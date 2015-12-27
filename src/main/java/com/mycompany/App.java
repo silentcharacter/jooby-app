@@ -1,0 +1,102 @@
+package com.mycompany;
+
+import com.typesafe.config.Config;
+import org.jooby.*;
+import org.jooby.hbs.Hbs;
+import org.jooby.mongodb.Jongoby;
+import org.jooby.mongodb.Mongodb;
+import org.jooby.pac4j.Auth;
+import org.jooby.pac4j.AuthStore;
+import org.jooby.swagger.SwaggerUI;
+import org.pac4j.core.profile.UserProfile;
+import org.pac4j.http.profile.HttpProfile;
+import org.pac4j.oauth.client.FacebookClient;
+import org.pac4j.oauth.client.Google2Client;
+import org.pac4j.oauth.client.TwitterClient;
+import org.pac4j.oauth.client.VkClient;
+
+import java.util.Optional;
+
+public class App extends Jooby {
+
+    {
+        use(new Mongodb());
+        use(new Jongoby());
+        use(new Hbs());
+//        session(MongoSessionStore.class);
+
+        assets("/assets/**");
+        assets("/favicon.ico", "/assets/favicon.ico");
+
+        get("*", (req, rsp) -> {
+            boolean loggedIn = req.session().get(Auth.ID).toOptional().isPresent();
+            req.set("loggedIn", loggedIn);
+        });
+
+        get("/", req -> {
+            return Results.html("index");
+        });
+
+        get("/login", (req, rsp) -> {
+            Config conf = req.require(Config.class);
+            rsp.send(Results.html("login").put("authCallback", conf.getString("auth.callback")));
+        });
+
+        use(new Auth()
+                        .client("/google/**", conf -> new Google2Client(conf.getString("google.key"), conf.getString("google.secret")))
+                        .client("/vk/**", conf -> new VkClient(conf.getString("vk.key"), conf.getString("vk.secret")))
+                        .client("/facebook/**", conf -> new FacebookClient(conf.getString("facebook.key"), conf.getString("facebook.secret")))
+                        .client("/twitter/**", conf -> new TwitterClient(conf.getString("twitter.key"), conf.getString("twitter.secret")))
+                        .form("*", MyUsernamePasswordAuthenticator.class)
+                        .authorizer("admin", "/form/admin/**", (ctx, profile) -> {
+                            if (!(profile instanceof HttpProfile)) {
+                                return false;
+                            }
+                            final HttpProfile httpProfile = (HttpProfile) profile;
+                            final String username = httpProfile.getUsername();
+                            return username.equals("admin");
+                        })
+        );
+
+        /** One handler for logged user. */
+        @SuppressWarnings("unchecked")
+        Route.OneArgHandler handler = req -> {
+            UserProfile profile = getUserProfile(req);
+
+            return Results.html("profile")
+                    .put("client", profile.getClass().getSimpleName().replace("Profile", ""))
+                    .put("profile", profile);
+        };
+
+        get("/profile", handler);
+        get("/facebook", handler);
+        get("/twitter", handler);
+        get("/form/admin", handler);
+        get("/google", handler);
+        get("/vk", handler);
+//        get("/rest-jwt", handler);
+//        get("/generate-token", handler);
+
+        SwaggerUI.install(this);
+        // Swagger will generate a swagger spec for the Pets MVC routes.
+        use(Friends.class);
+
+        get("/list", request -> Results.html("list").put("list", request.require(Friends.class).get()));
+    }
+
+    @SuppressWarnings("unchecked")
+    public UserProfile getUserProfile(final Request req) throws Exception {
+        // show profile or 401
+        Optional<String> profileId = req.session().get(Auth.ID).toOptional();
+        if (!profileId.isPresent()) {
+            throw new Err(Status.UNAUTHORIZED);
+        }
+        AuthStore<UserProfile> store = req.require(AuthStore.class);
+        return store.get(profileId.get()).get();
+    }
+
+    public static void main(final String[] args) throws Exception {
+        new App().start(args);
+    }
+
+}

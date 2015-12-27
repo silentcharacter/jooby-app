@@ -1,0 +1,25 @@
+{{#partial "main"}}
+<ul>
+  <li><a href="{{contextPath}}/profile">view profile (require authentication)</a></li>
+  <!--<li><a href="{{contextPath}}/generate-token">Generate token</a>: {{token}}</li>-->
+</ul>
+{{#unless loggedIn}}
+<h2>Authenticate</h2>
+<ul>
+  <!--<li><a href="{{contextPath}}/facebook">Facebook (use a real account)</a></li>-->
+  <!--<li><a href="{{contextPath}}/twitter">Twitter (use a real account)</a></li>-->
+  <li><a href="{{contextPath}}/login">Login</a></li>
+  <!--<li><a href="{{contextPath}}/google" title="Войти через Google">Войти через Google</a></li>-->
+</ul>
+<!--Web service authentication:-->
+<!--<ul>-->
+  <!--<li><a href="{{contextPath}}/rest-jwt">JWT Token (add the token as get parameter ?token=<i>generated_token</i>)</a></li>-->
+<!--</ul>-->
+{{/unless}}
+<h2>Protected URLs</h2>
+<ul>
+  <li><a href="{{contextPath}}/form/admin">form protected with custom authorizer (= must be a HttpProfile where the username starts with "jle")</a></li>
+  <li><a href="{{contextPath}}/list">Список объектов</a></li>
+</ul>
+{{/partial}}
+{{> html5}}
