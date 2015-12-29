@@ -108,6 +108,11 @@
       <version>${jooby.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.jooby</groupId>
+      <artifactId>jooby-jackson</artifactId>
+    </dependency>
+
 
   </dependencies>
 

@@ -1,4 +1,4 @@
-package com.mycompany;
+package com.mycompany.auth;
 
 import org.pac4j.core.exception.CredentialsException;
 import org.pac4j.core.util.CommonHelper;

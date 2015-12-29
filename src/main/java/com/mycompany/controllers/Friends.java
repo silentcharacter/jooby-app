@@ -1,7 +1,8 @@
-package com.mycompany;
+package com.mycompany.controllers;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import com.mycompany.domain.Friend;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;

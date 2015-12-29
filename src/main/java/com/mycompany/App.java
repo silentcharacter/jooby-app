@@ -1,8 +1,12 @@
 package com.mycompany;
 
+import com.mycompany.auth.MyUsernamePasswordAuthenticator;
+import com.mycompany.controllers.Friends;
+import com.mycompany.controllers.Todos;
 import com.typesafe.config.Config;
 import org.jooby.*;
 import org.jooby.hbs.Hbs;
+import org.jooby.json.Jackson;
 import org.jooby.mongodb.Jongoby;
 import org.jooby.mongodb.Mongodb;
 import org.jooby.pac4j.Auth;
@@ -23,6 +27,7 @@ public class App extends Jooby {
         use(new Mongodb());
         use(new Jongoby());
         use(new Hbs());
+        use(new Jackson());
 //        session(MongoSessionStore.class);
 
         assets("/assets/**");
@@ -36,6 +41,11 @@ public class App extends Jooby {
         get("/", req -> {
             return Results.html("index");
         });
+
+        get("/angular", req -> Results.html("angular"));
+        use(new Todos());
+
+
 
         get("/login", (req, rsp) -> {
             Config conf = req.require(Config.class);
@@ -78,7 +88,6 @@ public class App extends Jooby {
 //        get("/generate-token", handler);
 
         SwaggerUI.install(this);
-        // Swagger will generate a swagger spec for the Pets MVC routes.
         use(Friends.class);
 
         get("/list", request -> Results.html("list").put("list", request.require(Friends.class).get()));
