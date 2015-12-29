@@ -23,8 +23,7 @@ public class Todos extends Jooby {
                 .get("/", req -> {
                     Jongo jongo = req.require(Jongo.class);
                     MongoCollection todos = jongo.getCollection("todos");
-                    MongoCursor<Todo> all = todos.find().as(Todo.class);
-                    return Lists.newArrayList(all.iterator());
+                    return todos.find().as(Todo.class);
                 })
                 .post("/", req -> {
                     Jongo jongo = req.require(Jongo.class);
@@ -32,7 +31,6 @@ public class Todos extends Jooby {
                     Todo todo = req.body().to(Todo.class);
                     todos.insert(todo);
                     return todo;
-
                 });
 
     }
