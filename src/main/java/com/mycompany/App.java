@@ -1,5 +1,6 @@
 package com.mycompany;
 
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.mycompany.auth.MyUsernamePasswordAuthenticator;
 import com.mycompany.controllers.Roles;
 import com.mycompany.controllers.Todos;
