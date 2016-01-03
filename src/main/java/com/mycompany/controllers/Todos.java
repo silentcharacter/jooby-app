@@ -1,11 +1,9 @@
 package com.mycompany.controllers;
 
-import com.google.common.collect.Lists;
 import com.mycompany.domain.Todo;
 import org.bson.types.ObjectId;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
-import org.jongo.MongoCursor;
 import org.jooby.Jooby;
 
 public class Todos extends Jooby {

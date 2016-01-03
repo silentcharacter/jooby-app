@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>My First Admin</title>
+    <link rel="stylesheet" href="/assets/css/ng-admin.min.css">
+    <style type="text/css">
+        .ng-admin-entity-posts .ng-admin-column-title {
+            width: 400px;
+        }
+    </style>
+</head>
+<body ng-app="myApp">
+    <div ui-view></div>
+    <script src="/assets/js/ng-admin.min.js"></script>
+    <script type="text/javascript">
+        var myApp = angular.module('myApp', ['ng-admin']);
+        myApp.config(['NgAdminConfigurationProvider', function(nga) {
+            // create an admin application
+            var admin = nga.application('My First Admin').baseApiUrl('https://jsonplaceholder.typicode.com/'); // main API endpoint;
+            // create a user entity
+            // the API endpoint for this entity will be 'http://jsonplaceholder.typicode.com/users/:id
+            var user = nga.entity('users');
+            // set the fields of the user entity list view
+            user.listView().fields([
+                nga.field('name').isDetailLink(true),
+                nga.field('username'),
+                nga.field('email')
+            ]);
+            user.creationView().fields([
+                nga.field('name')
+                        .validation({ required: true, minlength: 3, maxlength: 100 }),
+                nga.field('username')
+                        .attributes({ placeholder: 'No space allowed, 5 chars min' })
+                        .validation({ required: true, pattern: '[A-Za-z0-9\.\-_]{5,20}' }),
+                nga.field('email', 'email')
+                        .validation({ required: true }),
+                nga.field('address.street')
+                        .label('Street'),
+                nga.field('address.city')
+                        .label('City'),
+                nga.field('address.zipcode')
+                        .label('Zipcode')
+                        .validation({ pattern: '[A-Z\-0-9]{5,10}' }),
+                nga.field('phone'),
+                nga.field('website')
+                        .validation({ validator: function(value) {
+                            if (value.indexOf('http://') !== 0) throw new Error ('Invalid url in website');
+                        } })
+            ]);
+            // use the same fields for the editionView as for the creationView
+            user.editionView().fields(user.creationView().fields());
+            // add the user entity to the admin application
+            admin.addEntity(user)
+
+            var post = nga.entity('posts');
+            post.listView().fields([
+                nga.field('title').isDetailLink(true),
+                nga.field('body', 'text')
+                        .map(function truncate(value) {
+                            if (!value) return '';
+                            return value.length > 50 ? value.substr(0, 50) + '...' : value;
+                        }),
+                nga.field('userId', 'reference')
+                        .targetEntity(user)
+                        .targetField(nga.field('username'))
+                        .label('User')
+            ])
+            .listActions(['show'])
+            .batchActions([])
+            .filters([
+                nga.field('q')
+                        .label('')
+                        .pinned(true)
+                        .template('<div class="input-group"><input type="text" ng-model="value" placeholder="Search" class="form-control"></input><span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span></div>'),
+                nga.field('userId', 'reference')
+                        .targetEntity(user)
+                        .targetField(nga.field('username'))
+                        .label('User')
+            ]);
+
+            post.showView().fields([
+                nga.field('title'),
+                nga.field('body', 'text'),
+                nga.field('userId', 'reference')
+                        .targetEntity(user)
+                        .targetField(nga.field('username'))
+                        .label('User'),
+                nga.field('comments', 'referenced_list')
+                        .targetEntity(nga.entity('comments'))
+                        .targetReferenceField('postId')
+                        .targetFields([
+                            nga.field('email'),
+                            nga.field('name')
+                        ])
+                        .sortField('id')
+                        .sortDir('DESC'),
+            ]);
+            post.readOnly();
+            admin.addEntity(post)
+
+            admin.menu(nga.menu()
+                .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>'))
+                .addChild(nga.menu(post).icon('<span class="glyphicon glyphicon-pencil"></span>'))
+                .addChild(nga.menu().title('Miscellaneous')
+                    .addChild(nga.menu().title('Stats').link('/stats').active(function(path) {
+                                        return path.indexOf('/stats') === 0;
+                                    }))
+                )
+            );
+
+            // attach the admin application to the DOM and run it
+            nga.configure(admin);
+        }]);
+    </script>
+</body>
+</html>

@@ -1,8 +1,9 @@
 package com.mycompany;
 
 import com.mycompany.auth.MyUsernamePasswordAuthenticator;
-import com.mycompany.controllers.Friends;
+import com.mycompany.controllers.Roles;
 import com.mycompany.controllers.Todos;
+import com.mycompany.controllers.Users;
 import com.typesafe.config.Config;
 import org.jooby.*;
 import org.jooby.hbs.Hbs;
@@ -11,7 +12,6 @@ import org.jooby.mongodb.Jongoby;
 import org.jooby.mongodb.Mongodb;
 import org.jooby.pac4j.Auth;
 import org.jooby.pac4j.AuthStore;
-import org.jooby.swagger.SwaggerUI;
 import org.pac4j.core.profile.UserProfile;
 import org.pac4j.http.profile.HttpProfile;
 import org.pac4j.oauth.client.FacebookClient;
@@ -44,8 +44,8 @@ public class App extends Jooby {
 
         get("/angular", req -> Results.html("angular"));
         use(new Todos());
-
-
+        use(new Users());
+        use(new Roles());
 
         get("/login", (req, rsp) -> {
             Config conf = req.require(Config.class);
@@ -64,7 +64,7 @@ public class App extends Jooby {
                             }
                             final HttpProfile httpProfile = (HttpProfile) profile;
                             final String username = httpProfile.getUsername();
-                            return username.equals("admin");
+                            return true;
                         })
         );
 
@@ -81,16 +81,12 @@ public class App extends Jooby {
         get("/profile", handler);
         get("/facebook", handler);
         get("/twitter", handler);
-        get("/form/admin", handler);
         get("/google", handler);
         get("/vk", handler);
+        get("/form/admin", req -> Results.html("admin"));
 //        get("/rest-jwt", handler);
 //        get("/generate-token", handler);
 
-        SwaggerUI.install(this);
-        use(Friends.class);
-
-        get("/list", request -> Results.html("list").put("list", request.require(Friends.class).get()));
     }
 
     @SuppressWarnings("unchecked")

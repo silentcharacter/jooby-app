@@ -102,11 +102,11 @@
       <version>${pac4j.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.jooby</groupId>
-      <artifactId>jooby-swagger</artifactId>
-      <version>${jooby.version}</version>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.jooby</groupId>-->
+      <!--<artifactId>jooby-swagger</artifactId>-->
+      <!--<version>${jooby.version}</version>-->
+    <!--</dependency>-->
 
     <dependency>
       <groupId>org.jooby</groupId>

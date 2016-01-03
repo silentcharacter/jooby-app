@@ -2,7 +2,7 @@ package com.mycompany.controllers;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-import com.mycompany.domain.Friend;
+import com.mycompany.domain.User;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
@@ -24,21 +24,21 @@ public class Friends {
     }
 
     @GET
-    public List<Friend> get() {
+    public List<User> get() {
         MongoCollection friends = jongo.getCollection("friends");
-        MongoCursor<Friend> all = friends.find().as(Friend.class);
+        MongoCursor<User> all = friends.find().as(User.class);
         return Lists.newArrayList(all.iterator());
     }
 
     @Path("/:id")
     @GET
-    public Friend get(String id) {
+    public User get(String id) {
         MongoCollection friends = jongo.getCollection("friends");
-        return friends.findOne(id).as(Friend.class);
+        return friends.findOne(id).as(User.class);
     }
 
     @POST
-    public Friend post(@Body Friend friend) {
+    public User post(@Body User friend) {
         MongoCollection friends = jongo.getCollection("friends");
         friends.insert(friend);
         return friend;

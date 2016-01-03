@@ -1,5 +1,9 @@
 package com.mycompany.auth;
 
+import com.google.inject.Inject;
+import com.mycompany.domain.User;
+import org.jongo.Jongo;
+import org.jongo.MongoCollection;
 import org.pac4j.core.exception.CredentialsException;
 import org.pac4j.core.util.CommonHelper;
 import org.pac4j.http.credentials.UsernamePasswordCredentials;
@@ -12,7 +16,11 @@ public class MyUsernamePasswordAuthenticator implements UsernamePasswordAuthenti
 
     protected static final Logger logger = LoggerFactory.getLogger(MyUsernamePasswordAuthenticator.class);
 
-    public MyUsernamePasswordAuthenticator() {
+    private Jongo jongo;
+
+    @Inject
+    public MyUsernamePasswordAuthenticator(Jongo jongo) {
+        this.jongo = jongo;
     }
 
     public void validate(UsernamePasswordCredentials credentials) {
@@ -31,9 +39,12 @@ public class MyUsernamePasswordAuthenticator implements UsernamePasswordAuthenti
             this.throwsException("Password cannot be blank");
         }
 
-        if (!username.equals("admin") || !password.equals("123123")) {
-            this.throwsException("Username : \'" + username + "\' does not match password");
+        MongoCollection users = jongo.getCollection("users");
+        User user = users.findOne("{email:#}", credentials.getUsername()).as(User.class);
+        if (user == null || !credentials.getPassword().equals(user.password)) {
+            this.throwsException("Password doesn't match");
         }
+
         HttpProfile profile = new HttpProfile();
         profile.setId(username);
         profile.addAttribute("username", username);
