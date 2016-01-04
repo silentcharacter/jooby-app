@@ -1,26 +1,26 @@
 {{#partial "main"}}
 <ul>
-  <li><a href="{{contextPath}}/profile">view profile (require authentication)</a></li>
+  <li><a href="{{contextPath}}/profile">Профиль</a></li>
   <!--<li><a href="{{contextPath}}/generate-token">Generate token</a>: {{token}}</li>-->
 </ul>
-<h2>Public URLs</h2>
+<h2>Публичные URL</h2>
 <ul>
   <li><a href="{{contextPath}}/angular">angular</a></li>
-  <li><a href="{{contextPath}}/assets/admin.html">admin</a></li>
+  <!--<li><a href="{{contextPath}}/assets/admin.html">admin</a></li>-->
 </ul>
 {{#unless loggedIn}}
-<h2>Authenticate</h2>
+<h2>Аутентификация</h2>
 <ul>
-  <li><a href="{{contextPath}}/login">Login</a></li>
+  <li><a href="{{contextPath}}/login">Вход</a></li>
 </ul>
 <!--Web service authentication:-->
 <!--<ul>-->
   <!--<li><a href="{{contextPath}}/rest-jwt">JWT Token (add the token as get parameter ?token=<i>generated_token</i>)</a></li>-->
 <!--</ul>-->
 {{/unless}}
-<h2>Protected URLs</h2>
+<h2>Защищенные URLs</h2>
 <ul>
-  <li><a href="{{contextPath}}/admin">form protected with custom authorizer</a></li>
+  <li><a href="{{contextPath}}/admin">Администрирование</a></li>
 </ul>
 {{/partial}}
 {{> html5}}
