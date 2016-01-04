@@ -19,6 +19,7 @@ import org.pac4j.oauth.client.FacebookClient;
 import org.pac4j.oauth.client.Google2Client;
 import org.pac4j.oauth.client.TwitterClient;
 import org.pac4j.oauth.client.VkClient;
+import org.pac4j.oauth.profile.google2.Google2Profile;
 
 import java.util.Optional;
 
@@ -59,12 +60,12 @@ public class App extends Jooby {
                         .client("/facebook/**", conf -> new FacebookClient(conf.getString("facebook.key"), conf.getString("facebook.secret")))
                         .client("/twitter/**", conf -> new TwitterClient(conf.getString("twitter.key"), conf.getString("twitter.secret")))
                         .form("*", MyUsernamePasswordAuthenticator.class)
-                        .authorizer("admin", "/form/admin/**", (ctx, profile) -> {
-                            if (!(profile instanceof HttpProfile)) {
+                        .authorizer("admin", "/admin/**", (ctx, profile) -> {
+                            if (!(profile instanceof HttpProfile || profile instanceof Google2Profile)) {
                                 return false;
                             }
-                            final HttpProfile httpProfile = (HttpProfile) profile;
-                            final String username = httpProfile.getUsername();
+//                            final HttpProfile httpProfile = (HttpProfile) profile;
+//                            final String username = httpProfile.getUsername();
                             return true;
                         })
         );
@@ -84,7 +85,10 @@ public class App extends Jooby {
         get("/twitter", handler);
         get("/google", handler);
         get("/vk", handler);
-        get("/form/admin", req -> Results.html("admin"));
+        get("/admin", (req, rsp) -> {
+            Config conf = req.require(Config.class);
+            rsp.send(Results.html("admin").put("apiUrl", conf.getString("application.apiUrl")));
+        });
 //        get("/rest-jwt", handler);
 //        get("/generate-token", handler);
 
