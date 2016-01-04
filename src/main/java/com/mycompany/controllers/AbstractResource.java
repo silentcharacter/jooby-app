@@ -37,12 +37,12 @@ public class AbstractResource<T> extends Jooby {
     protected Route.Handler getListHandler = (req, rsp) -> {
         Jongo jongo = req.require(Jongo.class);
         MongoCollection collection = jongo.getCollection(entityName);
-        String sortField = req.param("_sortField").value();
-        Integer sortDir = "DESC".equals(req.param("_sortDir").value())? -1 : 1;
-        if (StringUtils.isEmpty(sortField))
+        String sortField = "id";
+        Integer sortDir = -1;
+        if (req.param("_sortField").isSet())
         {
-            sortField = "id";
-            sortDir = -1;
+            sortField = req.param("_sortField").value();
+            sortDir = "DESC".equals(req.param("_sortDir").value())? -1 : 1;
         }
         Integer page = req.param("_page").intValue();
         Integer perPage = req.param("_perPage").intValue();
