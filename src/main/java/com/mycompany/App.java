@@ -1,26 +1,32 @@
 package com.mycompany;
 
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.mycompany.auth.MyUsernamePasswordAuthenticator;
 import com.mycompany.controllers.Roles;
 import com.mycompany.controllers.Todos;
 import com.mycompany.controllers.Users;
+import com.mycompany.domain.User;
 import com.typesafe.config.Config;
-import org.jooby.*;
+import org.jongo.Jongo;
+import org.jongo.MongoCollection;
+import org.jooby.Jooby;
+import org.jooby.Request;
+import org.jooby.Results;
+import org.jooby.Route;
 import org.jooby.hbs.Hbs;
 import org.jooby.json.Jackson;
 import org.jooby.mongodb.Jongoby;
 import org.jooby.mongodb.Mongodb;
 import org.jooby.pac4j.Auth;
 import org.jooby.pac4j.AuthStore;
+import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.UserProfile;
-import org.pac4j.http.profile.HttpProfile;
 import org.pac4j.oauth.client.FacebookClient;
 import org.pac4j.oauth.client.Google2Client;
 import org.pac4j.oauth.client.TwitterClient;
 import org.pac4j.oauth.client.VkClient;
-import org.pac4j.oauth.profile.google2.Google2Profile;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class App extends Jooby {
@@ -35,23 +41,29 @@ public class App extends Jooby {
         assets("/assets/**");
         assets("/favicon.ico", "/assets/favicon.ico");
 
-        get("*", (req, rsp) -> {
-            boolean loggedIn = req.session().get(Auth.ID).toOptional().isPresent();
-            req.set("loggedIn", loggedIn);
-        });
-
         get("/", req -> {
-            return Results.html("index");
+            UserProfile profile = getUserProfile(req);
+            return Results.html("angular").put("profile", profile == null ? "" : profile);
+        });
+        use(new Todos());
+
+        get("/userProfile", req -> {
+            CommonProfile profile = (CommonProfile) getUserProfile(req);
+            Map<String, Object> response = new HashMap<>();
+            if (profile != null) {
+                response.put("client", profile.getClass().getSimpleName().replace("Profile", ""));
+            }
+            response.put("profile", profile);
+            return response;
         });
 
-        get("/angular", req -> Results.html("angular"));
-        use(new Todos());
-        use(new Users());
-        use(new Roles());
-
-        get("/login", (req, rsp) -> {
-            Config conf = req.require(Config.class);
-            rsp.send(Results.html("login").put("authCallback", conf.getString("auth.callback")));
+        post("/register", (req, rsp) -> {
+            User user = req.body().to(User.class);
+            //todo: validate
+            Jongo jongo = req.require(Jongo.class);
+            MongoCollection collection = jongo.getCollection("users");
+            collection.insert(user);
+            rsp.redirect("/#/registrationSuccess");
         });
 
         use(new Auth()
@@ -60,49 +72,41 @@ public class App extends Jooby {
                         .client("/facebook/**", conf -> new FacebookClient(conf.getString("facebook.key"), conf.getString("facebook.secret")))
                         .client("/twitter/**", conf -> new TwitterClient(conf.getString("twitter.key"), conf.getString("twitter.secret")))
                         .form("*", MyUsernamePasswordAuthenticator.class)
-                        .authorizer("admin", "/admin/**", (ctx, profile) -> {
-                            if (!(profile instanceof HttpProfile || profile instanceof Google2Profile)) {
-                                return false;
-                            }
+//                        .authorizer("admin", "/admin/**", (ctx, profile) -> {
+//                            if (!(profile instanceof HttpProfile || profile instanceof Google2Profile)) {
+//                                return false;
+//                            }
 //                            final HttpProfile httpProfile = (HttpProfile) profile;
 //                            final String username = httpProfile.getUsername();
-                            return true;
-                        })
+//                            return true;
+//                        })
         );
 
-        /** One handler for logged user. */
-        @SuppressWarnings("unchecked")
-        Route.OneArgHandler handler = req -> {
-            UserProfile profile = getUserProfile(req);
+        Route.Handler handler = (req, rsp) -> rsp.redirect("/");
 
-            return Results.html("profile")
-                    .put("client", profile.getClass().getSimpleName().replace("Profile", ""))
-                    .put("profile", profile);
-        };
-
-        get("/profile", handler);
         get("/facebook", handler);
         get("/twitter", handler);
         get("/google", handler);
         get("/vk", handler);
+//        get("/rest-jwt", handler);
+//        get("/generate-token", handler);
+
         get("/admin", (req, rsp) -> {
             Config conf = req.require(Config.class);
             rsp.send(Results.html("admin").put("apiUrl", conf.getString("application.apiUrl")));
         });
-//        get("/rest-jwt", handler);
-//        get("/generate-token", handler);
-
+        use(new Users());
+        use(new Roles());
     }
 
     @SuppressWarnings("unchecked")
-    public UserProfile getUserProfile(final Request req) throws Exception {
-        // show profile or 401
+    public static UserProfile getUserProfile(final Request req) throws Exception {
         Optional<String> profileId = req.session().get(Auth.ID).toOptional();
-        if (!profileId.isPresent()) {
-            throw new Err(Status.UNAUTHORIZED);
+        if (profileId.isPresent()) {
+            AuthStore<UserProfile> store = req.require(AuthStore.class);
+            return store.get(profileId.get()).get();
         }
-        AuthStore<UserProfile> store = req.require(AuthStore.class);
-        return store.get(profileId.get()).get();
+        return null;
     }
 
     public static void main(final String[] args) throws Exception {

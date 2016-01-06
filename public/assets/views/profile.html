@@ -1,0 +1,8 @@
+<h2>{{client}}'s profile</h2>
+<ul>
+  <li>ID: {{profile.id}}</li>
+
+  <li ng-repeat='(key, value) in profile.attributes'>
+    <span>Key: {{key}}, value: {{value}}</span>
+  </li>
+</ul>

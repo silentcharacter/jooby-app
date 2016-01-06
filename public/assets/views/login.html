@@ -1,0 +1,29 @@
+<div class="container">
+
+    <form action="/auth" class="form-signin" method="post">
+        <h2 class="form-signin-heading">Войти</h2>
+        <input type="hidden" name="client_name" value="FormClient">
+        <label for="userName" class="sr-only">Имя пользователя</label>
+        <input type="text" id="userName" class="form-control" placeholder="Имя пользователя" required autofocus name="username">
+        <label for="inputPassword" class="sr-only">Пароль</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Пароль" required name="password">
+        <!--<div class="checkbox">-->
+        <!--<label>-->
+        <!--<input type="checkbox" value="remember-me"> Запомнить меня-->
+        <!--</label>-->
+        <!--</div>-->
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+    </form>
+</div>
+<div class="container">
+    <a href="/google" title="Войти через Google">Войти через Google</a>
+</div>
+<div class="container">
+    <a href="/vk" title="Войти через ВКонтакте">Войти через ВКонтакте</a>
+</div>
+<div class="container">
+    <a href="/facebook" title="Войти через Facebook">Войти через Facebook</a>
+</div>
+<div class="container">
+    <a href="/twitter" title="Войти через twitter">Войти через twitter</a>
+</div>

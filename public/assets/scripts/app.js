@@ -12,12 +12,31 @@ app.config(function ($routeProvider) {
     }).when('/create', {
         templateUrl: 'assets/views/create.html',
         controller: 'CreateCtrl'
+    }).when('/login', {
+        templateUrl: 'assets/views/login.html'
+    }).when('/profile', {
+        templateUrl: 'assets/views/profile.html',
+        controller: 'ProfileCtrl'
+    }).when('/register', {
+        templateUrl: 'assets/views/register.html',
+    }).when('/registrationSuccess', {
+        template: '<h3>Регистрация успешно завершена!</h3>' +
+        'На ваш почтовый ящик выслано письмо с подтверждением. <p>' +
+        'Теперь Вы можете <a href="#/login">войти</a>.'
     }).otherwise({
-        redirectTo: '/angular'
+        redirectTo: '/'
     })
 });
 
+app.controller('ProfileCtrl', function ($scope, Authentication) {
+    Authentication.then(function (data) {
+        $scope.client = data.client;
+        $scope.profile = data.profile;
+    });
+});
+
 app.controller('ListCtrl', function ($scope, $http) {
+
     $http.get('/api/v1/todos').success(function (data) {
         $scope.todos = data;
     }).error(function (data, status) {
@@ -48,4 +67,14 @@ app.controller('CreateCtrl', function ($scope, $http, $location) {
             console.log('Error ' + data)
         })
     }
+});
+
+app.factory('Authentication', function ($resource) {
+    var resource = $resource('/userProfile', {}, {
+        query: {
+            method: 'GET',
+            cache: true
+        }
+    });
+    return resource.get().$promise;
 });
