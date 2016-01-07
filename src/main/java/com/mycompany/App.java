@@ -91,10 +91,7 @@ public class App extends Jooby {
 //        get("/rest-jwt", handler);
 //        get("/generate-token", handler);
 
-        get("/admin", (req, rsp) -> {
-            Config conf = req.require(Config.class);
-            rsp.send(Results.html("admin").put("apiUrl", conf.getString("application.apiUrl")));
-        });
+        get("/admin", req -> Results.html("admin"));
         use(new Users());
         use(new Roles());
     }

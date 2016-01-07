@@ -12,7 +12,7 @@
     var myApp = angular.module('myApp', ['ng-admin']);
     myApp.config(['NgAdminConfigurationProvider', function(nga) {
         // create an admin application
-        var admin = nga.application('Панель администрирования').baseApiUrl('{{apiUrl}}'); // main API endpoint;
+        var admin = nga.application('Панель администрирования').baseApiUrl('/api/'); // main API endpoint;
 
         var role = nga.entity('roles');
         role.listView().title('Роли').fields([

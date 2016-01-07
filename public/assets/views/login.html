@@ -1,29 +1,37 @@
-<div class="container">
+<div class="middlePage">
+    <div class="page-header">
+        <h1 class="logo"><small>Добро пожаловать!</small></h1>
+    </div>
 
-    <form action="/auth" class="form-signin" method="post">
-        <h2 class="form-signin-heading">Войти</h2>
-        <input type="hidden" name="client_name" value="FormClient">
-        <label for="userName" class="sr-only">Имя пользователя</label>
-        <input type="text" id="userName" class="form-control" placeholder="Имя пользователя" required autofocus name="username">
-        <label for="inputPassword" class="sr-only">Пароль</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Пароль" required name="password">
-        <!--<div class="checkbox">-->
-        <!--<label>-->
-        <!--<input type="checkbox" value="remember-me"> Запомнить меня-->
-        <!--</label>-->
-        <!--</div>-->
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
-    </form>
-</div>
-<div class="container">
-    <a href="/google" title="Войти через Google">Войти через Google</a>
-</div>
-<div class="container">
-    <a href="/vk" title="Войти через ВКонтакте">Войти через ВКонтакте</a>
-</div>
-<div class="container">
-    <a href="/facebook" title="Войти через Facebook">Войти через Facebook</a>
-</div>
-<div class="container">
-    <a href="/twitter" title="Войти через twitter">Войти через twitter</a>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Пожалуйста авторизуйтесь</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-5" >
+                    <a href="/google"><img src="/assets/image/gg.png" /></a><br/>
+                    <a href="/vk"><img src="/assets/image/vk.png" /></a><br/>
+                    <a href="/facebook"><img src="/assets/image/fb.png" /></a><br/>
+                    <a href="/twitter"><img src="/assets/image/tw.png" /></a><br/>
+                </div>
+                <div class="col-md-7" style="border-left:1px solid #ccc;height:170px">
+                    <form class="form-horizontal" action="/auth" method="post">
+                        <!--<div id="signupalert" style="display:none" class="alert alert-danger">-->
+                        <!--<p>Error:</p>-->
+                        <!--<span></span>-->
+                        <!--</div>-->
+                        <fieldset>
+                            <input type="hidden" name="client_name" value="FormClient">
+                            <input required autofocus name="username" type="email" placeholder="Email" class="form-control input-md">
+                            <div class="spacing"><input type="checkbox" name="checkboxes" id="checkboxes-0" value="1"><small> Запомнить меня</small></div>
+                            <input name="password" type="password" placeholder="Пароль" class="form-control input-md" required>
+                            <div class="spacing"><a href="#"><small> Забыли пароль?</small></a><br/></div>
+                            <button id="singlebutton" name="singlebutton" class="btn btn-info btn-sm pull-right">Войти</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
