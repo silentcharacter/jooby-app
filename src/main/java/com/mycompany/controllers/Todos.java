@@ -21,7 +21,7 @@ public class Todos extends Jooby {
                 .get("/", req -> {
                     Jongo jongo = req.require(Jongo.class);
                     MongoCollection todos = jongo.getCollection("todos");
-                    return todos.find().as(Todo.class);
+                    return todos.find().sort("{done: 1, createdOn: -1}").as(Todo.class);
                 })
                 .post("/", req -> {
                     Jongo jongo = req.require(Jongo.class);
