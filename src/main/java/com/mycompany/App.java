@@ -57,6 +57,8 @@ public class App extends Jooby {
             return response;
         });
 
+        get("/login", ((request, response) -> response.redirect("/#/login")));
+
         post("/register", (req, rsp) -> {
             User user = req.body().to(User.class);
             //todo: validate
