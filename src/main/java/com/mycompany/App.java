@@ -5,7 +5,6 @@ import com.mycompany.controllers.Roles;
 import com.mycompany.controllers.Todos;
 import com.mycompany.controllers.Users;
 import com.mycompany.domain.User;
-import com.typesafe.config.Config;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jooby.Jooby;
@@ -15,7 +14,6 @@ import org.jooby.Route;
 import org.jooby.hbs.Hbs;
 import org.jooby.json.Jackson;
 import org.jooby.mongodb.Jongoby;
-import org.jooby.mongodb.MongoSessionStore;
 import org.jooby.mongodb.Mongodb;
 import org.jooby.pac4j.Auth;
 import org.jooby.pac4j.AuthStore;
@@ -42,32 +40,14 @@ public class App extends Jooby {
         assets("/assets/**");
         assets("/favicon.ico", "/assets/favicon.ico");
 
-        get("/", req -> {
-            UserProfile profile = getUserProfile(req);
-            return Results.html("angular").put("profile", profile == null ? "" : profile);
-        });
+        get("/", req -> Results.html("angular").put("profile", getUserProfile(req)));
         use(new Todos());
 
-        get("/userProfile", req -> {
-            CommonProfile profile = (CommonProfile) getUserProfile(req);
-            Map<String, Object> response = new HashMap<>();
-            if (profile != null) {
-                response.put("client", profile.getClass().getSimpleName().replace("Profile", ""));
-            }
-            response.put("profile", profile);
-            return response;
-        });
+        get("/userProfile", req -> getProfilePageData((CommonProfile) getUserProfile(req)));
 
         get("/login", ((request, response) -> response.redirect("/#/login")));
 
-        post("/register", (req, rsp) -> {
-            User user = req.body().to(User.class);
-            //todo: validate
-            Jongo jongo = req.require(Jongo.class);
-            MongoCollection collection = jongo.getCollection("users");
-            collection.insert(user);
-            rsp.redirect("/#/registrationSuccess");
-        });
+        post("/register", registrationHandler);
 
         use(new Auth()
                         .client("/google/**", conf -> new Google2Client(conf.getString("google.key"), conf.getString("google.secret")))
@@ -94,6 +74,32 @@ public class App extends Jooby {
         get("/admin", req -> Results.html("admin"));
         use(new Users());
         use(new Roles());
+    }
+
+    private static Route.Handler registrationHandler = (req, rsp) -> {
+        User user = req.body().to(User.class);
+        user.email = user.email.trim();
+        Jongo jongo = req.require(Jongo.class);
+        MongoCollection users = jongo.getCollection("users");
+        if (users.count("{email : #}", user.email) > 0) {
+            rsp.send("Пользователь с указанным email уже зарегистрирован!");
+            return;
+        }
+        if (user.password != req.param("password_confirm").toString()) {
+            rsp.send("Указанные пароли не совпадают!");
+            return;
+        }
+        users.insert(user);
+        rsp.redirect("/#/registrationSuccess");
+    };
+
+    private static Map<String, Object> getProfilePageData(CommonProfile profile) {
+        Map<String, Object> response = new HashMap<>();
+        if (profile != null) {
+            response.put("client", profile.getClass().getSimpleName().replace("Profile", ""));
+        }
+        response.put("profile", profile);
+        return response;
     }
 
     @SuppressWarnings("unchecked")
