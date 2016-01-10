@@ -18,7 +18,7 @@
         role.listView().title('Роли').fields([
             nga.field('name').isDetailLink(true).label("Название")
         ]).filters([
-            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать названию' })
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по названию' })
         ]);
         role.creationView().title('Создание роли').fields([
             nga.field('name').validation({ required: true, maxlength: 100 }).label("Название")
@@ -56,7 +56,7 @@
             nga.field('roles', 'reference_many').label("Роли")
                     .targetEntity(role)
                     .targetField(nga.field('name'))
-                    .attributes({ placeholder: 'Select some roles...' })
+                    .attributes({ placeholder: 'Выберите роли...' })
                     .remoteComplete(true, {
                         refreshDelay: 300 ,
                         searchQuery: search => ({ q: search })

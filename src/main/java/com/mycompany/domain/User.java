@@ -1,7 +1,5 @@
 package com.mycompany.domain;
 
-import org.jongo.marshall.jackson.oid.ObjectId;
-
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +15,7 @@ public class User extends Entity{
     public Date birthDate;
     public String password;
     public String website;
-    public List<ObjectId> roles;
+    public List<String> roles;
 
     public User() {
     }
