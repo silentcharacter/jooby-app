@@ -1,14 +1,7 @@
 package com.mycompany.domain;
 
-import org.jongo.marshall.jackson.oid.MongoId;
-import org.jongo.marshall.jackson.oid.MongoObjectId;
+public class Role extends Entity {
 
-import java.util.Date;
-
-public class Role {
-    @MongoId
-    @MongoObjectId
-    public String id;
     public String name;
 
     public Role() {
@@ -16,5 +9,10 @@ public class Role {
 
     public Role(String id) {
         this.id = id;
+    }
+
+    @Override
+    public String getFullText() {
+        return name.toLowerCase();
     }
 }

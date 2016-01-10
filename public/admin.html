@@ -17,6 +17,8 @@
         var role = nga.entity('roles');
         role.listView().title('Роли').fields([
             nga.field('name').isDetailLink(true).label("Название")
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать названию' })
         ]);
         role.creationView().title('Создание роли').fields([
             nga.field('name').validation({ required: true, maxlength: 100 }).label("Название")
@@ -35,6 +37,16 @@
                     .targetEntity(role)
                     .targetField(nga.field('name'))
                     .singleApiCall(ids => ({'id': ids }))
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по имени или фамилии' }),
+            nga.field('roles', 'reference').label('Роль').attributes({ placeholder: 'Выберите роль' })
+                    .pinned(true)
+                    .targetEntity(role)
+                    .targetField(nga.field('name'))
+                    .remoteComplete(true, {
+                        refreshDelay: 200,
+                        searchQuery: function(search) { return { q: search }; }
+                    })
         ]);
         user.creationView().title('Новый пользователь').fields([
             nga.field('firstName').validation({ required: true, minlength: 3, maxlength: 100 }).label("Имя"),
@@ -61,6 +73,7 @@
         ]);
         // use the same fields for the editionView as for the creationView
         user.editionView().title('Редактирование пользователя').fields(user.creationView().fields());
+
         // add the user entity to the admin application
         admin.addEntity(user);
 

@@ -8,8 +8,10 @@ import org.jongo.MongoCollection;
 import org.jooby.Jooby;
 import org.jooby.Route;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AbstractResource<T> extends Jooby {
@@ -51,19 +53,30 @@ public class AbstractResource<T> extends Jooby {
         }
         Integer page = req.param("_page").intValue();
         Integer perPage = req.param("_perPage").intValue();
-        rsp.header("X-Total-Count", collection.count());
-        String query = "";
-        Object[] filterValues = new Object[]{};
+        String query = "{%s}";
+        List<Object> filterValues = new ArrayList<>();
         if (req.param("_filters").isSet()) {
             ObjectMapper mapper = new ObjectMapper();
-            HashMap map = mapper.readValue(req.param("_filters").value(), HashMap.class);
+            HashMap<String, Object> map = mapper.readValue(req.param("_filters").value(), HashMap.class);
             if (map.containsKey("id")) {
                 List<String> ids = (List<String>) map.get("id");
-                filterValues = new Object[]{ids.stream().map(it -> new ObjectId(String.valueOf(it))).collect(Collectors.toList())};
-                query = "{_id: {$in:#}}";
+                filterValues.add(ids.stream().map(it -> new ObjectId(String.valueOf(it))).collect(Collectors.toList()));
+                query = String.format(query, "_id: {$in:#},%s");
+            }
+            if (map.containsKey("q")) {
+                query = String.format(query, "fullText: {$regex: #},%s");
+                filterValues.add(String.format(".*%s.*", map.get("q").toString().toLowerCase()));
+            }
+            map.remove("q");
+            map.remove("id");
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                query = String.format(query, entry.getKey() + ": #,%s");
+                filterValues.add(entry.getValue());
             }
         }
-        rsp.send(collection.find(query, filterValues)
+        query = query.replace("%s", "").replace(",}", "}");
+        rsp.header("X-Total-Count", collection.count(query, filterValues.toArray()));
+        rsp.send(collection.find(query, filterValues.toArray())
                 .sort(String.format("{%s: %d}", sortField, sortDir))
                 .limit(perPage).skip((page - 1) * perPage)
                 .as(typeParameterClass));

@@ -1,16 +1,12 @@
 package com.mycompany.domain;
 
-import org.jongo.marshall.jackson.oid.MongoId;
-import org.jongo.marshall.jackson.oid.MongoObjectId;
 import org.jongo.marshall.jackson.oid.ObjectId;
 
 import java.util.Date;
 import java.util.List;
 
-public class User {
-    @MongoId
-    @MongoObjectId
-    public String id;
+public class User extends Entity{
+
     public String firstName;
     public String lastName;
     public String email;
@@ -26,4 +22,8 @@ public class User {
     public User() {
     }
 
+    @Override
+    public String getFullText() {
+        return firstName.toLowerCase() + " " + lastName.toLowerCase();
+    }
 }

@@ -15,6 +15,7 @@ import org.jooby.Route;
 import org.jooby.hbs.Hbs;
 import org.jooby.json.Jackson;
 import org.jooby.mongodb.Jongoby;
+import org.jooby.mongodb.MongoSessionStore;
 import org.jooby.mongodb.Mongodb;
 import org.jooby.pac4j.Auth;
 import org.jooby.pac4j.AuthStore;
@@ -85,13 +86,10 @@ public class App extends Jooby {
         );
 
         Route.Handler handler = (req, rsp) -> rsp.redirect("/");
-
         get("/facebook", handler);
         get("/twitter", handler);
         get("/google", handler);
         get("/vk", handler);
-//        get("/rest-jwt", handler);
-//        get("/generate-token", handler);
 
         get("/admin", req -> Results.html("admin"));
         use(new Users());
