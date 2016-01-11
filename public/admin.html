@@ -28,7 +28,7 @@
         admin.addEntity(role);
 
         // create a user entity
-        var user = nga.entity('users');
+        var user = nga.entity('users').label('Пользователи');
         // set the fields of the user entity list view
         user.listView().title('Список пользователей').fields([
             nga.field('firstName').label("Имя"),
@@ -82,7 +82,7 @@
             .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Пользователи'))
             .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
             .addChild(nga.menu().title('Прочее')
-                    .addChild(nga.menu().title('Stats').link('/stats').active(function(path) {
+                    .addChild(nga.menu().title('Отчеты').link('/stats').active(function(path) {
                         return path.indexOf('/stats') === 0;
                     }))
             )
