@@ -51,8 +51,12 @@ public class AbstractResource<T> extends Jooby {
             sortField = req.param("_sortField").value();
             sortDir = "DESC".equals(req.param("_sortDir").value()) ? -1 : 1;
         }
-        Integer page = req.param("_page").intValue();
-        Integer perPage = req.param("_perPage").intValue();
+        Integer page = 1;
+        Integer perPage = 10000;
+        if (req.param("_page").isSet()) {
+            page = req.param("_page").intValue();
+            perPage = req.param("_perPage").intValue();
+        }
         String query = "{%s}";
         List<Object> filterValues = new ArrayList<>();
         if (req.param("_filters").isSet()) {
