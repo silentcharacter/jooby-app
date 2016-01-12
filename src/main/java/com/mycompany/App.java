@@ -85,7 +85,7 @@ public class App extends Jooby {
             rsp.send("Пользователь с указанным email уже зарегистрирован!");
             return;
         }
-        if (user.password != req.param("password_confirm").toString()) {
+        if (user.password.equals(req.param("password_confirm").toString())) {
             rsp.send("Указанные пароли не совпадают!");
             return;
         }
