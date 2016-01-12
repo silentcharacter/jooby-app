@@ -1,9 +1,11 @@
 package com.mycompany;
 
+import com.google.common.collect.Lists;
 import com.mycompany.auth.MyUsernamePasswordAuthenticator;
 import com.mycompany.controllers.Roles;
 import com.mycompany.controllers.Todos;
 import com.mycompany.controllers.Users;
+import com.mycompany.domain.Role;
 import com.mycompany.domain.User;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
@@ -24,6 +26,8 @@ import org.pac4j.oauth.client.Google2Client;
 import org.pac4j.oauth.client.TwitterClient;
 import org.pac4j.oauth.client.VkClient;
 
+import java.lang.reflect.Array;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -89,6 +93,8 @@ public class App extends Jooby {
             rsp.send("Указанные пароли не совпадают!");
             return;
         }
+        MongoCollection roles = jongo.getCollection("roles");
+        user.roles = Collections.singletonList(roles.findOne("{name: 'Пользователь'}").as(Role.class).id);
         users.insert(user);
         rsp.redirect("/#/registrationSuccess");
     };
