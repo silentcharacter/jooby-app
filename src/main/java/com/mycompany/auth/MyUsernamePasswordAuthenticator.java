@@ -54,9 +54,11 @@ public class MyUsernamePasswordAuthenticator implements UsernamePasswordAuthenti
         profile.addAttribute("first_name", user.firstName);
         profile.addAttribute("family_name", user.lastName);
         profile.addAttribute("display_name", user.firstName + " " + user.lastName);
-        MongoCollection roles = jongo.getCollection("roles");
-        for (String role : user.roles) {
-            profile.addRole(roles.findOne(new ObjectId(role)).as(Role.class).name);
+        if (user.roles != null) {
+            MongoCollection roles = jongo.getCollection("roles");
+            for (String role : user.roles) {
+                profile.addRole(roles.findOne(new ObjectId(role)).as(Role.class).name);
+            }
         }
         credentials.setUserProfile(profile);
     }
