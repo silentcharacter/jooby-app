@@ -1,58 +1,57 @@
-<form class="form-horizontal" action='/register' method="POST">
-    <fieldset>
-        <div id="legend">
-            <legend class="">Регистрация нового пользователя</legend>
-        </div>
-        <div class="control-group">
-            <!-- Username -->
-            <label class="control-label"  for="firstname">Имя</label>
-            <div class="controls">
-                <input type="text" id="firstname" name="firstName" placeholder="Имя" class="input-xlarge">
-                <p class="help-block">Пожалуйста, укажите ваше имя</p>
+<div class="main">
+    <form class="form-horizontal" action='/register' method="POST">
+        <fieldset>
+            <div id="legend">
+                <legend class="">Регистрация нового пользователя</legend>
             </div>
-        </div>
+            <div class="control-group">
+                <label class="control-label"  for="firstname">Имя</label>
+                <div class="controls">
+                    <input type="text" id="firstname" name="firstName" placeholder="Имя" class="input-xlarge">
+                    <p class="help-block">Пожалуйста, укажите ваше имя</p>
+                </div>
+            </div>
 
-        <div class="control-group">
-            <!-- Username -->
-            <label class="control-label"  for="lastname">Фамилия</label>
-            <div class="controls">
-                <input type="text" id="lastname" name="lastName" placeholder="Фамилия" class="input-xlarge">
-                <p class="help-block">Пожалуйста, укажите вашу фамилию</p>
+            <div class="control-group">
+                <label class="control-label"  for="lastname">Фамилия</label>
+                <div class="controls">
+                    <input type="text" id="lastname" name="lastName" placeholder="Фамилия" class="input-xlarge">
+                    <p class="help-block">Пожалуйста, укажите вашу фамилию</p>
+                </div>
             </div>
-        </div>
 
-        <div class="control-group">
-            <!-- E-mail -->
-            <label class="control-label" for="email">E-mail</label>
-            <div class="controls">
-                <input type="email" class=" input-xlarge" name="email" id="email" placeholder="Email">
-                <p class="help-block">Ваш адрес электронной почты</p>
+            <div class="control-group">
+                <!-- E-mail -->
+                <label class="control-label" for="email">E-mail</label>
+                <div class="controls">
+                    <input type="email" class=" input-xlarge" name="email" id="email" placeholder="Email">
+                    <p class="help-block">Ваш адрес электронной почты</p>
+                </div>
             </div>
-        </div>
 
-        <div class="control-group">
-            <!-- Password-->
-            <label class="control-label" for="password">Пароль</label>
-            <div class="controls">
-                <input type="password" id="password" name="password" placeholder="Пароль" class="input-xlarge">
-                <p class="help-block">Пароль должен содержать как минимум 4 символа</p>
+            <div class="control-group">
+                <label class="control-label" for="password">Пароль</label>
+                <div class="controls">
+                    <input type="password" id="password" name="password" placeholder="Пароль" class="input-xlarge">
+                    <p class="help-block">Пароль должен содержать как минимум 4 символа</p>
+                </div>
             </div>
-        </div>
 
-        <div class="control-group">
-            <!-- Password -->
-            <label class="control-label"  for="password_confirm">Пароль (подтверждение)</label>
-            <div class="controls">
-                <input type="password" id="password_confirm" name="password_confirm" placeholder="Пароль" class="input-xlarge">
-                <p class="help-block">Пожалуйста, повторите введенный пароль</p>
+            <div class="control-group">
+                <label class="control-label"  for="password_confirm">Пароль (подтверждение)</label>
+                <div class="controls">
+                    <input type="password" id="password_confirm" name="password_confirm" placeholder="Пароль" class="input-xlarge">
+                    <p class="help-block">Пожалуйста, повторите введенный пароль</p>
+                </div>
             </div>
-        </div>
 
-        <div class="control-group">
-            <!-- Button -->
-            <div class="controls">
-                <button class="btn btn-info btn-sm">Зарегистрироваться</button>
+            <div class="control-group">
+                <div class="controls">
+                    <!--<button class="btn btn-info btn-sm">Зарегистрироваться</button>-->
+                    <button class="btn btn-lg purple-bg">Зарегистрироваться</button>
+                </div>
             </div>
-        </div>
-    </fieldset>
-</form>
+            <br/><br/>
+        </fieldset>
+    </form>
+</div>

@@ -1,37 +1,61 @@
-<div class="middlePage">
-    <div class="page-header">
-        <h1 class="logo"><small>Добро пожаловать!</small></h1>
-    </div>
+<div class="container">
+    <div class="row">
 
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h3 class="panel-title">Пожалуйста авторизуйтесь</h3>
-        </div>
-        <div class="panel-body">
+        <div class="main">
+
+            <h3>Войдите или <a href="#/register">Зарегистрируйтесь</a></h3>
+            <hr class="colorgraph"><br>
             <div class="row">
-                <div class="col-md-5" >
-                    <a href="/google"><img src="/assets/image/gg.png" /></a><br/>
-                    <a href="/vk"><img src="/assets/image/vk.png" /></a><br/>
-                    <a href="/facebook"><img src="/assets/image/fb.png" /></a><br/>
-                    <a href="/twitter"><img src="/assets/image/tw.png" /></a><br/>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    <a href="/facebook" class="btn btn-lg btn-primary btn-block">Facebook</a>
                 </div>
-                <div class="col-md-7" style="border-left:1px solid #ccc;height:170px">
-                    <form class="form-horizontal" action="/auth" method="post">
-                        <!--<div id="signupalert" style="display:none" class="alert alert-danger">-->
-                        <!--<p>Error:</p>-->
-                        <!--<span></span>-->
-                        <!--</div>-->
-                        <fieldset>
-                            <input type="hidden" name="client_name" value="FormClient">
-                            <input required autofocus name="username" type="email" placeholder="Email" class="form-control input-md">
-                            <div class="spacing"><input type="checkbox" name="checkboxes" id="checkboxes-0" value="1"><small> Запомнить меня</small></div>
-                            <input name="password" type="password" placeholder="Пароль" class="form-control input-md" required>
-                            <div class="spacing"><a href="#"><small> Забыли пароль?</small></a><br/></div>
-                            <button id="singlebutton" name="singlebutton" class="btn btn-info btn-sm pull-right">Войти</button>
-                        </fieldset>
-                    </form>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    <a href="/google" class="btn btn-lg btn-danger btn-block">Google+</a>
                 </div>
             </div>
+            <br/>
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    <a href="/facebook" class="btn btn-lg btn-primary btn-block">ВКонтакте</a>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    <a href="/google" class="btn btn-lg btn-info btn-block">Twitter</a>
+                </div>
+            </div>
+            <div class="login-or">
+                <hr class="hr-or">
+                <span class="span-or">или</span>
+            </div>
+
+            <!--<div id="signupalert" style="display:none" class="alert alert-danger">-->
+            <!--<p>Error:</p>-->
+            <!--<span></span>-->
+            <!--</div>-->
+
+            <form role="form" action="/auth" method="post">
+                <input type="hidden" name="client_name" value="FormClient">
+                <div class="form-group">
+                    <label for="inputUsernameEmail">Email</label>
+                    <input required autofocus name="username" type="email" id="inputUsernameEmail" placeholder="Email" class="form-control input-md">
+                </div>
+                <div class="form-group">
+                    <a class="pull-right" href="#">Забыли пароль?</a>
+                    <label for="inputPassword">Пароль</label>
+                    <input name="password" type="password" placeholder="Пароль" class="form-control input-md" required id="inputPassword">
+                </div>
+                <!--<div class="checkbox pull-right">-->
+                    <!--<label>-->
+                        <!--<input type="checkbox">-->
+                        <!--Запомнить меня </label>-->
+                <!--</div>-->
+                <button type="submit" class="btn btn-lg btn-block purple-bg">
+                    Войти
+                </button>
+                <br/>
+                <br/>
+            </form>
+
         </div>
+
     </div>
 </div>
