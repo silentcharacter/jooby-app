@@ -6,30 +6,13 @@ import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jooby.Jooby;
 
-public class Todos extends Jooby {
+public class Todos extends AbstractResource<Todo> {
+
+    public Todos() {
+        super(Todo.class, "todos");
+    }
 
     {
-        use("/api/v1/todos")
-                .put("/:id", req -> {
-                    Jongo jongo = req.require(Jongo.class);
-                    MongoCollection todos = jongo.getCollection("todos");
-                    Todo todo = todos.findOne(new ObjectId(req.param("id").value())).as(Todo.class);
-                    todo.done = !todo.done;
-                    todos.save(todo);
-                    return todo;
-                })
-                .get("/", req -> {
-                    Jongo jongo = req.require(Jongo.class);
-                    MongoCollection todos = jongo.getCollection("todos");
-                    return todos.find().sort("{done: 1, createdOn: -1}").as(Todo.class);
-                })
-                .post("/", req -> {
-                    Jongo jongo = req.require(Jongo.class);
-                    MongoCollection todos = jongo.getCollection("todos");
-                    Todo todo = req.body().to(Todo.class);
-                    todos.insert(todo);
-                    return todo;
-                });
-
+        initializeRoutes();
     }
 }

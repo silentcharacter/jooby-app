@@ -6,12 +6,10 @@ import org.bson.types.ObjectId;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jooby.Jooby;
+import org.jooby.Request;
 import org.jooby.Route;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AbstractResource<T> extends Jooby {
@@ -45,12 +43,6 @@ public class AbstractResource<T> extends Jooby {
     protected Route.Handler getListHandler = (req, rsp) -> {
         Jongo jongo = req.require(Jongo.class);
         MongoCollection collection = jongo.getCollection(entityName);
-        String sortField = "id";
-        Integer sortDir = -1;
-        if (req.param("_sortField").isSet()) {
-            sortField = req.param("_sortField").value();
-            sortDir = "DESC".equals(req.param("_sortDir").value()) ? -1 : 1;
-        }
         Integer page = 1;
         Integer perPage = 10000;
         if (req.param("_page").isSet()) {
@@ -75,16 +67,43 @@ public class AbstractResource<T> extends Jooby {
             map.remove("id");
             for (Map.Entry<String, Object> entry : map.entrySet()) {
                 query = String.format(query, entry.getKey() + ": #,%s");
-                filterValues.add(entry.getValue());
+                filterValues.add(extractValue(entry.getValue()));
             }
         }
         query = query.replace("%s", "").replace(",}", "}");
         rsp.header("X-Total-Count", collection.count(query, filterValues.toArray()));
         rsp.send(collection.find(query, filterValues.toArray())
-                .sort(String.format("{%s: %d}", sortField, sortDir))
-                .limit(perPage).skip((page - 1) * perPage)
+                .sort(extractSort(req)).limit(perPage).skip((page - 1) * perPage)
                 .as(typeParameterClass));
     };
+
+    private Object extractValue(Object value) {
+        if (!(value instanceof String)) {
+            return value;
+        }
+        String str = value.toString();
+        if (str.equals("true") || str.equals("false")) {
+            return Boolean.valueOf(str);
+        }
+        return value;
+    }
+
+    private String extractSort(Request req) {
+        String sort = "{_id: -1}";
+        if (req.param("_sortField").isSet()) {
+            sort = "{%s : %d %s}";
+            Iterator<String> sortDirs = req.param("_sortDir").toList().iterator();
+            for (String sortFieldName : req.param("_sortField").toList()) {
+                if (sortFieldName.equals("id")) {
+                    sortFieldName = "_id";
+                }
+                Integer sortDir = "DESC".equals(sortDirs.next()) ? -1 : 1;
+                sort = String.format(sort, sortFieldName, sortDir,",%s : %d %s");
+            }
+            sort = sort.replace(",%s : %d %s", "");
+        }
+        return sort;
+    }
 
     protected Route.OneArgHandler getByIdHandler = req -> {
         Jongo jongo = req.require(Jongo.class);

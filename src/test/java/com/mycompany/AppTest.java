@@ -2,6 +2,7 @@ package com.mycompany;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mycompany.domain.New;
 import com.mycompany.domain.User;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -14,6 +15,7 @@ import org.junit.Test;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -30,6 +32,15 @@ public class AppTest extends BaseTest {
             new BasicNameValuePair("username", "igolnikovilya@gmail.com"),
             new BasicNameValuePair("password", "123123")
     };
+
+    @Test
+    public void testMapper() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        String str = "{\"createdOn\": \"2001-12-28T21:00:00.000Z\"}";
+        New _new = mapper.readValue(str, New.class);
+        System.out.println(_new.createdOn);
+//        "yyyy-MM-dd HH:mm:ss"
+    }
 
     @Test
     public void updateUsers() throws Exception {

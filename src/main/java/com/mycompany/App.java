@@ -1,10 +1,11 @@
 package com.mycompany;
 
-import com.google.common.collect.Lists;
 import com.mycompany.auth.MyUsernamePasswordAuthenticator;
+import com.mycompany.controllers.News;
 import com.mycompany.controllers.Roles;
 import com.mycompany.controllers.Todos;
 import com.mycompany.controllers.Users;
+import com.mycompany.domain.New;
 import com.mycompany.domain.Role;
 import com.mycompany.domain.User;
 import org.jongo.Jongo;
@@ -26,11 +27,9 @@ import org.pac4j.oauth.client.Google2Client;
 import org.pac4j.oauth.client.TwitterClient;
 import org.pac4j.oauth.client.VkClient;
 
-import java.lang.reflect.Array;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class App extends Jooby {
 
@@ -46,8 +45,9 @@ public class App extends Jooby {
 
         get("/", req -> Results.html("angular").put("profile", getUserProfile(req)));
         use(new Todos());
+        use(new News());
 
-        get("/userProfile", req -> getProfilePageData((CommonProfile) getUserProfile(req)));
+        get("/userProfile", req -> getProfilePageData(req));
 
         get("/login", ((request, response) -> response.redirect("/#/login")));
 
@@ -69,15 +69,50 @@ public class App extends Jooby {
 //                        })
         );
 
-        Route.Handler handler = (req, rsp) -> rsp.redirect("/");
-        get("/facebook", handler);
-        get("/twitter", handler);
-        get("/google", handler);
-        get("/vk", handler);
+        get("/facebook", socialLoginHandler);
+        get("/twitter", socialLoginHandler);
+        get("/google", socialLoginHandler);
+        get("/vk", socialLoginHandler);
 
         get("/admin", req -> Results.html("admin"));
         use(new Users());
         use(new Roles());
+    }
+
+    private static Route.Handler socialLoginHandler = (req, rsp) -> {
+        CommonProfile profile = getUserProfile(req);
+        if (profile == null) {
+            rsp.redirect("/");
+            return;
+        }
+        String email = extractEmail(req, profile);
+        Jongo jongo = req.require(Jongo.class);
+        MongoCollection users = jongo.getCollection("users");
+        if (users.count("{email : #}", email) == 0) {
+            User user = new User();
+            user.profileId = profile.getId();
+            user.firstName = profile.getFirstName();
+            user.lastName = profile.getFamilyName();
+            user.email = email;
+            MongoCollection roles = jongo.getCollection("roles");
+            user.roles = Collections.singletonList(roles.findOne("{name: 'Пользователь'}").as(Role.class).id);
+            users.insert(user);
+        }
+        rsp.redirect("/");
+    };
+
+    private static String extractEmail(Request req, CommonProfile profile) {
+        String email = profile.getEmail();
+        if (email == null) {
+            final String[] emails = {null};
+            req.session().attributes().forEach((k, v) -> {
+                if (k.endsWith("emails")) {
+                    emails[0] = v;
+                }
+            });
+            email = emails[0];
+        }
+        return email;
     }
 
     private static Route.Handler registrationHandler = (req, rsp) -> {
@@ -99,21 +134,40 @@ public class App extends Jooby {
         rsp.redirect("/#/registrationSuccess");
     };
 
-    private static Map<String, Object> getProfilePageData(CommonProfile profile) {
+    private static Map<String, Object> getProfilePageData(Request req) {
         Map<String, Object> response = new HashMap<>();
+        CommonProfile profile = getUserProfile(req);
         if (profile != null) {
             response.put("client", profile.getClass().getSimpleName().replace("Profile", ""));
         }
         response.put("profile", profile);
+        User user = getCurrentUser(req, profile);
+        if (user != null) {
+            response.put("userId", user.id);
+        }
         return response;
     }
 
+    private static User getCurrentUser(Request req, CommonProfile profile) {
+        Jongo jongo = req.require(Jongo.class);
+        MongoCollection users = jongo.getCollection("users");
+        if (profile == null) {
+            return null;
+        }
+        User user = users.findOne("{email : #}", extractEmail(req, profile)).as(User.class);
+        return user;
+    }
+
     @SuppressWarnings("unchecked")
-    public static UserProfile getUserProfile(final Request req) throws Exception {
-        Optional<String> profileId = req.session().get(Auth.ID).toOptional();
-        if (profileId.isPresent()) {
-            AuthStore<UserProfile> store = req.require(AuthStore.class);
-            return store.get(profileId.get()).get();
+    public static CommonProfile getUserProfile(Request req) {
+        try {
+            Optional<String> profileId = req.session().get(Auth.ID).toOptional();
+            if (profileId.isPresent()) {
+                AuthStore<UserProfile> store = req.require(AuthStore.class);
+                return (CommonProfile) store.get(profileId.get()).get();
+            }
+        } catch (Exception e) {
+            return null;
         }
         return null;
     }

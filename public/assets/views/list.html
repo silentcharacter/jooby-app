@@ -1,29 +1,58 @@
-<h2>All Todos <a class="btn btn-primary pull-right" href="#/create"><i
-        class="icon-plus-sign icon-white"></i> New Todo</a></h2>
+<div ng-if="profile.id">
 
-<table class="table table-hover">
-    <tr>
-        <th>
-            #
-        </th>
-        <th>
-            Title
-        </th>
-        <th>
-            Created On
-        </th>
-        <th>Done</th>
-    </tr>
-    <tr class="success-{{todo.done}}" ng-repeat="todo in todos">
-        <td>{{$index+1}}</td>
-        <td>
-            {{todo.title}}
-        </td>
-        <td>
-            {{todo.createdOn |date:'medium'}}
-        </td>
-        <td>
-            <input type="checkbox" ng-change="todoStatusChanged(todo)" ng-value="todo.done" ng-model="todo.done">
-        </td>
-    </tr>
-</table>
+    <h2>Дела наши скорбные
+        <a class="btn btn-primary pull-right" href="#/create">
+            <i class="glyphicon glyphicon-plus"></i>
+        </a>
+    </h2>
+
+    <table class="table table-hover">
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                Задача
+            </th>
+            <th>
+                Создана
+            </th>
+            <th>Выполнена</th>
+        </tr>
+        <tr class="success-{{todo.done}}" ng-repeat="todo in todos">
+            <td>{{$index+1}}</td>
+            <td>
+                {{todo.title}}
+            </td>
+            <td>
+                {{todo.createdOn | dateWithoutZoneShift}}
+            </td>
+            <td>
+                <input type="checkbox" ng-change="todoStatusChanged(todo)" ng-value="todo.done" ng-model="todo.done">
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+<div ng-if="!profile.id">
+
+    <h2 >Новости</h2>
+
+    <table class="table table-hover">
+        <tr ng-repeat="new in news">
+            <td>
+            </td>
+            <td>
+                <div class="lead" >
+                    {{new.title}}
+                </div>
+                {{new.description}}
+            </td>
+            <td>
+                {{new.createdOn | dateWithoutZoneShift}}
+            </td>
+        </tr>
+    </table>
+
+</div>

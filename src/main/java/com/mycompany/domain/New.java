@@ -2,16 +2,15 @@ package com.mycompany.domain;
 
 import java.util.Date;
 
-public class Todo extends Entity{
+public class New extends Entity{
 
     public String title;
-    public boolean done;
+    public String description;
     public Date createdOn = new Date();
-    public String user;
 
     @Override
     public String getFullText() {
-        return title.toLowerCase();
+        return title.toLowerCase() + description.toLowerCase();
     }
 
 }

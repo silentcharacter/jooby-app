@@ -79,9 +79,66 @@
         // add the user entity to the admin application
         admin.addEntity(user);
 
+        var todo = nga.entity('todos');
+        todo.listView().title('Задачи').fields([
+            nga.field('title').isDetailLink(true).label("Название"),
+            nga.field('done', 'boolean').label("Статус"),
+            nga.field('createdOn').label("Создано"),
+            nga.field('user', 'reference').isDetailLink(true)
+                    .label('Пользователь')
+                    .targetEntity(user)
+                    .targetField(nga.field('lastName'))
+                    .singleApiCall(ids => ({'id': ids }))
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по названию' }),
+            nga.field('done', 'boolean').label('Выполнена').pinned(true).attributes({ placeholder: ' ' }),
+            nga.field('user', 'reference').label('Пользователь').attributes({ placeholder: 'Выберите пользователя' })
+                .pinned(true)
+                .targetEntity(user)
+                .targetField(nga.field('lastName'))
+                .remoteComplete(true, {
+                    refreshDelay: 200,
+                    searchQuery: function(search) { return { q: search }; }
+                })
+        ]);
+        todo.creationView().title('Создание задачи').fields([
+            nga.field('title').validation({ required: true, maxlength: 512 }).label("Название"),
+            nga.field('done', 'boolean').label("Статус"),
+            nga.field('user', 'reference')
+                    .label('Пользователь')
+                    .targetEntity(user).attributes({ placeholder: 'Выберите пользователя' })
+                    .targetField(nga.field('lastName'))
+                    .sortField('lastName')
+                    .sortDir('ASC')
+                    .validation({ required: true })
+                    .remoteComplete(true, {
+                        refreshDelay: 200,
+                        searchQuery: search => ({ q: search })
+    })
+        ]);
+        todo.editionView().fields(todo.creationView().fields()).title('Редактирование задачи');
+        admin.addEntity(todo);
+
+        var news = nga.entity('news');
+        news.listView().title('Новости').fields([
+            nga.field('title').isDetailLink(true).label("Название"),
+            nga.field('createdOn', 'datetime').label("Дата")
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по новостям' })
+        ]);
+        news.creationView().title('Создание новости').fields([
+            nga.field('title').validation({ required: true, maxlength: 512 }).label("Название"),
+            nga.field('description').validation({ required: true, maxlength: 512 }).label("Описание"),
+            nga.field('createdOn', 'datetime').label("Дата"),
+        ]);
+        news.editionView().fields(news.creationView().fields()).title('Редактирование новости');
+        admin.addEntity(news);
+
         admin.menu(nga.menu()
             .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Пользователи'))
             .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
+            .addChild(nga.menu(todo).icon('<span class="glyphicon glyphicon-list-alt"></span>').title('Задачи'))
+            .addChild(nga.menu(news).icon('<span class="glyphicon glyphicon-flash"></span>').title('Новости'))
             .addChild(nga.menu().title('Прочее')
                     .addChild(nga.menu().title('Отчеты').link('/stats').active(function(path) {
                         return path.indexOf('/stats') === 0;

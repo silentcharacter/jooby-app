@@ -48,7 +48,7 @@ public class MyUsernamePasswordAuthenticator implements UsernamePasswordAuthenti
         }
 
         HttpProfile profile = new HttpProfile();
-        profile.setId(user.email);
+        profile.setId(user.id);
         profile.addAttribute("username", username);
         profile.addAttribute("email", user.email);
         profile.addAttribute("first_name", user.firstName);

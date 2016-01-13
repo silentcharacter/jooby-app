@@ -32,20 +32,33 @@ app.controller('ProfileCtrl', function ($scope, Authentication) {
     Authentication.then(function (data) {
         $scope.client = data.client;
         $scope.profile = data.profile;
+        $scope.userId = res.userId;
     });
 });
 
-app.controller('ListCtrl', function ($scope, $http) {
+app.controller('ListCtrl', function ($scope, $http, Authentication) {
 
-    $http.get('/api/v1/todos').success(function (data) {
-        $scope.todos = data;
-    }).error(function (data, status) {
-        console.log('Error ' + data)
-    })
+    Authentication.then(function(res) {
+        $scope.profile = res.profile;
+        $scope.userId = res.userId;
+        if ($scope.userId) {
+            $http.get('/api/todos?_sortField=done&_sortDir=ASC&_sortField=createdOn&_sortDir=DESC&_filters=%7B%22user%22%3A%22'+$scope.userId+'%22%7D').success(function (data) {
+                $scope.todos = data;
+            }).error(function (data, status) {
+                console.log('Error ' + data)
+            })
+        } else {
+            $http.get('/api/news?_sortField=createdOn&_sortDir=DESC').success(function (data) {
+                $scope.news = data;
+            }).error(function (data, status) {
+                console.log('Error ' + data)
+            })
+        }
+    });
 
     $scope.todoStatusChanged = function (todo) {
         console.log(todo);
-        $http.put('/api/v1/todos/' + todo.id, todo).success(function (data) {
+        $http.put('/api/todos/' + todo.id, todo).success(function (data) {
             console.log('status changed');
         }).error(function (data, status) {
             console.log('Error ' + data)
@@ -53,15 +66,21 @@ app.controller('ListCtrl', function ($scope, $http) {
     }
 });
 
-app.controller('CreateCtrl', function ($scope, $http, $location) {
-    $scope.todo = {
-        done: false
-    };
+app.controller('CreateCtrl', function ($scope, $http, $location, Authentication) {
+
+    Authentication.then(function(res) {
+        $scope.profile = res.profile;
+        $scope.userId = res.userId;
+        console.log($scope.userId);
+        $scope.todo = {
+            done: false,
+            user: $scope.userId
+        };
+    });
 
     $scope.createTodo = function () {
         console.log($scope.todo);
-        //$scope.todo.title = encodeURIComponent($scope.todo.title);
-        $http.post('/api/v1/todos', $scope.todo).success(function (data) {
+        $http.post('/api/todos', $scope.todo).success(function (data) {
             $location.path('/');
         }).error(function (data, status) {
             console.log('Error ' + data)
@@ -77,4 +96,19 @@ app.factory('Authentication', function ($resource) {
         }
     });
     return resource.get().$promise;
+});
+
+app.filter('dateWithoutZoneShift', function($filter)
+{
+    return function(input)
+    {
+        if(input == null){
+            return "";
+        }
+        var d = new Date();
+        d.setTime(Date.parse(input));
+        d = new Date(d.getTime() + d.getTimezoneOffset()*60000);
+        var _date = $filter('date')(new Date(d.getTime()), 'dd.MM.yyyy  HH:mm');
+        return _date;
+    };
 });

@@ -5,6 +5,7 @@ import java.util.List;
 
 public class User extends Entity{
 
+    public String profileId;
     public String firstName;
     public String lastName;
     public String email;
