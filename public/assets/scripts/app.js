@@ -32,7 +32,7 @@ app.controller('ProfileCtrl', function ($scope, Authentication) {
     Authentication.then(function (data) {
         $scope.client = data.client;
         $scope.profile = data.profile;
-        $scope.userId = res.userId;
+        $scope.userId = data.userId;
     });
 });
 
@@ -41,6 +41,7 @@ app.controller('ListCtrl', function ($scope, $http, Authentication) {
     Authentication.then(function(res) {
         $scope.profile = res.profile;
         $scope.userId = res.userId;
+        console.log($scope.userId);
         if ($scope.userId) {
             $http.get('/api/todos?_sortField=done&_sortDir=ASC&_sortField=createdOn&_sortDir=DESC&_filters=%7B%22user%22%3A%22'+$scope.userId+'%22%7D').success(function (data) {
                 $scope.todos = data;
