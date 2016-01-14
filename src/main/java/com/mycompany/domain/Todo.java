@@ -6,7 +6,7 @@ public class Todo extends Entity{
 
     public String title;
     public boolean done;
-    public Date createdOn = new Date();
+    public Date createdOn;
     public String user;
 
     @Override

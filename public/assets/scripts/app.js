@@ -80,6 +80,7 @@ app.controller('CreateCtrl', function ($scope, $http, $location, Authentication)
     });
 
     $scope.createTodo = function () {
+        $scope.todo.createdOn = new Date();
         console.log($scope.todo);
         $http.post('/api/todos', $scope.todo).success(function (data) {
             $location.path('/');
@@ -99,7 +100,7 @@ app.factory('Authentication', function ($resource) {
     return resource.get().$promise;
 });
 
-app.filter('dateWithoutZoneShift', function($filter)
+app.filter('dateTimeWithoutZoneShift', function($filter)
 {
     return function(input)
     {
