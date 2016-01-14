@@ -8,6 +8,7 @@ import com.mycompany.controllers.Users;
 import com.mycompany.domain.New;
 import com.mycompany.domain.Role;
 import com.mycompany.domain.User;
+import org.apache.commons.lang3.StringUtils;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jooby.Jooby;
@@ -86,6 +87,10 @@ public class App extends Jooby {
             return;
         }
         String email = extractEmail(req, profile);
+        if (StringUtils.isEmpty(email)) {
+            rsp.redirect("/");
+            return;
+        }
         Jongo jongo = req.require(Jongo.class);
         MongoCollection users = jongo.getCollection("users");
         if (users.count("{email : #}", email) == 0) {
@@ -154,8 +159,11 @@ public class App extends Jooby {
         if (profile == null) {
             return null;
         }
-        User user = users.findOne("{email : #}", extractEmail(req, profile)).as(User.class);
-        return user;
+        String email = extractEmail(req, profile);
+        if (StringUtils.isEmpty(email)) {
+            return null;
+        }
+        return users.findOne("{email : #}", email).as(User.class);
     }
 
     @SuppressWarnings("unchecked")
