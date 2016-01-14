@@ -1,7 +1,11 @@
 package com.mycompany.domain;
 
+import org.jooby.Mutant;
+import org.jooby.internal.MutantImpl;
+
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public class User extends Entity{
 
@@ -23,6 +27,6 @@ public class User extends Entity{
 
     @Override
     public String getFullText() {
-        return firstName.toLowerCase() + " " + lastName.toLowerCase();
+        return Optional.ofNullable(firstName).orElse("").toLowerCase() + " " + Optional.ofNullable(lastName).orElse("").toLowerCase();
     }
 }
