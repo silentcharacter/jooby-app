@@ -56,10 +56,10 @@ public class App extends Jooby {
 
         use(new Auth()
                         .client("/google/**", conf -> new Google2Client(conf.getString("google.key"), conf.getString("google.secret")))
-                        .client("/vk/**", conf -> new VkClient(conf.getString("vk.key"), conf.getString("vk.secret")))
                         .client("/twitter/**", conf -> new TwitterClient(conf.getString("twitter.key"), conf.getString("twitter.secret")))
+                        .client("/vk/**", conf -> new VkClient(conf.getString("vk.key"), conf.getString("vk.secret")))
                         .client("/facebook/**", conf -> new FacebookClient(conf.getString("facebook.key"), conf.getString("facebook.secret")))
-                        .form("*", MyUsernamePasswordAuthenticator.class)
+                        .form("**", MyUsernamePasswordAuthenticator.class)
 //                        .authorizer("admin", "/admin/**", (ctx, profile) -> {
 //                            if (!(profile instanceof HttpProfile || profile instanceof Google2Profile)) {
 //                                return false;
@@ -87,13 +87,9 @@ public class App extends Jooby {
             return;
         }
         String email = extractEmail(req, profile);
-        if (StringUtils.isEmpty(email)) {
-            rsp.redirect("/");
-            return;
-        }
         Jongo jongo = req.require(Jongo.class);
         MongoCollection users = jongo.getCollection("users");
-        if (users.count("{email : #}", email) == 0) {
+        if (users.count("{email : #}", email) == 0 && users.count("{profileId : #}", profile.getId()) == 0) {
             User user = new User();
             user.profileId = profile.getId();
             user.firstName = profile.getFirstName();
@@ -160,10 +156,10 @@ public class App extends Jooby {
             return null;
         }
         String email = extractEmail(req, profile);
-        if (StringUtils.isEmpty(email)) {
-            return null;
+        if (!StringUtils.isEmpty(email)) {
+            return users.findOne("{email : #}", email).as(User.class);
         }
-        return users.findOne("{email : #}", email).as(User.class);
+        return users.findOne("{profileId : #}", profile.getId()).as(User.class);
     }
 
     @SuppressWarnings("unchecked")
