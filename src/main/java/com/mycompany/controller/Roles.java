@@ -1,4 +1,4 @@
-package com.mycompany.controllers;
+package com.mycompany.controller;
 
 import com.mycompany.domain.Role;
 

@@ -1,10 +1,6 @@
-package com.mycompany.controllers;
+package com.mycompany.controller;
 
 import com.mycompany.domain.Todo;
-import org.bson.types.ObjectId;
-import org.jongo.Jongo;
-import org.jongo.MongoCollection;
-import org.jooby.Jooby;
 
 public class Todos extends AbstractResource<Todo> {
 

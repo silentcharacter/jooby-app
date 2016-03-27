@@ -39,7 +39,6 @@ public class AppTest extends BaseTest {
         String str = "{\"createdOn\": \"2001-12-28T21:00:00.000Z\"}";
         New _new = mapper.readValue(str, New.class);
         System.out.println(_new.createdOn);
-//        "yyyy-MM-dd HH:mm:ss"
     }
 
     @Test
