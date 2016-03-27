@@ -56,14 +56,7 @@ public class App extends Jooby {
         use(new Auth()
                         .form("/admin/**", MyUsernamePasswordAuthenticator.class)
                         .form("/api/**", MyUsernamePasswordAuthenticator.class)
-//                        .authorizer("admin", "/admin/**", (ctx, profile) -> {
-//                            if (!(profile instanceof HttpProfile || profile instanceof Google2Profile)) {
-//                                return false;
-//                            }
-//                            final HttpProfile httpProfile = (HttpProfile) profile;
-//                            final String username = httpProfile.getUsername();
-//                            return true;
-//                        })
+                        .authorizer("admin", "/admin/**", AuthenticationService.authorizerHandler)
                         .client("/google/**", conf -> new Google2Client(conf.getString("google.key"), conf.getString("google.secret")))
                         .client("/vk/**", conf -> new VkClient(conf.getString("vk.key"), conf.getString("vk.secret")))
                         .client("/facebook/**", conf -> new FacebookClient(conf.getString("facebook.key"), conf.getString("facebook.secret")))

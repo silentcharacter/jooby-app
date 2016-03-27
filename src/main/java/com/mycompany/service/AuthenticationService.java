@@ -9,8 +9,11 @@ import org.jooby.Request;
 import org.jooby.Route;
 import org.jooby.pac4j.Auth;
 import org.jooby.pac4j.AuthStore;
+import org.pac4j.core.authorization.Authorizer;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.UserProfile;
+import org.pac4j.http.profile.HttpProfile;
+import org.pac4j.oauth.profile.google2.Google2Profile;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -60,6 +63,14 @@ public class AuthenticationService {
         rsp.redirect("/#/registrationSuccess");
     };
 
+    public static Authorizer authorizerHandler = (ctx, profile) -> {
+//        if (!(profile instanceof HttpProfile || profile instanceof Google2Profile)) {
+//            return false;
+//        }
+//        final HttpProfile httpProfile = (HttpProfile) profile;
+//        final String username = httpProfile.getUsername();
+        return true;
+    };
 
     private static User getCurrentUser(Request req, CommonProfile profile) {
         Jongo jongo = req.require(Jongo.class);
