@@ -1,0 +1,124 @@
+.minicart{
+	background:url(/assets/image/sprite.png);
+	background-position: -156px 11px;
+	background-repeat:no-repeat;
+	width: 40px;
+	height: 50px;
+	padding-right: 32px;
+}
+
+.bigcart{
+	background:url(/assets/image/sprite.png);
+	background-position: 0px 11px;
+	background-repeat:no-repeat;
+	width: 155px;
+	height: 120px;
+	margin:0 0 40px 60px;
+}
+
+.count {
+	color:#fff;
+	background: #666666;
+	border-radius: 50%;
+	position: relative;
+	top: 30px;
+	right: -25px;
+	width: 25px;
+	height: 25px;
+	display: inline-block;
+	text-align: center;
+	line-height: 25px;
+}
+
+.popover-content td{
+	padding: 5px
+}
+
+/* Mobile device size */
+
+@media (max-width: 768px) {
+
+	.navbar{ 
+		padding:10px 0;
+	}
+	
+	.minicart{
+		margin-right: -1px;
+		padding-right: 0;
+	}
+
+	.navbar-brand{
+		padding-left: 0;
+	}
+
+	.breadcrumbBox{
+		height:80px;
+		padding-top:21px;
+	}
+
+	.col-md-5.col-sm-12 p{
+		max-width: 300px;
+	}
+
+	.col-md-7.col-sm-12{
+		padding-left: 0;
+		padding-right: 15px;
+		margin-bottom: 32px;
+	}
+
+	.col-md-7.col-sm-12 ul{
+		padding-left: 15px ;
+	}
+
+	.columnCaptions span{
+		padding: 0 21px 0 0;
+	}
+
+	.columnCaptions span:last-child{
+		float: right;
+		padding-right: 42px;
+	}
+
+	.row{
+		padding-bottom:10px;
+	}
+
+	.quantity{	
+		width: 23px;
+		padding-right: 40px !important;
+	}
+
+	.popbtn{
+		background-color: white;
+		position: absolute;
+		height:40px;
+		right: 0;
+	}
+
+	.price{	
+		position: absolute;
+		right: 42px;
+	}
+
+	.totals{
+		padding: 0;
+	}
+
+	.totals .price{
+		position: static;
+	}
+
+	/* Change Bootstrap's default popover to make it look nice on a mobile device */
+
+	.popover.bottom>.arrow{
+		left: auto;
+		margin-left: 0;
+		right: 5px;
+	}
+
+	.popover.bottom{
+		margin-top: 7px;
+		margin-left: -40px;
+	}
+
+}

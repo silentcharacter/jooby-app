@@ -44,6 +44,8 @@ public class App extends Jooby {
 
         get("/", req -> Results.html("angular").put("profile", AuthenticationService.getUserProfile(req)));
 
+        use(new ShopApp());
+
         //public rest resources
         use(new Todos());
         use(new News());
