@@ -1,4 +1,4 @@
-package com.mycompany.service;
+    package com.mycompany.service;
 
 import com.mycompany.domain.Role;
 import com.mycompany.domain.User;
@@ -38,7 +38,9 @@ public class AuthenticationService {
             user.lastName = profile.getFamilyName();
             user.email = email;
             MongoCollection roles = jongo.getCollection("roles");
-            user.roles = Collections.singletonList(roles.findOne("{name: 'Пользователь'}").as(Role.class).id);
+            Role role = roles.findOne("{name: 'Пользователь'}").as(Role.class);
+            if (role != null)
+                user.roles = Collections.singletonList(role.id);
             users.insert(user);
         }
         rsp.redirect("/");

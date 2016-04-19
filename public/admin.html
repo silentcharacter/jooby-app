@@ -152,12 +152,42 @@
         products.editionView().fields(products.creationView().fields()).title('Редактирование продукта');
         admin.addEntity(products);
 
+        var colors = nga.entity('colors');
+        colors.listView().title('Цвета теста').fields([
+            nga.field('name').isDetailLink(true).label("Название"),
+            nga.field('price', 'number').label("Цена")
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по цветам' })
+        ]);
+        colors.creationView().title('Создание цвета').fields([
+            nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
+            nga.field('price', 'number').label("Цена")
+        ]);
+        colors.editionView().fields(colors.creationView().fields()).title('Редактирование цвета');
+        admin.addEntity(colors);
+
+        var sauces = nga.entity('sauces');
+        sauces.listView().title('Соусы').fields([
+            nga.field('name').isDetailLink(true).label("Название"),
+            nga.field('price', 'number').label("Цена")
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по соусам' })
+        ]);
+        sauces.creationView().title('Создание соуса').fields([
+            nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
+            nga.field('price', 'number').label("Цена")
+        ]);
+        sauces.editionView().fields(sauces.creationView().fields()).title('Редактирование соуса');
+        admin.addEntity(sauces);
+
         admin.menu(nga.menu()
             .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Пользователи'))
             .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
             .addChild(nga.menu(todo).icon('<span class="glyphicon glyphicon-list-alt"></span>').title('Задачи'))
             .addChild(nga.menu(news).icon('<span class="glyphicon glyphicon-flash"></span>').title('Новости'))
             .addChild(nga.menu(products).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Продукты'))
+            .addChild(nga.menu(colors).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Цвета теста'))
+            .addChild(nga.menu(sauces).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Соусы'))
             .addChild(nga.menu().title('Прочее')
                     .addChild(nga.menu().title('Отчеты').link('/stats').active(function(path) {
                         return path.indexOf('/stats') === 0;

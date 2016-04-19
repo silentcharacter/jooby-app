@@ -33,7 +33,6 @@ public class AppTest extends BaseTest {
             new BasicNameValuePair("password", "123123")
     };
 
-    @Test
     public void testMapper() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         String str = "{\"createdOn\": \"2001-12-28T21:00:00.000Z\"}";
@@ -41,7 +40,6 @@ public class AppTest extends BaseTest {
         System.out.println(_new.createdOn);
     }
 
-    @Test
     public void updateUsers() throws Exception {
         client.start();
         client.post("/auth?client_name=FormClient").bodyForm(credentials).execute();
@@ -55,7 +53,6 @@ public class AppTest extends BaseTest {
         }
     }
 
-    @Test
     public void createUsers() throws Exception {
         client.start();
         client.post("/auth?client_name=FormClient").bodyForm(credentials).execute();
@@ -78,7 +75,7 @@ public class AppTest extends BaseTest {
         }
     }
 
-    @Test
+//    @Test
     public void index() throws Exception {
         server.get("/")
                 .expect(200)

@@ -1,48 +1,46 @@
 package com.mycompany;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mycompany.controller.shop.Colors;
 import com.mycompany.controller.shop.Products;
-import com.mycompany.domain.shop.Cart;
-import com.mycompany.domain.shop.CartEntry;
+import com.mycompany.controller.shop.Sauces;
+import com.mycompany.domain.shop.Color;
 import com.mycompany.domain.shop.Product;
-import org.jongo.Jongo;
-import org.jongo.MongoCollection;
-import org.jongo.MongoCursor;
+import com.mycompany.service.shop.CartService;
+import com.mycompany.service.shop.ColorService;
+import com.mycompany.service.shop.ProductService;
+import com.mycompany.service.shop.SauceService;
 import org.jooby.Jooby;
 import org.jooby.Results;
-import org.jooby.Session;
-
-import java.util.Optional;
 
 public class ShopApp extends Jooby {
 
     {
+        use(new ProductService());
+        use(new ColorService());
+        use(new SauceService());
+        use(new Products());
+        use(new Colors());
+        use(new Sauces());
+
         get("/shop", req -> {
-            Jongo jongo = req.require(Jongo.class);
-            MongoCollection collection = jongo.getCollection("products");
-            MongoCursor products = collection.find().as(Product.class);
-
-            Optional<String> cartJson = req.session().get("cart").toOptional();
-            ObjectMapper mapper = new ObjectMapper();
-            Cart cart = null;
-            if (cartJson.isPresent()) {
-                cart = mapper.readValue(cartJson.get(), Cart.class);
-            } else {
-                cart = new Cart();
-                Product product = new Product();
-                product.name = "test product";
-                cart.entries.add(new CartEntry(product, 1));
-
-                String cartJsonString = mapper.writeValueAsString(cart);
-                req.session().set("cart", cartJsonString);
-            }
-
+            ProductService productService = req.require(ProductService.class);
             return Results.html("shop")
-                    .put("products", products)
-                    .put("cart", cart);
+                    .put("products", productService.getAll(req))
+                    .put("cart", CartService.getSessionCart(req));
         });
 
-        use(new Products());
+        post("/addToCart", req -> {
+            ProductService productService = req.require(ProductService.class);
+            ColorService colorService = req.require(ColorService.class);
+            Product product = productService.getById(req, req.param("productId").value());
+            Color color = req.param("colorId").isSet() ? colorService.getById(req, req.param("colorId").value()) : null;
+            return CartService.addToCart(req, product, req.param("quantity").intValue(), color, null);
+        });
+
+        post("/removeFromCart", req -> {
+            return CartService.removeFromCart(req, req.param("productId").value());
+        });
+
     }
 
 }
