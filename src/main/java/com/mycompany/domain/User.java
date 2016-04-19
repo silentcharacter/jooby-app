@@ -1,8 +1,5 @@
 package com.mycompany.domain;
 
-import org.jooby.Mutant;
-import org.jooby.internal.MutantImpl;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;

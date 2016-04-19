@@ -116,7 +116,7 @@
                     .remoteComplete(true, {
                         refreshDelay: 200,
                         searchQuery: search => ({ q: search })
-    })
+                    })
         ]);
         todo.editionView().fields(todo.creationView().fields()).title('Редактирование задачи');
         admin.addEntity(todo);
@@ -136,11 +136,28 @@
         news.editionView().fields(news.creationView().fields()).title('Редактирование новости');
         admin.addEntity(news);
 
+        var products = nga.entity('products');
+        products.listView().title('Продукты').fields([
+            nga.field('name').isDetailLink(true).label("Название"),
+            nga.field('description').label("Описание"),
+            nga.field('price', 'number').label("Цена")
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по продуктам' })
+        ]);
+        products.creationView().title('Создание продукта').fields([
+            nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
+            nga.field('description').validation({ required: true}).label("Описание"),
+            nga.field('price', 'number').label("Цена")
+        ]);
+        products.editionView().fields(products.creationView().fields()).title('Редактирование продукта');
+        admin.addEntity(products);
+
         admin.menu(nga.menu()
             .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Пользователи'))
             .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
             .addChild(nga.menu(todo).icon('<span class="glyphicon glyphicon-list-alt"></span>').title('Задачи'))
             .addChild(nga.menu(news).icon('<span class="glyphicon glyphicon-flash"></span>').title('Новости'))
+            .addChild(nga.menu(products).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Продукты'))
             .addChild(nga.menu().title('Прочее')
                     .addChild(nga.menu().title('Отчеты').link('/stats').active(function(path) {
                         return path.indexOf('/stats') === 0;
