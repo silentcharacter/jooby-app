@@ -155,13 +155,15 @@
         var colors = nga.entity('colors');
         colors.listView().title('Цвета теста').fields([
             nga.field('name').isDetailLink(true).label("Название"),
-            nga.field('price', 'number').label("Цена")
+            nga.field('price', 'number').label("Цена"),
+            nga.field('_default', 'boolean').label("По умолчанию")
         ]).filters([
             nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по цветам' })
         ]);
         colors.creationView().title('Создание цвета').fields([
             nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
-            nga.field('price', 'number').label("Цена")
+            nga.field('price', 'number').label("Цена"),
+            nga.field('_default', 'boolean').label("По умолчанию")
         ]);
         colors.editionView().fields(colors.creationView().fields()).title('Редактирование цвета');
         admin.addEntity(colors);

@@ -84,56 +84,43 @@
                             <h4 class="modal-title">Добавление в корзину</h4>
                         </div>
                         <div class="modal-body">
-                            <p>Укажите количество (кг):</p>
-                            <div class="input-group spinner" data-trigger="spinner">
-                                <input type="text" class="form-control text-center" value="1" data-rule="quantity">
-                                <div class="input-group-addon">
-                                    <button type="button" class="spin-up" data-spin="up"><span class="glyphicon glyphicon-triangle-top"></span></button>
-                                    <button type="button" class="spin-down" data-spin="down"><span class="glyphicon glyphicon-triangle-bottom"></span></button>
+                            <form id="addToCartForm" method="post" action="#" >
+                                <input type="hidden" name="productId">
+                                <p>Укажите количество (кг):</p>
+                                <div class="input-group spinner" data-trigger="spinner">
+                                    <input type="text" class="form-control text-center" value="1" data-rule="quantity" name="quantity">
+                                    <div class="input-group-addon">
+                                        <button type="button" class="spin-up" data-spin="up"><span class="glyphicon glyphicon-triangle-top"></span></button>
+                                        <button type="button" class="spin-down" data-spin="down"><span class="glyphicon glyphicon-triangle-bottom"></span></button>
+                                    </div>
                                 </div>
-                            </div>
-                            <hr>
-                            <p>Выберите дополнительные опции:</p>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" value="">
-                                    Острый соус
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" value="">
-                                    Пикантный соус
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" value="">
-                                    Кетчуп
-                                </label>
-                            </div>
-                            <hr>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-                                    Обычный цвет теста
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                                    Красное тесто
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="optionsRadios" id="optionsRadios3" value="option2">
-                                    Зеленое тесто
-                                </label>
-                            </div>
+                                <hr>
+                                <p>Выберите дополнительные опции:</p>
+                                {{#each sauces}}
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="sauces" value="{{id}}">
+                                        {{name}} ({{price}} руб.)
+                                    </label>
+                                </div>
+                                {{/each}}
+                                <hr>
+                                {{#each colors}}
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="colorId" value="{{id}}"
+                                               {{#if _default}}
+                                                    checked
+                                               {{/if}}
+                                        >
+                                        {{name}} ({{price}} руб.)
+                                    </label>
+                                </div>
+                                {{/each}}
+                            </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Добавить</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="addToCart">Добавить</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
                         </div>
                     </div>
@@ -146,7 +133,7 @@
                     <h2>{{name}}</h2>
                     <p>{{description}}</p>
                     <p>Цена: <b>{{price}}</b></p>
-                    <p><a class="btn btn-default" href="#" role="button" data-toggle="modal" data-target="#myModal">
+                    <p><a class="btn btn-default bt-add-product" href="#" role="button" data-toggle="modal" data-target="#myModal" onclick="onOrderClick('{{id}}')">
                         Заказать &raquo;
                     </a></p>
                 </div><!--/.col-xs-6.col-lg-4-->
