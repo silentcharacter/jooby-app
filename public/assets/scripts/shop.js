@@ -3,7 +3,7 @@ $(document).ready(function () {
     $('.row-offcanvas').toggleClass('active')
   });
 
-  updateCart();
+//  updateCart();
 });
 
 function updateCart() {
