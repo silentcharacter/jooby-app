@@ -1,5 +1,7 @@
 package com.mycompany.domain.shop;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,5 +23,15 @@ public class Cart {
             }
         }
         this.totalPrice = totalPrice;
+    }
+
+    public void addEntry(Product product, Integer quantity, Color color, List<Sauce> sauces) {
+        entries.add(new CartEntry(product, quantity, color, sauces, entries.size()));
+        calculate();
+    }
+
+    @JsonIgnore
+    public boolean isEmpty() {
+        return entries.isEmpty();
     }
 }

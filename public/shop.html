@@ -120,7 +120,7 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" id="addToCart">Добавить</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="addToCart()">Добавить</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
                         </div>
                     </div>
@@ -142,26 +142,8 @@
             </div><!--/row-->
         </div><!--/.col-xs-12.col-sm-9-->
 
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
-            <a href="#" data-toggle="popover" title="Товаров в корзине: 2 на 1150 руб." data-placement="left">
-                <div id="cart" class="container bigcart">
-                    <span class="count">1</span>
-                </div>
-            </a>
-            <!-- your popup hidden content -->
-            <div id="popover_content_wrapper" class="popover-content" style="display: none">
-                <table>
-                    <tr>
-                        <td>Пельмени с курицей</td>
-                        <td>2 кг</td>
-                        <td><span class="glyphicon glyphicon-remove"></span></td>
-                    </tr>
-                    <tr>
-                        <td>Пельмени со свининой</td>
-                        <td>1 кг</td>
-                        <td><span class="glyphicon glyphicon-remove"></span></td>
-                    </tr>
-                </table>
+        <div class="col-xs-8 col-sm-3 sidebar-offcanvas" id="sidebar">
+            <div id="cartPlaceholder">
             </div>
             <button type="button" class="btn btn-danger btn-lg btn-block">Оформить заказ</button>
 
@@ -171,6 +153,7 @@
     <hr>
 
     <footer>
+        <p>&copy; 2016 Drugakov, Inc.</p>
         <p>&copy; 2016 Drugakov, Inc.</p>
     </footer>
 

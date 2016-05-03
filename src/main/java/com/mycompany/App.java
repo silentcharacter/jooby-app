@@ -5,30 +5,18 @@ import com.mycompany.controller.News;
 import com.mycompany.controller.Roles;
 import com.mycompany.controller.Todos;
 import com.mycompany.controller.Users;
-import com.mycompany.domain.Role;
-import com.mycompany.domain.User;
 import com.mycompany.service.AuthenticationService;
-import org.apache.commons.lang3.StringUtils;
-import org.jongo.Jongo;
-import org.jongo.MongoCollection;
 import org.jooby.Jooby;
-import org.jooby.Request;
 import org.jooby.Results;
-import org.jooby.Route;
 import org.jooby.hbs.Hbs;
 import org.jooby.json.Jackson;
 import org.jooby.mongodb.Jongoby;
 import org.jooby.mongodb.Mongodb;
 import org.jooby.pac4j.Auth;
-import org.jooby.pac4j.AuthStore;
-import org.pac4j.core.profile.CommonProfile;
-import org.pac4j.core.profile.UserProfile;
 import org.pac4j.oauth.client.FacebookClient;
 import org.pac4j.oauth.client.Google2Client;
 import org.pac4j.oauth.client.TwitterClient;
 import org.pac4j.oauth.client.VkClient;
-
-import java.util.*;
 
 public class App extends Jooby {
 

@@ -19,6 +19,7 @@ public class CartService {
             try {
                 cart = mapper.readValue(cartJson.get(), Cart.class);
             } catch (IOException e) {
+                e.printStackTrace();
                 cart = new Cart();
             }
         } else {
@@ -41,17 +42,16 @@ public class CartService {
 
     public static Cart addToCart(Request req, Product product, Integer quantity, Color color, List<Sauce> sauces) {
         Cart cart = getSessionCart(req);
-        cart.entries.add(new CartEntry(product, quantity, color, sauces));
-        cart.calculate();
+        cart.addEntry(product, quantity, color, sauces);
         saveSessionCart(req, cart);
         return cart;
     }
 
-    public static Cart removeFromCart(Request req, String productId) {
+    public static Cart removeFromCart(Request req, Integer entryNo) {
         Cart cart = getSessionCart(req);
         CartEntry toRemove = null;
         for (CartEntry entry : cart.entries) {
-            if (entry.product.id.equals(productId)) {
+            if (entry.entryNo.equals(entryNo)) {
                 toRemove = entry;
                 break;
             }

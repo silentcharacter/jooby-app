@@ -38,6 +38,11 @@ public class ShopApp extends Jooby {
                     .put("cart", CartService.getSessionCart(req));
         });
 
+        get("/cart", req -> {
+            return Results.html("cart")
+                    .put("cart", CartService.getSessionCart(req));
+        });
+
         post("/addToCart", req -> {
             ProductService productService = req.require(ProductService.class);
             ColorService colorService = req.require(ColorService.class);
@@ -55,8 +60,10 @@ public class ShopApp extends Jooby {
         });
 
         post("/removeFromCart", req -> {
-            return CartService.removeFromCart(req, req.param("productId").value());
+            return CartService.removeFromCart(req, req.param("entryNo").intValue());
         });
+
+        get("/test", req -> Results.json("ok"));
 
     }
 
