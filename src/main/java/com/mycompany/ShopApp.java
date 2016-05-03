@@ -34,8 +34,7 @@ public class ShopApp extends Jooby {
             return Results.html("shop")
                     .put("products", productService.getAll(req))
                     .put("colors", colorService.getAll(req))
-                    .put("sauces", sauceService.getAll(req))
-                    .put("cart", CartService.getSessionCart(req));
+                    .put("sauces", sauceService.getAll(req));
         });
 
         get("/cart", req -> {

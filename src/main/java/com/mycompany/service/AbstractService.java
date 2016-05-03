@@ -30,7 +30,7 @@ public abstract class AbstractService<T> extends Jooby {
         Jongo jongo = req.require(Jongo.class);
         MongoCollection collection = jongo.getCollection(entityName);
         MongoCursor<T> cursor = collection.find(query, filterValues.toArray())
-                .sort(sort).limit(perPage).skip((page - 1) * perPage)
+                .sort(sort).limit(perPage).skip(page * perPage)
                 .as(typeParameterClass);
         return Lists.newArrayList(cursor.iterator());
     }
