@@ -1,0 +1,107 @@
+    <div class="jumbotron">
+        <h1>Оформление заказа</h1>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th><th>Наименование</th><th>Количество</th><th>Цена</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Пельмени со свининой</td><td>4 кг</td><td>1300 руб.</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Пельмени с бараниной</td><td>3 кг</td><td>1300 руб.</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Пельмени с говном</td><td>7 кг</td><td>1300 руб.</td>
+            </tr>
+                <th scope="row"></th>
+                <td><b>Итого</b></td><td></td><td><b>100000 руб.</b></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Контактная информация</h3>
+    <form>
+        <div class="row">
+            <div class="col-xs-2">
+                <input type="text" class="form-control" placeholder="Телефон">
+            </div>
+            <div class="col-xs-3">
+                <input type="text" class="form-control" placeholder="Имя">
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-xs-3">
+                <input type="text" class="form-control" placeholder="Улица">
+            </div>
+            <div class="col-xs-2">
+                <input type="text" class="form-control" placeholder="Номер дома">
+            </div>
+            <div class="col-xs-2">
+                <input type="text" class="form-control" placeholder="Подъезд">
+            </div>
+            <div class="col-xs-2">
+                <input type="text" class="form-control" placeholder="Квартира/офис">
+            </div>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="delivery" id="delivery1" value="free" checked>
+                Бесплатная доставка курьером
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="delivery" id="delivery2" value="paid">
+                Платная доставка курьером
+            </label>
+        </div>
+        <div class="raw">
+            <div class="col-xs-4">
+                <select class="form-control">
+                    <option>Дата</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+            <div class="col-xs-4">
+                <select class="form-control">
+                    <option>Время</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </div>
+
+        <br/>
+        <br/>
+
+        <div class="radio">
+            <label>
+                <input type="radio" name="payment" id="payment1" value="cash" checked>
+                Наличными курьеру
+            </label>
+        </div>
+        <div class="radio disabled">
+            <label>
+                <input type="radio" name="payment" id="payment2" value="online" disabled>
+                Онлайн
+            </label>
+        </div>
+        <br/>
+        <button type="submit" class="btn btn-danger btn-lg">Оформить заказ</button>
+    </form>

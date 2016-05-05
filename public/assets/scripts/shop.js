@@ -3,6 +3,10 @@ $(document).ready(function () {
         $('.row-offcanvas').toggleClass('active')
     });
 
+    setUpPopover();
+});
+
+function setUpPopover() {
     $('[data-toggle="popover"]').popover({
         html : true,
         content: function() {
@@ -10,23 +14,15 @@ $(document).ready(function () {
         }
       }
     );
-});
+}
 
 function updateCart() {
     $.ajax({
       type: 'GET',
       url: '/cart',
       success: function(result) {
-
         $("#cartPlaceholder").html(result);
-
-        $('[data-toggle="popover"]').popover({
-            html : true,
-            content: function() {
-              return $('#popover_content_wrapper').html();
-            }
-          }
-        );
+        setUpPopover();
       }
   });
 }
@@ -45,14 +41,11 @@ function addToCart() {
       type: 'POST',
       url: '/addToCart',
       data: msg,
-      success: function(data) {
-//        console.log(data);
-        updateCart();
-      },
       error:  function(xhr, str){
         console.log('Возникла ошибка: ' + xhr.responseCode);
-        updateCart();
       }
+    }).always(function(){
+        updateCart();
     });
 }
 
@@ -60,13 +53,10 @@ function removeFromCart(entryNo) {
     $.ajax({
       type: 'POST',
       url: '/removeFromCart?entryNo=' + entryNo,
-      success: function(data) {
-//        console.log(data);
-        updateCart();
-      },
       error:  function(xhr, str){
         console.log('Возникла ошибка: ' + xhr.responseCode);
-        updateCart();
       }
+    }).always(function(){
+      updateCart();
     });
 }
