@@ -12,15 +12,17 @@ public class Cart {
     public void calculate() {
         Integer totalPrice = 0;
         for (CartEntry entry : entries) {
-            totalPrice += entry.product.price * entry.quantity;
+            int rowTotalPrice = entry.product.price * entry.quantity;
             if (entry.color != null) {
-                totalPrice += entry.color.price;
+                rowTotalPrice += entry.color.price;
             }
             if (entry.sauces != null) {
                 for (Sauce sauce : entry.sauces) {
-                    totalPrice += sauce.price;
+                    rowTotalPrice += sauce.price;
                 }
             }
+            entry.totalPrice = rowTotalPrice;
+            totalPrice += rowTotalPrice;
         }
         this.totalPrice = totalPrice;
     }

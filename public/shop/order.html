@@ -1,26 +1,37 @@
     <h1>Оформление заказа</h1>
 
-    <div class="table-responsive">
-        <table class="table table-striped" style="font-size: smaller">
-            <thead>
-                <tr>
-                    <th>Наименование</th><th>Кол-во</th><th>Цена</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Пельмени со свининой</td><td>4 кг</td><td>1300 руб.</td>
-                </tr>
-                <tr>
-                    <td>Пельмени с бараниной</td><td>3 кг</td><td>1300 руб.</td>
-                </tr>
-                <tr>
-                    <td>Пельмени с говном</td><td>7 кг</td><td>1300 руб.</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <b>Итого 100000 руб.</b>
+    <table class="table table-striped col-sm-6">
+        <thead>
+            <tr>
+                <th class="col-sm-2 col-lg-6">Наименование</th>
+                <th class="col-sm-2 col-lg-3">Кол-во</th>
+                <th class="col-sm-2 col-lg-3">Цена</th>
+            </tr>
+        </thead>
+        <tbody>
+        {{#each cart.entries}}
+            <tr>
+                <td >
+                    {{product.name}}
+                    {{#if color}}
+                        {{#unless color._default}}
+                            (цвет {{color.name}})
+                        {{/unless}}
+                    {{/if}}
+                    {{#if sauces}}
+                        <p/>+
+                        {{#each sauces}}
+                            {{name}}&nbsp;
+                        {{/each}}
+                    {{/if}}
+                </td>
+                <td >{{quantity}} кг</td>
+                <td >{{totalPrice}} руб.</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <b>Итого {{cart.totalPrice}} руб.</b>
 
     <h3>Контактная информация</h3>
     <form class="form-horizontal" role="form">
@@ -154,6 +165,7 @@
 
         </div><!-- /.row this actually does not appear to be needed with the form-horizontal -->
 
+        <h4><b>Итого к оплате {{cart.totalPrice}} руб.</b></h4>
         <br/>
 
         <div class="row">

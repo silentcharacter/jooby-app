@@ -9,6 +9,7 @@ public class CartEntry {
     public List<Sauce> sauces = new ArrayList<>();
     public Integer quantity = 0;
     public Integer entryNo = 0;
+    public Integer totalPrice = 0;
 
     public CartEntry() {
     }
