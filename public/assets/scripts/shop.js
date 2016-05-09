@@ -4,6 +4,31 @@ $(document).ready(function () {
     });
 
     setUpPopover();
+
+    $("[name='phone']").mask("0000000000");
+
+    $('#street').typeahead({
+        source: function (query, process) {
+            return $.ajax({
+                 type: 'POST',
+                 url: 'https://dadata.ru/api/v1/suggest/address',
+                 headers: {
+                     "Content-Type": "application/json",
+                     "Authorization": "Token bf69a05b6ce842dcd0cbc159648d19a8c49fdf33"
+                 },
+                 data: JSON.stringify({"query": "Ярославль " + query}),
+                 success: function(result) {
+                   var suggestions = [];
+                   for (var s of result.suggestions) {
+                     suggestions.push(s.data.street_with_type);
+                   }
+                   return process(suggestions);
+                 }
+           });
+        }
+    });
+
+
 });
 
 function setUpPopover() {
@@ -24,7 +49,7 @@ function updateCart() {
         $("#cartPlaceholder").html(result);
         setUpPopover();
       }
-  });
+    });
 }
 
 function onOrderClick(id) {
@@ -60,3 +85,18 @@ function removeFromCart(entryNo) {
       updateCart();
     });
 }
+
+function onDeliveryClick(active, nonactive) {
+    $('#' + active).addClass('active');
+    $('#' + nonactive).removeClass('active');
+    $('[name="delivery"]').val(active);
+    if (active === 'freeDelivery') {
+        $('[name="date"]').attr('disabled', '').val('NULL');
+        $('[name="time"]').attr('disabled', '').val('NULL');
+    } else {
+        $('[name="date"]').removeAttr('disabled');
+        $('[name="time"]').removeAttr('disabled');
+    }
+}
+
+

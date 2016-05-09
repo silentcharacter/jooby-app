@@ -1,107 +1,165 @@
-    <div class="jumbotron">
-        <h1>Оформление заказа</h1>
-    </div>
+    <h1>Оформление заказа</h1>
 
     <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped" style="font-size: smaller">
             <thead>
-            <tr>
-                <th>#</th><th>Наименование</th><th>Количество</th><th>Цена</th>
-            </tr>
+                <tr>
+                    <th>Наименование</th><th>Кол-во</th><th>Цена</th>
+                </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Пельмени со свининой</td><td>4 кг</td><td>1300 руб.</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Пельмени с бараниной</td><td>3 кг</td><td>1300 руб.</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Пельмени с говном</td><td>7 кг</td><td>1300 руб.</td>
-            </tr>
-                <th scope="row"></th>
-                <td><b>Итого</b></td><td></td><td><b>100000 руб.</b></td>
-            </tr>
+                <tr>
+                    <td>Пельмени со свининой</td><td>4 кг</td><td>1300 руб.</td>
+                </tr>
+                <tr>
+                    <td>Пельмени с бараниной</td><td>3 кг</td><td>1300 руб.</td>
+                </tr>
+                <tr>
+                    <td>Пельмени с говном</td><td>7 кг</td><td>1300 руб.</td>
+                </tr>
             </tbody>
         </table>
     </div>
+    <b>Итого 100000 руб.</b>
 
     <h3>Контактная информация</h3>
-    <form>
+    <form class="form-horizontal" role="form">
+
         <div class="row">
-            <div class="col-xs-2">
-                <input type="text" class="form-control" placeholder="Телефон">
+            <div class="col-sm-6 col-lg-6">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Телефон">
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-3">
-                <input type="text" class="form-control" placeholder="Имя">
+            <div class="col-sm-6 col-lg-6">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Имя">
+                    </div>
+                </div>
             </div>
-        </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" id="street" name="street" placeholder="Улица" autocomplete="off"
+                                data-items="10">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" id="streetNumber" name="streetNumber" placeholder="Номер дома">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" id="entrance" name="entrance" placeholder="Подъезд">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" id="flat" name="flat" placeholder="Квартира/офис">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="button" id="freeDelivery" class="btn active btn-primary btn-block"
+                                onclick="onDeliveryClick('freeDelivery','paidDelivery')">
+                            Бесплатная доставка
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="button" id="paidDelivery" class="btn btn-primary btn-block"
+                                onclick="onDeliveryClick('paidDelivery','freeDelivery')">
+                            Платная доставка
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="delivery" value="freeDelivery">
+        <!--</div>-->
+        <!--<h4>Когда доставить</h4>-->
+        <!--<div class="row">-->
+            <div class="col-sm-6 col-lg-3 ">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <select name="date" class="form-control" disabled>
+                            <option value="NULL">Выберите дату</option>
+                            <option>12.12.2016</option>
+                            <option>13.12.2016</option>
+                            <option>14.12.2016</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <select name="time" class="form-control" disabled>
+                            <option value="NULL">Выберите время</option>
+                            <option>10:00-13:00</option>
+                            <option>13:00-16:00</option>
+                            <option>16:00-19:00</option>
+                            <option>19:00-22:00</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="col-sm-12 col-lg-6">-->
+                <!--<div class="form-group">-->
+                    <!--<div class="col-md-12">-->
+                        <!--<input type="text" class="form-control invisible" >-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="col-sm-6 col-lg-3">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="button" class="btn active btn-primary btn-block">Оплата наличными курьеру</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="button" class="btn  btn-primary btn-block disabled">Оплата Онлайн</button>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="col-sm-6 col-lg-8">-->
+            <!--<div class="btn-group btn-group-lg" role="group" data-toggle="buttons" >-->
+                <!--<label class="btn btn-warning active btn-block " >-->
+                    <!--<input type="radio" checked >Бесплатная доставка курьером-->
+                <!--</label>-->
+                <!--<label class="btn btn-warning btn-block " >-->
+                    <!--<input type="radio" >Платная доставка курьером-->
+                <!--</label>-->
+
+            <!--</div>-->
+            <!--</div>-->
+
+        </div><!-- /.row this actually does not appear to be needed with the form-horizontal -->
+
         <br/>
+
         <div class="row">
-            <div class="col-xs-3">
-                <input type="text" class="form-control" placeholder="Улица">
-            </div>
-            <div class="col-xs-2">
-                <input type="text" class="form-control" placeholder="Номер дома">
-            </div>
-            <div class="col-xs-2">
-                <input type="text" class="form-control" placeholder="Подъезд">
-            </div>
-            <div class="col-xs-2">
-                <input type="text" class="form-control" placeholder="Квартира/офис">
-            </div>
-        </div>
-        <div class="radio">
-            <label>
-                <input type="radio" name="delivery" id="delivery1" value="free" checked>
-                Бесплатная доставка курьером
-            </label>
-        </div>
-        <div class="radio">
-            <label>
-                <input type="radio" name="delivery" id="delivery2" value="paid">
-                Платная доставка курьером
-            </label>
-        </div>
-        <div class="raw">
-            <div class="col-xs-4">
-                <select class="form-control">
-                    <option>Дата</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div>
-            <div class="col-xs-4">
-                <select class="form-control">
-                    <option>Время</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
+            <div class="col-sm-6 col-lg-3">
+                <button type="submit" class="btn btn-danger btn-lg btn-block">Оформить заказ</button>
             </div>
         </div>
 
-        <br/>
-        <br/>
-
-        <div class="radio">
-            <label>
-                <input type="radio" name="payment" id="payment1" value="cash" checked>
-                Наличными курьеру
-            </label>
-        </div>
-        <div class="radio disabled">
-            <label>
-                <input type="radio" name="payment" id="payment2" value="online" disabled>
-                Онлайн
-            </label>
-        </div>
-        <br/>
-        <button type="submit" class="btn btn-danger btn-lg">Оформить заказ</button>
     </form>
