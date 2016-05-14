@@ -4,7 +4,9 @@
         <thead>
             <tr>
                 <th class="col-sm-2 col-lg-6">Наименование</th>
-                <th class="col-sm-2 col-lg-3">Кол-во</th>
+                <th class="col-sm-2 col-lg-3">
+                    <div class="hidden-xs">Кол-во</div>
+                </th>
                 <th class="col-sm-2 col-lg-3">Цена</th>
             </tr>
         </thead>
@@ -34,56 +36,59 @@
     <b>Итого {{cart.totalPrice}} руб.</b>
 
     <h3>Контактная информация</h3>
-    <form class="form-horizontal" role="form">
+    {{#if errorMessage}}
+        <div class="alert alert-danger" role="alert">{{errorMessage}}</div>
+    {{/if}}
+    <form class="form-horizontal" role="form" method="post" >
 
         <div class="row">
             <div class="col-sm-6 col-lg-6">
-                <div class="form-group">
+                <div class="form-group {{#equal 'phone' errorField}}has-error{{/equal}}">
                     <div class="col-md-12">
-                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Телефон">
+                        <input type="text" class="form-control" value="{{order.phone}}" name="phone" placeholder="Телефон (9XX)XXX-XX-XX*">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-6">
-                <div class="form-group">
+                <div class="form-group {{#equal 'name' errorField}}has-error{{/equal}}">
                     <div class="col-md-12">
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Имя">
+                        <input type="text" class="form-control" value="{{order.name}}" name="name" placeholder="Имя*">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-3">
-                <div class="form-group">
+                <div class="form-group {{#equal 'streetName' errorField}}has-error{{/equal}}">
                     <div class="col-md-12">
-                        <input type="text" class="form-control" id="street" name="street" placeholder="Улица" autocomplete="off"
+                        <input type="text" class="form-control" name="streetName" value="{{order.streetName}}" placeholder="Улица*" autocomplete="off"
                                 data-items="10">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-3">
-                <div class="form-group">
+                <div class="form-group {{#equal 'streetNumber' errorField}}has-error{{/equal}}">
                     <div class="col-md-12">
-                        <input type="text" class="form-control" id="streetNumber" name="streetNumber" placeholder="Номер дома">
+                        <input type="text" class="form-control" name="streetNumber" value="{{order.streetNumber}}" placeholder="Номер дома*">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="form-group {{#equal 'entrance' errorField}}has-error{{/equal}}">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" name="entrance" value="{{order.entrance}}" placeholder="Подъезд">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="form-group {{#equal 'flat' errorField}}has-error{{/equal}}">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" name="flat" value="{{order.flat}}" placeholder="Квартира/офис*">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-3">
                 <div class="form-group">
                     <div class="col-md-12">
-                        <input type="text" class="form-control" id="entrance" name="entrance" placeholder="Подъезд">
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <input type="text" class="form-control" id="flat" name="flat" placeholder="Квартира/офис">
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <button type="button" id="freeDelivery" class="btn active btn-primary btn-block"
+                        <button type="button" id="freeDelivery" class="btn {{#equal 'freeDelivery' order.delivery}}active{{/equal}} btn-primary btn-block"
                                 onclick="onDeliveryClick('freeDelivery','paidDelivery')">
                             Бесплатная доставка
                         </button>
@@ -93,38 +98,38 @@
             <div class="col-sm-6 col-lg-3">
                 <div class="form-group">
                     <div class="col-md-12">
-                        <button type="button" id="paidDelivery" class="btn btn-primary btn-block"
+                        <button type="button" id="paidDelivery" class="btn {{#equal 'paidDelivery' order.delivery}}active{{/equal}} btn-primary btn-block"
                                 onclick="onDeliveryClick('paidDelivery','freeDelivery')">
                             Платная доставка
                         </button>
                     </div>
                 </div>
             </div>
-            <input type="hidden" name="delivery" value="freeDelivery">
+            <input type="hidden" name="delivery" value="{{order.delivery}}">
         <!--</div>-->
         <!--<h4>Когда доставить</h4>-->
         <!--<div class="row">-->
             <div class="col-sm-6 col-lg-3 ">
-                <div class="form-group">
+                <div class="form-group {{#equal 'deliveryDate' errorField}}has-error{{/equal}}">
                     <div class="col-md-12">
-                        <select name="date" class="form-control" disabled>
+                        <select name="deliveryDate" class="form-control" {{#equal 'freeDelivery' order.delivery}}disabled{{/equal}}>
                             <option value="NULL">Выберите дату</option>
-                            <option>12.12.2016</option>
-                            <option>13.12.2016</option>
-                            <option>14.12.2016</option>
+                            <option {{#equal '12.12.2016' order.deliveryDate}}selected{{/equal}}>12.12.2016</option>
+                            <option {{#equal '13.12.2016' order.deliveryDate}}selected{{/equal}}>13.12.2016</option>
+                            <option {{#equal '14.12.2016' order.deliveryDate}}selected{{/equal}}>14.12.2016</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-3">
-                <div class="form-group">
+                <div class="form-group {{#equal 'deliveryTime' errorField}}has-error{{/equal}}">
                     <div class="col-md-12">
-                        <select name="time" class="form-control" disabled>
+                        <select name="deliveryTime" class="form-control" {{#equal 'freeDelivery' order.delivery}}disabled{{/equal}}>
                             <option value="NULL">Выберите время</option>
-                            <option>10:00-13:00</option>
-                            <option>13:00-16:00</option>
-                            <option>16:00-19:00</option>
-                            <option>19:00-22:00</option>
+                            <option {{#equal '10:00-13:00' order.deliveryTime}}selected{{/equal}}>10:00-13:00</option>
+                            <option {{#equal '13:00-16:00' order.deliveryTime}}selected{{/equal}}>13:00-16:00</option>
+                            <option {{#equal '16:00-19:00' order.deliveryTime}}selected{{/equal}}>16:00-19:00</option>
+                            <option {{#equal '19:00-22:00' order.deliveryTime}}selected{{/equal}}>19:00-22:00</option>
                         </select>
                     </div>
                 </div>
@@ -150,6 +155,7 @@
                     </div>
                 </div>
             </div>
+            <input type="hidden" name="payment" value="cash">
 
             <!--<div class="col-sm-6 col-lg-8">-->
             <!--<div class="btn-group btn-group-lg" role="group" data-toggle="buttons" >-->

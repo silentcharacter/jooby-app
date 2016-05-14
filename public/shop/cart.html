@@ -9,6 +9,11 @@
         <span class="count">{{cart.entries.size}}</span>
     </div>
 </a>
+<button type="button" {{#unless cart.isEmpty}}onclick="window.location='/shop/order'"{{/unless}}
+        class="btn btn-danger btn-lg btn-block {{#if cart.isEmpty}}disabled{{/if}}">
+    Оформить заказ
+</button>
+
 <!-- your popup hidden content -->
 <div id="popover_content_wrapper" class="popover-content" style="display: none">
     <table>

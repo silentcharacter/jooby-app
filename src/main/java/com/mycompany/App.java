@@ -5,6 +5,7 @@ import com.mycompany.controller.News;
 import com.mycompany.controller.Roles;
 import com.mycompany.controller.Todos;
 import com.mycompany.controller.Users;
+import com.mycompany.hbs.EqualHelper;
 import com.mycompany.service.AuthenticationService;
 import org.jooby.Jooby;
 import org.jooby.Results;
@@ -23,7 +24,9 @@ public class App extends Jooby {
     {
         use(new Mongodb());
         use(new Jongoby());
-        use(new Hbs());
+        use(new Hbs().doWith((hbs, config) -> {
+            hbs.registerHelper("equal", new EqualHelper());
+        }));
         use(new Jackson());
 //        session(MongoSessionStore.class);
 

@@ -1,15 +1,15 @@
 package com.mycompany;
 
-import com.mycompany.controller.shop.Colors;
-import com.mycompany.controller.shop.Products;
-import com.mycompany.controller.shop.Sauces;
+import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.Color;
+import com.mycompany.domain.shop.Order;
 import com.mycompany.domain.shop.Product;
 import com.mycompany.domain.shop.Sauce;
 import com.mycompany.service.shop.CartService;
 import com.mycompany.service.shop.ColorService;
 import com.mycompany.service.shop.ProductService;
 import com.mycompany.service.shop.SauceService;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.jooby.Jooby;
 import org.jooby.Results;
 
@@ -45,9 +45,29 @@ public class ShopApp extends Jooby {
         });
 
         get("/shop/order", req -> {
+            Order order = new Order();
+            order.delivery = "freeDelivery";
             return Results.html("shop/shop")
                   .put("templateName", "shop/order")
+                  .put("order", order)
                   .put("cart", CartService.getSessionCart(req));
+        });
+
+        post("/shop/order", req -> {
+            Order order = req.body().to(Order.class);
+            ValidationResult validationResult = OrderValidator.validate(order);
+            if (!validationResult.equals(ValidationResult.OK)) {
+                return Results.html("shop/shop")
+                      .put("templateName", "shop/order")
+                      .put("order", order)
+                      .put("errorMessage", validationResult.message)
+                      .put("errorField", validationResult.fieldName);
+            }
+            return Results.redirect("/shop/order/thankyou");
+        });
+
+        get("/shop/order/thankyou", req -> {
+            return Results.html("shop/shop").put("templateName", "shop/thankyou");
         });
 
         post("/addToCart", req -> {

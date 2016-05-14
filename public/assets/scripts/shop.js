@@ -7,7 +7,7 @@ $(document).ready(function () {
 
     $("[name='phone']").mask("0000000000");
 
-    $('#street').typeahead({
+    $("[name='streetName']").typeahead({
         source: function (query, process) {
             return $.ajax({
                  type: 'POST',
@@ -18,11 +18,11 @@ $(document).ready(function () {
                  },
                  data: JSON.stringify({"query": "Ярославль " + query}),
                  success: function(result) {
-                   var suggestions = [];
+                   var suggestions = new Set();
                    for (var s of result.suggestions) {
-                     suggestions.push(s.data.street_with_type);
+                     suggestions.add(s.data.street_with_type);
                    }
-                   return process(suggestions);
+                   return process(Array.from(suggestions));
                  }
            });
         }
@@ -91,11 +91,11 @@ function onDeliveryClick(active, nonactive) {
     $('#' + nonactive).removeClass('active');
     $('[name="delivery"]').val(active);
     if (active === 'freeDelivery') {
-        $('[name="date"]').attr('disabled', '').val('NULL');
-        $('[name="time"]').attr('disabled', '').val('NULL');
+        $('[name="deliveryDate"]').attr('disabled', '').val('NULL');
+        $('[name="deliveryTime"]').attr('disabled', '').val('NULL');
     } else {
-        $('[name="date"]').removeAttr('disabled');
-        $('[name="time"]').removeAttr('disabled');
+        $('[name="deliveryDate"]').removeAttr('disabled');
+        $('[name="deliveryTime"]').removeAttr('disabled');
     }
 }
 
