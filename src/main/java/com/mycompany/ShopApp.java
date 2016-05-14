@@ -61,7 +61,8 @@ public class ShopApp extends Jooby {
                       .put("templateName", "shop/order")
                       .put("order", order)
                       .put("errorMessage", validationResult.message)
-                      .put("errorField", validationResult.fieldName);
+                      .put("errorField", validationResult.fieldName)
+                      .put("cart", CartService.getSessionCart(req));
             }
             return Results.redirect("/shop/order/thankyou");
         });
