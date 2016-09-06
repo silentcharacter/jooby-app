@@ -9,7 +9,6 @@ import com.mycompany.service.shop.CartService;
 import com.mycompany.service.shop.ColorService;
 import com.mycompany.service.shop.ProductService;
 import com.mycompany.service.shop.SauceService;
-import com.sun.org.apache.xpath.internal.operations.Or;
 import org.jooby.Jooby;
 import org.jooby.Results;
 
@@ -19,18 +18,16 @@ import java.util.stream.Collectors;
 
 public class ShopApp extends Jooby {
 
+    private static ProductService productService = new ProductService();
+    private static ColorService colorService = new ColorService();
+    private static SauceService sauceService = new SauceService();
+
     {
-        use(new ProductService());
-        use(new ColorService());
-        use(new SauceService());
         use(new Products());
         use(new Colors());
         use(new Sauces());
 
         get("/shop", req -> {
-            ProductService productService = req.require(ProductService.class);
-            ColorService colorService = req.require(ColorService.class);
-            SauceService sauceService = req.require(SauceService.class);
             return Results.html("shop/shop")
                     .put("templateName", "shop/main")
                     .put("products", productService.getAll(req))
@@ -40,8 +37,7 @@ public class ShopApp extends Jooby {
         });
 
         get("/cart", req -> {
-            return Results.html("shop/cart")
-                    .put("cart", CartService.getSessionCart(req));
+            return Results.json(CartService.getSessionCart(req));
         });
 
         get("/shop/order", req -> {
@@ -72,9 +68,6 @@ public class ShopApp extends Jooby {
         });
 
         post("/addToCart", req -> {
-            ProductService productService = req.require(ProductService.class);
-            ColorService colorService = req.require(ColorService.class);
-            SauceService sauceService = req.require(SauceService.class);
             Product product = productService.getById(req, req.param("productId").value());
             Color color = req.param("colorId").isSet() ? colorService.getById(req, req.param("colorId").value()) : null;
             List<Sauce> sauceList = new ArrayList<>();

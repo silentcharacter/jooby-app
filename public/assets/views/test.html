@@ -1,0 +1,698 @@
+<head>
+    <!-- Basic page needs ================================================== -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- Title and description ================================================== -->
+    <title>
+        Магазин пельменей ручной лепки
+    </title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!--<meta property="og:type" content="website">-->
+    <!--<meta property="og:title" content="Supply Theme Demo Shop | By Shopify">-->
+    <!--<meta property="og:image" content="http://cdn.shopify.com/s/files/1/0543/1637/t/12/assets/logo.png?5887780921313339839">-->
+    <!--<meta property="og:image:secure_url" content="https://cdn.shopify.com/s/files/1/0543/1637/t/12/assets/logo.png?5887780921313339839">-->
+    <!--<meta property="og:url" content="http://supply-electronics.myshopify.com/">-->
+    <!--<meta property="og:site_name" content="Digitalshop">-->
+    <!--<meta name="twitter:site" content="@Shopify">-->
+
+    <!-- Helpers ================================================== -->
+    <!--<link rel="canonical" href="http://supply-electronics.myshopify.com/">-->
+
+    <!-- Ajaxify Cart Plugin ================================================== -->
+    <!--<link href="//cdn.shopify.com/s/files/1/0543/1637/t/12/assets/ajaxify.scss.css?5887780921313339839" rel="stylesheet" type="text/css"  media="all"  />-->
+    <link href="/assets/css/test.css" rel="stylesheet" type="text/css"  media="all"  />
+    <link href="/assets/css/spr.css" rel="stylesheet" type="text/css"  media="all"  />
+    <!-- CSS ================================================== -->
+    <!--<link href="//cdn.shopify.com/s/files/1/0543/1637/t/12/assets/timber.scss.css?5887780921313339839" rel="stylesheet" type="text/css"  media="all"  />-->
+
+    <!--<link href="//fonts.googleapis.com/css?family=Open+Sans:700" rel="stylesheet" type="text/css"  media="all"  />-->
+    <!--<link href="//fonts.googleapis.com/css?family=Dosis:600" rel="stylesheet" type="text/css"  media="all"  />-->
+
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="/assets/js/jquery.js" type="text/javascript"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/modernizr.min.js" type="text/javascript"></script>
+
+    <script src="/assets/js/jquery.flexslider.min.js" type="text/javascript"></script>
+    <script src="//cdn.shopify.com/s/files/1/0543/1637/t/12/assets/shop.js?5887780921313339839" type="text/javascript"></script>
+    <script src="/assets/scripts/shop.js" type="text/javascript"></script>
+
+    <script src="/assets/js/handlebars.min.js" type="text/javascript"></script>
+    <script src="/assets/js/jquery.mask.min.js" type="text/javascript"></script>
+    <script src="/assets/js/bootstrap3-typeahead.min.js" type="text/javascript"></script>
+    <script src="/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+    <style>
+        a:hover {
+            text-decoration: none;
+        }
+        li > a:hover {
+            color: white;
+        }
+        .icon-cart {
+            text-decoration: none;
+            color: white;
+        }
+        .header-cart-btn:focus {
+            outline: none;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+
+<body id="supply-theme-demo-shop-by-shopify" class="template-index" >
+
+    <header class="site-header" role="banner">
+        <div class="wrapper">
+            <div class="grid--full">
+                <div class="grid-item large--one-half">
+                    <h1 class="header-logo" itemscope itemtype="http://schema.org/Organization">
+                        <img href="/" itemprop="url">
+                            <img src="/assets/image/java-logo.png" alt="Магазин пельменей" itemprop="logo" height="50">
+                        </a>
+                    </h1>
+                </div>
+                <div class="grid-item large--one-half text-center large--text-right">
+                    <div class="site-header--text-links">
+                        При заказе от 1500 руб. доставка бесплатно!
+                        <!--<span class="site-header&#45;&#45;meta-links medium-down&#45;&#45;hide">-->
+                            <!--<a href="/account/login" id="customer_login_link">Sign in</a>-->
+                            <!--<span class="site-header&#45;&#45;spacer">or</span>-->
+                            <!--<a href="/account/register" id="customer_register_link">Create an Account</a>-->
+                        <!--</span>-->
+                    </div>
+                    <br class="medium-down--hide">
+                    <!--<form action="/search" method="get" class="search-bar" role="search">-->
+                        <!--<input type="hidden" name="type" value="product">-->
+
+                        <!--<input type="search" name="q" value="" placeholder="Search all products..." aria-label="Search all products...">-->
+                        <!--<button type="submit" class="search-bar&#45;&#45;submit icon-fallback-text">-->
+                            <!--<span class="icon icon-search" aria-hidden="true"></span>-->
+                            <!--<span class="fallback-text">Search</span>-->
+                        <!--</button>-->
+                    <!--</form>-->
+                    <a href="#" class="header-cart-btn cart-toggle" onclick="onCartBtnClick()"> <!--data-toggle="modal" data-target="#cartModal"-->
+                        <span class="icon icon-cart"></span>Корзина
+                        <span class="cart-count cart-badge--desktop ">2</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav-bar" role="navigation">
+        <div class="wrapper">
+            <!--<form action="/search" method="get" class="search-bar" role="search">-->
+                <!--<input type="hidden" name="type" value="product">-->
+
+                <!--<input type="search" name="q" value="" placeholder="Search all products..." aria-label="Search all products...">-->
+                <!--<button type="submit" class="search-bar&#45;&#45;submit icon-fallback-text">-->
+                    <!--<span class="icon icon-search" aria-hidden="true"></span>-->
+                    <!--<span class="fallback-text">Search</span>-->
+                <!--</button>-->
+            <!--</form>-->
+            <ul class="site-nav" id="accessibleNav">
+                <li class="large--hide">
+                    <a href="/">Домой</a>
+                </li>
+                <li class="site-nav--has-dropdown" aria-haspopup="true">
+                    <a href="#">О пельменях
+                        <span class="icon-fallback-text">
+                            <span class="icon icon-arrow-down" aria-hidden="true"></span>
+                        </span>
+                    </a>
+                    <ul class="site-nav--dropdown">
+                        <li ><a href="/collections/dslr-cameras">DSLR Cameras</a></li>
+                    </ul>
+                </li>
+                <li class="site-nav--has-dropdown" aria-haspopup="true">
+                    <a href="#">Доставка
+                        <span class="icon-fallback-text">
+                            <span class="icon icon-arrow-down" aria-hidden="true"></span>
+                        </span>
+                    </a>
+                    <ul class="site-nav--dropdown">
+                        <li ><a href="/collections/computers">Laptops &amp; Macbooks</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Контакты</a>
+                </li>
+                <!--<li class="customer-navlink large&#45;&#45;hide"><a href="/account/login" id="customer_login_link">Sign in</a></li>-->
+                <!--<li class="customer-navlink large&#45;&#45;hide"><a href="/account/register" id="customer_register_link">Create an Account</a></li>-->
+            </ul>
+        </div>
+    </nav>
+
+    <div id="mobileNavBar">
+        <div class="display-table-cell">
+            <a class="menu-toggle mobileNavBar-link">Меню</a>
+        </div>
+        <div class="display-table-cell">
+            <a href="#" class="cart-toggle mobileNavBar-link" style="text-decoration: none" data-toggle="modal" data-target="#cartModal">
+                <span class="icon icon-cart"></span>
+                Корзина <span class="cart-count ">2</span>
+            </a>
+        </div>
+    </div>
+
+    <main class="wrapper main-content" role="main">
+        <div class="flexslider" id="heroSlider">
+            <ul class="slides">
+                <li>
+                    <a href="/collections/dslr-cameras" class="slide-link">
+                        <img src="//cdn.shopify.com/s/files/1/0543/1637/t/12/assets/slide_1.jpg?5887780921313339839" alt="" />
+                    </a>
+                </li>
+                <li>
+                    <a href="/collections/dslr-cameras" class="slide-link">
+                        <img src="//cdn.shopify.com/s/files/1/0543/1637/t/12/assets/slide_2.jpg?5887780921313339839" alt="" />
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <!--{{#each products}}-->
+
+            <div class="grid-item large--one-third medium--one-half small--one-whole on-sale">
+                <!--<a href="/collections/computers/products/arbitron-2000" class="product-grid-item">-->
+                    <div class="product-grid-image" style="height: 160px;">
+                        <div >
+                            <img src="//cdn.shopify.com/s/files/1/0543/1637/products/desktop2_17e6d40f-1d4d-4851-9ff3-2f204d6b319a_compact.jpeg?v=1406642511"
+                                 alt="Arbitron 2000">
+                        </div>
+                    </div>
+                    <p>Arbitron 2000</p>
+                    <div class="product-item--price">
+                        <span class="h1 medium--left">
+                            <small>499<sup>99</sup></small>
+                        </span>
+                        <span class="sale-tag medium--right has-reviews">
+                            Save $100<sup>00</sup>
+                        </span>
+                    </div>
+                    <span class="spr-badge" id="spr_badge_330383699" data-rating="4.2631578947368425">
+                        <span class="spr-starrating spr-badge-starrating">
+                            <i class="spr-icon spr-icon-star" style=""></i>
+                            <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star" style=""></i>
+                            <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star-half-alt" style=""></i>
+                        </span>
+                        <span class="spr-badge-caption">19 reviews</span>
+                    </span>
+                    <br/>
+                    <a class="btn bt-add-product" href="#" role="button" data-toggle="modal" data-target="#myModal" onclick="onOrderClick('{{id}}')">
+                        <span class="icon icon-cart">Купить</span>
+                    </a>
+                <!--</a>-->
+            </div>
+            <div class="grid-item large--one-third medium--one-half small--one-whole on-sale">
+                <a href="/collections/computers/products/arbitron-2000" class="product-grid-item">
+                    <div class="product-grid-image" style="height: 160px;">
+                        <div class="product-grid-image--centered">
+                            <img src="//cdn.shopify.com/s/files/1/0543/1637/products/desktop2_17e6d40f-1d4d-4851-9ff3-2f204d6b319a_compact.jpeg?v=1406642511"
+                                 alt="Arbitron 2000">
+                        </div>
+                    </div>
+                    <p>Arbitron 2000</p>
+                    <div class="product-item--price">
+                        <span class="h1 medium--left">
+                            <small>499<sup>99</sup></small>
+                        </span>
+                        <span class="sale-tag medium--right has-reviews">
+                            Save $100<sup>00</sup>
+                        </span>
+                    </div>
+                    <span class="spr-badge" id="spr_badge_330383699" data-rating="4.2631578947368425">
+                        <span class="spr-starrating spr-badge-starrating">
+                            <i class="spr-icon spr-icon-star" style=""></i>
+                            <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star" style=""></i>
+                            <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star-half-alt" style=""></i>
+                        </span>
+                        <span class="spr-badge-caption">19 reviews</span>
+                    </span>
+                </a>
+            </div>
+            <div class="grid-item large--one-third medium--one-half small--one-whole on-sale">
+                <a href="/collections/computers/products/arbitron-2000" class="product-grid-item">
+                    <div class="product-grid-image" style="height: 160px;">
+                        <div class="product-grid-image--centered">
+                            <img src="//cdn.shopify.com/s/files/1/0543/1637/products/desktop2_17e6d40f-1d4d-4851-9ff3-2f204d6b319a_compact.jpeg?v=1406642511"
+                                 alt="Arbitron 2000">
+                        </div>
+                    </div>
+                    <p>Arbitron 2000</p>
+                    <div class="product-item--price">
+                        <span class="h1 medium--left">
+                            <small>499<sup>99</sup></small>
+                        </span>
+                        <span class="sale-tag medium--right has-reviews">
+                            Save $100<sup>00</sup>
+                        </span>
+                    </div>
+                    <span class="spr-badge" id="spr_badge_330383699" data-rating="4.2631578947368425">
+                        <span class="spr-starrating spr-badge-starrating">
+                            <i class="spr-icon spr-icon-star" style=""></i>
+                            <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star" style=""></i>
+                            <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star-half-alt" style=""></i>
+                        </span>
+                        <span class="spr-badge-caption">19 reviews</span>
+                    </span>
+                </a>
+            </div>
+            <!--{{/each}}-->
+        </div><!--/row-->
+    </main>
+
+    <footer class="site-footer small--text-center" role="contentinfo">
+        <div class="wrapper">
+            <div class="grid">
+                <div class="grid-item medium--one-half large--three-twelfths">
+                    <h3>Быстрые ссылки</h3>
+                    <ul>
+                        <!--<li><a href="/search">Search</a></li>-->
+                        <li><a href="#">О пельменях</a></li>
+                        <li><a href="#">Доставка</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="grid-item medium--one-half large--five-twelfths">
+                    <h3>Мы в социальных сетях</h3>
+                    <ul class="inline-list social-icons">
+                        <li>
+                            <a class="icon-fallback-text" href="https://twitter.com/shopify" title="Digitalshop on Twitter">
+                                <span class="icon icon-twitter" aria-hidden="true"></span>
+                                <span class="fallback-text">Twitter</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="icon-fallback-text" href="https://facebook.com/shopify" title="Digitalshop on Facebook">
+                                <span class="icon icon-facebook" aria-hidden="true"></span>
+                                <span class="fallback-text">Facebook</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="icon-fallback-text" href="https://plus.google.com/+shopify" title="Digitalshop on Google">
+                                <span class="icon icon-google" aria-hidden="true"></span>
+                                <span class="fallback-text">Google</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="icon-fallback-text" href="https://instagram.com/shopify" title="Digitalshop on Instagram">
+                                <span class="icon icon-instagram" aria-hidden="true"></span>
+                                <span class="fallback-text">Instagram</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="icon-fallback-text" href="http://www.youtube.com/user/shopify" title="Digitalshop on YouTube">
+                                <span class="icon icon-youtube" aria-hidden="true"></span>
+                                <span class="fallback-text">YouTube</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="grid-item large--one-third">
+                    <h3>Новости</h3>
+                    <form action="" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" class="input-group">
+                        <input type="email" value="" placeholder="Email" name="EMAIL" id="mail" class="input-group-field" aria-label="Email Address" autocorrect="off" autocapitalize="off">
+                        <span class="input-group-btn">
+                            <input type="submit" class="btn-secondary btn--small" value="Подписаться" name="subscribe" id="subscribe">
+                        </span>
+                    </form>
+                </div>
+            </div>
+
+            <hr class="hr--small">
+
+            <div class="grid">
+                <div class="grid-item large--two-fifths">
+                    <ul class="legal-links inline-list">
+                        <li>
+                            &copy; 2016 Другаков и Ко
+                        </li>
+                        <li>
+                            E-commerce от <a target="_blank" rel="nofollow" href="https://igolni.com">igolni.com</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="grid-item large--three-fifths large--text-right">
+                    <ul class="inline-list payment-icons">
+                        <li>
+                          <span class="icon-fallback-text">
+                            <span class="icon icon-visa" aria-hidden="true"></span>
+                            <span class="fallback-text">visa</span>
+                          </span>
+                        </li>
+                        <li>
+                          <span class="icon-fallback-text">
+                            <span class="icon icon-master" aria-hidden="true"></span>
+                            <span class="fallback-text">master</span>
+                          </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script id="cartContentTemplate" type="text/x-handlebars-template">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Корзина</h4>
+        </div>
+        <div class="modal-body">
+            <div class="cart-row" data-id="721061279">
+                <div class="grid">
+                    <div class="grid-item large--seven-twelfths">
+                        <div class="grid">
+                            <div class="grid-item one-third large--one-quarter">
+                                <a href="/products/nikon-coolpix-16mp-34x-optical-zoom-digital-camera-red?variant=721061279" class="cart-image">
+                                    <img src="//cdn.shopify.com/s/files/1/0543/1637/products/10282813_3_8cf4eb45-0405-4890-b662-5eed11357361_medium.jpeg?v=1406642534" alt="Nikon COOLPIX 16MP 34X Optical Zoom Digital Camera - Red">
+                                </a>
+                            </div>
+                            <div class="grid-item two-thirds large--three-quarters">
+                                <a href="/products/nikon-coolpix-16mp-34x-optical-zoom-digital-camera-red?variant=721061279">
+                                    Nikon COOLPIX 16MP 34X Optical Zoom Digital Camera
+                                </a>
+                                <br>
+                                <small>Red</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-item large--five-twelfths medium--two-thirds push--medium--one-third">
+                        <div class="grid">
+                            <div class="grid-item one-half medium-down--one-third text-right">
+                                <div class="ajaxifyCart--qty">
+                                    <input type="text" class="ajaxifyCart--num" value="1 x" min="0" data-id="721061279" aria-label="quantity" pattern="[0-9]*">
+                                    <span class="ajaxifyCart--qty-adjuster ajaxifyCart--add" data-id="721061279" data-qty="11">+</span>
+                                    <span class="ajaxifyCart--qty-adjuster ajaxifyCart--minus" data-id="721061279" data-qty="0">-</span>
+                                </div>
+                            </div>
+                            <div class="grid-item one-third medium-down--one-third medium-down--text-left text-right">
+                                      <span class="h2" style="margin-top: 7px;">
+                                        <small>279<sup>99</sup></small>
+                                      </span>
+                            </div>
+                            <div class="grid-item one-sixth medium-down--one-third text-right">
+                                <a href="/cart/change?line=1&amp;quantity=0" data-id="721061279" class="icon-fallback-text btn-secondary remove ajaxifyCart--remove">
+                                    <span class="icon icon-x" aria-hidden="true"></span>
+                                    <span class="fallback-text">Remove</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-row" data-id="721061231">
+                <div class="grid">
+                    <div class="grid-item large--seven-twelfths">
+                        <div class="grid">
+                            <div class="grid-item one-third large--one-quarter">
+                                <a href="/products/canon-eos-rebel-t3-12-2mp-dslr-camera-with-18-55mm-lens-camera-case-memory-card?variant=721061231" class="cart-image">
+                                    <img src="//cdn.shopify.com/s/files/1/0543/1637/products/supplyb0096s3_433e8a91-70a9-48fc-bd6c-67ea5a5ff476_medium.jpeg?v=1406642518" alt="Canon EOS Rebel T3 12.2MP DSLR Camera - Black / None">
+                                </a>
+                            </div>
+                            <div class="grid-item two-thirds large--three-quarters">
+                                <a href="/products/canon-eos-rebel-t3-12-2mp-dslr-camera-with-18-55mm-lens-camera-case-memory-card?variant=721061231">
+                                    Canon EOS Rebel T3 12.2MP DSLR Camera
+                                </a>
+                                <br>
+                                <small>Black / None</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid-item large--five-twelfths medium--two-thirds push--medium--one-third">
+                        <div class="grid">
+                            <div class="grid-item one-half medium-down--one-third text-right">
+                                <div class="ajaxifyCart--qty">
+                                    <input type="text" class="ajaxifyCart--num" value="1 x" min="0" data-id="721061231" aria-label="quantity" pattern="[0-9]*">
+                                    <span class="ajaxifyCart--qty-adjuster ajaxifyCart--add" data-id="721061231" data-qty="11">+</span>
+                                    <span class="ajaxifyCart--qty-adjuster ajaxifyCart--minus" data-id="721061231" data-qty="0">-</span>
+                                </div>
+                            </div>
+                            <div class="grid-item one-third medium-down--one-third medium-down--text-left text-right">
+                                      <span class="h2" style="margin-top: 7px;">
+                                        <small>454<sup>99</sup></small>
+                                      </span>
+                            </div>
+                            <div class="grid-item one-sixth medium-down--one-third text-right">
+                                <a href="/cart/change?line=2&amp;quantity=0" data-id="721061231" class="icon-fallback-text btn-secondary remove ajaxifyCart--remove">
+                                    <span class="icon icon-x" aria-hidden="true"></span>
+                                    <span class="fallback-text">Remove</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-row">
+                <div class="grid">
+                    <div class="grid-item text-right ">
+                        <div class="cart-subtotal">
+                            Subtotal
+                                    <span class="h1 cart-subtotal--price">
+                                        <small>734<sup>98</sup></small>
+                                    </span>
+                        </div>
+                        <!--<input type="submit" name="update" class="btn-secondary update-cart" value="Update cart">-->
+                        <button type="submit" name="checkout" class="btn" >
+                            <span class="icon icon-cart">Checkout</span>
+
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="cartTemplate" type="text/template">
+
+        <form action="/cart" method="post" novalidate>
+            <div class="ajaxifyCart--products">
+                {{#items}}
+                <div class="ajaxifyCart--product">
+                    <div class="ajaxifyCart--row" data-id="{{id}}">
+                        <div class="grid">
+                            <div class="grid-item large--two-thirds">
+                                <div class="grid">
+                                    <div class="grid-item one-quarter">
+                                        <a href="{{url}}" class="ajaxCart--product-image"><img src="{{img}}" alt=""></a>
+                                    </div>
+                                    <div class="grid-item three-quarters">
+                                        <a href="{{url}}" class="h4">{{name}}</a>
+                                        <p>{{variation}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid-item large--one-third">
+                                <div class="grid">
+                                    <div class="grid-item one-third">
+                                        <div class="ajaxifyCart--qty">
+                                            <input type="text" name="updates[]" class="ajaxifyCart--num" value="{{itemQty}}" min="0" data-id="{{id}}" aria-label="quantity" pattern="[0-9]*">
+                                            <span class="ajaxifyCart--qty-adjuster ajaxifyCart--add" data-id="{{id}}" data-qty="{{itemAdd}}">+</span>
+                                            <span class="ajaxifyCart--qty-adjuster ajaxifyCart--minus" data-id="{{id}}" data-qty="{{itemMinus}}">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="grid-item one-third text-center">
+                                        <p>{{price}}</p>
+                                    </div>
+                                    <div class="grid-item one-third text-right">
+                                        <p>
+                                            <small><a href="/cart/change?id={{id}}&amp;quantity=0" class="ajaxifyCart--remove" data-id="{{id}}">Remove</a></small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/items}}
+            </div>
+            <div class="ajaxifyCart--row text-right medium-down--text-center">
+                <span class="h3">Subtotal {{totalPrice}}</span>
+                <input type="submit" class="{{btnClass}}" name="checkout" value="Checkout">
+            </div>
+        </form>
+
+    </script>
+    <!--<script id="drawerTemplate" type="text/template">-->
+
+        <!--<div id="ajaxifyDrawer" class="ajaxify-drawer">-->
+            <!--<div id="ajaxifyCart" class="ajaxifyCart&#45;&#45;content {{wrapperClass}}"></div>-->
+        <!--</div>-->
+        <!--<div class="ajaxifyDrawer-caret"><span></span></div>-->
+
+    <!--</script>-->
+    <!--<script id="modalTemplate" type="text/template">-->
+
+        <!--<div id="ajaxifyModal" class="ajaxify-modal">-->
+            <!--<div id="ajaxifyCart" class="ajaxifyCart&#45;&#45;content"></div>-->
+        <!--</div>-->
+
+    <!--</script>-->
+    <script id="ajaxifyQty" type="text/template">
+
+        <div class="ajaxifyCart--qty">
+            <input type="text" class="ajaxifyCart--num" value="{{itemQty}}" min="0" data-id="{{id}}" aria-label="quantity" pattern="[0-9]*">
+            <span class="ajaxifyCart--qty-adjuster ajaxifyCart--add" data-id="{{id}}" data-qty="{{itemAdd}}">+</span>
+            <span class="ajaxifyCart--qty-adjuster ajaxifyCart--minus" data-id="{{id}}" data-qty="{{itemMinus}}">-</span>
+        </div>
+
+    </script>
+    <script id="jsQty" type="text/template">
+
+        <div class="js-qty">
+            <input type="text" class="js--num" value="{{itemQty}}" min="1" data-id="{{id}}" aria-label="quantity" pattern="[0-9]*" name="{{inputName}}" id="{{inputId}}">
+            <span class="js--qty-adjuster js--add" data-id="{{id}}" data-qty="{{itemAdd}}">+</span>
+            <span class="js--qty-adjuster js--minus" data-id="{{id}}" data-qty="{{itemMinus}}">-</span>
+        </div>
+
+    </script>
+
+    <!--<script src="//cdn.shopify.com/s/files/1/0543/1637/t/12/assets/ajaxify.js?5887780921313339839" type="text/javascript"></script>-->
+    <!--<script>-->
+  <!--jQuery(function($) {-->
+    <!--ajaxifyShopify.init({-->
+      <!--method: 'modal',-->
+      <!--wrapperClass: 'wrapper',-->
+      <!--formSelector: '#addToCartForm',-->
+      <!--addToCartSelector: '#addToCart',-->
+      <!--cartCountSelector: '.cart-count',-->
+      <!--toggleCartButton: '.cart-toggle',-->
+      <!--useCartTemplate: true,-->
+      <!--btnClass: 'btn',-->
+      <!--moneyFormat: "${{amount}}",-->
+      <!--disableAjaxCart: false,-->
+      <!--enableQtySelectors: true-->
+    <!--});-->
+  <!--});-->
+  <!--</script>-->
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+        <div class="modal-dialog modal-lg" role="document">
+            <div id="cartContent" class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Корзина</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="cart-row" data-id="721061279">
+                        <div class="grid">
+                            <div class="grid-item large--seven-twelfths">
+                                <div class="grid">
+                                    <div class="grid-item one-third large--one-quarter">
+                                        <a href="/products/nikon-coolpix-16mp-34x-optical-zoom-digital-camera-red?variant=721061279" class="cart-image">
+                                            <img src="//cdn.shopify.com/s/files/1/0543/1637/products/10282813_3_8cf4eb45-0405-4890-b662-5eed11357361_medium.jpeg?v=1406642534" alt="Nikon COOLPIX 16MP 34X Optical Zoom Digital Camera - Red">
+                                        </a>
+                                    </div>
+                                    <div class="grid-item two-thirds large--three-quarters">
+                                        <a href="/products/nikon-coolpix-16mp-34x-optical-zoom-digital-camera-red?variant=721061279">
+                                            Nikon COOLPIX 16MP 34X Optical Zoom Digital Camera
+                                        </a>
+                                        <br>
+                                        <small>Red</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid-item large--five-twelfths medium--two-thirds push--medium--one-third">
+                                <div class="grid">
+                                    <div class="grid-item one-half medium-down--one-third text-right">
+                                        <div class="ajaxifyCart--qty">
+                                            <input type="text" class="ajaxifyCart--num" value="1 x" min="0" data-id="721061279" aria-label="quantity" pattern="[0-9]*">
+                                            <span class="ajaxifyCart--qty-adjuster ajaxifyCart--add" data-id="721061279" data-qty="11">+</span>
+                                            <span class="ajaxifyCart--qty-adjuster ajaxifyCart--minus" data-id="721061279" data-qty="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="grid-item one-third medium-down--one-third medium-down--text-left text-right">
+                                      <span class="h2" style="margin-top: 7px;">
+                                        <small>279<sup>99</sup></small>
+                                      </span>
+                                    </div>
+                                    <div class="grid-item one-sixth medium-down--one-third text-right">
+                                        <a href="/cart/change?line=1&amp;quantity=0" data-id="721061279" class="icon-fallback-text btn-secondary remove ajaxifyCart--remove">
+                                            <span class="icon icon-x" aria-hidden="true"></span>
+                                            <span class="fallback-text">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cart-row" data-id="721061231">
+                        <div class="grid">
+                            <div class="grid-item large--seven-twelfths">
+                                <div class="grid">
+                                    <div class="grid-item one-third large--one-quarter">
+                                        <a href="/products/canon-eos-rebel-t3-12-2mp-dslr-camera-with-18-55mm-lens-camera-case-memory-card?variant=721061231" class="cart-image">
+                                            <img src="//cdn.shopify.com/s/files/1/0543/1637/products/supplyb0096s3_433e8a91-70a9-48fc-bd6c-67ea5a5ff476_medium.jpeg?v=1406642518" alt="Canon EOS Rebel T3 12.2MP DSLR Camera - Black / None">
+                                        </a>
+                                    </div>
+                                    <div class="grid-item two-thirds large--three-quarters">
+                                        <a href="/products/canon-eos-rebel-t3-12-2mp-dslr-camera-with-18-55mm-lens-camera-case-memory-card?variant=721061231">
+                                            Canon EOS Rebel T3 12.2MP DSLR Camera
+                                        </a>
+                                        <br>
+                                        <small>Black / None</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid-item large--five-twelfths medium--two-thirds push--medium--one-third">
+                                <div class="grid">
+                                    <div class="grid-item one-half medium-down--one-third text-right">
+                                        <div class="ajaxifyCart--qty">
+                                            <input type="text" class="ajaxifyCart--num" value="1 x" min="0" data-id="721061231" aria-label="quantity" pattern="[0-9]*">
+                                            <span class="ajaxifyCart--qty-adjuster ajaxifyCart--add" data-id="721061231" data-qty="11">+</span>
+                                            <span class="ajaxifyCart--qty-adjuster ajaxifyCart--minus" data-id="721061231" data-qty="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="grid-item one-third medium-down--one-third medium-down--text-left text-right">
+                                      <span class="h2" style="margin-top: 7px;">
+                                        <small>454<sup>99</sup></small>
+                                      </span>
+                                    </div>
+                                    <div class="grid-item one-sixth medium-down--one-third text-right">
+                                        <a href="/cart/change?line=2&amp;quantity=0" data-id="721061231" class="icon-fallback-text btn-secondary remove ajaxifyCart--remove">
+                                            <span class="icon icon-x" aria-hidden="true"></span>
+                                            <span class="fallback-text">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cart-row">
+                        <div class="grid">
+                            <div class="grid-item text-right ">
+                                <div class="cart-subtotal">
+                                    Subtotal
+                                    <span class="h1 cart-subtotal--price">
+                                        <small>734<sup>98</sup></small>
+                                    </span>
+                                </div>
+                                <!--<input type="submit" name="update" class="btn-secondary update-cart" value="Update cart">-->
+                                <button type="submit" name="checkout" class="btn" >
+                                    <span class="icon icon-cart">Checkout</span>
+
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="modal-footer">-->
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+
+</body>
+
+
+
+</html>

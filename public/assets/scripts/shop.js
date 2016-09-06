@@ -1,10 +1,4 @@
 $(document).ready(function () {
-    $('[data-toggle="offcanvas"]').click(function () {
-        $('.row-offcanvas').toggleClass('active')
-    });
-
-    setUpPopover();
-
     $("[name='phone']").mask("0000000000");
 
     $("[name='streetName']").typeahead({
@@ -30,16 +24,6 @@ $(document).ready(function () {
 
 
 });
-
-function setUpPopover() {
-    $('[data-toggle="popover"]').popover({
-        html : true,
-        content: function() {
-          return $('#popover_content_wrapper').html();
-        }
-      }
-    );
-}
 
 function updateCart() {
     $.ajax({
@@ -99,4 +83,17 @@ function onDeliveryClick(active, nonactive) {
     }
 }
 
+function onCartBtnClick() {
+    var source = $("#cartContentTemplate").html();
+    var template = Handlebars.compile(source);
 
+    $.ajax({
+        type: 'GET',
+        url: '/cart',
+        success: function(result) {
+            console.log(result)
+            $('#cartContent').html(template(result));
+            $('#cartModal').modal('show')
+        }
+    });
+}
