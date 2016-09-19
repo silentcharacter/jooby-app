@@ -1,0 +1,94 @@
+<header class="site-header" role="banner">
+    <div class="wrapper">
+        <div class="grid--full">
+            <div class="grid-item large--one-half">
+                <h1 class="header-logo" itemscope itemtype="http://schema.org/Organization">
+                    <img href="/" itemprop="url">
+                    <img src="/assets/image/java-logo.png" alt="Магазин пельменей" itemprop="logo" height="50">
+                    </a>
+                </h1>
+            </div>
+            <div class="grid-item large--one-half text-center large--text-right">
+                <div class="site-header--text-links">
+                    При заказе от 1500 руб. доставка бесплатно!
+                    <!--<span class="site-header&#45;&#45;meta-links medium-down&#45;&#45;hide">-->
+                    <!--<a href="/account/login" id="customer_login_link">Sign in</a>-->
+                    <!--<span class="site-header&#45;&#45;spacer">or</span>-->
+                    <!--<a href="/account/register" id="customer_register_link">Create an Account</a>-->
+                    <!--</span>-->
+                </div>
+                <br class="medium-down--hide">
+                <!--<form action="/search" method="get" class="search-bar" role="search">-->
+                <!--<input type="hidden" name="type" value="product">-->
+
+                <!--<input type="search" name="q" value="" placeholder="Search all products..." aria-label="Search all products...">-->
+                <!--<button type="submit" class="search-bar&#45;&#45;submit icon-fallback-text">-->
+                <!--<span class="icon icon-search" aria-hidden="true"></span>-->
+                <!--<span class="fallback-text">Search</span>-->
+                <!--</button>-->
+                <!--</form>-->
+                <a href="#" class="header-cart-btn cart-toggle" onclick="onCartBtnClick()">
+                    <span class="icon icon-cart"></span>Корзина
+                    <span class="cart-count cart-badge--desktop ">{{cart.totalCount}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<nav class="nav-bar" role="navigation">
+    <div class="wrapper">
+        <!--<form action="/search" method="get" class="search-bar" role="search">-->
+        <!--<input type="hidden" name="type" value="product">-->
+
+        <!--<input type="search" name="q" value="" placeholder="Search all products..." aria-label="Search all products...">-->
+        <!--<button type="submit" class="search-bar&#45;&#45;submit icon-fallback-text">-->
+        <!--<span class="icon icon-search" aria-hidden="true"></span>-->
+        <!--<span class="fallback-text">Search</span>-->
+        <!--</button>-->
+        <!--</form>-->
+        <ul class="site-nav" id="accessibleNav">
+            <li class="large--hide">
+                <a href="/">Домой</a>
+            </li>
+            <li class="site-nav--has-dropdown" aria-haspopup="true">
+                <a href="#">О пельменях
+                    <span class="icon-fallback-text">
+                            <span class="icon icon-arrow-down" aria-hidden="true"></span>
+                        </span>
+                </a>
+                <ul class="site-nav--dropdown">
+                    <li ><a href="#">Статья о пользе пельменей</a></li>
+                </ul>
+            </li>
+            <li class="site-nav--has-dropdown" aria-haspopup="true">
+                <a href="#">Доставка
+                    <span class="icon-fallback-text">
+                            <span class="icon icon-arrow-down" aria-hidden="true"></span>
+                        </span>
+                </a>
+                <ul class="site-nav--dropdown">
+                    <li ><a href="#">Бесплатная доставка</a></li>
+                    <li ><a href="#">Платная доставка</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Контакты</a>
+            </li>
+            <!--<li class="customer-navlink large&#45;&#45;hide"><a href="/account/login" id="customer_login_link">Sign in</a></li>-->
+            <!--<li class="customer-navlink large&#45;&#45;hide"><a href="/account/register" id="customer_register_link">Create an Account</a></li>-->
+        </ul>
+    </div>
+</nav>
+
+<div id="mobileNavBar">
+    <div class="display-table-cell">
+        <a class="menu-toggle mobileNavBar-link">Меню</a>
+    </div>
+    <div class="display-table-cell">
+        <a href="#" class="cart-toggle mobileNavBar-link" style="text-decoration: none" data-toggle="modal" data-target="#cartModal">
+            <span class="icon icon-cart"></span>
+            Корзина <span class="cart-count ">{{cart.totalCount}}</span>
+        </a>
+    </div>
+</div>

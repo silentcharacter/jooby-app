@@ -1,100 +1,113 @@
-    <div class="row row-offcanvas row-offcanvas-right">
+<main class="wrapper main-content" role="main">
+    <div class="flexslider" id="heroSlider">
+        <ul class="slides">
+            <li>
+                <a href="#" class="slide-link">
+                    <img src="/assets/image/banner2.png" alt="" />
+                </a>
+            </li>
+            <li>
+                <a href="#" class="slide-link">
+                    <img src="/assets/image/banner1.jpg" alt="" />
+                </a>
+            </li>
+            <li>
+                <a href="#" class="slide-link">
+                    <img src="/assets/image/banner3.jpg" alt="" />
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        {{#each products}}
 
-        <div class="col-xs-12 col-sm-9">
-            <p class="pull-right visible-xs">
-                <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Корзина</button>
-            </p>
-            <div class="jumbotron">
-                <h1>Пельмени ручной работы!</h1>
-                <p>Пускай сейчас никто не тужит.
-                    И в луке руки у стряпух...
-                    Кружи нам головы и души,
-                    Пельменный дух, тяжёлый дух!.</p>
-            </div>
-
-            <!-- Modal -->
-            <div class="modal fade" id="myModal" role="dialog">
-                <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Добавление в корзину</h4>
-                        </div>
-                        <div class="modal-body">
-                            <form id="addToCartForm" method="post" action="#" >
-                                <input type="hidden" name="productId">
-                                <p>Укажите количество (кг):</p>
-                                <div class="input-group spinner" data-trigger="spinner">
-                                    <input type="text" class="form-control text-center" value="1" data-rule="quantity" name="quantity">
-                                    <div class="input-group-addon">
-                                        <button type="button" class="spin-up" data-spin="up"><span class="glyphicon glyphicon-triangle-top"></span></button>
-                                        <button type="button" class="spin-down" data-spin="down"><span class="glyphicon glyphicon-triangle-bottom"></span></button>
-                                    </div>
-                                </div>
-                                <hr>
-                                <p>Выберите дополнительные опции:</p>
-                                {{#each sauces}}
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="sauces" value="{{id}}">
-                                        {{name}} ({{price}} руб.)
-                                    </label>
-                                </div>
-                                {{/each}}
-                                <hr>
-                                {{#each colors}}
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="colorId" value="{{id}}"
-                                               {{#if _default}}
-                                                    checked
-                                               {{/if}}
-                                        >
-                                        {{name}} ({{price}} руб.)
-                                    </label>
-                                </div>
-                                {{/each}}
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="addToCart()">Добавить</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-                        </div>
-                    </div>
+        <div class="grid-item large--one-third medium--one-half small--one-whole on-sale">
+            <div class="product-grid-image" style="height: 160px;">
+                <div >
+                    <img src="/assets/image/pelmen.jpg" alt="{{name}}">
                 </div>
             </div>
+            <p>{{name}}</p>
+            <div class="product-item--price">
+                <span class="h1 medium--left">
+                    <small>{{price}}<sup>99</sup></small>
+                </span>
+                <span class="sale-tag medium--right has-reviews">
+                    Акция
+                </span>
+            </div>
+            <span class="spr-badge" id="spr_badge_330383699" data-rating="4.2631578947368425">
+                        <span class="spr-starrating spr-badge-starrating">
+                            <i class="spr-icon spr-icon-star" style=""></i>
+                            <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star" style=""></i>
+                            <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star-half-alt" style=""></i>
+                        </span>
+                        <span class="spr-badge-caption">19 отзывов</span>
+                    </span>
+            <br/>
+            <a class="btn bt-add-product" href="#" role="button" data-toggle="modal" data-target="#addToCartModal" onclick="onAddToCartBtnClick('{{id}}')">
+                <span class="icon icon-cart">Купить</span>
+            </a>
+            <!--</a>-->
+        </div>
 
-            <div class="row">
-                {{#each products}}
-                <div class="col-xs-12 col-md-6 col-lg-4">
-                    <h2>{{name}}</h2>
-                    <p>{{description}}</p>
-                    <p>Цена: <b>{{price}}</b></p>
-                    <p><a class="btn btn-default bt-add-product" href="#" role="button" data-toggle="modal" data-target="#myModal" onclick="onOrderClick('{{id}}')">
-                        Заказать &raquo;
-                    </a></p>
-                </div><!--/.col-xs-6.col-lg-4-->
-                {{/each}}
-            </div><!--/row-->
+        {{/each}}
+    </div><!--/row-->
+</main>
 
-            <!--<div class="row">-->
-                <!--<div class="col-sm-6 col-md-4">-->
-                    <!--<div class="thumbnail">-->
-                        <!--<img src="..." alt="...">-->
-                        <!--<div class="caption">-->
-                            <!--<h3>Thumbnail label</h3>-->
-                            <!--<p>...</p>-->
-                            <!--<p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>-->
+<!-- Modal -->
+<div class="modal fade" id="addToCartModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header add-to-cart">
+                <button type="button" class="close add-to-cart" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Добавление в корзину</h4>
+            </div>
+            <div class="modal-body">
+                <form id="addToCartForm" method="post" action="#" >
+                    <input type="hidden" name="productId">
+                    <p>Укажите количество (кг):</p>
+                    <div class="ajaxifyCart--qty">
+                        <input type="text" class="ajaxifyCart--num" value="1 кг" min="0" name="quantity">
+                        <span onclick="" class="ajaxifyCart--qty-adjuster ajaxifyCart--add">+</span>
+                        <span onclick="" class="ajaxifyCart--qty-adjuster ajaxifyCart--minus">-</span>
+                    </div>
+                    <!--<div class="input-group spinner" data-trigger="spinner">-->
+                        <!--<input type="text" class="form-control text-center" value="1" data-rule="quantity" name="quantity">-->
+                        <!--<div class="input-group-addon">-->
+                            <!--<button type="button" class="spin-up" data-spin="up"><span class="glyphicon glyphicon-triangle-top"></span></button>-->
+                            <!--<button type="button" class="spin-down" data-spin="down"><span class="glyphicon glyphicon-triangle-bottom"></span></button>-->
                         <!--</div>-->
                     <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-
-        </div><!--/.col-xs-12.col-sm-9-->
-
-        <div class="col-xs-12 col-sm-3 sidebar-offcanvas" id="sidebar">
-            <div id="cartPlaceholder">
-                {{> shop/cart }}
+                    <hr>
+                    <p>Выберите дополнительные опции:</p>
+                    {{#each sauces}}
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="sauces" value="{{id}}">
+                            {{name}} ({{price}} руб.)
+                        </label>
+                    </div>
+                    {{/each}}
+                    <hr>
+                    {{#each colors}}
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="colorId" value="{{id}}"
+                                   {{#if _default}}
+                                   checked
+                                   {{/if}}
+                            >
+                            {{name}} ({{price}} руб.)
+                        </label>
+                    </div>
+                    {{/each}}
+                </form>
             </div>
-        </div><!--/.sidebar-offcanvas-->
-    </div><!--/row-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="addToCart()">Добавить</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>

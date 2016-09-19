@@ -1,0 +1,76 @@
+<script id="cartContentTemplate" type="text/x-handlebars-template">
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">Корзина</h4>
+</div>
+<div class="modal-body">
+    {{#each entries}}
+    <div class="cart-row" data-id="{{product.id}}">
+        <div class="grid">
+            <div class="grid-item large--seven-twelfths">
+                <div class="grid">
+                    <div class="grid-item one-third large--one-quarter">
+                        <a href="/products/nikon-coolpix-16mp-34x-optical-zoom-digital-camera-red?variant=721061279" class="cart-image">
+                            <img src="//cdn.shopify.com/s/files/1/0543/1637/products/10282813_3_8cf4eb45-0405-4890-b662-5eed11357361_medium.jpeg?v=1406642534" alt="Nikon COOLPIX 16MP 34X Optical Zoom Digital Camera - Red">
+                        </a>
+                    </div>
+                    <div class="grid-item two-thirds large--three-quarters">
+                        <a href="#">
+                            {{product.name}}
+                        </a>
+                        <br>
+                        <small>{{color.name}}</small>
+                        {{#each sauces}}
+                            <br/><small>{{name}}</small>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-item large--five-twelfths medium--two-thirds push--medium--one-third">
+                <div class="grid">
+                    <div class="grid-item one-half medium-down--one-third text-right">
+                        <div class="ajaxifyCart--qty">
+                            <input type="text" class="ajaxifyCart--num" value="{{quantity}} кг" min="0" data-id="{{product.id}}" aria-label="quantity">
+                            <span onclick="modifyCart({{entryNo}},{{math quantity '+' 1}})" class="ajaxifyCart--qty-adjuster ajaxifyCart--add">+</span>
+                            <span onclick="modifyCart({{entryNo}},{{math quantity '-' 1}})" class="ajaxifyCart--qty-adjuster ajaxifyCart--minus">-</span>
+                        </div>
+                    </div>
+                    <div class="grid-item one-third medium-down--one-third medium-down--text-left text-right">
+                        <span class="h2" style="margin-top: 7px;">
+                            <small>{{totalPrice}}<sup>00</sup></small>
+                        </span>
+                    </div>
+                    <div class="grid-item one-sixth medium-down--one-third text-right">
+                        <a href="#" onclick="modifyCart({{entryNo}},0); return false;" class="icon-fallback-text btn-secondary remove ">
+                            <span class="icon icon-x" aria-hidden="true"></span>
+                            <span class="fallback-text">Удалить</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+
+    <div class="cart-row">
+        <div class="grid">
+            <div class="grid-item text-right ">
+                <div class="cart-subtotal">
+                    Итого
+                    <span class="h1 cart-subtotal--price">
+                            <small>{{totalPrice}}<sup>00</sup></small>
+                        </span>
+                </div>
+                <!--<input type="submit" name="update" class="btn-secondary update-cart" value="Update cart">-->
+                <button type="button" class="btn" onclick="document.location = 'order';">
+                    <span class="icon icon-cart">Оформить заказ</span>
+                </button>
+                <!--<a href="#" class="btn header-cart-btn cart-toggle" onclick="onCartBtnClick()">-->
+                    <!--<span class="icon icon-cart"></span>Оформить заказ-->
+                <!--</a>-->
+            </div>
+        </div>
+    </div>
+</div>
+</script>

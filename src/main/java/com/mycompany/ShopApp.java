@@ -27,18 +27,31 @@ public class ShopApp extends Jooby {
         use(new Colors());
         use(new Sauces());
 
-        get("/shop", req -> {
-            return Results.html("shop/shop")
-                    .put("templateName", "shop/main")
-                    .put("products", productService.getAll(req))
-                    .put("colors", colorService.getAll(req))
-                    .put("sauces", sauceService.getAll(req))
-                    .put("cart", CartService.getSessionCart(req));
+        get("/shop", req -> Results.html("shop/shop")
+					 .put("templateName", "shop/main")
+					 .put("products", productService.getAll(req))
+					 .put("colors", colorService.getAll(req))
+					 .put("sauces", sauceService.getAll(req))
+					 .put("cart", CartService.getSessionCart(req)));
+
+        get("/cart", req -> Results.json(CartService.getSessionCart(req)));
+
+        post("/cart", req -> {
+            Product product = productService.getById(req, req.param("productId").value());
+            Color color = req.param("colorId").isSet() ? colorService.getById(req, req.param("colorId").value()) : null;
+            List<Sauce> sauceList = new ArrayList<>();
+            if (req.param("sauces").isSet()) {
+                sauceList.addAll(
+                      req.param("sauces").toList().stream().map(sauceId -> sauceService.getById(req, sauceId))
+                            .collect(Collectors.toList())
+                );
+            }
+            return CartService.addToCart(req, product, req.param("quantity").intValue(), color, sauceList);
         });
 
-        get("/cart", req -> {
-            return Results.json(CartService.getSessionCart(req));
-        });
+        put("/cart", req -> CartService.updateCartRow(req, req.param("entryNo").intValue(), req.param("quantity").intValue()));
+
+        delete("/cart", req -> CartService.removeFromCart(req, req.param("entryNo").intValue()));
 
         get("/shop/order", req -> {
             Order order = new Order();
@@ -49,7 +62,16 @@ public class ShopApp extends Jooby {
                   .put("cart", CartService.getSessionCart(req));
         });
 
-        post("/shop/order", req -> {
+        get("/shop/checkout", req -> {
+            Order order = new Order();
+            order.delivery = "freeDelivery";
+            return Results.html("shop/checkout")
+//                  .put("templateName", "shop/order")
+                  .put("order", order)
+                  .put("cart", CartService.getSessionCart(req));
+        });
+
+        post("/shop/checkout", req -> {
             Order order = req.body().to(Order.class);
             ValidationResult validationResult = OrderValidator.validate(order);
             if (!validationResult.equals(ValidationResult.OK)) {
@@ -63,26 +85,7 @@ public class ShopApp extends Jooby {
             return Results.redirect("/shop/order/thankyou");
         });
 
-        get("/shop/order/thankyou", req -> {
-            return Results.html("shop/shop").put("templateName", "shop/thankyou");
-        });
-
-        post("/addToCart", req -> {
-            Product product = productService.getById(req, req.param("productId").value());
-            Color color = req.param("colorId").isSet() ? colorService.getById(req, req.param("colorId").value()) : null;
-            List<Sauce> sauceList = new ArrayList<>();
-            if (req.param("sauces").isSet()) {
-                sauceList.addAll(
-                        req.param("sauces").toList().stream().map(sauceId -> sauceService.getById(req, sauceId))
-                                .collect(Collectors.toList())
-                );
-            }
-            return CartService.addToCart(req, product, req.param("quantity").intValue(), color, sauceList);
-        });
-
-        post("/removeFromCart", req -> {
-            return CartService.removeFromCart(req, req.param("entryNo").intValue());
-        });
+        get("/shop/order/thankyou", req -> Results.html("shop/shop").put("templateName", "shop/thankyou"));
 
     }
 

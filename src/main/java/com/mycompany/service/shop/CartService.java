@@ -47,6 +47,13 @@ public class CartService {
         return cart;
     }
 
+    public static Cart updateCartRow(Request req, Integer entryNo, Integer quantity) {
+        Cart cart = getSessionCart(req);
+        cart.updateEntry(entryNo, quantity);
+        saveSessionCart(req, cart);
+        return cart;
+    }
+
     public static Cart removeFromCart(Request req, Integer entryNo) {
         Cart cart = getSessionCart(req);
         CartEntry toRemove = null;
