@@ -52,14 +52,38 @@ function modifyCart(entryNo, quantity) {
 
 function onAddToCartBtnClick(id) {
     $("input[name='productId'").val(id);
+    $("input[name='quantity'").val("1 кг");
+    $('#addToCartModal').modal('show');
+}
+
+function changeInputValue(id, delta) {
+    var input = $('#' + id);
+    var val = input.val();
+    try {
+        val = parseInt(val.match(/\d+/)[0]) + delta;
+    } catch (err) {
+        val = NaN;
+    }
+    if (val < 1 || isNaN(val))
+        val = 1;
+    val = val + " кг";
+    input.val(val);
 }
 
 function addToCart() {
-    var msg = $('#addToCartForm').serialize();
+    var msg = $('#addToCartForm').serializeArray();
+    var obj = {};
+    for(var i in msg) {
+        obj[msg[i].name] = msg[i].value;
+    }
+    obj.quantity = parseInt(obj.quantity);
+    if (isNaN(obj.quantity)) {
+        return;
+    }
     $.ajax({
         type: 'POST',
         url: '/cart',
-        data: msg,
+        data: obj,
         error: function (xhr, str) {
             console.log('Возникла ошибка: ' + xhr.responseCode);
         }

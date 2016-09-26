@@ -5,13 +5,13 @@
 </div>
 <div class="modal-body">
     {{#each entries}}
-    <div class="cart-row" data-id="{{product.id}}">
-        <div class="grid">
+    <div class="cart-row">
+        <div class="grid" style="padding-left: 30px">
             <div class="grid-item large--seven-twelfths">
                 <div class="grid">
                     <div class="grid-item one-third large--one-quarter">
-                        <a href="/products/nikon-coolpix-16mp-34x-optical-zoom-digital-camera-red?variant=721061279" class="cart-image">
-                            <img src="//cdn.shopify.com/s/files/1/0543/1637/products/10282813_3_8cf4eb45-0405-4890-b662-5eed11357361_medium.jpeg?v=1406642534" alt="Nikon COOLPIX 16MP 34X Optical Zoom Digital Camera - Red">
+                        <a href="#" class="cart-image">
+                            <img src="/assets/image/pelmen.jpg" alt="Nikon COOLPIX 16MP 34X Optical Zoom Digital Camera - Red">
                         </a>
                     </div>
                     <div class="grid-item two-thirds large--three-quarters">
@@ -63,7 +63,7 @@
                         </span>
                 </div>
                 <!--<input type="submit" name="update" class="btn-secondary update-cart" value="Update cart">-->
-                <button type="button" class="btn" onclick="document.location = 'order';">
+                <button type="button" class="btn" onclick="document.location = '/shop/checkout';">
                     <span class="icon icon-cart">Оформить заказ</span>
                 </button>
                 <!--<a href="#" class="btn header-cart-btn cart-toggle" onclick="onCartBtnClick()">-->

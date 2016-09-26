@@ -53,20 +53,10 @@ public class ShopApp extends Jooby {
 
         delete("/cart", req -> CartService.removeFromCart(req, req.param("entryNo").intValue()));
 
-        get("/shop/order", req -> {
-            Order order = new Order();
-            order.delivery = "freeDelivery";
-            return Results.html("shop/shop")
-                  .put("templateName", "shop/order")
-                  .put("order", order)
-                  .put("cart", CartService.getSessionCart(req));
-        });
-
         get("/shop/checkout", req -> {
             Order order = new Order();
             order.delivery = "freeDelivery";
             return Results.html("shop/checkout")
-//                  .put("templateName", "shop/order")
                   .put("order", order)
                   .put("cart", CartService.getSessionCart(req));
         });
