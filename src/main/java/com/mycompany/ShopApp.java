@@ -1,10 +1,7 @@
 package com.mycompany;
 
 import com.mycompany.controller.shop.*;
-import com.mycompany.domain.shop.Color;
-import com.mycompany.domain.shop.Order;
-import com.mycompany.domain.shop.Product;
-import com.mycompany.domain.shop.Sauce;
+import com.mycompany.domain.shop.*;
 import com.mycompany.service.shop.CartService;
 import com.mycompany.service.shop.ColorService;
 import com.mycompany.service.shop.ProductService;
@@ -54,7 +51,7 @@ public class ShopApp extends Jooby {
         delete("/cart", req -> CartService.removeFromCart(req, req.param("entryNo").intValue()));
 
         get("/shop/checkout", req -> {
-            Order order = new Order();
+            Cart order = new Cart();
             order.delivery = "freeDelivery";
             return Results.html("shop/checkout")
                   .put("order", order)
@@ -62,20 +59,40 @@ public class ShopApp extends Jooby {
         });
 
         post("/shop/checkout", req -> {
-            Order order = req.body().to(Order.class);
+            Cart order = req.body().to(Cart.class);
             ValidationResult validationResult = OrderValidator.validate(order);
             if (!validationResult.equals(ValidationResult.OK)) {
-                return Results.html("shop/shop")
-                      .put("templateName", "shop/order")
+                return Results.html("shop/checkout")
                       .put("order", order)
                       .put("errorMessage", validationResult.message)
                       .put("errorField", validationResult.fieldName)
                       .put("cart", CartService.getSessionCart(req));
             }
-            return Results.redirect("/shop/order/thankyou");
+            return Results.redirect("/shop/checkout/delivery");
         });
 
-        get("/shop/order/thankyou", req -> Results.html("shop/shop").put("templateName", "shop/thankyou"));
+        get("/shop/checkout/delivery", req -> {
+            Cart order = new Cart();
+            order.delivery = "freeDelivery";
+            return Results.html("shop/checkout")
+                  .put("order", order)
+                  .put("cart", CartService.getSessionCart(req));
+        });
+
+        post("/shop/checkout/delivery", req -> {
+            Cart order = req.body().to(Cart.class);
+            ValidationResult validationResult = OrderValidator.validate(order);
+            if (!validationResult.equals(ValidationResult.OK)) {
+                return Results.html("shop/checkout")
+                      .put("order", order)
+                      .put("errorMessage", validationResult.message)
+                      .put("errorField", validationResult.fieldName)
+                      .put("cart", CartService.getSessionCart(req));
+            }
+            return Results.redirect("/shop/checkout/delivery");
+        });
+
+        get("/shop/order/thankyou", req -> Results.html("shop/checkout").put("step", "thankyou"));
 
     }
 

@@ -1,19 +1,38 @@
 package com.mycompany.domain.shop;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mycompany.domain.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cart {
-    public List<CartEntry> entries = new ArrayList<>();
+public class Cart extends Entity
+{
+    public String name;
+    public String phone;
+    public String streetName;
+    public String streetNumber;
+    public String entrance;
+    public String flat;
+    public String delivery;
+    public String deliveryDate;
+    public String deliveryTime;
+    public String payment;
+
+    @Override
+    public String getFullText()
+    {
+        return "";
+    }
+
+    public List<OrderEntry> entries = new ArrayList<>();
     public Integer totalPrice = 0;
     public Integer totalCount = 0;
 
     public void calculate() {
         totalPrice = 0;
         totalCount = 0;
-        for (CartEntry entry : entries) {
+        for (OrderEntry entry : entries) {
             int rowTotalPrice = entry.product.price * entry.quantity;
             if (entry.color != null) {
                 rowTotalPrice += entry.color.price;
@@ -30,13 +49,13 @@ public class Cart {
     }
 
     public void addEntry(Product product, Integer quantity, Color color, List<Sauce> sauces) {
-        entries.add(new CartEntry(product, quantity, color, sauces, entries.size()));
+        entries.add(new OrderEntry(product, quantity, color, sauces, entries.size()));
         calculate();
     }
 
     public void updateEntry(Integer entryNo, Integer quantity) {
-        CartEntry cartEntry = null;
-        for (CartEntry entry : entries)
+        OrderEntry cartEntry = null;
+        for (OrderEntry entry : entries)
         {
             if (entry.entryNo.equals(entryNo)) {
                 cartEntry = entry;

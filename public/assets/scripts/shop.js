@@ -89,6 +89,7 @@ function addToCart() {
         }
     }).always(function () {
         updateCart();
+        onCartBtnClick();
     });
 }
 

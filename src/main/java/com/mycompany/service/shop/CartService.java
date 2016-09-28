@@ -56,8 +56,8 @@ public class CartService {
 
     public static Cart removeFromCart(Request req, Integer entryNo) {
         Cart cart = getSessionCart(req);
-        CartEntry toRemove = null;
-        for (CartEntry entry : cart.entries) {
+        OrderEntry toRemove = null;
+        for (OrderEntry entry : cart.entries) {
             if (entry.entryNo.equals(entryNo)) {
                 toRemove = entry;
                 break;
