@@ -9553,10 +9553,10 @@
                 }, e = {}.hasOwnProperty;
                 this.BillingAddress = function (e) {
                     function n() {
-                        n.__super__.constructor.apply(this, arguments), this.$('input[name="checkout[different_billing_address]"]').length && (this.$('input[name="checkout[different_billing_address]"]').prop("disabled", !1), this.differentBillingRadio = this.$("#checkout_different_billing_address_true")[0], this.$billingAddress = this.$("[data-address-fields]"), this.$billingAddressFields = this.$billingAddress.find("input, select, textarea"), this.toggleDifferentBillingAddressForm())
+                        n.__super__.constructor.apply(this, arguments), this.$('input[name="delivery"]').length && (this.$('input[name="checkout[different_billing_address]"]').prop("disabled", !1), this.differentBillingRadio = this.$("#payabledelivery")[0], this.$billingAddress = this.$("[data-address-fields]"), this.$billingAddressFields = this.$billingAddress.find("input, select, textarea"), this.toggleDifferentBillingAddressForm())
                     }
 
-                    return t(n, e), n.prototype.events = {'change input[name="checkout[different_billing_address]"]': "toggleDifferentBillingAddressForm"}, n.prototype.toggleDifferentBillingAddressForm = function () {
+                    return t(n, e), n.prototype.events = {'change input[name="delivery"]': "toggleDifferentBillingAddressForm"}, n.prototype.toggleDifferentBillingAddressForm = function () {
                         var t;
                         return t = this.differentBillingRadio.checked, this.$billingAddress.toggleClass("hidden", !t), this.differentBillingRadio.setAttribute("aria-expanded", t), this.$billingAddressFields.prop("disabled", !t)
                     }, n

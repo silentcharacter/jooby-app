@@ -51,48 +51,46 @@ public class ShopApp extends Jooby {
         delete("/cart", req -> CartService.removeFromCart(req, req.param("entryNo").intValue()));
 
         get("/shop/checkout", req -> {
-            Cart order = new Cart();
-            order.delivery = "freeDelivery";
-            return Results.html("shop/checkout")
-                  .put("order", order)
-                  .put("cart", CartService.getSessionCart(req));
+            Cart cart = CartService.getSessionCart(req);
+            return Results.html("shop/checkout").put("cart", cart).put("cartForm", cart).put("step", "contact");
         });
 
         post("/shop/checkout", req -> {
-            Cart order = req.body().to(Cart.class);
-            ValidationResult validationResult = OrderValidator.validate(order);
+            Cart cartForm = req.body().to(Cart.class);
+            ValidationResult validationResult = OrderValidator.validate(cartForm);
             if (!validationResult.equals(ValidationResult.OK)) {
                 return Results.html("shop/checkout")
-                      .put("order", order)
+                      .put("step", "contact")
+                      .put("cartForm", cartForm)
                       .put("errorMessage", validationResult.message)
                       .put("errorField", validationResult.fieldName)
                       .put("cart", CartService.getSessionCart(req));
             }
+            CartService.saveContactInfo(req, cartForm);
             return Results.redirect("/shop/checkout/delivery");
         });
 
-        get("/shop/checkout/delivery", req -> {
-            Cart order = new Cart();
-            order.delivery = "freeDelivery";
-            return Results.html("shop/checkout")
-                  .put("order", order)
-                  .put("cart", CartService.getSessionCart(req));
-        });
+        get("/shop/checkout/delivery", req -> Results.html("shop/checkout")
+				  .put("step", "delivery")
+				  .put("cart", CartService.getSessionCart(req)));
 
         post("/shop/checkout/delivery", req -> {
-            Cart order = req.body().to(Cart.class);
-            ValidationResult validationResult = OrderValidator.validate(order);
-            if (!validationResult.equals(ValidationResult.OK)) {
-                return Results.html("shop/checkout")
-                      .put("order", order)
-                      .put("errorMessage", validationResult.message)
-                      .put("errorField", validationResult.fieldName)
-                      .put("cart", CartService.getSessionCart(req));
-            }
-            return Results.redirect("/shop/checkout/delivery");
+            CartService.setDelivery(req, req.param("delivery").value());
+            return Results.redirect("/shop/checkout/payment");
         });
 
-        get("/shop/order/thankyou", req -> Results.html("shop/checkout").put("step", "thankyou"));
+        get("/shop/checkout/payment", req -> Results.html("shop/checkout")
+				  .put("step", "payment")
+				  .put("cart", CartService.getSessionCart(req)));
+
+        post("/shop/checkout/payment", req -> {
+
+            return Results.redirect("/shop/checkout/thankyou");
+        });
+
+        get("/shop/checkout/thankyou", req -> Results.html("shop/checkout")
+              .put("cart", CartService.getSessionCart(req))
+              .put("step", "thankyou"));
 
     }
 

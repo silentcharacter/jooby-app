@@ -29,8 +29,8 @@
     <script src="/assets/scripts/shop.js" type="text/javascript"></script>
 </head>
 
-
 <body>
+
 <div class="banner" data-header>
     <div class="wrap">
         <a href="/shop" class="logo logo--left">
@@ -71,11 +71,9 @@
     <div class="wrap">
         <div class="sidebar" role="complementary">
             <div class="sidebar__header">
-
-                <a href="https://supply-electronics.myshopify.com" class="logo logo--left">
+                <a href="/shop" class="logo logo--left">
                     <h1 class="logo__text">Пельмени ручной лепки</h1>
                 </a>
-
             </div>
             <div class="sidebar__content">
                 <div class="order-summary order-summary--is-collapsed" data-order-summary>
@@ -141,7 +139,8 @@
                         <div class="order-summary__section order-summary__section--discount" data-reduction-form="update">
                             <form class="edit_checkout" action="#" accept-charset="UTF-8" method="post">
                                 <!--<input type="hidden" name="authenticity_token" value="56Ocw3Cak1rzbnRvajhsJQx3zftk+1XyCxgw/c4Njqd73PG88cHf5Sqpsw1Wc1VyfUpc6T7BzWIrrQeTR9IgUg=="/>-->
-                                <input type="hidden" name="step" value="contact_information"/>
+                                <!--<input type="hidden" name="step" value="contact_information"/>-->
+                                <input type="hidden" name="errorField" value="{{errorField}}"/>
 
                                 <div class="fieldset">
                                     <div class="field ">
@@ -175,19 +174,12 @@
                         <div class="order-summary__section order-summary__section--total-lines"
                              data-order-summary-section="payment-lines">
                             <table class="total-line-table">
-                                <caption class="visually-hidden">Cost summary</caption>
-                                <thead>
-                                <tr>
-                                    <th scope="col"><span class="visually-hidden">Description</span></th>
-                                    <th scope="col"><span class="visually-hidden">Price</span></th>
-                                </tr>
-                                </thead>
                                 <tbody>
                                 <tr class="total-line total-line--subtotal">
                                     <td class="total-line__name">Подитог</td>
                                     <td class="total-line__price">
                                       <span class="order-summary__emphasis" data-checkout-subtotal-price-target="1197958">
-                                        {{cart.totalPrice}} руб.
+                                        {{cart.subTotalPrice}} руб.
                                       </span>
                                     </td>
                                 </tr>
@@ -197,8 +189,9 @@
                                     <td class="total-line__name">Доставка</td>
                                     <td class="total-line__price">
                                         <span class="order-summary__emphasis" data-checkout-total-shipping-target="0">
-                                          —
+                                          {{cart.deliveryPrice}}
                                         </span>
+                                        <span class="payment-due__currency">руб</span>
                                     </td>
                                 </tr>
 
@@ -231,34 +224,62 @@
                     <h1 class="logo__text">Пельмени ручной лепки</h1>
                 </a>
 
-                <ul class="breadcrumb ">
-                    <li class="breadcrumb__item breadcrumb__item--completed">
-                        <a class="breadcrumb__link" href="/shop">Каталог</a>
-                    </li>
+                <ul class="breadcrumb">
 
-                    <li class="breadcrumb__item breadcrumb__item--current">
-                        Контактная информация
-                    </li>
-                    <li class="breadcrumb__item breadcrumb__item--blank">
-                        <a class="breadcrumb__link" href="/checkout?step=shipping_method">Способ доставки</a>
-                    </li>
-                    <li class="breadcrumb__item breadcrumb__item--blank">
-                        Оплата
-                    </li>
+                    {{#equal step "thankyou"}}
+                    {{else}}
+                        <li class="breadcrumb__item breadcrumb__item--completed">
+                            <a class="breadcrumb__link" href="/shop">Каталог</a>
+                        </li>
+                    {{/equal}}
+
+                    {{#equal step "contact"}}
+                        <li class="breadcrumb__item breadcrumb__item--current">
+                            Контактная информация
+                        </li>
+                        <li class="breadcrumb__item breadcrumb__item--blank">
+                            <a class="breadcrumb__link" href="/shop/checkout/delivery">Способ доставки</a>
+                        </li>
+                        <li class="breadcrumb__item breadcrumb__item--blank">
+                            Оплата
+                        </li>
+                    {{/equal}}
+                    {{#equal step "delivery"}}
+                        <li class="breadcrumb__item breadcrumb__item--current">
+                            <a class="breadcrumb__link" href="/shop/checkout">Контактная информация</a>
+                        </li>
+                        <li class="breadcrumb__item breadcrumb__item--current">
+                            Способ доставки
+                        </li>
+                        <li class="breadcrumb__item breadcrumb__item--current">
+                            <a class="breadcrumb__link" href="/shop/checkout/payment">Оплата</a>
+                        </li>
+                    {{/equal}}
+                    {{#equal step "payment"}}
+                        <li class="breadcrumb__item breadcrumb__item--current">
+                            <a class="breadcrumb__link" href="/shop/checkout">Контактная информация</a>
+                        </li>
+                        <li class="breadcrumb__item breadcrumb__item--blank">
+                            <a class="breadcrumb__link" href="/shop/checkout/delivery">Способ доставки</a>
+                        </li>
+                        <li class="breadcrumb__item breadcrumb__item--current">
+                            Оплата
+                        </li>
+                    {{/equal}}
                 </ul>
 
-
             </div>
+
             <div class="main__content">
-                <div class="step" data-step="contact_information">
-                    <form class="edit_checkout" action="/shop/checkout" accept-charset="UTF-8" method="post">
+                {{#equal step "contact"}}
+                    <form action="/shop/checkout" accept-charset="UTF-8" method="post">
                         <!--<input type="hidden" name="authenticity_token"-->
                                <!--value="Z8dy1DDac4yR0OCz4sH9ETTP/ihio71UhXrV/GTkHX37uB+rsYE/M0gXJ9HeisRGRfJvOjiZJcSlz+KS7TuziA=="/>-->
 
-                        <input type="hidden" name="previous_step" id="previous_step" value="contact_information"/>
-                        <input type="hidden" name="step" value="shipping_method"/>
-
                         <div class="step__sections">
+                            {{#if errorMessage}}
+                                <div class="alert alert-danger">{{errorMessage}}</div>
+                            {{/if}}
 
                             <div class="section section--contact-information">
                                 <div class="section__header">
@@ -267,60 +288,51 @@
                                 <div class="section__content">
                                     <div class="fieldset" data-email-check='[data-email-suggestions]'>
                                         <div class="field field--required">
-                                            <label class="field__label" for="checkout_shipping_address_phone">Телефон</label>
+                                            <label class="field__label" for="phone">Телефон</label>
                                             <div class="field__input-wrapper">
-                                                <input placeholder="Телефон" class="field__input" size="30" type="tel"
-                                                       name="phone" id="checkout_shipping_address_phone"/>
+                                                <input placeholder="Телефон" class="field__input" type="tel" name="phone" id="phone" value="{{cartForm.phone}}"/>
                                             </div>
                                         </div>
                                         <div class="field field--required">
-                                            <label class="field__label" for="checkout_shipping_address_first_name">Имя</label>
+                                            <label class="field__label" for="name">Имя</label>
                                             <div class="field__input-wrapper">
-                                                <input placeholder="Имя" class="field__input" size="30" type="text" name="name"
-                                                       id="checkout_shipping_address_first_name"/>
+                                                <input placeholder="Имя" class="field__input" type="text" name="name" id="name" value="{{cartForm.name}}"/>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-
                             <div class="section section--shipping-address">
-
                                 <div class="section__header">
                                     <h2 class="section__title">
                                         Адрес
                                     </h2>
                                 </div>
-
                                 <div class="section__content">
                                     <div class="fieldset">
                                         <div class="field field--required">
                                             <label class="field__label" for="streetName">Улица</label>
                                             <div class="field__input-wrapper">
-                                                <input placeholder="Улица" class="field__input" size="30" type="text"
-                                                       name="streetName" id="streetName"/>
+                                                <input placeholder="Улица" class="field__input" type="text" name="streetName" id="streetName" value="{{cartForm.streetName}}"/>
                                             </div>
                                         </div>
                                         <div class="field--third field field--optional field--show-floating-label">
-                                            <label class="field__label" for="streetNo">Номер дома</label>
+                                            <label class="field__label" for="streetNumber">Номер дома</label>
                                             <div class="field__input-wrapper">
-                                                <input placeholder="Номер дома" class="field__input" size="30" type="text"
-                                                       name="streetNumber" id="streetNo"/>
+                                                <input placeholder="Номер дома" class="field__input" type="text" name="streetNumber" id="streetNumber" value="{{cartForm.streetNumber}}"/>
                                             </div>
                                         </div>
                                         <div class="field--third field field--optional field--show-floating-label">
                                             <label class="field__label" for="entrance">Подъезд</label>
                                             <div class="field__input-wrapper">
-                                                <input placeholder="Подъезд" class="field__input" type="text" name="entrance"
-                                                       id="entrance"/>
+                                                <input placeholder="Подъезд" class="field__input" type="text" name="entrance" id="entrance" value="{{cartForm.entrance}}"/>
                                             </div>
                                         </div>
                                         <div class="field--third field field--optional field--show-floating-label">
                                             <label class="field__label" for="flat">Квартира/офис</label>
                                             <div class="field__input-wrapper">
-                                                <input placeholder="Квартира/офис" class="field__input" type="text"
-                                                       name="flat" id="flat"/>
+                                                <input placeholder="Квартира/офис" class="field__input" type="text" name="flat" id="flat" value="{{cartForm.flat}}"/>
                                             </div>
                                         </div>
                                     </div>
@@ -339,68 +351,7 @@
                             <!--</div>-->
                             <!--</div>-->
 
-
-                            <!--<div class="section section&#45;&#45;billing-address" data-billing-address="">-->
-                                <!--<div class="section__header">-->
-                                    <!--<h2 class="section__title">Billing address</h2>-->
-                                <!--</div>-->
-
-                                <!--<div class="section__content">-->
-                                    <!--<div class="content-box">-->
-                                        <!--<div class="radio-wrapper content-box__row">-->
-                                            <!--<div class="radio__input">-->
-                                                <!--<input class="input-radio" data-backup="different_billing_address_false" type="radio" value="false" checked="checked" name="checkout[different_billing_address]" id="checkout_different_billing_address_false">-->
-                                            <!--</div>-->
-
-                                            <!--<label class="radio__label content-box__emphasis" for="checkout_different_billing_address_false">-->
-                                                <!--Same as shipping address-->
-                                            <!--</label>-->
-                                        <!--</div>-->
-
-                                        <!--<div class="radio-wrapper content-box__row">-->
-                                            <!--<div class="radio__input">-->
-                                                <!--<input class="input-radio" data-backup="different_billing_address_true" aria-expanded="true" aria-controls="section&#45;&#45;billing-address__different" type="radio" value="true" name="checkout[different_billing_address]" id="checkout_different_billing_address_true">-->
-                                            <!--</div>-->
-                                            <!--<label class="radio__label content-box__emphasis" for="checkout_different_billing_address_true">-->
-                                                <!--Use a different billing address-->
-                                            <!--</label>        </div>-->
-
-                                        <!--<div class="radio-group__row content-box__row content-box__row&#45;&#45;secondary" data-address-fields="" id="section&#45;&#45;billing-address__different">-->
-                                            <!--<div class="fieldset">-->
-
-
-
-                                                <!--<div data-country-section="1" class="field field&#45;&#45;required field&#45;&#45;three-eights field&#45;&#45;show-floating-label">-->
-
-                                                    <!--<div class="field__input-wrapper field__input-wrapper&#45;&#45;select"><label class="field__label" for="checkout_billing_address_country">Country</label>-->
-                                                        <!--<select size="1" autocomplete="billing country" data-backup="country" class="field__input field__input&#45;&#45;select" name="checkout[billing_address][country]" id="checkout_billing_address_country"><option data-code="US" value="United States">United States</option>-->
-                                                            <!--<option data-code="IN" value="India">India</option>-->
-                                                            <!--<option data-code="CA" value="Canada">Canada</option>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-                                                <!--<input class="visually-hidden" autocomplete="billing address-level1" tabindex="-1" data-autocomplete-field="province" size="30" type="text" name="checkout[billing_address][province]">-->
-
-                                                <!--<div data-province-section="1" class="field field&#45;&#45;required field&#45;&#45;three-eights field&#45;&#45;show-floating-label">-->
-
-                                                    <!--<div class="field__input-wrapper field__input-wrapper&#45;&#45;select"><label class="field__label" for="checkout_billing_address_province">State</label>-->
-                                                        <!--<input type="hidden" name="checkout[billing_address][province]"><select name="checkout[billing_address][province]" class="field__input&#45;&#45;select"></select><select placeholder="Region" data-backup="province" class="field__input field__input&#45;&#45;select" name="checkout[billing_address][province]" id="checkout_billing_address_province"><option value="" disabled="">State</option><option data-code="AL" value="Alabama">Alabama</option><option data-code="AK" value="Alaska">Alaska</option><option data-code="AS" value="American Samoa">American Samoa</option><option data-code="AZ" value="Arizona">Arizona</option><option data-code="AR" value="Arkansas">Arkansas</option><option data-code="AA" value="Armed Forces Americas">Armed Forces Americas</option><option data-code="AE" value="Armed Forces Europe">Armed Forces Europe</option><option data-code="AP" value="Armed Forces Pacific">Armed Forces Pacific</option><option data-code="CA" value="California">California</option><option data-code="CO" value="Colorado">Colorado</option><option data-code="CT" value="Connecticut">Connecticut</option><option data-code="DE" value="Delaware">Delaware</option><option data-code="FM" value="Federated States of Micronesia">Federated States of Micronesia</option><option data-code="FL" value="Florida">Florida</option><option data-code="GA" value="Georgia">Georgia</option><option data-code="GU" value="Guam">Guam</option><option data-code="HI" value="Hawaii">Hawaii</option><option data-code="ID" value="Idaho">Idaho</option><option data-code="IL" value="Illinois">Illinois</option><option data-code="IN" value="Indiana">Indiana</option><option data-code="IA" value="Iowa">Iowa</option><option data-code="KS" value="Kansas">Kansas</option><option data-code="KY" value="Kentucky">Kentucky</option><option data-code="LA" value="Louisiana">Louisiana</option><option data-code="ME" value="Maine">Maine</option><option data-code="MH" value="Marshall Islands">Marshall Islands</option><option data-code="MD" value="Maryland">Maryland</option><option data-code="MA" value="Massachusetts">Massachusetts</option><option data-code="MI" value="Michigan">Michigan</option><option data-code="MN" value="Minnesota">Minnesota</option><option data-code="MS" value="Mississippi">Mississippi</option><option data-code="MO" value="Missouri">Missouri</option><option data-code="MT" value="Montana">Montana</option><option data-code="NE" value="Nebraska">Nebraska</option><option data-code="NV" value="Nevada">Nevada</option><option data-code="NH" value="New Hampshire">New Hampshire</option><option data-code="NJ" value="New Jersey">New Jersey</option><option data-code="NM" value="New Mexico">New Mexico</option><option data-code="NY" value="New York">New York</option><option data-code="NC" value="North Carolina">North Carolina</option><option data-code="ND" value="North Dakota">North Dakota</option><option data-code="MP" value="Northern Mariana Islands">Northern Mariana Islands</option><option data-code="OH" value="Ohio">Ohio</option><option data-code="OK" value="Oklahoma">Oklahoma</option><option data-code="OR" value="Oregon">Oregon</option><option data-code="PW" value="Palau">Palau</option><option data-code="PA" value="Pennsylvania">Pennsylvania</option><option data-code="PR" value="Puerto Rico">Puerto Rico</option><option data-code="RI" value="Rhode Island">Rhode Island</option><option data-code="SC" value="South Carolina">South Carolina</option><option data-code="SD" value="South Dakota">South Dakota</option><option data-code="TN" value="Tennessee">Tennessee</option><option data-code="TX" value="Texas">Texas</option><option data-code="UT" value="Utah">Utah</option><option data-code="VT" value="Vermont">Vermont</option><option data-code="VI" value="Virgin Islands">Virgin Islands</option><option data-code="VA" value="Virginia">Virginia</option><option data-code="WA" value="Washington">Washington</option><option data-code="DC" value="Washington DC">Washington DC</option><option data-code="WV" value="West Virginia">West Virginia</option><option data-code="WI" value="Wisconsin">Wisconsin</option><option data-code="WY" value="Wyoming">Wyoming</option></select>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-
-                                            <!--</div>-->
-
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-
                         </div>
-
-
-
-
-
-
 
                         <div class="step__footer">
                             <button name="button" type="submit" class="step__footer__continue-btn btn ">
@@ -409,8 +360,7 @@
                             </button>
 
                             <a class="step__footer__previous-link" href="/shop">
-                                <svg class="previous-link__icon icon--chevron icon" xmlns="http://www.w3.org/2000/svg" width="6.7"
-                                     height="11.3" viewBox="0 0 6.7 11.3">
+                                <svg class="previous-link__icon icon--chevron icon" xmlns="http://www.w3.org/2000/svg" width="6.7" height="11.3" viewBox="0 0 6.7 11.3">
                                     <path d="M6.7 1.1l-1-1.1-4.6 4.6-1.1 1.1 1.1 1 4.6 4.6 1-1-4.6-4.6z"/>
                                 </svg>
                                 Вернуться к покупкам
@@ -418,9 +368,208 @@
                         </div>
 
                     </form>
-                </div>
+                {{/equal}}
+                {{#equal step "delivery"}}
+                    <form action="/shop/checkout/delivery" accept-charset="UTF-8" method="post">
+                        <div class="step__sections">
+                            <div class="section section--shipping-address-recap">
+                                <div class="section__header">
+                                    <h2 class="section__title">Контактная информация</h2>
+                                </div>
+                                <div class="section__content">
+                                    <p>
+                                        {{cart.name}}<br>{{cart.phone}}<br>{{cart.streetName}}&nbsp;{{cart.streetNumber}}, кв/офис {{cart.flat}}
+                                        <a class="edit-link edit-link--small" href="/shop/checkout">Редактировать контакты</a>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="section section--billing-address" data-billing-address="">
+                                <div class="section__header">
+                                    <h2 class="section__title">Доставка</h2>
+                                </div>
+
+                                <div class="section__content">
+                                    <div class="content-box">
+                                        <div class="radio-wrapper content-box__row">
+                                            <div class="radio__input">
+                                                <input class="input-radio" type="radio" value="free" {{#equal cart.delivery "free"}}checked="checked"{{/equal}} name="delivery" id="freedelivery">
+                                            </div>
+
+                                            <label class="radio__label content-box__emphasis" for="freedelivery">
+                                                <span class="radio__label__primary">
+                                                      Бесплатная доставка
+                                                    </span>
+                                                <span class="radio__label__accessory content-box__emphasis">0 руб.</span>
+                                            </label>
+                                        </div>
+
+                                        <div class="radio-wrapper content-box__row">
+                                            <div class="radio__input">
+                                                {{#equal cart.delivery "payable"}}
+                                                <input class="input-radio" aria-expanded="true" aria-controls="section--billing-address__different" type="radio" value="payable" name="delivery" id="payabledelivery" checked="checked">
+                                                {{else}}
+                                                <input class="input-radio" aria-expanded="false" aria-controls="section--billing-address__different" type="radio" value="payable" name="delivery" id="payabledelivery">
+                                                {{/equal}}
+                                            </div>
+                                            <label class="radio__label content-box__emphasis" for="payabledelivery">
+                                                <span class="radio__label__primary">
+                                                      Платная доставка
+                                                    </span>
+                                                <span class="radio__label__accessory content-box__emphasis">300 руб.</span>
+                                            </label>
+                                        </div>
+
+                                        {{#equal cart.delivery "payable"}}
+                                        <div class="radio-group__row content-box__row content-box__row--secondary " data-address-fields="" id="section--billing-address__different">
+                                        {{else}}
+                                        <div class="radio-group__row content-box__row content-box__row--secondary hidden" data-address-fields="" id="section--billing-address__different">
+                                        {{/equal}}
+                                            <div class="fieldset">
+
+                                                <div class="field field--required field--three-eights field--show-floating-label">
+                                                    <div class="field__input-wrapper field__input-wrapper--select">
+                                                        <label class="field__label" for="deliveryDate">Дата</label>
+                                                        <select class="field__input field__input--select" name="deliveryDate" id="deliveryDate">
+                                                            <option value="01.01.2016">01.01.2016</option>
+                                                            <option value="02.01.2016">02.01.2016</option>
+                                                            <option value="03.01.2016">03.01.2016</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="field field--required field--three-eights field--show-floating-label">
+                                                    <div class="field__input-wrapper field__input-wrapper--select">
+                                                        <label class="field__label" for="deliveryDate">Время</label>
+                                                        <select class="field__input field__input--select" name="deliveryTime" id="deliveryTime">
+                                                            <option value="10:00 - 13:00">10:00 - 13:00</option>
+                                                            <option value="13:00 - 16:00">13:00 - 16:00</option>
+                                                            <option value="16:00 - 19:00">16:00 - 19:00</option>
+                                                            <option value="19:00 - 22:00">19:00 - 22:00</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step__footer">
+                            <button name="button" type="submit" class="step__footer__continue-btn btn ">
+                                <span class="btn__content">Далее к способу оплаты</span>
+                                <i class="btn__spinner icon icon--button-spinner"></i>
+                            </button>
+
+                            <a class="step__footer__previous-link" href="/shop">
+                                <svg class="previous-link__icon icon--chevron icon" xmlns="http://www.w3.org/2000/svg" width="6.7" height="11.3" viewBox="0 0 6.7 11.3">
+                                    <path d="M6.7 1.1l-1-1.1-4.6 4.6-1.1 1.1 1.1 1 4.6 4.6 1-1-4.6-4.6z"/>
+                                </svg>
+                                Вернуться к покупкам
+                            </a>
+                        </div>
+                    </form>
+                {{/equal}}
+
+                {{#equal step "payment"}}
+                    <form action="/shop/checkout/payment" accept-charset="UTF-8" method="post">
+                        <div class="step__sections">
+                            <div class="section section--shipping-address-recap">
+                                <div class="section__header">
+                                    <h2 class="section__title">Контактная информация</h2>
+                                </div>
+                                <div class="section__content">
+                                    <p>
+                                        {{cart.name}}<br>{{cart.phone}}<br>{{cart.streetName}}&nbsp;{{cart.streetNumber}}, кв/офис {{cart.flat}}
+                                        <a class="edit-link edit-link--small" href="/shop/checkout">Редактировать контакты</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="section section--shipping-address-recap">
+                                <div class="section__header">
+                                    <h2 class="section__title">Доставка</h2>
+                                </div>
+                                <div class="section__content">
+                                    <p>
+                                        {{#equal cart.delivery "payable"}}
+                                        Платная
+                                        {{else}}
+                                        Бесплатная
+                                        {{/equal}}
+                                        <a class="edit-link edit-link--small" href="/shop/checkout/delivery">Изменить</a>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="section section--billing-address" data-billing-address="">
+                                <div class="section__header">
+                                    <h2 class="section__title">Оплата</h2>
+                                </div>
+
+                                <div class="section__content">
+                                    <div class="content-box">
+                                        <div class="radio-wrapper content-box__row">
+                                            <div class="radio__input">
+                                                <input class="input-radio" type="radio" value="free" {{#equal cart.delivery "free"}}checked="checked"{{/equal}} name="delivery" id="freedelivery">
+                                            </div>
+
+                                            <label class="radio__label content-box__emphasis" for="freedelivery">
+                                                Наличными
+                                            </label>
+                                        </div>
+
+                                        <div class="radio-wrapper content-box__row">
+                                            <div class="radio__input">
+                                                {{#equal cart.delivery "payable"}}
+                                                <input class="input-radio" aria-expanded="true" aria-controls="section--billing-address__different" type="radio" value="payable" name="delivery" id="payabledelivery" checked="checked">
+                                                {{else}}
+                                                <input class="input-radio" aria-expanded="false" aria-controls="section--billing-address__different" type="radio" value="payable" name="delivery" id="payabledelivery">
+                                                {{/equal}}
+                                            </div>
+                                            <label class="radio__label content-box__emphasis" for="payabledelivery">
+                                                Онлайн
+                                            </label>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step__footer">
+                            <button name="button" type="submit" class="step__footer__continue-btn btn ">
+                                <span class="btn__content">Далее к способу оплаты</span>
+                                <i class="btn__spinner icon icon--button-spinner"></i>
+                            </button>
+
+                            <a class="step__footer__previous-link" href="/shop">
+                                <svg class="previous-link__icon icon--chevron icon" xmlns="http://www.w3.org/2000/svg" width="6.7" height="11.3" viewBox="0 0 6.7 11.3">
+                                    <path d="M6.7 1.1l-1-1.1-4.6 4.6-1.1 1.1 1.1 1 4.6 4.6 1-1-4.6-4.6z"/>
+                                </svg>
+                                Вернуться к покупкам
+                            </a>
+                        </div>
+                    </form>
+                {{/equal}}
+
+                {{#equal step "thankyou"}}
+                    Спасибо!<br/>Номер Вашего заказа 10024252. <br/>Мы свяжемся с Вами в ближайшее время!
+                    <div class="step__footer">
+                        <a class="step__footer__previous-link" href="/shop">
+                            <svg class="previous-link__icon icon--chevron icon" xmlns="http://www.w3.org/2000/svg" width="6.7" height="11.3" viewBox="0 0 6.7 11.3">
+                                <path d="M6.7 1.1l-1-1.1-4.6 4.6-1.1 1.1 1.1 1 4.6 4.6 1-1-4.6-4.6z"/>
+                            </svg>
+                            Вернуться к покупкам
+                        </a>
+                    </div>
+                {{/equal}}
 
             </div>
+
             <div class="main__footer">
                 <div class="modals">
                 </div>

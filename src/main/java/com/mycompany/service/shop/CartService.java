@@ -3,6 +3,7 @@ package com.mycompany.service.shop;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.domain.shop.*;
+import org.jooby.Mutant;
 import org.jooby.Request;
 
 import java.io.IOException;
@@ -69,5 +70,25 @@ public class CartService {
         cart.calculate();
         saveSessionCart(req, cart);
         return cart;
+    }
+
+    public static void saveContactInfo(Request req, Cart cartForm) {
+        Cart cart = getSessionCart(req);
+        cart.name = cartForm.name;
+        cart.phone = cartForm.phone;
+        cart.streetName = cartForm.streetName;
+        cart.streetNumber = cartForm.streetNumber;
+        cart.entrance = cartForm.entrance;
+        cart.flat = cartForm.flat;
+        saveSessionCart(req, cart);
+    }
+
+    public static void setDelivery(Request req, String delivery)
+    {
+        Cart cart = getSessionCart(req);
+        cart.delivery = delivery;
+        cart.deliveryPrice = cart.delivery.equals(Cart.FREE)? 0 : 300;
+        cart.calculate();
+        saveSessionCart(req, cart);
     }
 }
