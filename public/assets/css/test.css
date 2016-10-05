@@ -1,7 +1,8 @@
 @font-face {
     font-family: "icons";
-    src: url("//cdn.shopify.com/s/files/1/0543/1637/t/12/assets/icons.eot?8191033795269121135");
-    src: url("//cdn.shopify.com/s/files/1/0543/1637/t/12/assets/icons.eot?8191033795269121135#iefix") format("embedded-opentype"), url("//cdn.shopify.com/s/files/1/0543/1637/t/12/assets/icons.woff?8191033795269121135") format("woff"), url("//cdn.shopify.com/s/files/1/0543/1637/t/12/assets/icons.ttf?8191033795269121135") format("truetype"), url("//cdn.shopify.com/s/files/1/0543/1637/t/12/assets/icons.svg?8191033795269121135#timber-icons") format("svg");
+    src: url("/assets/image/icons.eot");
+    src: url("/assets/image/icons.eot") format("embedded-opentype"), url("/assets/image/icons.woff") format("woff"),
+    url("/assets/image/icons.ttf") format("truetype"), url("//cdn.shopify.com/s/files/1/0543/1637/t/12/assets/icons.svg?8191033795269121135#timber-icons") format("svg");
     font-weight: normal;
     font-style: normal
 }
@@ -4723,9 +4724,5 @@ form[action="/cart/add"]:after, form[action^="/cart/add"]:after {
 }
 
 
-
-.icon-x {
-    margin-top: 4px;
-}
 
 
