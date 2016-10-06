@@ -1166,7 +1166,7 @@ body {
 .main-content {
     display: block;
     padding-top: 30px;
-    padding-bottom: 60px
+    /*padding-bottom: 60px*/
 }
 
 .grid-border > .grid-item {
@@ -2439,7 +2439,7 @@ a:hover .share-count:after {
 
 @media screen and (min-width: 769px) {
     .site-header {
-        padding: 30px 0
+        /*padding: 30px 0*/
     }
 }
 
@@ -2466,7 +2466,7 @@ a:hover .share-count:after {
 }
 
 .header-logo {
-    margin: 30px auto;
+    margin-bottom: 10px;
     max-width: 240px
 }
 
@@ -4727,4 +4727,6 @@ form[action="/cart/add"]:after, form[action^="/cart/add"]:after {
     margin-top: 50px;
 }
 
-
+.on-sale {
+    padding-bottom: 20px;
+}
