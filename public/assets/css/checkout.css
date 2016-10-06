@@ -5213,3 +5213,16 @@ input::-moz-focus-inner {
     padding: 0;
     position: absolute
 }
+
+.Row
+{
+    display: table;
+    width: 100%; /*Optional*/
+    table-layout: fixed; /*Optional*/
+}
+.Column
+{
+    padding-left: 10px;
+    padding-right: 10px;
+    display: table-cell;
+}

@@ -24,6 +24,8 @@ $(document).ready(function () {
 
     $("#" + $("[name='errorField']").val()).addClass("has-error");
 
+    $('select').niceSelect();
+
 });
 
 function updateCart() {
