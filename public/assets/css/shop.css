@@ -4723,6 +4723,8 @@ form[action="/cart/add"]:after, form[action^="/cart/add"]:after {
     }
 }
 
-
+.modal-content {
+    margin-top: 50px;
+}
 
 

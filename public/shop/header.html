@@ -86,7 +86,7 @@
         <a class="menu-toggle mobileNavBar-link">Меню</a>
     </div>
     <div class="display-table-cell">
-        <a href="#" class="cart-toggle mobileNavBar-link" style="text-decoration: none" data-toggle="modal" data-target="#cartModal">
+        <a href="#" class="cart-toggle mobileNavBar-link" style="text-decoration: none; outline:none;" onclick="onCartBtnClick()">
             <span class="icon icon-cart"></span>
             Корзина <span class="cart-count ">{{cart.totalCount}}</span>
         </a>
