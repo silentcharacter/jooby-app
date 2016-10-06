@@ -61,7 +61,8 @@
                 </svg>
             </div>
             <div class="order-summary-toggle__total-recap total-recap" data-order-summary-section="toggle-total-recap">
-                <span class="total-recap__final-price">{{cart.totalPrice}} руб.</span>
+                <span class="total-recap__final-price">{{cart.totalPrice}}</span>
+                <span class="payment-due__currency">руб</span>
             </div>
         </div>
     </div>
@@ -111,7 +112,8 @@
                                             {{quantity}}
                                         </td>
                                         <td class="product__price">
-                                            <span class="order-summary__emphasis">{{totalPrice}} руб.</span>
+                                            <span class="order-summary__emphasis">{{totalPrice}}</span>
+                                            <span class="payment-due__currency">руб</span>
                                         </td>
                                     </tr>
                                     {{/each}}
@@ -171,8 +173,9 @@
                                     <td class="total-line__name">Подитог</td>
                                     <td class="total-line__price">
                                       <span class="order-summary__emphasis">
-                                        {{cart.subTotalPrice}} руб.
+                                        {{cart.subTotalPrice}}
                                       </span>
+                                      <span class="payment-due__currency">руб</span>
                                     </td>
                                 </tr>
 
