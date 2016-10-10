@@ -1,5 +1,9 @@
 package com.mycompany.domain;
 
+import com.mycompany.annotation.Deployment;
+
+
+@Deployment(table = "roles")
 public class Role extends Entity {
 
     public String name;

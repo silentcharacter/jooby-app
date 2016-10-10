@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class OrderValidator
 {
-	public static ValidationResult validate(Cart order) {
+	public static ValidationResult validateContacts(Cart order) {
 		if (StringUtils.isEmpty(order.phone)) {
 			return new ValidationResult("phone", "Заполните поле 'Телефон'");
 		}

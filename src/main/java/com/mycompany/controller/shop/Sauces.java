@@ -7,7 +7,7 @@ import com.mycompany.domain.shop.Sauce;
 public class Sauces extends AbstractResource<Sauce> {
 
     public Sauces() {
-        super(Sauce.class, "sauces");
+        super(Sauce.class);
     }
 
     {

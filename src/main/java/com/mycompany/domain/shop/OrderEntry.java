@@ -1,9 +1,13 @@
 package com.mycompany.domain.shop;
 
+import com.mycompany.annotation.Deployment;
+import com.mycompany.domain.Entity;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderEntry
+@Deployment(table = "orderEntries")
+public class OrderEntry extends Entity
 {
     public Product product;
     public Color color;
@@ -13,6 +17,12 @@ public class OrderEntry
     public Integer totalPrice = 0;
 
     public OrderEntry() {
+    }
+
+    @Override
+    public String getFullText()
+    {
+        return product.getFullText();
     }
 
     public OrderEntry(Product product, Integer quantity, Color color, List<Sauce> sauces, Integer entryNo) {

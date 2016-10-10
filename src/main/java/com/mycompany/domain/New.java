@@ -1,7 +1,10 @@
 package com.mycompany.domain;
 
+import com.mycompany.annotation.Deployment;
+
 import java.util.Date;
 
+@Deployment(table = "news")
 public class New extends Entity{
 
     public String title;

@@ -5,7 +5,7 @@ import com.mycompany.domain.Todo;
 public class Todos extends AbstractResource<Todo> {
 
     public Todos() {
-        super(Todo.class, "todos");
+        super(Todo.class);
     }
 
     {

@@ -8,7 +8,7 @@ import com.mycompany.domain.shop.Sauce;
 public class Colors extends AbstractResource<Color> {
 
     public Colors() {
-        super(Color.class, "colors");
+        super(Color.class);
     }
 
     {

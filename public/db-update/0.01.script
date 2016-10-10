@@ -1,0 +1,10 @@
+db.paymentTypes.insertMany([
+        {name:'offline', description: "Наличными"},
+        {name:'online', description: "Онлайн"}
+    ]
+);
+db.deliveryTypes.insertMany([
+        {name:'free', description: "Бесплатная", price: 0},
+        {name:'payable', description: "Платная", price: 300}
+    ]
+)

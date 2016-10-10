@@ -1,0 +1,81 @@
+<form action="/shop/checkout" accept-charset="UTF-8" method="post">
+    <div class="step__sections">
+        {{#if errorMessage}}
+            <div class="alert alert-danger">{{errorMessage}}</div>
+        {{/if}}
+
+        <div class="section section--contact-information">
+            <div class="section__header">
+                <h2 class="section__title">Контактная информация</h2>
+            </div>
+            <div class="section__content">
+                <div class="fieldset" data-email-check='[data-email-suggestions]'>
+                    <div class="field field--required">
+                        <label class="field__label" for="phone">Телефон</label>
+                        <div class="field__input-wrapper">
+                            <input placeholder="Телефон" class="field__input" type="tel" name="phone" id="phone" value="{{cartForm.phone}}"/>
+                        </div>
+                    </div>
+                    <div class="field field--required">
+                        <label class="field__label" for="name">Имя</label>
+                        <div class="field__input-wrapper">
+                            <input placeholder="Имя" class="field__input" type="text" name="name" id="name" value="{{cartForm.name}}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section--shipping-address">
+            <div class="section__header">
+                <h2 class="section__title">
+                    Адрес
+                </h2>
+            </div>
+            <div class="section__content">
+                <div class="fieldset">
+                    <div class="field field--required">
+                        <label class="field__label" for="streetName">Улица</label>
+                        <div class="field__input-wrapper">
+                            <input placeholder="Улица" class="field__input" type="text" name="streetName" id="streetName" value="{{cartForm.streetName}}"/>
+                        </div>
+                    </div>
+                    <div class="field--third field field--optional field--show-floating-label">
+                        <label class="field__label" for="streetNumber">Номер дома</label>
+                        <div class="field__input-wrapper">
+                            <input placeholder="Номер дома" class="field__input" type="text" name="streetNumber" id="streetNumber" value="{{cartForm.streetNumber}}"/>
+                        </div>
+                    </div>
+                    <div class="field--third field field--optional field--show-floating-label">
+                        <label class="field__label" for="entrance">Подъезд</label>
+                        <div class="field__input-wrapper">
+                            <input placeholder="Подъезд" class="field__input" type="text" name="entrance" id="entrance" value="{{cartForm.entrance}}"/>
+                        </div>
+                    </div>
+                    <div class="field--third field field--optional field--show-floating-label">
+                        <label class="field__label" for="flat">Квартира/офис</label>
+                        <div class="field__input-wrapper">
+                            <input placeholder="Квартира/офис" class="field__input" type="text" name="flat" id="flat" value="{{cartForm.flat}}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="section section&#45;&#45;half-spacing-top section&#45;&#45;optional">-->
+        <!--<div class="section__content">-->
+        <!--<div class="checkbox-wrapper">-->
+        <!--<div class="checkbox__input">-->
+        <!--<input size="30" type="hidden" value="false" name="checkout[remember_me]" />-->
+        <!--<input name="checkout[remember_me]" type="hidden" value="0" /><input class="input-checkbox" data-backup="remember_me" type="checkbox" value="1" name="checkout[remember_me]" id="checkout_remember_me" />-->
+        <!--</div>-->
+        <!--<label class="checkbox__label" for="checkout_remember_me">-->
+        <!--Save this information for next time-->
+        <!--</label>          </div>-->
+        <!--</div>-->
+        <!--</div>-->
+
+    </div>
+
+    {{> shop/checkoutfooter btnCaption="Далее выбрать способ доставки" }}
+
+</form>

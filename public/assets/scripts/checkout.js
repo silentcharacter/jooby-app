@@ -9398,7 +9398,8 @@
 
                     return e(r, n), r.prototype.events = {"change [data-country-section] select": "updateCountry"}, r.prototype.updateCountry = function () {
                         var t, e;
-                        return this.$countrySection || (this.$countrySection = this.$("[data-country-section]")), this.$provinceSection || (this.$provinceSection = this.$("[data-province-section]")), this.$zipSection || (this.$zipSection = this.$("[data-zip-section]")), this.$country || (this.$country = this.$countrySection.find("select")), this.$provinces || (this.$provinces = this.$provinceSection.find("input")), this.$zip || (this.$zip = this.$zipSection.find("input")), this.$provincesLabel || (this.$provincesLabel = this.$provinceSection.find("label")), this.$zipLabel || (this.$zipLabel = this.$zipSection.find("label")), e = this.$provinces.val(), this.$provinces.is("select") || this.coerceToSelect(), t = Countries[this.$country.val()], null != t && (this.hasAccessToProvinces(t) || (t.provinces = null)), null != t && this.updateFieldClasses(t), null != t && this.updateZip(t), (null != t ? t.provinces : 0) ? (this.createProvinceOptions(t), this.$provincesLabel.text(t.province_label), this.toggleField(this.$provinceSection, this.$provinces, !0), this.updateProvinces(t.province_label), this.$provinces.val(e), this.$provinces.val() ? void 0 : this.$provinces.val(this.$provinces.find("option:first-child").val())) : this.toggleField(this.$provinceSection, this.$provinces, !1)
+                        return ""
+                        // this.$countrySection || (this.$countrySection = this.$("[data-country-section]")), this.$provinceSection || (this.$provinceSection = this.$("[data-province-section]")), this.$zipSection || (this.$zipSection = this.$("[data-zip-section]")), this.$country || (this.$country = this.$countrySection.find("select")), this.$provinces || (this.$provinces = this.$provinceSection.find("input")), this.$zip || (this.$zip = this.$zipSection.find("input")), this.$provincesLabel || (this.$provincesLabel = this.$provinceSection.find("label")), this.$zipLabel || (this.$zipLabel = this.$zipSection.find("label")), e = this.$provinces.val(), this.$provinces.is("select") || this.coerceToSelect(), t = Countries[this.$country.val()], null != t && (this.hasAccessToProvinces(t) || (t.provinces = null)), null != t && this.updateFieldClasses(t), null != t && this.updateZip(t), (null != t ? t.provinces : 0) ? (this.createProvinceOptions(t), this.$provincesLabel.text(t.province_label), this.toggleField(this.$provinceSection, this.$provinces, !0), this.updateProvinces(t.province_label), this.$provinces.val(e), this.$provinces.val() ? void 0 : this.$provinces.val(this.$provinces.find("option:first-child").val())) : this.toggleField(this.$provinceSection, this.$provinces, !1)
                     }, r.prototype.hasAccessToProvinces = function (e) {
                         return e.provinces_beta ? t("html").hasClass(e.provinces_beta) : !0
                     }, r.prototype.updateFieldClasses = function (t) {
@@ -9421,8 +9422,8 @@
                         return e = this.createOption(t, ""), e.prop("disabled", !0), this.$provinces.prepend(e)
                     }, r.prototype.coerceToSelect = function () {
                         var e, n, r, i, o, a, s;
-                        for (n = t(document.createElement("select")), a = this.$provinces.prop("attributes"), i = 0, o = a.length; o > i; i++)r = a[i], "type" !== (s = r.name) && "value" !== s && n.attr(r.name, r.value);
-                        return e = t(document.createElement("input")).attr("type", "hidden").attr("name", n.attr("name")), this.$provinces.replaceWith(n), this.$provinces = n, n.before(e)
+                        // for (n = t(document.createElement("select")), a = this.$provinces.prop("attributes"), i = 0, o = a.length; o > i; i++)r = a[i], "type" !== (s = r.name) && "value" !== s && n.attr(r.name, r.value);
+                        return ""
                     }, r
                 }(Behaviour)
             }.call(this), function () {

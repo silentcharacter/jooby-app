@@ -7,7 +7,7 @@ import com.mycompany.service.AbstractService;
 public class ColorService extends AbstractService<Color> {
 
     public ColorService() {
-        super(Color.class, "colors");
+        super(Color.class);
     }
 
 }

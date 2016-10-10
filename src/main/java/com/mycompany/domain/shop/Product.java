@@ -1,9 +1,11 @@
 package com.mycompany.domain.shop;
 
+import com.mycompany.annotation.Deployment;
 import com.mycompany.domain.Entity;
 
 import java.util.Optional;
 
+@Deployment(table = "products")
 public class Product extends Entity {
 
     public String name;

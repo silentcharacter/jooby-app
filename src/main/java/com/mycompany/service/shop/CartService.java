@@ -3,7 +3,6 @@ package com.mycompany.service.shop;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.domain.shop.*;
-import org.jooby.Mutant;
 import org.jooby.Request;
 
 import java.io.IOException;
@@ -11,6 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class CartService {
+
+    private static DeliveryTypeService deliveryTypeService = new DeliveryTypeService();
+    private static PaymentTypeService paymentTypeService = new PaymentTypeService();
 
     public static Cart getSessionCart(Request req) {
         Optional<String> cartJson = req.session().get("cart").toOptional();
@@ -21,12 +23,20 @@ public class CartService {
                 cart = mapper.readValue(cartJson.get(), Cart.class);
             } catch (IOException e) {
                 e.printStackTrace();
-                cart = new Cart();
+                cart = getNewCart(req);
             }
         } else {
-            cart = new Cart();
+            cart = getNewCart(req);
             saveSessionCart(req, cart);
         }
+        return cart;
+    }
+
+    private static Cart getNewCart(Request req)
+    {
+        Cart cart = new Cart();
+        cart.delivery = deliveryTypeService.getBy("name", DeliveryType.FREE, req);
+        cart.payment = paymentTypeService.getBy("name", PaymentType.OFFLINE, req);
         return cart;
     }
 
@@ -86,8 +96,7 @@ public class CartService {
     public static void setDelivery(Request req, String delivery)
     {
         Cart cart = getSessionCart(req);
-        cart.delivery = delivery;
-        cart.deliveryPrice = cart.delivery.equals(Cart.FREE)? 0 : 300;
+        cart.delivery = deliveryTypeService.getBy("name", delivery, req);
         cart.calculate();
         saveSessionCart(req, cart);
     }

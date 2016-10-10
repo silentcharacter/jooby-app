@@ -1,6 +1,7 @@
 package com.mycompany.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mycompany.annotation.Deployment;
 import org.bson.types.ObjectId;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
@@ -16,9 +17,13 @@ public class AbstractResource<T> extends Jooby {
     private Class<T> typeParameterClass = null;
     private String entityName = null;
 
-    public AbstractResource(Class<T> typeParameterClass, String entityName) {
+    public AbstractResource(Class<T> typeParameterClass) {
         this.typeParameterClass = typeParameterClass;
-        this.entityName = entityName;
+        Deployment deployment = typeParameterClass.getAnnotation(Deployment.class);
+        if (deployment == null) {
+            throw new RuntimeException("Invalid entity - no deployment annotation!");
+        }
+        this.entityName = deployment.table();
     }
 
     protected void initializeRoutes() {

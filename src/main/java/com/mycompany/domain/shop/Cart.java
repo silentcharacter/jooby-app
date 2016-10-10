@@ -1,30 +1,26 @@
 package com.mycompany.domain.shop;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mycompany.annotation.Deployment;
 import com.mycompany.domain.Entity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class Cart extends Entity
 {
-    public static String FREE = "free";
-
     public String name;
     public String phone;
     public String streetName;
     public String streetNumber;
     public String entrance;
     public String flat;
-    public String delivery;
-    public String deliveryDate;
+    public DeliveryType delivery;
+    public Date deliveryDate;
     public String deliveryTime;
-    public String payment;
-
-    public Cart()
-    {
-        delivery = FREE;
-    }
+    public PaymentType payment;
 
     @Override
     public String getFullText()
@@ -33,7 +29,6 @@ public class Cart extends Entity
     }
 
     public List<OrderEntry> entries = new ArrayList<>();
-    public Integer deliveryPrice = 0;
     public Integer subTotalPrice = 0;
     public Integer totalPrice = 0;
     public Integer totalCount = 0;
@@ -56,7 +51,7 @@ public class Cart extends Entity
             subTotalPrice += rowTotalPrice;
             totalCount += entry.quantity;
         }
-        totalPrice = subTotalPrice + deliveryPrice;
+        totalPrice = subTotalPrice + delivery.price;
     }
 
     public void addEntry(Product product, Integer quantity, Color color, List<Sauce> sauces) {

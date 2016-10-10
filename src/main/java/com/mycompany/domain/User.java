@@ -1,9 +1,12 @@
 package com.mycompany.domain;
 
+import com.mycompany.annotation.Deployment;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Deployment(table = "users")
 public class User extends Entity{
 
     public String profileId;

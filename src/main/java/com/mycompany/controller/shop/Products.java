@@ -6,7 +6,7 @@ import com.mycompany.domain.shop.Product;
 public class Products extends AbstractResource<Product> {
 
     public Products() {
-        super(Product.class, "products");
+        super(Product.class);
     }
 
     {

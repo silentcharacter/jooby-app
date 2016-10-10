@@ -5,7 +5,7 @@ import com.mycompany.domain.New;
 public class News extends AbstractResource<New> {
 
     public News() {
-        super(New.class, "news");
+        super(New.class);
     }
 
     {

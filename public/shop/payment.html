@@ -1,0 +1,62 @@
+<form action="/shop/checkout/payment" accept-charset="UTF-8" method="post">
+    <div class="step__sections">
+        <div class="section">
+            <div class="section__header">
+                <h2 class="section__title">Контактная информация</h2>
+            </div>
+            <div class="section__content">
+                <p>
+                    {{cart.name}}<br>{{cart.phone}}<br>{{cart.streetName}}&nbsp;{{cart.streetNumber}}, кв/офис {{cart.flat}}
+                    <a class="edit-link edit-link--small" href="/shop/checkout">Редактировать контакты</a>
+                </p>
+            </div>
+        </div>
+        <div class="section">
+                <h2>Доставка</h2>
+                <a class="edit-link edit-link--small" href="/shop/checkout/delivery">
+                    {{#equal cart.delivery.name "payable"}}
+                        Платная
+                    {{else}}
+                        Бесплатная
+                    {{/equal}}
+                </a>
+        </div>
+
+        <div class="section " data-billing-address="">
+            <div class="section__header">
+                <h2 class="section__title">Оплата</h2>
+            </div>
+
+            <div class="section__content">
+                <div class="content-box">
+                    <div class="radio-wrapper content-box__row">
+                        <div class="radio__input">
+                            <input class="input-radio" type="radio" value="free" {{#equal cart.delivery.name "free"}}checked="checked"{{/equal}} name="delivery" id="freedelivery">
+                        </div>
+
+                        <label class="radio__label content-box__emphasis" for="freedelivery">
+                            Наличными
+                        </label>
+                    </div>
+
+                    <div class="radio-wrapper content-box__row">
+                        <div class="radio__input">
+                            {{#equal cart.delivery.name "payable"}}
+                            <input class="input-radio" aria-expanded="true" aria-controls="section--billing-address__different" type="radio" value="payable" name="delivery" id="payabledelivery" checked="checked">
+                            {{else}}
+                            <input class="input-radio" aria-expanded="false" aria-controls="section--billing-address__different" type="radio" value="payable" name="delivery" id="payabledelivery">
+                            {{/equal}}
+                        </div>
+                        <label class="radio__label content-box__emphasis" for="payabledelivery">
+                            Онлайн
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{> shop/checkoutfooter btnCaption="Оформить заказ" }}
+
+</form>

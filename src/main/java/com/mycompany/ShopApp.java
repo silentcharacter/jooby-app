@@ -13,85 +13,125 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ShopApp extends Jooby {
+import static com.mycompany.constant.ShopAppConstants.CONTACT_BREADCRUMB;
+import static com.mycompany.constant.ShopAppConstants.DELIVERY_BREADCRUMB;
+import static com.mycompany.constant.ShopAppConstants.PAYMENT_BREADCRUMB;
 
-    private static ProductService productService = new ProductService();
-    private static ColorService colorService = new ColorService();
-    private static SauceService sauceService = new SauceService();
 
-    {
-        use(new Products());
-        use(new Colors());
-        use(new Sauces());
+public class ShopApp extends Jooby
+{
+	private static ProductService productService = new ProductService();
+	private static ColorService colorService = new ColorService();
+	private static SauceService sauceService = new SauceService();
 
-        get("/shop", req -> Results.html("shop/shop")
-					 .put("templateName", "shop/main")
-					 .put("products", productService.getAll(req))
-					 .put("colors", colorService.getAll(req))
-					 .put("sauces", sauceService.getAll(req))
-					 .put("cart", CartService.getSessionCart(req)));
+	{
+		use(new Products());
+		use(new Colors());
+		use(new Sauces());
 
-        get("/cart", req -> Results.json(CartService.getSessionCart(req)));
+		get("/shop", req -> Results.html("shop/shop")
+				.put("templateName", "shop/main")
+				.put("products", productService.getAll(req))
+				.put("colors", colorService.getAll(req))
+				.put("sauces", sauceService.getAll(req))
+				.put("cart", CartService.getSessionCart(req)));
 
-        post("/cart", req -> {
-            Product product = productService.getById(req, req.param("productId").value());
-            Color color = req.param("colorId").isSet() ? colorService.getById(req, req.param("colorId").value()) : null;
-            List<Sauce> sauceList = new ArrayList<>();
-            if (req.param("sauces").isSet()) {
-                sauceList.addAll(
-                      req.param("sauces").toList().stream().map(sauceId -> sauceService.getById(req, sauceId))
-                            .collect(Collectors.toList())
-                );
-            }
-            return CartService.addToCart(req, product, req.param("quantity").intValue(), color, sauceList);
-        });
+		get("/cart", req -> Results.json(CartService.getSessionCart(req)));
 
-        put("/cart", req -> CartService.updateCartRow(req, req.param("entryNo").intValue(), req.param("quantity").intValue()));
+		post("/cart", req ->
+		{
+			Product product = productService.getById(req, req.param("productId").value());
+			Color color = req.param("colorId").isSet() ? colorService.getById(req, req.param("colorId").value()) : null;
+			List<Sauce> sauceList = new ArrayList<>();
+			if (req.param("sauces").isSet())
+			{
+				sauceList.addAll(
+						req.param("sauces").toList().stream().map(sauceId -> sauceService.getById(req, sauceId))
+								.collect(Collectors.toList())
+				);
+			}
+			return CartService.addToCart(req, product, req.param("quantity").intValue(), color, sauceList);
+		});
 
-        delete("/cart", req -> CartService.removeFromCart(req, req.param("entryNo").intValue()));
+		put("/cart", req -> CartService.updateCartRow(req, req.param("entryNo").intValue(), req.param("quantity").intValue()));
 
-        get("/shop/checkout", req -> {
-            Cart cart = CartService.getSessionCart(req);
-            return Results.html("shop/checkout").put("cart", cart).put("cartForm", cart).put("step", "contact");
-        });
+		delete("/cart", req -> CartService.removeFromCart(req, req.param("entryNo").intValue()));
 
-        post("/shop/checkout", req -> {
-            Cart cartForm = req.body().to(Cart.class);
-            ValidationResult validationResult = OrderValidator.validate(cartForm);
-            if (!validationResult.equals(ValidationResult.OK)) {
-                return Results.html("shop/checkout")
-                      .put("step", "contact")
-                      .put("cartForm", cartForm)
-                      .put("errorMessage", validationResult.message)
-                      .put("errorField", validationResult.fieldName)
-                      .put("cart", CartService.getSessionCart(req));
-            }
-            CartService.saveContactInfo(req, cartForm);
-            return Results.redirect("/shop/checkout/delivery");
-        });
+		get("/shop/checkout/**", (req, rsp, chain) -> {
+			Cart cart = CartService.getSessionCart(req);
+			if (cart.isEmpty()) {
+				rsp.redirect("/shop");
+			}
+			chain.next(req, rsp);
+		});
 
-        get("/shop/checkout/delivery", req -> Results.html("shop/checkout")
-				  .put("step", "delivery")
-				  .put("cart", CartService.getSessionCart(req)));
+		get("/shop/checkout", req ->
+		{
+			Cart cart = CartService.getSessionCart(req);
+			return Results.html("shop/checkout")
+					.put("cart", cart)
+					.put("cartForm", cart)
+					.put("step", "contact")
+					.put("templateName", "shop/contacts")
+					.put("breadcrumbs", CONTACT_BREADCRUMB);
+		});
 
-        post("/shop/checkout/delivery", req -> {
-            CartService.setDelivery(req, req.param("delivery").value());
-            return Results.redirect("/shop/checkout/payment");
-        });
+		post("/shop/checkout", req ->
+		{
+			Cart cartForm = req.body().to(Cart.class);
+			ValidationResult validationResult = OrderValidator.validateContacts(cartForm);
+			if (!validationResult.equals(ValidationResult.OK))
+			{
+				return Results.html("shop/checkout")
+						.put("templateName", "shop/contacts")
+						.put("breadcrumbs", CONTACT_BREADCRUMB)
+						.put("step", "contact")
+						.put("cartForm", cartForm)
+						.put("errorMessage", validationResult.message)
+						.put("errorField", validationResult.fieldName)
+						.put("cart", CartService.getSessionCart(req));
+			}
+			CartService.saveContactInfo(req, cartForm);
+			return Results.redirect("/shop/checkout/delivery");
+		});
 
-        get("/shop/checkout/payment", req -> Results.html("shop/checkout")
-				  .put("step", "payment")
-				  .put("cart", CartService.getSessionCart(req)));
+		get("/shop/checkout/delivery", req ->
+		{
+			Cart cart = CartService.getSessionCart(req);
+			ValidationResult validationResult = OrderValidator.validateContacts(cart);
+			if (!validationResult.equals(ValidationResult.OK))
+			{
+				return Results.redirect("/shop/checkout");
+			}
+			return Results.html("shop/checkout")
+					.put("step", "delivery")
+					.put("cart", CartService.getSessionCart(req))
+					.put("templateName", "shop/delivery")
+					.put("breadcrumbs", DELIVERY_BREADCRUMB);
+		});
 
-        post("/shop/checkout/payment", req -> {
+		post("/shop/checkout/delivery", req ->
+		{
+			CartService.setDelivery(req, req.param("delivery").value());
+			return Results.redirect("/shop/checkout/payment");
+		});
 
-            return Results.redirect("/shop/checkout/thankyou");
-        });
+		get("/shop/checkout/payment", req -> Results.html("shop/checkout")
+				.put("step", "payment")
+				.put("cart", CartService.getSessionCart(req))
+				.put("templateName", "shop/payment")
+				.put("breadcrumbs", PAYMENT_BREADCRUMB));
 
-        get("/shop/checkout/thankyou", req -> Results.html("shop/checkout")
-              .put("cart", CartService.getSessionCart(req))
-              .put("step", "thankyou"));
+		post("/shop/checkout/payment", req ->
+		{
+			return Results.redirect("/shop/checkout/thankyou");
+		});
 
-    }
+		get("/shop/checkout/thankyou", req -> Results.html("shop/checkout")
+				.put("cart", CartService.getSessionCart(req))
+				.put("step", "thankyou")
+				.put("templateName", "shop/payment"));
+
+	}
 
 }
