@@ -34,6 +34,7 @@ public class MigrationService
 			MongoCollection scriptlogs = jongo.getCollection("scriptlogs");
 
 			File scriptFolder = new File(System.getProperty("user.dir") + "/public/db-update");
+			logger.info(scriptFolder.getAbsolutePath());
 			for (final File script : scriptFolder.listFiles())
 			{
 				String scriptName = script.getName();
