@@ -3,9 +3,14 @@ package com.mycompany.service.shop;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.domain.shop.*;
+import com.typesafe.config.Config;
 import org.jooby.Request;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,19 +23,29 @@ public class CartService {
         Optional<String> cartJson = req.session().get("cart").toOptional();
         ObjectMapper mapper = new ObjectMapper();
         Cart cart;
-        if (cartJson.isPresent()) {
-            try {
-                cart = mapper.readValue(cartJson.get(), Cart.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-                cart = getNewCart(req);
-            }
-        } else {
+        try {
+			  if (cartJson.isPresent()) {
+					 cart = mapper.readValue(cartJson.get(), Cart.class);
+			  } else {
+					if ("dev".equals(req.require(Config.class).getString("application.env"))) {
+						 cart = mapper.readValue(getDumpCartJson(), Cart.class);
+					} else {
+						 cart = getNewCart(req);
+					}
+					saveSessionCart(req, cart);
+			  }
+        } catch (IOException e) {
+            e.printStackTrace();
             cart = getNewCart(req);
-            saveSessionCart(req, cart);
         }
         return cart;
     }
+
+	static String getDumpCartJson() throws IOException
+	{
+		byte[] encoded = Files.readAllBytes(Paths.get(System.getProperty("user.dir") + "/public/shop/cart.json"));
+		return new String(encoded, "utf-8");
+	}
 
     private static Cart getNewCart(Request req)
     {
@@ -93,11 +108,62 @@ public class CartService {
         saveSessionCart(req, cart);
     }
 
-    public static void setDelivery(Request req, String delivery)
+    public static void setDeliveryOptions(Request req, String deliveryType, Date deliveryDate, String deliveryTime) {
+		 Cart cart = getSessionCart(req);
+		 cart.delivery = deliveryTypeService.getBy("name", deliveryType, req);
+		 cart.deliveryDate = deliveryDate;
+		 cart.deliveryTime = deliveryTime;
+		 cart.calculate();
+		 saveSessionCart(req, cart);
+	 }
+
+    public static void setPaymentType(Request req, String payment)
     {
         Cart cart = getSessionCart(req);
-        cart.delivery = deliveryTypeService.getBy("name", delivery, req);
-        cart.calculate();
+        cart.payment = paymentTypeService.getBy("name", payment, req);
         saveSessionCart(req, cart);
     }
+
+    /*
+
+    public static Cart getSessionCart(Request req) {
+		 return getSessionCart(req, Cart.class);
+	 }
+
+    public static <T extends Cart> T getSessionCart(Request req, Class<T> _class) {
+        Optional<String> cartJson = req.session().get("cart").toOptional();
+        ObjectMapper mapper = new ObjectMapper();
+        T cart;
+        try {
+			  if (cartJson.isPresent()) {
+					 cart = mapper.readValue(cartJson.get(), _class);
+			  } else {
+					if ("dev".equals(req.require(Config.class).getString("application.env"))) {
+						 cart = mapper.readValue(getDumpCartJson(), _class);
+					} else {
+						 cart = getNewCart(req);
+					}
+					saveSessionCart(req, cart);
+			  }
+        } catch (IOException e) {
+            e.printStackTrace();
+            cart = getNewCart(req);
+        }
+        return cart;
+    }
+
+	static String getDumpCartJson() throws IOException
+	{
+		byte[] encoded = Files.readAllBytes(Paths.get(System.getProperty("user.dir") + "/public/shop/cart.json"));
+		return new String(encoded, "utf-8");
+	}
+
+    private static <T extends Cart> T getNewCart(Request req)
+    {
+        T cart = new T();
+        cart.delivery = deliveryTypeService.getBy("name", DeliveryType.FREE, req);
+        cart.payment = paymentTypeService.getBy("name", PaymentType.OFFLINE, req);
+        return cart;
+    }
+    * */
 }

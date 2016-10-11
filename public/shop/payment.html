@@ -15,7 +15,7 @@
                 <h2>Доставка</h2>
                 <a class="edit-link edit-link--small" href="/shop/checkout/delivery">
                     {{#equal cart.delivery.name "payable"}}
-                        Платная
+                        Платная ({{formatDate cart.deliveryDate day="numeric" month="numeric" year="numeric"}}, {{cart.deliveryTime}})
                     {{else}}
                         Бесплатная
                     {{/equal}}
@@ -31,23 +31,23 @@
                 <div class="content-box">
                     <div class="radio-wrapper content-box__row">
                         <div class="radio__input">
-                            <input class="input-radio" type="radio" value="free" {{#equal cart.delivery.name "free"}}checked="checked"{{/equal}} name="delivery" id="freedelivery">
+                            <input class="input-radio" type="radio" value="offline" {{#equal cart.payment.name "offline"}}checked="checked"{{/equal}} name="payment" id="offline">
                         </div>
 
-                        <label class="radio__label content-box__emphasis" for="freedelivery">
+                        <label class="radio__label content-box__emphasis" for="offline">
                             Наличными
                         </label>
                     </div>
 
                     <div class="radio-wrapper content-box__row">
                         <div class="radio__input">
-                            {{#equal cart.delivery.name "payable"}}
-                            <input class="input-radio" aria-expanded="true" aria-controls="section--billing-address__different" type="radio" value="payable" name="delivery" id="payabledelivery" checked="checked">
+                            {{#equal cart.payment.name "online"}}
+                            <input class="input-radio" aria-expanded="true" aria-controls="section--billing-address__different" type="radio" value="online" name="payment" id="online" checked="checked">
                             {{else}}
-                            <input class="input-radio" aria-expanded="false" aria-controls="section--billing-address__different" type="radio" value="payable" name="delivery" id="payabledelivery">
+                            <input class="input-radio" aria-expanded="false" aria-controls="section--billing-address__different" type="radio" value="online" name="payment" id="online">
                             {{/equal}}
                         </div>
-                        <label class="radio__label content-box__emphasis" for="payabledelivery">
+                        <label class="radio__label content-box__emphasis" for="online">
                             Онлайн
                         </label>
                     </div>

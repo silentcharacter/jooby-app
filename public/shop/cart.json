@@ -1,0 +1,54 @@
+{
+  "id": null,
+  "name": "Илья Игольников",
+  "phone": "9066390408",
+  "streetName": "Наумова, 18",
+  "streetNumber": "18",
+  "entrance": "",
+  "flat": "3",
+  "delivery": {
+    "id": "57f8e87d132ae8c15682c8a3",
+    "name": "free",
+    "description": "Бесплатная",
+    "price": 0,
+    "fullText": "free бесплатная"
+  },
+  "deliveryDate": null,
+  "deliveryTime": null,
+  "payment": {
+    "id": "57f8e87d132ae8c15682c8a1",
+    "name": "offline",
+    "description": "Наличными",
+    "price": null,
+    "fullText": "offline наличными"
+  },
+  "entries": [
+    {
+      "id": null,
+      "product": {
+        "id": "57250d81982c7136bca422bb",
+        "name": "Пельмени с говядиной",
+        "description": "Текст о пользе пельменей со говядиной.",
+        "price": 370,
+        "fullText": "пельмени с говядиной текст о пользе пельменей со говядиной."
+      },
+      "color": {
+        "id": "571d396b59de8330c482e3b3",
+        "name": "Обычный цвет",
+        "description": null,
+        "price": 0,
+        "_default": true,
+        "fullText": "обычный цвет "
+      },
+      "sauces": [],
+      "quantity": 1,
+      "entryNo": 0,
+      "totalPrice": 370,
+      "fullText": "пельмени с говядиной текст о пользе пельменей со говядиной."
+    }
+  ],
+  "subTotalPrice": 370,
+  "totalPrice": 370,
+  "totalCount": 1,
+  "fullText": ""
+}

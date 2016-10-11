@@ -21,17 +21,16 @@ public class Cart extends Entity
     public Date deliveryDate;
     public String deliveryTime;
     public PaymentType payment;
+    public Integer subTotalPrice = 0;
+    public Integer totalPrice = 0;
+    public Integer totalCount = 0;
+    public List<OrderEntry> entries = new ArrayList<>();
 
     @Override
     public String getFullText()
     {
         return "";
     }
-
-    public List<OrderEntry> entries = new ArrayList<>();
-    public Integer subTotalPrice = 0;
-    public Integer totalPrice = 0;
-    public Integer totalCount = 0;
 
     public void calculate() {
         totalPrice = 0;

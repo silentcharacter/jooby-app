@@ -8,8 +8,12 @@ import com.mycompany.service.shop.ProductService;
 import com.mycompany.service.shop.SauceService;
 import org.jooby.Jooby;
 import org.jooby.Results;
+import org.jooby.View;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +27,7 @@ public class ShopApp extends Jooby
 	private static ProductService productService = new ProductService();
 	private static ColorService colorService = new ColorService();
 	private static SauceService sauceService = new SauceService();
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 	{
 		use(new Products());
@@ -58,6 +63,7 @@ public class ShopApp extends Jooby
 		delete("/cart", req -> CartService.removeFromCart(req, req.param("entryNo").intValue()));
 
 		get("/shop/checkout/**", (req, rsp, chain) -> {
+			//todo: optimize
 			Cart cart = CartService.getSessionCart(req);
 			if (cart.isEmpty()) {
 				rsp.redirect("/shop");
@@ -103,16 +109,25 @@ public class ShopApp extends Jooby
 			{
 				return Results.redirect("/shop/checkout");
 			}
-			return Results.html("shop/checkout")
+			View view = Results.html("shop/checkout")
 					.put("step", "delivery")
-					.put("cart", CartService.getSessionCart(req))
+					.put("cart", cart)
 					.put("templateName", "shop/delivery")
 					.put("breadcrumbs", DELIVERY_BREADCRUMB);
+			populateDatesAndTimes(view);
+			return view;
 		});
 
 		post("/shop/checkout/delivery", req ->
 		{
-			CartService.setDelivery(req, req.param("delivery").value());
+			if (req.param("deliveryDate").isSet()) {
+				CartService.setDeliveryOptions(req,
+						req.param("delivery").value(),
+						dateFormat.parse(req.param("deliveryDate").value()),
+						req.param("deliveryTime").value());
+			} else {
+				CartService.setDeliveryOptions(req, req.param("delivery").value(), null, null);
+			}
 			return Results.redirect("/shop/checkout/payment");
 		});
 
@@ -124,14 +139,31 @@ public class ShopApp extends Jooby
 
 		post("/shop/checkout/payment", req ->
 		{
+			CartService.setPaymentType(req, req.param("payment").value());
 			return Results.redirect("/shop/checkout/thankyou");
 		});
 
 		get("/shop/checkout/thankyou", req -> Results.html("shop/checkout")
 				.put("cart", CartService.getSessionCart(req))
 				.put("step", "thankyou")
-				.put("templateName", "shop/payment"));
+				.put("templateName", "shop/thankyou"));
+	}
 
+	private void populateDatesAndTimes(View view)
+	{
+		List<String> dates = new ArrayList<>();
+		Calendar calendar = Calendar.getInstance();
+		for (int i = 0; i < 4; i++)
+		{
+			calendar.add(Calendar.DATE, 1);
+			dates.add(dateFormat.format(calendar.getTime()));
+		}
+		List<String> dateTimes = new ArrayList<>();
+		dateTimes.add("10:00 - 13:00");
+		dateTimes.add("13:00 - 16:00");
+		dateTimes.add("16:00 - 19:00");
+		dateTimes.add("19:00 - 22:00");
+		view.put("dates", dates).put("dateTimes", dateTimes);
 	}
 
 }

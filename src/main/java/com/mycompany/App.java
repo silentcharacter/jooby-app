@@ -1,19 +1,14 @@
 package com.mycompany;
 
-import com.mongodb.*;
 import com.mycompany.auth.MyUsernamePasswordAuthenticator;
 import com.mycompany.controller.News;
 import com.mycompany.controller.Roles;
 import com.mycompany.controller.Todos;
 import com.mycompany.controller.Users;
-import com.mycompany.domain.ScriptLog;
 import com.mycompany.hbs.EqualHelper;
+import com.mycompany.hbs.FormatDateHelper;
 import com.mycompany.service.AuthenticationService;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
-import org.apache.commons.lang3.StringUtils;
-import org.jongo.Jongo;
-import org.jongo.MongoCollection;
+import com.mycompany.service.MigrationService;
 import org.jooby.Jooby;
 import org.jooby.Results;
 import org.jooby.hbs.Hbs;
@@ -25,9 +20,6 @@ import org.pac4j.oauth.client.FacebookClient;
 import org.pac4j.oauth.client.Google2Client;
 import org.pac4j.oauth.client.TwitterClient;
 import org.pac4j.oauth.client.VkClient;
-
-import java.io.*;
-import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +33,7 @@ public class App extends Jooby {
         use(new Jongoby());
         use(new Hbs().doWith((hbs, config) -> {
             hbs.registerHelper("equal", new EqualHelper());
+            hbs.registerHelper("formatDate", new FormatDateHelper());
         }));
         use(new Jackson());
 //        session(MongoSessionStore.class);
@@ -85,48 +78,10 @@ public class App extends Jooby {
     }
 
     @Override
-    public void start(final String[] args) throws Exception
+    public void start(String[] args) throws Exception
     {
         super.start(args);
-        runUpdateScripts();
-    }
-
-    private void runUpdateScripts() throws IOException
-    {
-        logger.info("Running update scripts");
-        Config conf = ConfigFactory.defaultApplication();
-        String dbName = StringUtils.substringAfterLast(conf.getString("db"), "/");
-        DB db = new MongoClient().getDB(dbName);
-        Jongo jongo = new Jongo(db);
-        MongoCollection scriptlogs = jongo.getCollection("scriptlogs");
-
-        File scriptFolder = new File(System.getProperty("user.dir") + "/public/db-update");
-        for (final File script : scriptFolder.listFiles()) {
-            String scriptName = script.getName();
-            String scriptPath = script.getAbsolutePath();
-            logger.info(scriptName);
-
-            ScriptLog log = scriptlogs.findOne(String.format("{version: '%s'}", scriptName)).as(ScriptLog.class);
-            if (log == null) {
-                try {
-                    String command = String.format("mongo %s %s", dbName, scriptPath);
-                    Process p = Runtime.getRuntime().exec(command);
-                    String line;
-                    BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()) );
-                    while ((line = in.readLine()) != null) {
-                        logger.info(line);
-                    }
-                    in.close();
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-                log = new ScriptLog();
-                log.version = scriptName;
-                log.date = new Date();
-                scriptlogs.insert(log);
-            }
-        }
+        MigrationService.runUpdateScripts();
     }
 
     public static void main(final String[] args) throws Exception {

@@ -9740,7 +9740,7 @@
                 this.ClientDetailsTracker = function (n) {
                     function r() {
                         var e, n, i;
-                        r.__super__.constructor.apply(this, arguments), i = t("<input>").attr("type", "hidden").attr("name", "checkout[client_details][browser_width]").val(t(window).width()), e = t("<input>").attr("type", "hidden").attr("name", "checkout[client_details][browser_height]").val(t(window).height()), n = t("<input>").attr("type", "hidden").attr("name", "checkout[client_details][javascript_enabled]").val(1), this.$("form").append(i).append(e).append(n)
+                        // r.__super__.constructor.apply(this, arguments), i = t("<input>").attr("type", "hidden").attr("name", "checkout[client_details][browser_width]").val(t(window).width()), e = t("<input>").attr("type", "hidden").attr("name", "checkout[client_details][browser_height]").val(t(window).height()), n = t("<input>").attr("type", "hidden").attr("name", "checkout[client_details][javascript_enabled]").val(1), this.$("form").append(i).append(e).append(n)
                     }
 
                     return e(r, n), r

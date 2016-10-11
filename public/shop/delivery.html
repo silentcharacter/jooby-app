@@ -25,9 +25,7 @@
                         </div>
 
                         <label class="radio__label content-box__emphasis" for="freedelivery">
-                                                <span class="radio__label__primary">
-                                                      Бесплатная доставка
-                                                    </span>
+                            <span class="radio__label__primary">Бесплатная доставка</span>
                             <span class="radio__label__accessory content-box__emphasis">0 руб.</span>
                         </label>
                     </div>
@@ -41,9 +39,7 @@
                             {{/equal}}
                         </div>
                         <label class="radio__label content-box__emphasis" for="payabledelivery">
-                                                <span class="radio__label__primary">
-                                                      Платная доставка
-                                                    </span>
+                            <span class="radio__label__primary">Платная доставка</span>
                             <span class="radio__label__accessory content-box__emphasis">300 руб.</span>
                         </label>
                     </div>
@@ -59,26 +55,29 @@
                                     <div class="Column">
                                         <label for="deliveryDate">Дата</label>
                                         <select class="wide" name="deliveryDate" id="deliveryDate">
-                                            <option value="01.01.2016">01.01.2016</option>
-                                            <option value="02.01.2016">02.01.2016</option>
-                                            <option value="03.01.2016">03.01.2016</option>
+                                            {{#each dates}}
+                                                <option value="{{this}}" {{#equal this cart.deliveryDate}}selected{{/equal}}>
+                                                    {{this}}
+                                                </option>
+                                            {{/each}}
                                         </select>
                                     </div>
                                     <div class="Column">
                                         <label for="deliveryTime">Время</label>
                                         <select class="wide" name="deliveryTime" id="deliveryTime">
-                                            <option value="10:00 - 13:00">10:00 - 13:00</option>
-                                            <option value="13:00 - 16:00">13:00 - 16:00</option>
-                                            <option value="16:00 - 19:00">16:00 - 19:00</option>
-                                            <option value="19:00 - 22:00">19:00 - 22:00</option>
+                                            {{#each dateTimes}}
+                                                <option value="{{this}}" {{#equal this cart.deliveryTime}}selected{{/equal}}>
+                                                    {{this}}
+                                                </option>
+                                            {{/each}}
                                         </select>
                                     </div>
                                 </div>
                             </div>
-
                     </div>
                 </div>
             </div>
+            <div style="margin-bottom: 100px"></div>
 
             {{> shop/checkoutfooter btnCaption="Далее к способу оплаты" }}
 
