@@ -2,22 +2,19 @@ package com.mycompany.service;
 
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
-import com.mycompany.App;
 import com.mycompany.domain.ScriptLog;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.SystemUtils;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
-import org.jooby.Asset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
@@ -51,23 +48,9 @@ public class MigrationService
 					if (name.startsWith(path + "/") && name.endsWith("script"))
 					{ //filter according to the path
 						logger.info(name);
-						InputStream initialStream = MigrationService.class.getClassLoader().getResourceAsStream(name);
-						if (initialStream == null) {
-							logger.error("initialStream == null");
-						}
-//						File targetFile = new File(System.getProperty("user.dir") + "/" + StringUtils.substringAfterLast(name, "/"));
-						String targetFileName = System.getProperty("user.dir") + "/" + StringUtils.substringAfterLast(name, "/");
-						logger.info(targetFileName);
-//						FileUtils.copyInputStreamToFile(initialStream, targetFile);
-						try (FileOutputStream fos = new FileOutputStream(targetFileName)){
-							byte[] buf = new byte[2048];
-							int r;
-							while(-1 != (r = initialStream.read(buf))) {
-								fos.write(buf, 0, r);
-							}
-						}
-						File targetFile = new File(targetFileName);
+						File targetFile = copyResourceToFile(name);
 						runScript(dbName, scriptlogs, targetFile.getName(), targetFile.getAbsolutePath());
+						Files.delete(targetFile.toPath());
 					}
 				}
 				jar.close();
@@ -91,6 +74,24 @@ public class MigrationService
 		{
 			db.getMongo().close();
 		}
+	}
+
+	private static File copyResourceToFile(String name) throws IOException
+	{
+		InputStream initialStream = MigrationService.class.getClassLoader().getResourceAsStream(name);
+		if (initialStream == null) {
+			logger.error("initialStream == null");
+		}
+		String targetFileName = System.getProperty("user.dir") + "/" + StringUtils.substringAfterLast(name, "/");
+		logger.info(targetFileName);
+		try (FileOutputStream fos = new FileOutputStream(targetFileName)){
+			byte[] buf = new byte[2048];
+			int r;
+			while(-1 != (r = initialStream.read(buf))) {
+				fos.write(buf, 0, r);
+			}
+		}
+		return new File(targetFileName);
 	}
 
 	private static void runScript(String dbName, MongoCollection scriptlogs, String scriptName, String scriptPath)
