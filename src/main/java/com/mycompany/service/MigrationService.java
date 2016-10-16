@@ -51,7 +51,7 @@ public class MigrationService
 					if (name.startsWith(path + "/") && name.endsWith("script"))
 					{ //filter according to the path
 						logger.info(name);
-						InputStream initialStream = MigrationService.class.getResourceAsStream(name);
+						InputStream initialStream = MigrationService.class.getClassLoader().getResourceAsStream(name);
 						if (initialStream == null) {
 							logger.error("initialStream == null");
 						}
