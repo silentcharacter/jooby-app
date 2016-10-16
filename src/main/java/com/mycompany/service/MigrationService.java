@@ -51,9 +51,18 @@ public class MigrationService
 					{ //filter according to the path
 						logger.info(name);
 						InputStream initialStream = MigrationService.class.getResourceAsStream(name);
-						File targetFile = new File(System.getProperty("user.dir") + "/" + StringUtils.substringAfterLast(name, "/"));
-						logger.info(targetFile.getAbsolutePath());
-						FileUtils.copyInputStreamToFile(initialStream, targetFile);
+//						File targetFile = new File(System.getProperty("user.dir") + "/" + StringUtils.substringAfterLast(name, "/"));
+						String targetFileName = System.getProperty("user.dir") + "/" + StringUtils.substringAfterLast(name, "/");
+						logger.info(targetFileName);
+//						FileUtils.copyInputStreamToFile(initialStream, targetFile);
+						try (FileOutputStream fos = new FileOutputStream(targetFileName)){
+							byte[] buf = new byte[2048];
+							int r;
+							while(-1 != (r = initialStream.read(buf))) {
+								fos.write(buf, 0, r);
+							}
+						}
+						File targetFile = new File(targetFileName);
 						runScript(dbName, scriptlogs, targetFile.getName(), targetFile.getAbsolutePath());
 					}
 				}
