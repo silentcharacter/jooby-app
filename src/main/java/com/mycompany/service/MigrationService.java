@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
+import org.jooby.Asset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +52,9 @@ public class MigrationService
 					{ //filter according to the path
 						logger.info(name);
 						InputStream initialStream = MigrationService.class.getResourceAsStream(name);
+						if (initialStream == null) {
+							logger.error("initialStream == null");
+						}
 //						File targetFile = new File(System.getProperty("user.dir") + "/" + StringUtils.substringAfterLast(name, "/"));
 						String targetFileName = System.getProperty("user.dir") + "/" + StringUtils.substringAfterLast(name, "/");
 						logger.info(targetFileName);
