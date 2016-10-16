@@ -47,11 +47,12 @@ public class MigrationService
 				while (entries.hasMoreElements())
 				{
 					final String name = entries.nextElement().getName();
-					if (name.startsWith(path + "/"))
+					if (name.startsWith(path + "/") && name.endsWith("script"))
 					{ //filter according to the path
 						logger.info(name);
 						InputStream initialStream = MigrationService.class.getResourceAsStream(name);
 						File targetFile = new File(System.getProperty("user.dir") + "/" + StringUtils.substringAfterLast(name, "/"));
+						logger.info(targetFile.getAbsolutePath());
 						FileUtils.copyInputStreamToFile(initialStream, targetFile);
 						runScript(dbName, scriptlogs, targetFile.getName(), targetFile.getAbsolutePath());
 					}
