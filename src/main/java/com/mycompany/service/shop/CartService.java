@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public class CartService {
 
-	 final static Logger logger = LoggerFactory.getLogger(App.class);
+	 private final static Logger logger = LoggerFactory.getLogger(App.class);
 
     private static DeliveryTypeService deliveryTypeService = new DeliveryTypeService();
     private static PaymentTypeService paymentTypeService = new PaymentTypeService();
@@ -130,63 +130,24 @@ public class CartService {
         saveSessionCart(req, cart);
     }
 
-    public static void placeOrder(Request req)
+    public static Order placeOrder(Request req)
 	 {
 		 Optional<String> cartJson = req.session().get("cart").toOptional();
 		 ObjectMapper mapper = new ObjectMapper();
 		 try {
 			 if (!cartJson.isPresent()) {
-				 return;
+				 return null;
 			 }
 			 Order order = mapper.readValue(cartJson.get(), Order.class);
 			 order.orderNumber = "123";
 			 order.orderDate = new Date();
 			 orderService.insert(req, order);
+			 saveSessionCart(req, getNewCart(req));
+			 return order;
 		 } catch (IOException e) {
 			 logger.error("Error placing order", e);
 		 }
+		 return null;
 	 }
 
-    /*
-
-    public static Cart getSessionCart(Request req) {
-		 return getSessionCart(req, Cart.class);
-	 }
-
-    public static <T extends Cart> T getSessionCart(Request req, Class<T> _class) {
-        Optional<String> cartJson = req.session().get("cart").toOptional();
-        ObjectMapper mapper = new ObjectMapper();
-        T cart;
-        try {
-			  if (cartJson.isPresent()) {
-					 cart = mapper.readValue(cartJson.get(), _class);
-			  } else {
-					if ("dev".equals(req.require(Config.class).getString("application.env"))) {
-						 cart = mapper.readValue(getDumpCartJson(), _class);
-					} else {
-						 cart = getNewCart(req);
-					}
-					saveSessionCart(req, cart);
-			  }
-        } catch (IOException e) {
-            e.printStackTrace();
-            cart = getNewCart(req);
-        }
-        return cart;
-    }
-
-	static String getDumpCartJson() throws IOException
-	{
-		byte[] encoded = Files.readAllBytes(Paths.get(System.getProperty("user.dir") + "/public/shop/cart.json"));
-		return new String(encoded, "utf-8");
-	}
-
-    private static <T extends Cart> T getNewCart(Request req)
-    {
-        T cart = new T();
-        cart.delivery = deliveryTypeService.getBy("name", DeliveryType.FREE, req);
-        cart.payment = paymentTypeService.getBy("name", PaymentType.OFFLINE, req);
-        return cart;
-    }
-    * */
 }

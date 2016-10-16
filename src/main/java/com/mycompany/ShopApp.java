@@ -143,13 +143,18 @@ public class ShopApp extends Jooby
 		post("/shop/checkout/payment", req ->
 		{
 			CartService.setPaymentType(req, req.param("payment").value());
-			CartService.placeOrder(req);
-			return Results.redirect("/shop/checkout/thankyou");
+			Order order = CartService.placeOrder(req);
+			if (order != null) {
+				return Results.redirect("/shop/thankyou?order=" + order.orderNumber);
+			}
+			throw new RuntimeException("Order not placed");
 		});
 
-		get("/shop/checkout/thankyou", req -> Results.html("shop/checkout")
+		get("/shop/thankyou", req -> Results.html("shop/checkout")
+				//todo: here will be empty cart!
 				.put("cart", CartService.getSessionCart(req))
 				.put("step", "thankyou")
+				.put("orderNumber", req.param("order").value())
 				.put("templateName", "shop/thankyou"));
 	}
 
