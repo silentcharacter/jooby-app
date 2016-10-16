@@ -30,6 +30,9 @@ public class ShopApp extends Jooby
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 	{
+		use(new Orders());
+		use(new PaymentTypes());
+		use(new DeliveryTypes());
 		use(new Products());
 		use(new Colors());
 		use(new Sauces());
@@ -140,6 +143,7 @@ public class ShopApp extends Jooby
 		post("/shop/checkout/payment", req ->
 		{
 			CartService.setPaymentType(req, req.param("payment").value());
+			CartService.placeOrder(req);
 			return Results.redirect("/shop/checkout/thankyou");
 		});
 

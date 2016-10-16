@@ -136,6 +136,54 @@
         news.editionView().fields(news.creationView().fields()).title('Редактирование новости');
         admin.addEntity(news);
 
+        var orders = nga.entity('orders');
+        orders.listView().title('Заказы').fields([
+            nga.field('orderNumber').isDetailLink(true).label("Номер"),
+            nga.field('orderDate', 'datetime').label("Дата"),
+            nga.field('name').label("Клиент"),
+            nga.field('totalPrice', 'number').label("Сумма"),
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по заказам' })
+        ]);
+        orders.creationView().title('Создание заказа').fields([
+            nga.field('orderNumber').isDetailLink(true).label("Номер"),
+            nga.field('orderDate', 'datetime').label("Дата"),
+            nga.field('name').label("Клиент"),
+            nga.field('totalPrice', 'number').label("Сумма"),
+        ]);
+        orders.editionView().fields(orders.creationView().fields()).title('Редактирование заказа');
+        admin.addEntity(orders);
+
+        var deliveryTypes = nga.entity('deliveryTypes');
+        deliveryTypes.listView().title('Способы доставки').fields([
+            nga.field('name').isDetailLink(true).label("Название"),
+            nga.field('description').label("Описание"),
+            nga.field('price', 'number').label("Цена")
+        ]).filters([
+        ]);
+        deliveryTypes.creationView().title('Создание Способа доставки').fields([
+            nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
+            nga.field('description').validation({ required: true}).label("Описание"),
+            nga.field('price', 'number').label("Цена")
+        ]);
+        deliveryTypes.editionView().fields(deliveryTypes.creationView().fields()).title('Редактирование Способа доставки');
+        admin.addEntity(deliveryTypes);
+
+        var paymentTypes = nga.entity('paymentTypes');
+        paymentTypes.listView().title('Способы оплаты').fields([
+            nga.field('name').isDetailLink(true).label("Название"),
+            nga.field('description').label("Описание"),
+            nga.field('price', 'number').label("Цена")
+        ]).filters([
+        ]);
+        paymentTypes.creationView().title('Создание Способа оплаты').fields([
+            nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
+            nga.field('description').validation({ required: true}).label("Описание"),
+            nga.field('price', 'number').label("Цена")
+        ]);
+        paymentTypes.editionView().fields(paymentTypes.creationView().fields()).title('Редактирование Способа оплаты');
+        admin.addEntity(paymentTypes);
+
         var products = nga.entity('products');
         products.listView().title('Продукты').fields([
             nga.field('name').isDetailLink(true).label("Название"),
@@ -183,19 +231,25 @@
         admin.addEntity(sauces);
 
         admin.menu(nga.menu()
-            .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Пользователи'))
-            .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
-            .addChild(nga.menu(todo).icon('<span class="glyphicon glyphicon-list-alt"></span>').title('Задачи'))
-            .addChild(nga.menu(news).icon('<span class="glyphicon glyphicon-flash"></span>').title('Новости'))
-            .addChild(nga.menu(products).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Продукты'))
-            .addChild(nga.menu(colors).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Цвета теста'))
-            .addChild(nga.menu(sauces).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Соусы'))
-            .addChild(nga.menu().title('Прочее')
-                    .addChild(nga.menu().title('Отчеты').link('/stats').active(function(path) {
-                        return path.indexOf('/stats') === 0;
-                    }))
-            )
-            .addChild(nga.menu().link('/exit').icon('<span class="glyphicon glyphicon-log-out"></span>').title('Выход'))
+                .addChild(nga.menu(orders).icon('<span class="glyphicon glyphicon-shopping-cart"></span>').title('Заказы'))
+                .addChild(nga.menu().title('Справочники')
+                    .addChild(nga.menu(paymentTypes).icon('<span class="glyphicon glyphicon-ruble"></span>').title('Способы оплаты'))
+                    .addChild(nga.menu(deliveryTypes).icon('<span class="glyphicon glyphicon-plane"></span>').title('Способы доставки'))
+                    .addChild(nga.menu(products).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Продукты'))
+                    .addChild(nga.menu(colors).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Цвета теста'))
+                    .addChild(nga.menu(sauces).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Соусы'))
+                )
+                .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Пользователи'))
+                .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
+                .addChild(nga.menu(todo).icon('<span class="glyphicon glyphicon-list-alt"></span>').title('Задачи'))
+                .addChild(nga.menu(news).icon('<span class="glyphicon glyphicon-flash"></span>').title('Новости'))
+
+                .addChild(nga.menu().title('Прочее')
+                        .addChild(nga.menu().title('Отчеты').link('/stats').active(function(path) {
+                            return path.indexOf('/stats') === 0;
+                        }))
+                )
+                .addChild(nga.menu().link('/exit').icon('<span class="glyphicon glyphicon-log-out"></span>').title('Выход'))
         );
 
         admin.dashboard(nga.dashboard()

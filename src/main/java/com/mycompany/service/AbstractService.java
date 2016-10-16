@@ -9,6 +9,7 @@ import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
 import org.jooby.Jooby;
 import org.jooby.Request;
+import org.jooby.Route;
 
 import java.util.Collections;
 import java.util.List;
@@ -50,5 +51,12 @@ public abstract class AbstractService<T> extends Jooby {
         Jongo jongo = req.require(Jongo.class);
         MongoCollection collection = jongo.getCollection(entityName);
         return collection.findOne(String.format("{%s: '%s'}", field, value)).as(typeParameterClass);
+    }
+
+    public T insert(Request req, T obj) {
+        Jongo jongo = req.require(Jongo.class);
+        MongoCollection collection = jongo.getCollection(entityName);
+        collection.insert(obj);
+        return obj;
     }
 }

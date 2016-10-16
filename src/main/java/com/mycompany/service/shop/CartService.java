@@ -2,9 +2,12 @@ package com.mycompany.service.shop;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mycompany.App;
 import com.mycompany.domain.shop.*;
 import com.typesafe.config.Config;
 import org.jooby.Request;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -16,8 +19,11 @@ import java.util.Optional;
 
 public class CartService {
 
+	 final static Logger logger = LoggerFactory.getLogger(App.class);
+
     private static DeliveryTypeService deliveryTypeService = new DeliveryTypeService();
     private static PaymentTypeService paymentTypeService = new PaymentTypeService();
+    private static OrderService orderService = new OrderService();
 
     public static Cart getSessionCart(Request req) {
         Optional<String> cartJson = req.session().get("cart").toOptional();
@@ -123,6 +129,23 @@ public class CartService {
         cart.payment = paymentTypeService.getBy("name", payment, req);
         saveSessionCart(req, cart);
     }
+
+    public static void placeOrder(Request req)
+	 {
+		 Optional<String> cartJson = req.session().get("cart").toOptional();
+		 ObjectMapper mapper = new ObjectMapper();
+		 try {
+			 if (!cartJson.isPresent()) {
+				 return;
+			 }
+			 Order order = mapper.readValue(cartJson.get(), Order.class);
+			 order.orderNumber = "123";
+			 order.orderDate = new Date();
+			 orderService.insert(req, order);
+		 } catch (IOException e) {
+			 logger.error("Error placing order", e);
+		 }
+	 }
 
     /*
 
