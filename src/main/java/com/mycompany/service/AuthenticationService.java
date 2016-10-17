@@ -1,4 +1,4 @@
-    package com.mycompany.service;
+package com.mycompany.service;
 
 import com.mycompany.domain.Role;
 import com.mycompany.domain.User;
@@ -9,11 +9,7 @@ import org.jooby.Request;
 import org.jooby.Route;
 import org.jooby.pac4j.Auth;
 import org.jooby.pac4j.AuthStore;
-import org.pac4j.core.authorization.Authorizer;
 import org.pac4j.core.profile.CommonProfile;
-import org.pac4j.core.profile.UserProfile;
-import org.pac4j.http.profile.HttpProfile;
-import org.pac4j.oauth.profile.google2.Google2Profile;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -43,6 +39,11 @@ public class AuthenticationService {
                 user.roles = Collections.singletonList(role.id);
             users.insert(user);
         }
+        Optional<String> redirectUrl = req.session().get("redirectUrl").toOptional();
+        if (redirectUrl.isPresent()) {
+            rsp.redirect(redirectUrl.get());
+            req.session().unset("redirectUrl");
+        }
         rsp.redirect("/");
     };
 
@@ -65,14 +66,14 @@ public class AuthenticationService {
         rsp.redirect("/#/registrationSuccess");
     };
 
-    public static Authorizer authorizerHandler = (ctx, profile) -> {
+//    public static Authorizer authorizerHandler = (ctx, profile) -> {
 //        if (!(profile instanceof HttpProfile || profile instanceof Google2Profile)) {
 //            return false;
 //        }
 //        final HttpProfile httpProfile = (HttpProfile) profile;
 //        final String username = httpProfile.getUsername();
-        return true;
-    };
+//        return true;
+//    };
 
     private static User getCurrentUser(Request req, CommonProfile profile) {
         Jongo jongo = req.require(Jongo.class);
@@ -106,8 +107,8 @@ public class AuthenticationService {
         try {
             Optional<String> profileId = req.session().get(Auth.ID).toOptional();
             if (profileId.isPresent()) {
-                AuthStore<UserProfile> store = req.require(AuthStore.class);
-                return (CommonProfile) store.get(profileId.get()).get();
+                AuthStore<CommonProfile> store = req.require(AuthStore.class);
+                return store.get(profileId.get()).get();
             }
         } catch (Exception e) {
             return null;

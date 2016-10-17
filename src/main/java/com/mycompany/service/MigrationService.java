@@ -1,13 +1,11 @@
 package com.mycompany.service;
 
-import com.mongodb.DB;
-import com.mongodb.MongoClient;
 import com.mycompany.domain.ScriptLog;
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
+import org.jooby.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,15 +23,14 @@ public class MigrationService
 {
 	final static Logger logger = LoggerFactory.getLogger(MigrationService.class);
 
-	public static void runUpdateScripts() throws IOException, URISyntaxException
+	public static void runUpdateScripts(Registry r)
 	{
 		logger.info("Running update scripts");
-		Config conf = ConfigFactory.defaultApplication();
+		Config conf = r.require(Config.class);
 		String dbName = StringUtils.substringAfterLast(conf.getString("db"), "/");
-		DB db = new MongoClient().getDB(dbName);
 		try
 		{
-			Jongo jongo = new Jongo(db);
+			Jongo jongo = r.require(Jongo.class);
 			MongoCollection scriptlogs = jongo.getCollection("scriptlogs");
 			String path = "db-update";
 			final File jarFile = new File(MigrationService.class.getProtectionDomain().getCodeSource().getLocation().getPath());
@@ -70,9 +67,8 @@ public class MigrationService
 			}
 			logger.info("Update scripts performed");
 		}
-		finally
-		{
-			db.getMongo().close();
+		catch (URISyntaxException | IOException e) {
+			logger.error("Error running update scripts", e);
 		}
 	}
 

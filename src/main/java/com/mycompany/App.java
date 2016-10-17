@@ -14,6 +14,7 @@ import org.jooby.Results;
 import org.jooby.hbs.Hbs;
 import org.jooby.json.Jackson;
 import org.jooby.mongodb.Jongoby;
+import org.jooby.mongodb.MongoSessionStore;
 import org.jooby.mongodb.Mongodb;
 import org.jooby.pac4j.Auth;
 import org.pac4j.oauth.client.FacebookClient;
@@ -22,15 +23,8 @@ import org.pac4j.oauth.client.TwitterClient;
 import org.pac4j.oauth.client.VkClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.misc.Launcher;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.Optional;
 
 
 public class App extends Jooby {
@@ -54,19 +48,30 @@ public class App extends Jooby {
 
         use(new ShopApp());
 
+        onStart(r -> {
+            MigrationService.runUpdateScripts(r);
+        });
+
         //public rest resources
         use(new Todos());
         use(new News());
 
         //auth routes
-        get("/userProfile", req -> AuthenticationService.getProfilePageData(req));
+        get("/userProfile", AuthenticationService::getProfilePageData);
         get("/login", ((request, response) -> response.redirect("/#/login")));
         post("/register", AuthenticationService.registrationHandler);
+        get("**", (req, rsp, chain) -> {
+            Optional<String> profileId = req.session().get(Auth.ID).toOptional();
+            if (!profileId.isPresent() && req.path().contains("admin")) {
+                req.session().set("redirectUrl", req.path());
+            }
+            chain.next(req, rsp);
+        });
 
         use(new Auth()
                         .form("/admin/**", MyUsernamePasswordAuthenticator.class)
                         .form("/api/**", MyUsernamePasswordAuthenticator.class)
-                        .authorizer("admin", "/admin/**", AuthenticationService.authorizerHandler)
+//                        .authorizer("admin", "/admin/**", AuthenticationService.authorizerHandler)
                         .client("/google/**", conf -> new Google2Client(conf.getString("google.key"), conf.getString("google.secret")))
                         .client("/vk/**", conf -> new VkClient(conf.getString("vk.key"), conf.getString("vk.secret")))
                         .client("/facebook/**", conf -> new FacebookClient(conf.getString("facebook.key"), conf.getString("facebook.secret")))
@@ -84,13 +89,7 @@ public class App extends Jooby {
         //secure rest resources
         use(new Users());
         use(new Roles());
-    }
 
-    @Override
-    public void start(String[] args) throws Exception
-    {
-        super.start(args);
-        MigrationService.runUpdateScripts();
     }
 
     public static void main(final String[] args) throws Exception {

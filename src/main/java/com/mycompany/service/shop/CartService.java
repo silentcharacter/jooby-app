@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -139,7 +138,7 @@ public class CartService {
 				 return null;
 			 }
 			 Order order = mapper.readValue(cartJson.get(), Order.class);
-			 order.orderNumber = "123";
+			 order.orderNumber = orderService.generateNewOrderNumber(req);
 			 order.orderDate = new Date();
 			 orderService.insert(req, order);
 			 saveSessionCart(req, getNewCart(req));

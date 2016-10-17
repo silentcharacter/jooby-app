@@ -2,10 +2,7 @@ package com.mycompany;
 
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
-import com.mycompany.service.shop.CartService;
-import com.mycompany.service.shop.ColorService;
-import com.mycompany.service.shop.ProductService;
-import com.mycompany.service.shop.SauceService;
+import com.mycompany.service.shop.*;
 import org.jooby.Jooby;
 import org.jooby.Results;
 import org.jooby.View;
@@ -27,6 +24,7 @@ public class ShopApp extends Jooby
 	private static ProductService productService = new ProductService();
 	private static ColorService colorService = new ColorService();
 	private static SauceService sauceService = new SauceService();
+	private static OrderService orderService = new OrderService();
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 	{
@@ -150,12 +148,14 @@ public class ShopApp extends Jooby
 			throw new RuntimeException("Order not placed");
 		});
 
-		get("/shop/thankyou", req -> Results.html("shop/checkout")
-				//todo: here will be empty cart!
-				.put("cart", CartService.getSessionCart(req))
-				.put("step", "thankyou")
-				.put("orderNumber", req.param("order").value())
-				.put("templateName", "shop/thankyou"));
+		get("/shop/thankyou", req -> {
+				String orderNumber = req.param("order").value();
+				return Results.html("shop/checkout")
+					.put("cart", orderService.getBy("orderNumber", orderNumber, req))
+					.put("step", "thankyou")
+					.put("orderNumber", orderNumber)
+					.put("templateName", "shop/thankyou");
+		});
 	}
 
 	private void populateDatesAndTimes(View view)

@@ -6,15 +6,17 @@ import com.mycompany.domain.User;
 import org.bson.types.ObjectId;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
+import org.pac4j.core.context.WebContext;
+import org.pac4j.core.credentials.UsernamePasswordCredentials;
+import org.pac4j.core.credentials.authenticator.Authenticator;
 import org.pac4j.core.exception.CredentialsException;
+import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.util.CommonHelper;
-import org.pac4j.http.credentials.UsernamePasswordCredentials;
-import org.pac4j.http.credentials.authenticator.UsernamePasswordAuthenticator;
-import org.pac4j.http.profile.HttpProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MyUsernamePasswordAuthenticator implements UsernamePasswordAuthenticator {
+public class MyUsernamePasswordAuthenticator implements Authenticator<UsernamePasswordCredentials>
+{
 
     protected static final Logger logger = LoggerFactory.getLogger(MyUsernamePasswordAuthenticator.class);
 
@@ -25,7 +27,7 @@ public class MyUsernamePasswordAuthenticator implements UsernamePasswordAuthenti
         this.jongo = jongo;
     }
 
-    public void validate(UsernamePasswordCredentials credentials) {
+    public void validate(UsernamePasswordCredentials credentials, WebContext context) {
         if (credentials == null) {
             this.throwsException("No credential");
             return;
@@ -47,7 +49,7 @@ public class MyUsernamePasswordAuthenticator implements UsernamePasswordAuthenti
             this.throwsException("Password doesn't match");
         }
 
-        HttpProfile profile = new HttpProfile();
+        CommonProfile profile = new CommonProfile();
         profile.setId(user.id);
         profile.addAttribute("username", username);
         profile.addAttribute("email", user.email);
