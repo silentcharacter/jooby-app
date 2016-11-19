@@ -1,11 +1,9 @@
 package com.mycompany.domain.shop;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mycompany.annotation.Deployment;
 import com.mycompany.domain.Entity;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -17,10 +15,11 @@ public class Cart extends Entity
     public String streetNumber;
     public String entrance;
     public String flat;
-    public DeliveryType delivery;
+    public String deliveryId;
+    public Integer deliveryPrice;
     public Date deliveryDate;
     public String deliveryTime;
-    public PaymentType payment;
+    public String paymentTypeId;
     public Integer subTotalPrice = 0;
     public Integer totalPrice = 0;
     public Integer totalCount = 0;
@@ -37,20 +36,14 @@ public class Cart extends Entity
         subTotalPrice = 0;
         totalCount = 0;
         for (OrderEntry entry : entries) {
-            int rowTotalPrice = entry.product.price * entry.quantity;
-            if (entry.color != null) {
-                rowTotalPrice += entry.color.price;
-            }
-            if (entry.sauces != null) {
-                for (Sauce sauce : entry.sauces) {
-                    rowTotalPrice += sauce.price;
-                }
-            }
+            int rowTotalPrice = entry.productPrice * entry.quantity;
+            rowTotalPrice += entry.colorPrice;
+            rowTotalPrice += entry.saucePrice;
             entry.totalPrice = rowTotalPrice;
             subTotalPrice += rowTotalPrice;
             totalCount += entry.quantity;
         }
-        totalPrice = subTotalPrice + delivery.price;
+        totalPrice = subTotalPrice + deliveryPrice;
     }
 
     public void addEntry(Product product, Integer quantity, Color color, List<Sauce> sauces) {
@@ -73,6 +66,20 @@ public class Cart extends Entity
             } else {
                 cartEntry.quantity = quantity;
             }
+        }
+        calculate();
+    }
+
+    public void removeEntry(Integer entryNo) {
+        OrderEntry toRemove = null;
+        for (OrderEntry entry : entries) {
+            if (entry.entryNo.equals(entryNo)) {
+                toRemove = entry;
+                break;
+            }
+        }
+        if (toRemove != null) {
+            entries.remove(toRemove);
         }
         calculate();
     }

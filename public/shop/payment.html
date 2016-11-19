@@ -31,7 +31,7 @@
                 <div class="content-box">
                     <div class="radio-wrapper content-box__row">
                         <div class="radio__input">
-                            <input class="input-radio" type="radio" value="offline" {{#equal cart.payment.name "offline"}}checked="checked"{{/equal}} name="payment" id="offline">
+                            <input class="input-radio" type="radio" value="offline" {{#equal cart.paymentType.name "offline"}}checked="checked"{{/equal}} name="payment" id="offline">
                         </div>
 
                         <label class="radio__label content-box__emphasis" for="offline">
@@ -41,7 +41,7 @@
 
                     <div class="radio-wrapper content-box__row">
                         <div class="radio__input">
-                            {{#equal cart.payment.name "online"}}
+                            {{#equal cart.paymentType.name "online"}}
                             <input class="input-radio" aria-expanded="true" aria-controls="section--billing-address__different" type="radio" value="online" name="payment" id="online" checked="checked">
                             {{else}}
                             <input class="input-radio" aria-expanded="false" aria-controls="section--billing-address__different" type="radio" value="online" name="payment" id="online">

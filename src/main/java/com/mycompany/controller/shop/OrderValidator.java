@@ -23,7 +23,7 @@ public class OrderValidator
 		if (StringUtils.isEmpty(order.flat)) {
 			return new ValidationResult("flat", "Заполните поле 'Квартира/офис'");
 		}
-//		if (order.delivery.equals("paidDelivery")) {
+//		if (order.deliveryId.equals("paidDelivery")) {
 //			if (StringUtils.isEmpty(order.deliveryDate) || order.deliveryDate.equals("NULL")) {
 //				return new ValidationResult("deliveryDate", "Выберите дату доставки");
 //			}

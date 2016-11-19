@@ -8,10 +8,7 @@ import org.jooby.Results;
 import org.jooby.View;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.mycompany.constant.ShopAppConstants.CONTACT_BREADCRUMB;
@@ -40,9 +37,9 @@ public class ShopApp extends Jooby
 				.put("products", productService.getAll(req))
 				.put("colors", colorService.getAll(req))
 				.put("sauces", sauceService.getAll(req))
-				.put("cart", CartService.getSessionCart(req)));
+				.put("cart", CartService.getFetchedCart(req)));
 
-		get("/cart", req -> Results.json(CartService.getSessionCart(req)));
+		get("/cart", req -> Results.json(CartService.getFetchedCart(req)));
 
 		post("/cart", req ->
 		{
@@ -74,7 +71,7 @@ public class ShopApp extends Jooby
 
 		get("/shop/checkout", req ->
 		{
-			Cart cart = CartService.getSessionCart(req);
+			Map cart = CartService.getFetchedCart(req);
 			return Results.html("shop/checkout")
 					.put("cart", cart)
 					.put("cartForm", cart)
@@ -96,7 +93,7 @@ public class ShopApp extends Jooby
 						.put("cartForm", cartForm)
 						.put("errorMessage", validationResult.message)
 						.put("errorField", validationResult.fieldName)
-						.put("cart", CartService.getSessionCart(req));
+						.put("cart", CartService.getFetchedCart(req));
 			}
 			CartService.saveContactInfo(req, cartForm);
 			return Results.redirect("/shop/checkout/delivery");
@@ -112,7 +109,7 @@ public class ShopApp extends Jooby
 			}
 			View view = Results.html("shop/checkout")
 					.put("step", "delivery")
-					.put("cart", cart)
+					.put("cart", CartService.getFetchedCart(req))
 					.put("templateName", "shop/delivery")
 					.put("breadcrumbs", DELIVERY_BREADCRUMB);
 			populateDatesAndTimes(view);
@@ -134,7 +131,7 @@ public class ShopApp extends Jooby
 
 		get("/shop/checkout/payment", req -> Results.html("shop/checkout")
 				.put("step", "payment")
-				.put("cart", CartService.getSessionCart(req))
+				.put("cart", CartService.getFetchedCart(req))
 				.put("templateName", "shop/payment")
 				.put("breadcrumbs", PAYMENT_BREADCRUMB));
 

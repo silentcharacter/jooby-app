@@ -136,24 +136,6 @@
         news.editionView().fields(news.creationView().fields()).title('Редактирование новости');
         admin.addEntity(news);
 
-        var orders = nga.entity('orders');
-        orders.listView().title('Заказы').fields([
-            nga.field('orderNumber').isDetailLink(true).label("Номер"),
-            nga.field('orderDate', 'datetime').label("Дата"),
-            nga.field('name').label("Клиент"),
-            nga.field('totalPrice', 'number').label("Сумма"),
-        ]).filters([
-            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по заказам' })
-        ]);
-        orders.creationView().title('Создание заказа').fields([
-            nga.field('orderNumber').isDetailLink(true).label("Номер"),
-            nga.field('orderDate', 'datetime').label("Дата"),
-            nga.field('name').label("Клиент"),
-            nga.field('totalPrice', 'number').label("Сумма"),
-        ]);
-        orders.editionView().fields(orders.creationView().fields()).title('Редактирование заказа');
-        admin.addEntity(orders);
-
         var deliveryTypes = nga.entity('deliveryTypes');
         deliveryTypes.listView().title('Способы доставки').fields([
             nga.field('name').isDetailLink(true).label("Название"),
@@ -194,7 +176,7 @@
         ]);
         products.creationView().title('Создание продукта').fields([
             nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
-            nga.field('description').validation({ required: true}).label("Описание"),
+            nga.field('description', 'wysiwyg').validation({ required: true}).label("Описание"),
             nga.field('price', 'number').label("Цена")
         ]);
         products.editionView().fields(products.creationView().fields()).title('Редактирование продукта');
@@ -229,6 +211,68 @@
         ]);
         sauces.editionView().fields(sauces.creationView().fields()).title('Редактирование соуса');
         admin.addEntity(sauces);
+
+        var orders = nga.entity('orders');
+        orders.listView().title('Заказы').fields([
+            nga.field('orderNumber').isDetailLink(true).label("Номер"),
+            nga.field('orderDate', 'datetime').label("Дата"),
+            nga.field('name').label("Клиент"),
+            nga.field('phone').label("Телефон"),
+            nga.field('totalPrice', 'number').label("Сумма"),
+        ]).filters([
+            nga.field('q').label('').pinned(true).template('<div class="input-group"><input type="text" ng-model="value" placeholder="Искать по заказам" class="form-control"></input><span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span></div>'),
+        ]);
+        orders.creationView().title('Создание заказа').fields([
+            nga.field('orderNumber').isDetailLink(true).label("Номер"),
+            nga.field('orderDate', 'datetime').label("Дата"),
+            nga.field('deliveryDate', 'datetime').label("Доставить"),
+            nga.field('deliveryTime').label("Интервал"),
+            nga.field('name').label("Клиент"),
+            nga.field('totalPrice', 'number').label("Сумма").cssClasses('col-sm-2').format('$0.00'),
+            nga.field('deliveryId', 'reference').label("Способ доставки")
+                    .targetEntity(deliveryTypes)
+                    .targetField(nga.field('description'))
+                    .singleApiCall(ids => ({'id': ids })),
+            nga.field('deliveryPrice').label('Стоимость доставки'),
+            nga.field('paymentTypeId', 'reference').label("Способ оплаты")
+                    .targetEntity(paymentTypes)
+                    .targetField(nga.field('description'))
+                    .singleApiCall(ids => ({'id': ids })),
+            nga.field("streetName").label('Улица'),
+            nga.field('streetNumber').label("Дом").cssClasses('col-sm-2'),
+            nga.field('entrance').label("Подъезд").cssClasses('col-sm-2'),
+            nga.field('flat').label("Квартира").cssClasses('col-sm-2'),
+            nga.field('entries', 'embedded_list').label('Состав заказа')
+                    .targetFields([
+                        nga.field('productId', 'reference')
+                                .label('Продукт').attributes({ placeholder: 'Выберите значение' })
+                                .targetEntity(products)
+                                .targetField(nga.field('name'))
+                                .remoteComplete(true, {
+                                    refreshDelay: 200,
+                                    searchQuery: search => ({ q: search })
+                                }),
+                        nga.field('colorId', 'reference')
+                                .label('Цвет').attributes({ placeholder: 'Выберите значение' })
+                                .targetEntity(colors)
+                                .targetField(nga.field('name'))
+                                .remoteComplete(true, {
+                                    refreshDelay: 200,
+                                    searchQuery: search => ({ q: search })
+                                }),
+                        nga.field('sauces', 'reference_many').label('Соусы')
+                                .targetEntity(sauces)
+                                .targetField(nga.field('name'))
+                                .attributes({ placeholder: 'Выберите значение' })
+                                .remoteComplete(true, {
+                                    refreshDelay: 300 ,
+                                    searchQuery: search => ({ q: search })
+                                }),
+                        nga.field('totalPrice').label('Цена'),
+                    ]),
+        ]);
+        orders.editionView().fields(orders.creationView().fields()).title('Редактирование заказа');
+        admin.addEntity(orders);
 
         admin.menu(nga.menu()
                 .addChild(nga.menu(orders).icon('<span class="glyphicon glyphicon-shopping-cart"></span>').title('Заказы'))
