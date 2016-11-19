@@ -252,6 +252,7 @@
                                     refreshDelay: 200,
                                     searchQuery: search => ({ q: search })
                                 }),
+                        nga.field('quantity', 'number').label("Количество"),
                         nga.field('colorId', 'reference')
                                 .label('Цвет').attributes({ placeholder: 'Выберите значение' })
                                 .targetEntity(colors)
