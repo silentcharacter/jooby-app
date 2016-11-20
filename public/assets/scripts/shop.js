@@ -24,8 +24,9 @@ $(document).ready(function () {
 
     $("#" + $("[name='errorField']").val()).addClass("has-error");
 
-    $('select').niceSelect();
-
+    $( ".description" ).each(function( index ) {
+        $(this).html($(this).text());
+    });
 });
 
 function updateCart() {
@@ -55,8 +56,11 @@ function modifyCart(entryNo, quantity) {
 }
 
 function onAddToCartBtnClick(id) {
-    $("input[name='productId'").val(id);
-    $("input[name='quantity'").val("1 кг");
+    $('#addToCartForm').find("input[type='checkbox']").prop( "checked", false );
+    $('#addToCartForm').find("input[type='radio']").prop( "checked", false );
+    $('#addToCartForm').find("input[type='radio']:first").prop( "checked", true );
+    $("input[name='productId']").val(id);
+    $("input[name='quantity']").val("1 кг");
     $('#addToCartModal').modal('show');
 }
 
@@ -76,9 +80,14 @@ function changeInputValue(id, delta) {
 
 function addToCart() {
     var msg = $('#addToCartForm').serializeArray();
-    var obj = {};
+    var obj = {sauces: []};
     for(var i in msg) {
-        obj[msg[i].name] = msg[i].value;
+        var fieldName = msg[i].name;
+        if (fieldName == 'sauces') {
+            obj.sauces.push(msg[i].value);
+        } else {
+            obj[fieldName] = msg[i].value;
+        }
     }
     obj.quantity = parseInt(obj.quantity);
     if (isNaN(obj.quantity)) {

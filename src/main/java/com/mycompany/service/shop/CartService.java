@@ -181,6 +181,8 @@ public class CartService
 			Order order = mapper.readValue(cartJson.get(), Order.class);
 			order.orderNumber = orderService.generateNewOrderNumber(req);
 			order.orderDate = new Date();
+			//needed to solve ng-admin bug not showing embedded linked entities
+			order.sauces = sauceService.getAll(req).stream().map(sauce -> sauce.id).collect(Collectors.toList());
 			orderService.insert(req, order);
 			saveSessionCart(req, getNewCart(req));
 			return order;

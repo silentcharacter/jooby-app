@@ -46,17 +46,21 @@ public class ShopApp extends Jooby
 			Product product = productService.getById(req, req.param("productId").value());
 			Color color = req.param("colorId").isSet() ? colorService.getById(req, req.param("colorId").value()) : null;
 			List<Sauce> sauceList = new ArrayList<>();
-			if (req.param("sauces").isSet())
+			if (req.param("sauces[]").isSet())
 			{
 				sauceList.addAll(
-						req.param("sauces").toList().stream().map(sauceId -> sauceService.getById(req, sauceId))
+						req.param("sauces[]").toList().stream().map(sauceId -> sauceService.getById(req, sauceId))
 								.collect(Collectors.toList())
 				);
 			}
 			return CartService.addToCart(req, product, req.param("quantity").intValue(), color, sauceList);
 		});
 
-		put("/cart", req -> CartService.updateCartRow(req, req.param("entryNo").intValue(), req.param("quantity").intValue()));
+		put("/cart", req ->
+		{
+			CartService.updateCartRow(req, req.param("entryNo").intValue(), req.param("quantity").intValue());
+			return CartService.getFetchedCart(req);
+		});
 
 		delete("/cart", req -> CartService.removeFromCart(req, req.param("entryNo").intValue()));
 

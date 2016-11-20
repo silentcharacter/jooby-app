@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="utf-8">
     <title>Панель администрирования</title>
@@ -242,6 +242,14 @@
             nga.field('streetNumber').label("Дом").cssClasses('col-sm-2'),
             nga.field('entrance').label("Подъезд").cssClasses('col-sm-2'),
             nga.field('flat').label("Квартира").cssClasses('col-sm-2'),
+            nga.field('sauces', 'reference_many').label('')
+                    .targetEntity(sauces)
+                    .targetField(nga.field('name'))
+                    .attributes({ placeholder: 'Выберите значение' })
+                    .remoteComplete(true, {
+                        refreshDelay: 300 ,
+                        searchQuery: search => ({ q: search })
+                    }).cssClasses('hidden'),
             nga.field('entries', 'embedded_list').label('Состав заказа')
                     .targetFields([
                         nga.field('productId', 'reference')
