@@ -11,7 +11,11 @@ import java.util.List;
 public class Order extends Cart
 {
 	public String orderNumber;
+
 	public Date orderDate;
+
+	public OrderStatus status;
+
 	//needed to solve ng-admin bug not showing embedded linked entities
 	public List<String> sauces = new ArrayList<>();
 

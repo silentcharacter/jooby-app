@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.App;
 import com.mycompany.domain.shop.*;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.typesafe.config.Config;
 import org.jooby.Request;
 import org.slf4j.Logger;
@@ -181,6 +182,7 @@ public class CartService
 			Order order = mapper.readValue(cartJson.get(), Order.class);
 			order.orderNumber = orderService.generateNewOrderNumber(req);
 			order.orderDate = new Date();
+			order.status = OrderStatus.NEW;
 			//needed to solve ng-admin bug not showing embedded linked entities
 			order.sauces = sauceService.getAll(req).stream().map(sauce -> sauce.id).collect(Collectors.toList());
 			orderService.insert(req, order);

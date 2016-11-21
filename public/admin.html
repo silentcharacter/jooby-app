@@ -227,21 +227,33 @@
         sauces.editionView().fields(sauces.creationView().fields()).title('Редактирование соуса');
         admin.addEntity(sauces);
 
+        var orderStatuses = [
+            { value: 'Новый', label: 'Новый' },
+            { value: 'Обработан', label: 'Обработан' },
+            { value: 'Отменен', label: 'Отменен' },
+            { value: 'В доставке', label: 'В доставке' },
+            { value: 'Доставлен', label: 'Доставлен' },
+            { value: 'Не доставлен', label: 'Не доставлен' },
+        ]
+
         var orders = nga.entity('orders');
         orders.listView().title('Заказы').fields([
             nga.field('orderNumber').isDetailLink(true).label("Номер"),
             nga.field('orderDate', 'datetime').label("Дата"),
+            nga.field('status').label("Статус"),
             nga.field('name').label("Клиент"),
             nga.field('phone').label("Телефон"),
             nga.field('totalPrice', 'number').label("Сумма"),
         ]).filters([
             nga.field('q').label('').pinned(true).template('<div class="input-group"><input type="text" ng-model="value" placeholder="Искать по заказам" class="form-control"></input><span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span></div>'),
+            nga.field('status', 'choice').label("Статус").pinned(true).choices(orderStatuses),
         ]);
         orders.creationView().title('Создание заказа').fields([
             nga.field('orderNumber').isDetailLink(true).label("Номер"),
             nga.field('orderDate', 'datetime').label("Дата"),
             nga.field('deliveryDate', 'datetime').label("Доставить"),
             nga.field('deliveryTime').label("Интервал"),
+            nga.field('status', 'choice').label("Статус").choices(orderStatuses),
             nga.field('name').label("Клиент"),
             nga.field('totalPrice', 'number').label("Сумма").cssClasses('col-sm-2').format('$0.00'),
             nga.field('deliveryId', 'reference').label("Способ доставки")
