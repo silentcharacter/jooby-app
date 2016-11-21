@@ -14,6 +14,7 @@ import org.jooby.Results;
 import org.jooby.hbs.Hbs;
 import org.jooby.json.Jackson;
 import org.jooby.mongodb.Jongoby;
+import org.jooby.mongodb.MongoSessionStore;
 import org.jooby.mongodb.Mongodb;
 import org.jooby.pac4j.Auth;
 import org.pac4j.oauth.client.FacebookClient;

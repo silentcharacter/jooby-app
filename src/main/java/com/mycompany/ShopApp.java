@@ -160,6 +160,8 @@ public class ShopApp extends Jooby
 					.put("orderNumber", orderNumber)
 					.put("templateName", "shop/thankyou");
 		});
+
+		get("/orderByPhone", request -> orderService.findByPhone(request, request.param("phone").value()));
 	}
 
 	private void populateDatesAndTimes(View view, Request req)

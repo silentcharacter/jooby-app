@@ -14,7 +14,7 @@ import org.jooby.Route;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractService<T> extends Jooby {
+public abstract class AbstractService<T> {
 
     private Class<T> typeParameterClass = null;
     private String entityName = null;

@@ -1,10 +1,14 @@
 package com.mycompany.service.shop;
 
+import com.google.common.base.Strings;
 import com.mongodb.client.MongoDatabase;
 import com.mycompany.domain.shop.Order;
 import com.mycompany.service.AbstractService;
 import org.bson.Document;
 import org.jooby.Request;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class OrderService extends AbstractService<Order> {
@@ -23,4 +27,18 @@ public class OrderService extends AbstractService<Order> {
         return result;
     }
 
+	public Map<String, String> findByPhone(Request req, String phone)
+	{
+		Map<String, String> map = new HashMap<>();
+		if (Strings.isNullOrEmpty(phone)) {
+			return map;
+		}
+		Order order = getBy("phone", phone, req);
+		map.put("name", order.name);
+		map.put("streetName", order.streetName);
+		map.put("streetNumber", order.streetNumber);
+		map.put("flat", order.flat);
+		map.put("entrance", order.entrance);
+		return map;
+	}
 }
