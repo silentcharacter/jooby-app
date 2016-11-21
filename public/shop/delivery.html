@@ -50,22 +50,21 @@
                         <div class="radio-group__row content-box__row content-box__row--secondary hidden" data-address-fields="" id="section--billing-address__different">
                     {{/equal}}
                             <div class="fieldset ">
-
                                 <div class="Row">
                                     <div class="Column">
                                         <label for="deliveryDate">Дата</label>
-                                        <select class="wide" name="deliveryDate" id="deliveryDate">
+                                        <select id="datesSelect" class="wide" name="deliveryDate" id="deliveryDate">
                                             {{#each dates}}
-                                                <option value="{{this}}" {{#equal this cart.deliveryDate}}selected{{/equal}}>
-                                                    {{this}}
+                                                <option value="{{@key}}" {{#equal @key cart.deliveryDate}}selected{{/equal}} data={{this}}>
+                                                    {{@key}}
                                                 </option>
                                             {{/each}}
                                         </select>
                                     </div>
                                     <div class="Column">
                                         <label for="deliveryTime">Время</label>
-                                        <select class="wide" name="deliveryTime" id="deliveryTime">
-                                            {{#each dateTimes}}
+                                        <select id="timeSelect" class="wide" name="deliveryTime" id="deliveryTime">
+                                            {{#each tomorrowDateTimes}}
                                                 <option value="{{this}}" {{#equal this cart.deliveryTime}}selected{{/equal}}>
                                                     {{this}}
                                                 </option>
@@ -74,7 +73,7 @@
                                     </div>
                                 </div>
                             </div>
-                    </div>
+                        </div>
                 </div>
             </div>
             <div style="margin-bottom: 100px"></div>

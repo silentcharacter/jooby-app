@@ -42,6 +42,7 @@ public class App extends Jooby {
 
         assets("/assets/**");
         assets("/favicon.ico", "/assets/favicon.ico");
+        assets("/jquery.min.map", "/assets/js/jquery.min.map");
 
         get("/", req -> Results.html("angular").put("profile", AuthenticationService.getUserProfile(req)));
 

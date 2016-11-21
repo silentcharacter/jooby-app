@@ -24,7 +24,7 @@ $(document).ready(function () {
 
     $("#" + $("[name='errorField']").val()).addClass("has-error");
 
-    $( ".description" ).each(function( index ) {
+    $(".description" ).each(function( index ) {
         $(this).html($(this).text());
     });
 });

@@ -136,6 +136,19 @@
         news.editionView().fields(news.creationView().fields()).title('Редактирование новости');
         admin.addEntity(news);
 
+        //********* SHOP ************
+        var globalConfigs = nga.entity('globalConfigs');
+        globalConfigs.listView().title('Настройки').fields([
+            nga.field('name').isDetailLink(true).label("Название"),
+            nga.field('deliveryGap').label("Время до ближайшей доставки"),
+        ]).filters([
+        ]);
+        globalConfigs.creationView().title('Настройки').fields([
+            nga.field('deliveryGap', 'number').label("Время до ближайшей доставки (ч)")
+        ]);
+        globalConfigs.editionView().fields(globalConfigs.creationView().fields()).title('Настройки');
+        admin.addEntity(globalConfigs);
+
         var deliveryTypes = nga.entity('deliveryTypes');
         deliveryTypes.listView().title('Способы доставки').fields([
             nga.field('name').isDetailLink(true).label("Название"),
@@ -292,6 +305,7 @@
                     .addChild(nga.menu(colors).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Цвета теста'))
                     .addChild(nga.menu(sauces).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Соусы'))
                 )
+                .addChild(nga.menu(globalConfigs).icon('<span class="glyphicon glyphicon-cog"></span>').title('Настройки'))
                 .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Пользователи'))
                 .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
                 .addChild(nga.menu(todo).icon('<span class="glyphicon glyphicon-list-alt"></span>').title('Задачи'))
@@ -306,6 +320,7 @@
         );
 
         admin.dashboard(nga.dashboard()
+            .addCollection(nga.collection(globalConfigs).name('globalConfigs').title('Настройки').fields(globalConfigs.listView().fields()))
             .addCollection(nga.collection(user).name('users').title('Пользователи').fields(user.listView().fields()))
             .addCollection(nga.collection(role).name('roles').title('Роли').fields(role.listView().fields()))
         );

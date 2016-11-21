@@ -4,6 +4,7 @@ import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.shop.*;
 import org.jooby.Jooby;
+import org.jooby.Request;
 import org.jooby.Results;
 import org.jooby.View;
 
@@ -22,6 +23,7 @@ public class ShopApp extends Jooby
 	private static ColorService colorService = new ColorService();
 	private static SauceService sauceService = new SauceService();
 	private static OrderService orderService = new OrderService();
+	private static GlobalConfigService globalConfigService = new GlobalConfigService();
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 	{
@@ -31,6 +33,7 @@ public class ShopApp extends Jooby
 		use(new Products());
 		use(new Colors());
 		use(new Sauces());
+		use(new GlobalConfigs());
 
 		get("/shop", req -> Results.html("shop/shop")
 				.put("templateName", "shop/main")
@@ -116,7 +119,7 @@ public class ShopApp extends Jooby
 					.put("cart", CartService.getFetchedCart(req))
 					.put("templateName", "shop/delivery")
 					.put("breadcrumbs", DELIVERY_BREADCRUMB);
-			populateDatesAndTimes(view);
+			populateDatesAndTimes(view, req);
 			return view;
 		});
 
@@ -159,21 +162,38 @@ public class ShopApp extends Jooby
 		});
 	}
 
-	private void populateDatesAndTimes(View view)
+	private void populateDatesAndTimes(View view, Request req)
 	{
-		List<String> dates = new ArrayList<>();
+		int deliveryGap = globalConfigService.getAll(req).get(0).deliveryGap;
+
+		List<String> possibleDateTimes = new ArrayList<>();
+		possibleDateTimes.add("10:00-13:00");
+		possibleDateTimes.add("13:00-16:00");
+		possibleDateTimes.add("16:00-19:00");
+		possibleDateTimes.add("19:00-22:00");
+
+		List<String> tomorrowDateTimes = new ArrayList<>();
+		Map<String, String> dates = new TreeMap<>();
 		Calendar calendar = Calendar.getInstance();
+		Calendar deliveryPeriodStart = Calendar.getInstance();
+		deliveryPeriodStart.add(Calendar.HOUR_OF_DAY, deliveryGap);
 		for (int i = 0; i < 4; i++)
 		{
 			calendar.add(Calendar.DATE, 1);
-			dates.add(dateFormat.format(calendar.getTime()));
+			String date = dateFormat.format(calendar.getTime());
+			if (i == 0) {
+				possibleDateTimes.forEach(entry -> {
+					calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(entry.substring(0, 2)));
+					if (deliveryPeriodStart.before(calendar)) {
+						tomorrowDateTimes.add(entry);
+					}
+				});
+				dates.put(date, tomorrowDateTimes.stream().collect(Collectors.joining(",")));
+			} else {
+				dates.put(date, possibleDateTimes.stream().collect(Collectors.joining(",")));
+			}
 		}
-		List<String> dateTimes = new ArrayList<>();
-		dateTimes.add("10:00 - 13:00");
-		dateTimes.add("13:00 - 16:00");
-		dateTimes.add("16:00 - 19:00");
-		dateTimes.add("19:00 - 22:00");
-		view.put("dates", dates).put("dateTimes", dateTimes);
+		view.put("dates", dates).put("tomorrowDateTimes", tomorrowDateTimes);
 	}
 
 }

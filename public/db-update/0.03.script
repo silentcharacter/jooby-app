@@ -1,0 +1,4 @@
+db.globalConfigs.insertMany([
+        {name:'Настройки сайта', deliveryGap: 24},
+    ]
+);
