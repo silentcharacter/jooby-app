@@ -8,6 +8,7 @@ import org.jooby.Request;
 import org.jooby.Results;
 import org.jooby.View;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,6 +27,8 @@ public class ShopApp extends Jooby
 	private static GlobalConfigService globalConfigService = new GlobalConfigService();
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
+	private static List<String> possibleDateTimes = new ArrayList<>();
+
 	{
 		use(new Orders());
 		use(new PaymentTypes());
@@ -34,6 +37,8 @@ public class ShopApp extends Jooby
 		use(new Colors());
 		use(new Sauces());
 		use(new GlobalConfigs());
+
+		possibleDateTimes.addAll(Arrays.asList("10:00-13:00", "13:00-16:00", "16:00-19:00", "19:00-22:00"));
 
 		get("/shop", req -> Results.html("shop/shop")
 				.put("templateName", "shop/main")
@@ -168,36 +173,31 @@ public class ShopApp extends Jooby
 	{
 		GlobalConfig config = globalConfigService.getAll(req).get(0);
 
-		List<String> possibleDateTimes = new ArrayList<>();
-		possibleDateTimes.add("10:00-13:00");
-		possibleDateTimes.add("13:00-16:00");
-		possibleDateTimes.add("16:00-19:00");
-		possibleDateTimes.add("19:00-22:00");
-
 		List<String> tomorrowDateTimes = new ArrayList<>();
 		Map<String, String> dates = new TreeMap<>();
 		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DATE, 1);
 		Calendar deliveryPeriodStart = Calendar.getInstance();
 		deliveryPeriodStart.add(Calendar.HOUR_OF_DAY, config.deliveryGap);
-		for (int i = 0; i < config.deliveryDaysRange; i++)
+		//for tomorrow
+		possibleDateTimes.forEach(entry -> {
+			calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(entry.substring(0, 2)));
+			if (deliveryPeriodStart.before(calendar)) {
+				tomorrowDateTimes.add(entry);
+			}
+		});
+		String date = dateFormat.format(calendar.getTime());
+		if (!tomorrowDateTimes.isEmpty()) {
+			dates.put(date, tomorrowDateTimes.stream().collect(Collectors.joining(",")));
+		} else {
+			tomorrowDateTimes.addAll(possibleDateTimes);
+		}
+		//next days
+		for (int i = 1; i < config.deliveryDaysRange; i++)
 		{
 			calendar.add(Calendar.DATE, 1);
-			String date = dateFormat.format(calendar.getTime());
-			if (i == 0) {
-				possibleDateTimes.forEach(entry -> {
-					calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(entry.substring(0, 2)));
-					if (deliveryPeriodStart.before(calendar)) {
-						tomorrowDateTimes.add(entry);
-					}
-				});
-				if (!tomorrowDateTimes.isEmpty()) {
-					dates.put(date, tomorrowDateTimes.stream().collect(Collectors.joining(",")));
-				} else {
-					tomorrowDateTimes.addAll(possibleDateTimes);
-				}
-			} else {
-				dates.put(date, possibleDateTimes.stream().collect(Collectors.joining(",")));
-			}
+			date = dateFormat.format(calendar.getTime());
+			dates.put(date, possibleDateTimes.stream().collect(Collectors.joining(",")));
 		}
 		view.put("dates", dates).put("tomorrowDateTimes", tomorrowDateTimes);
 	}
