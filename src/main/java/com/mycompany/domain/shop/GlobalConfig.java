@@ -6,8 +6,9 @@ import com.mycompany.domain.Entity;
 @Deployment(table = "globalConfigs")
 public class GlobalConfig extends Entity
 {
-	public int deliveryGap;
 	public String name;
+	public int deliveryGap;
+	public int deliveryDaysRange;
 
 	@Override
 	public String getFullText()

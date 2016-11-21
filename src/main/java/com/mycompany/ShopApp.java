@@ -166,7 +166,7 @@ public class ShopApp extends Jooby
 
 	private void populateDatesAndTimes(View view, Request req)
 	{
-		int deliveryGap = globalConfigService.getAll(req).get(0).deliveryGap;
+		GlobalConfig config = globalConfigService.getAll(req).get(0);
 
 		List<String> possibleDateTimes = new ArrayList<>();
 		possibleDateTimes.add("10:00-13:00");
@@ -178,8 +178,8 @@ public class ShopApp extends Jooby
 		Map<String, String> dates = new TreeMap<>();
 		Calendar calendar = Calendar.getInstance();
 		Calendar deliveryPeriodStart = Calendar.getInstance();
-		deliveryPeriodStart.add(Calendar.HOUR_OF_DAY, deliveryGap);
-		for (int i = 0; i < 4; i++)
+		deliveryPeriodStart.add(Calendar.HOUR_OF_DAY, config.deliveryGap);
+		for (int i = 0; i < config.deliveryDaysRange; i++)
 		{
 			calendar.add(Calendar.DATE, 1);
 			String date = dateFormat.format(calendar.getTime());
@@ -190,7 +190,11 @@ public class ShopApp extends Jooby
 						tomorrowDateTimes.add(entry);
 					}
 				});
-				dates.put(date, tomorrowDateTimes.stream().collect(Collectors.joining(",")));
+				if (!tomorrowDateTimes.isEmpty()) {
+					dates.put(date, tomorrowDateTimes.stream().collect(Collectors.joining(",")));
+				} else {
+					tomorrowDateTimes.addAll(possibleDateTimes);
+				}
 			} else {
 				dates.put(date, possibleDateTimes.stream().collect(Collectors.joining(",")));
 			}

@@ -1,0 +1,4 @@
+db.globalConfigs.update(
+    {},
+    { $set: { deliveryDaysRange: 5} }
+);

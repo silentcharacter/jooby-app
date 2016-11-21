@@ -141,10 +141,12 @@
         globalConfigs.listView().title('Настройки').fields([
             nga.field('name').isDetailLink(true).label("Название"),
             nga.field('deliveryGap').label("Время до ближайшей доставки"),
+            nga.field('deliveryDaysRange').label("Кол-во дней в форме выбора доставки"),
         ]).filters([
         ]);
         globalConfigs.creationView().title('Настройки').fields([
-            nga.field('deliveryGap', 'number').label("Время до ближайшей доставки (ч)")
+            nga.field('deliveryGap', 'number').label("Время до ближайшей доставки (ч)"),
+            nga.field('deliveryDaysRange', 'number').label("Кол-во дней в форме выбора доставки"),
         ]);
         globalConfigs.editionView().fields(globalConfigs.creationView().fields()).title('Настройки');
         admin.addEntity(globalConfigs);
