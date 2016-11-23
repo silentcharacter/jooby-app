@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="col-lg-12">
+        <ma-view-actions><ma-back-button></ma-back-button></ma-view-actions>
+        <div class="page-header">
+            <h2>Обработка заказов</h2>
+        </div>
+    </div>
+    <div ng-repeat="order in orders" ng-click="onClick(order)">
+        {{order.orderNumber}}&nbsp;{{order.status}}
+    </div>
+    <div>Выбран заказ</div>
+    <div>{{order.orderNumber}}</div>
+</div>
