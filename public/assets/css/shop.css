@@ -4213,10 +4213,6 @@ form[action="/cart/add"]:after, form[action^="/cart/add"]:after {
     border-color: #ececec
 }
 
-.ajaxifyCart--qty-adjuster {
-    opacity: 0
-}
-
 .cart-row:hover .ajaxifyCart--qty-adjuster, .ajaxifyCart--product:hover .ajaxifyCart--qty-adjuster, .supports-touch .ajaxifyCart--qty-adjuster {
     opacity: 1;
     -webkit-transition: background-color 0.2s ease-out;
