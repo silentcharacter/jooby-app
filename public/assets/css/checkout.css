@@ -891,7 +891,7 @@ body {
 .sidebar:after {
     content: "";
     display: block;
-    width: 300%;
+    width:220%;
     position: absolute;
     top: 0;
     left: -100%;
@@ -904,6 +904,7 @@ body {
 @media (min-width: 1000px) {
     .sidebar:after {
         left: 0;
+        width:130%;
         background-position: left top;
         box-shadow: 1px 0 0 #e1e1e1 inset
     }
