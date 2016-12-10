@@ -1,13 +1,91 @@
 <div class="row">
-    <div class="col-lg-12">
+    <div class="">
         <ma-view-actions><ma-back-button></ma-back-button></ma-view-actions>
         <div class="page-header">
             <h2>Обработка заказов</h2>
         </div>
     </div>
-    <div ng-repeat="order in orders" ng-click="onClick(order)">
-        {{order.orderNumber}}&nbsp;{{order.status}}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                Список заказов
+            </div>
+            <div class="col-sm-4">
+                Выбран заказ
+            </div>
+            <div class="col-sm-4">
+                График доставки
+            </div>
+        </div>
+        <div class="row match-my-cols">
+            <div class="col-sm-4">
+                <div class="box">
+                <table class="grid table table-hover ">
+                    <thead>
+                    <tr>
+                        <th class="ng-admin-column-orderNumber ng-admin-type-string">Номер</th>
+                        <th class="ng-admin-column-orderDate ng-admin-type-datetime">Дата</th>
+                        <th class="ng-admin-column-status ng-admin-type-string">Статус</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="order in orders" ng-click="onClick(order)" ng-class="color(order)">
+                        <td>
+                            {{order.orderNumber}}
+                        </td>
+                        <td>
+                            {{order.orderDate | date : "dd-MM-yyyy"}}
+                        </td>
+                        <td>
+                            {{order.status}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="box">
+                <div>{{order.orderNumber}}</div>
+                <div>{{order.orderDate | date : "dd-MM-yyyy"}}</div>
+                <div>{{order.status}}</div>
+            </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="box">
+                </div>
+            </div>
+        </div>
     </div>
-    <div>Выбран заказ</div>
-    <div>{{order.orderNumber}}</div>
 </div>
+
+<style>
+    [class*="col-"] {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        /*background-color: rgba(86,61,124,.15);*/
+        border: 1px solid rgba(86,61,124,.2);
+    }
+    .row.match-my-cols {
+        overflow: hidden;
+    }
+
+    .row.match-my-cols [class*="col-"]{
+        margin-bottom: -99999px;
+        padding-bottom: 99999px;
+    }
+
+    .match-my-cols .box {
+        background: none;
+        position: static;
+    }
+    .match-my-cols [class*="col-"] {
+        background: #fff;
+    }
+    .match-my-cols .box a {
+        position: relative;
+    }
+</style>
+
+

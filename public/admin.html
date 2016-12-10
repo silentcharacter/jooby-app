@@ -254,7 +254,10 @@
         ]).filters([
             nga.field('q').label('').pinned(true).template('<div class="input-group"><input type="text" ng-model="value" placeholder="Искать по заказам" class="form-control"></input><span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span></div>'),
             nga.field('status', 'choice').label("Статус").pinned(true).choices(orderStatuses).attributes({placeholder:'Выберите статус'}),
-            nga.field('deliveryDate', 'datetime').label("Дата доставки"),
+            nga.field('deliveryDate_$gte', 'date').label("Дата доставки с"),
+            nga.field('deliveryDate_$lt', 'date').label('Дата доставки до'),
+            nga.field('orderDate_$gte', 'date').label("Дата заказа с"),
+            nga.field('orderDate_$lt', 'date').label('Дата заказа до'),
         ]);
         orders.creationView().title('Создание заказа').fields([
             nga.field('orderNumber').isDetailLink(true).label("Номер"),

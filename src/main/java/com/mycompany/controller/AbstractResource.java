@@ -9,10 +9,15 @@ import org.jooby.Jooby;
 import org.jooby.Request;
 import org.jooby.Route;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class AbstractResource<T> extends Jooby {
+
+    SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     private Class<T> typeParameterClass = null;
     private String entityName = null;
@@ -35,7 +40,7 @@ public class AbstractResource<T> extends Jooby {
                 .delete("/:id", deleteHandler);
     }
 
-    protected Route.OneArgHandler updateHandler = req -> {
+    private Route.OneArgHandler updateHandler = req -> {
         Jongo jongo = req.require(Jongo.class);
         MongoCollection collection = jongo.getCollection(entityName);
         T object = req.body().to(typeParameterClass);
@@ -44,7 +49,7 @@ public class AbstractResource<T> extends Jooby {
     };
 
     @SuppressWarnings("unchecked")
-    protected Route.Handler getListHandler = (req, rsp) -> {
+    private Route.Handler getListHandler = (req, rsp) -> {
         Jongo jongo = req.require(Jongo.class);
         MongoCollection collection = jongo.getCollection(entityName);
         Integer page = 1;
@@ -53,33 +58,56 @@ public class AbstractResource<T> extends Jooby {
             page = req.param("_page").intValue();
             perPage = req.param("_perPage").intValue();
         }
-        String query = "{%s}";
         List<Object> filterValues = new ArrayList<>();
+        List<String> queryConditions = new ArrayList<>();
         if (req.param("_filters").isSet()) {
             ObjectMapper mapper = new ObjectMapper();
             HashMap<String, Object> map = mapper.readValue(req.param("_filters").value(), HashMap.class);
+
             if (map.containsKey("id")) {
+                queryConditions.add("_id: {$in:#}");
                 List<String> ids = (List<String>) map.get("id");
                 filterValues.add(ids.stream().map(it -> new ObjectId(String.valueOf(it))).collect(Collectors.toList()));
-                query = String.format(query, "_id: {$in:#},%s");
+                map.remove("id");
             }
+
             if (map.containsKey("q")) {
-                query = String.format(query, "fullText: {$regex: #},%s");
+                queryConditions.add("fullText: {$regex: #}");
                 filterValues.add(String.format(".*%s.*", map.get("q").toString().toLowerCase()));
+                map.remove("q");
             }
-            map.remove("q");
-            map.remove("id");
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                query = String.format(query, entry.getKey() + ": #,%s");
-                filterValues.add(extractValue(entry.getValue()));
-            }
+
+            Map<String, List<String>> groupedFields = map.keySet().stream().filter(key -> key.contains("_$")).collect(
+                  Collectors.groupingBy(fieldName -> fieldName.split("_")[0], Collectors.toList()));
+            groupedFields.forEach((key, value) -> {
+                queryConditions.add(key + ":" + value.stream().map(it -> it.split("_")[1] + ":#").collect(Collectors.joining(",", "{", "}")));
+                filterValues.addAll(value.stream().map(v -> safeParse(map.get(v))).collect(Collectors.toList()));
+                value.forEach(map::remove);
+            });
+
+            map.forEach((key, value) -> {
+                queryConditions.add(key + ": #");
+                filterValues.add(extractValue(value));
+            });
         }
-        query = query.replace("%s", "").replace(",}", "}");
+        String query = queryConditions.stream().collect(Collectors.joining(",", "{", "}"));
         rsp.header("X-Total-Count", collection.count(query, filterValues.toArray()));
         rsp.send(collection.find(query, filterValues.toArray())
                 .sort(extractSort(req)).limit(perPage).skip((page - 1) * perPage)
                 .as(typeParameterClass));
     };
+
+    private Date safeParse(Object s) {
+        try
+        {
+            return FORMAT.parse((String) s);
+        }
+        catch (ParseException e)
+        {
+            return new Date();
+        }
+    }
+
 
     private Object extractValue(Object value) {
         if (!(value instanceof String)) {
@@ -109,13 +137,13 @@ public class AbstractResource<T> extends Jooby {
         return sort;
     }
 
-    protected Route.OneArgHandler getByIdHandler = req -> {
+    private Route.OneArgHandler getByIdHandler = req -> {
         Jongo jongo = req.require(Jongo.class);
         MongoCollection collection = jongo.getCollection(entityName);
         return collection.findOne(new ObjectId(req.param("id").value())).as(typeParameterClass);
     };
 
-    protected Route.OneArgHandler insertHandler = req -> {
+    private Route.OneArgHandler insertHandler = req -> {
         Jongo jongo = req.require(Jongo.class);
         MongoCollection collection = jongo.getCollection(entityName);
         T object = req.body().to(typeParameterClass);
@@ -123,7 +151,7 @@ public class AbstractResource<T> extends Jooby {
         return object;
     };
 
-    protected Route.OneArgHandler deleteHandler = req -> {
+    private Route.OneArgHandler deleteHandler = req -> {
         Jongo jongo = req.require(Jongo.class);
         MongoCollection collection = jongo.getCollection(entityName);
         collection.remove(new ObjectId(req.param("id").value()));

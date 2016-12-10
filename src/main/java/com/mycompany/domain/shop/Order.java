@@ -22,7 +22,7 @@ public class Order extends Cart
 	@Override
 	public String getFullText()
 	{
-		return orderNumber + name + phone;
+		return orderNumber + "_" +name.toLowerCase() + "_" + phone;
 	}
 
 }

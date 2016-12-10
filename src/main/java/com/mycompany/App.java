@@ -11,6 +11,7 @@ import com.mycompany.service.AuthenticationService;
 import com.mycompany.service.MigrationService;
 import org.jooby.Jooby;
 import org.jooby.Results;
+import org.jooby.Sse;
 import org.jooby.hbs.Hbs;
 import org.jooby.json.Jackson;
 import org.jooby.mongodb.Jongoby;
@@ -24,7 +25,15 @@ import org.pac4j.oauth.client.VkClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class App extends Jooby {

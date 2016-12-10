@@ -3,14 +3,16 @@ package com.mycompany;
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.shop.*;
-import org.jooby.Jooby;
-import org.jooby.Request;
-import org.jooby.Results;
-import org.jooby.View;
+import org.jooby.*;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static com.mycompany.constant.ShopAppConstants.CONTACT_BREADCRUMB;
@@ -28,6 +30,8 @@ public class ShopApp extends Jooby
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 	private static List<String> possibleDateTimes = new ArrayList<>();
+
+	private static List<Sse> listeners = Collections.synchronizedList(new ArrayList<Sse>());
 
 	{
 		use(new Orders());
@@ -151,6 +155,7 @@ public class ShopApp extends Jooby
 		{
 			CartService.setPaymentType(req, req.param("payment").value());
 			Order order = CartService.placeOrder(req);
+			sendEvent(order);
 			if (order != null) {
 				return Results.redirect("/shop/thankyou?order=" + order.orderNumber);
 			}
@@ -167,6 +172,27 @@ public class ShopApp extends Jooby
 		});
 
 		get("/orderByPhone", request -> orderService.findByPhone(request, request.param("phone").value()));
+
+		get("/test", req -> {
+			Order order = new Order();
+			order.id = "100";
+			order.orderNumber = "100";
+			order.name = "test";
+			order.phone = "234234";
+			sendEvent(order);
+			return "ok";
+		});
+
+		sse("/events", sse -> {
+			listeners.add(sse);
+			sse.onClose(() -> listeners.remove(sse));
+			sse.keepAlive(15, TimeUnit.SECONDS);
+		});
+	}
+
+	private void sendEvent(Order order)
+	{
+		listeners.forEach(sse -> sse.send(order, "json"));
 	}
 
 	private void populateDatesAndTimes(View view, Request req)
