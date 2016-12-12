@@ -49,7 +49,7 @@ public class AbstractResource<T> extends Jooby {
     };
 
     @SuppressWarnings("unchecked")
-    private Route.Handler getListHandler = (req, rsp) -> {
+    protected Route.Handler getListHandler = (req, rsp) -> {
         Jongo jongo = req.require(Jongo.class);
         MongoCollection collection = jongo.getCollection(entityName);
         Integer page = 1;

@@ -64,15 +64,29 @@ public class CartService
 		return cart;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static Map<String, Object> getFetchedCart(Request req)
 	{
-		Cart cart = getSessionCart(req);
+		return getOrderMap(req, getSessionCart(req));
+	}
+
+	//todo: move to facade
+	public static Map<String, Object> getFetchedOrder(String orderId, Request req)
+	{
+		return getOrderMap(req, orderService.getById(req, orderId));
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Map<String, Object> getOrderMap(Request req, Cart cart)
+	{
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> map = objectMapper.convertValue(cart, Map.class);
 		map.put("deliveryDate", cart.deliveryDate);
 		map.put("delivery", deliveryTypeService.getById(req, cart.deliveryId));
 		map.put("paymentType", paymentTypeService.getById(req, cart.paymentTypeId));
+		if (cart instanceof Order) {
+			Order order = (Order) cart;
+			map.put("orderDate", order.orderDate);
+		}
 		List<Map> entries = (List) map.get("entries");
 		entries.forEach(entry -> {
 			entry.put("product", productService.getById(req, (String) entry.get("productId")));

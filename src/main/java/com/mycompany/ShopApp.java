@@ -173,6 +173,8 @@ public class ShopApp extends Jooby
 
 		get("/orderByPhone", request -> orderService.findByPhone(request, request.param("phone").value()));
 
+		get("/shop/order/detailed/:id", request -> CartService.getFetchedOrder(request.param("id").value(), request));
+
 		get("/test", req -> {
 			Order order = new Order();
 			order.id = "100";

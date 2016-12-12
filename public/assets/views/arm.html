@@ -9,50 +9,105 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
-                Список заказов
+                <h3>Список заказов</h3>
             </div>
             <div class="col-sm-4">
-                Выбран заказ
+                <h3>Выбраный заказ</h3>
             </div>
             <div class="col-sm-4">
-                График доставки
+                <h3>График доставки</h3>
             </div>
         </div>
         <div class="row match-my-cols">
-            <div class="col-sm-4">
+            <div class="col-sm-4 same-height">
                 <div class="box">
-                <table class="grid table table-hover ">
-                    <thead>
-                    <tr>
-                        <th class="ng-admin-column-orderNumber ng-admin-type-string">Номер</th>
-                        <th class="ng-admin-column-orderDate ng-admin-type-datetime">Дата</th>
-                        <th class="ng-admin-column-status ng-admin-type-string">Статус</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="order in orders" ng-click="onClick(order)" ng-class="color(order)">
-                        <td>
-                            {{order.orderNumber}}
-                        </td>
-                        <td>
-                            {{order.orderDate | date : "dd-MM-yyyy"}}
-                        </td>
-                        <td>
-                            {{order.status}}
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                    <table class="grid table table-hover ">
+                        <thead>
+                        <tr>
+                            <th class="ng-admin-column-orderNumber ng-admin-type-string">Номер</th>
+                            <th class="ng-admin-column-orderDate ng-admin-type-datetime">Дата</th>
+                            <th class="ng-admin-column-status ng-admin-type-string">Статус</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="order in orders" ng-click="onClick(order)" ng-class="color(order)">
+                            <td>
+                                {{order.orderNumber}}
+                            </td>
+                            <td>
+                                {{order.orderDate | date : "dd-MM-yyyy"}}
+                            </td>
+                            <td>
+                                {{order.status}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            <div class="col-sm-4 same-height">
+                <div class="box" ng-if="order">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Номер заказа:</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static mb-0">{{order.orderNumber}}</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Дата заказа:</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static mb-0">{{order.orderDate | date : "dd-MM-yyyy"}}</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Статус:</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static mb-0">{{order.status}}</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="deliverySelect" class="col-sm-2 col-form-label">Доставка:</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="deliverySelect" ng-options="item as item.description for item in deliveryTypes track by item.id" ng-model="order.delivery">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="deliveryDate" class="col-xs-2 col-form-label">Дата доставки</label>
+                        <div class="col-xs-10">
+                            <input class="form-control" type="date" ng-model="order.deliveryDate" id="deliveryDate">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="deliveryTime" class="col-sm-2 col-form-label">Время доставки:</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="deliveryTime" ng-options="item as item.label for item in times track by item.value" ng-model="order.deliveryTime">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="example-text-input" class="col-xs-2 col-form-label">Text</label>
+                        <div class="col-xs-10">
+                            <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="example-search-input" class="col-xs-2 col-form-label">Search</label>
+                        <div class="col-xs-10">
+                            <input class="form-control" type="search" value="How do I shoot web" id="example-search-input">
+                        </div>
+                    </div>
+                    <div style="padding-top: 130px"></div>
+                    <div class="form-group row">
+                        <div class="offset-sm-2">
+                            <button type="submit" class="btn btn-primary btn-block btn-lg">В доставку</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-4">
-                <div class="box">
-                <div>{{order.orderNumber}}</div>
-                <div>{{order.orderDate | date : "dd-MM-yyyy"}}</div>
-                <div>{{order.status}}</div>
-            </div>
-            </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 same-height">
                 <div class="box">
                 </div>
             </div>
@@ -61,7 +116,7 @@
 </div>
 
 <style>
-    [class*="col-"] {
+    [class*="same-height"] {
         padding-top: 1rem;
         padding-bottom: 1rem;
         /*background-color: rgba(86,61,124,.15);*/
@@ -71,7 +126,7 @@
         overflow: hidden;
     }
 
-    .row.match-my-cols [class*="col-"]{
+    .row.match-my-cols [class*="same-height"]{
         margin-bottom: -99999px;
         padding-bottom: 99999px;
     }
@@ -80,11 +135,39 @@
         background: none;
         position: static;
     }
-    .match-my-cols [class*="col-"] {
+    .match-my-cols [class*="same-height"] {
         background: #fff;
     }
     .match-my-cols .box a {
         position: relative;
+    }
+    .bg-success-selected {
+        background-color: #418d22;
+        font-weight: bold;
+    }
+    .bg-selected {
+        background-color: #B3B5B5;
+        font-weight: bold;
+    }
+    .col-form-label {
+        margin-top: 5px;
+        width: 35%;
+    }
+    .container {
+        margin: 0;
+        margin-top: -15px;
+    }
+    .form-control-static {
+        padding-top: 5px;
+    }
+    .col-sm-10 {
+        width:65%;
+    }
+    .col-xs-10 {
+        width:65%;
+    }
+    .form-group {
+        margin-bottom: 3px;
     }
 </style>
 

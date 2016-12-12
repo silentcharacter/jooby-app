@@ -7,13 +7,32 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', fu
         console.log('Error ' + data)
     });
 
+    $http.get('/api/deliveryTypes').success(function (data) {
+        $scope.deliveryTypes = data;
+    }).error(function (data, status) {
+        console.log('Error ' + data)
+    });
+
+    $scope.times = window.times;
+
     $scope.onClick = function (order) {
-        $scope.order = order;
+        $http.get('/shop/order/detailed/' + order.id).success(function (data) {
+            $scope.order = data;
+            $scope.order.deliveryDate = new Date($scope.order.deliveryDate);
+            console.log($scope.order);
+        }).error(function (data, status) {
+            console.log('Error ' + data)
+        });
     };
 
     $scope.color = function (order) {
-        if (order.status == 'Новый')
+        if (order.status == 'Новый') {
+            if ($scope.order && $scope.order.id == order.id)
+                return 'bg-success-selected';
             return 'bg-success';
+        }
+        if ($scope.order && $scope.order.id == order.id)
+            return 'bg-selected';
         return '';
     };
 
