@@ -1,3 +1,11 @@
+@font-face {
+    font-family: Lorek; /* Имя шрифта */
+    src: url("/assets/fonts/10270.otf"); /* Путь к файлу со шрифтом */
+}
+* {
+    font-family: Lorek, serif;
+}
+
 html, body {
     margin: 0;
     width: 100%;
@@ -5,13 +13,9 @@ html, body {
 }
 
 html {
-    font-family: sans-serif;
+    /*font-family: sans-serif;*/
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%
-}
-
-body {
-    /*overflow-x: hidden*/
 }
 
 small {
@@ -306,7 +310,7 @@ td, th {
 
 body {
     font-size: 14px;
-    font-family: Helvetica Neue, sans-serif;
+    /*font-family: Helvetica Neue, sans-serif;*/
     line-height: 1.3em;
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -325,7 +329,7 @@ a:hover {
 }
 
 h1 {
-    font-family: Helvetica Neue, sans-serif;
+    /*font-family: Helvetica Neue, sans-serif;*/
     font-size: 1.71429em
 }
 
@@ -336,7 +340,7 @@ h1 {
 }
 
 h2 {
-    font-family: Helvetica Neue, sans-serif;
+    /*font-family: Helvetica Neue, sans-serif;*/
     font-size: 1.28571em
 }
 
@@ -357,7 +361,7 @@ h2 {
 }
 
 h3 {
-    font-family: Helvetica Neue, sans-serif;
+    /*font-family: Helvetica Neue, sans-serif;*/
     font-size: 1em;
     font-weight: 500;
     margin-bottom: 0.75em
@@ -4366,7 +4370,7 @@ html, body {
 }
 
 html {
-    font-family: sans-serif;
+    /*font-family: sans-serif;*/
     font-size: 14px;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%

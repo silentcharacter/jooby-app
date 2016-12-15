@@ -7,6 +7,14 @@
     font-style: normal
 }
 
+@font-face {
+    font-family: Lorek; /* Имя шрифта */
+    src: url("/assets/fonts/10270.otf"); /* Путь к файлу со шрифтом */
+}
+* {
+    font-family: Lorek, serif;
+}
+
 .clearfix:after {
     content: "";
     display: table;
@@ -1232,7 +1240,7 @@ body {
 body, input, textarea, button, select {
     font-size: 15px;
     line-height: 1.6;
-    font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /*font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
     color: #585858;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
@@ -1243,7 +1251,7 @@ h1, .h1, #shopify-product-reviews .spr-header-title, h2, .h2, h3, .h3, h4, .h4, 
     display: block;
     margin: 0 0 0.5em;
     line-height: 1.4;
-    font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", sans-serif;
+    /*font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", sans-serif;*/
     font-weight: 700;
     text-transform: uppercase
 }
@@ -1360,7 +1368,7 @@ blockquote cite:before {
 
 code, pre {
     background-color: #faf7f5;
-    font-family: Consolas, monospace;
+    /*font-family: Consolas, monospace;*/
     font-size: 1em;
     border: 0 none;
     padding: 0 2px;
@@ -1567,7 +1575,7 @@ button[disabled], html input[disabled] {
     -webkit-appearance: none;
     -moz-appearance: none;
     border-radius: 2px;
-    font-family: "Dosis", "HelveticaNeue", "Helvetica Neue", sans-serif;
+    /*font-family: "Dosis", "HelveticaNeue", "Helvetica Neue", sans-serif;*/
     font-weight: 600;
     font-size: 17px;
     -webkit-transition: background-color 0.2s ease-out;
@@ -2166,7 +2174,7 @@ label.error {
 }
 
 .social-sharing {
-    font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /*font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
     padding-top: 15px
 }
 
@@ -2582,7 +2590,7 @@ a:hover .share-count:after {
     width: 100%;
     margin-bottom: 0;
     padding: 10px 45px 10px 10px;
-    font-family: "Dosis", "HelveticaNeue", "Helvetica Neue", sans-serif;
+    /*font-family: "Dosis", "HelveticaNeue", "Helvetica Neue", sans-serif;*/
     font-weight: 600;
     font-size: 17px;
     line-height: 24px !important
@@ -2670,7 +2678,7 @@ a:hover .share-count:after {
 
 .site-nav {
     margin: 0;
-    font-family: "Dosis", "HelveticaNeue", "Helvetica Neue", sans-serif;
+    /*font-family: "Dosis", "HelveticaNeue", "Helvetica Neue", sans-serif;*/
     font-weight: 600;
     font-size: 17px;
     text-transform: uppercase;
@@ -3177,7 +3185,7 @@ a.product-grid-item:hover img, .product-grid-item:hover img {
     position: relative;
     display: block;
     color: #585858;
-    font-family: "Dosis", "HelveticaNeue", "Helvetica Neue", sans-serif;
+    /*font-family: "Dosis", "HelveticaNeue", "Helvetica Neue", sans-serif;*/
     font-weight: 600;
     padding-top: 15px;
     line-height: 1;
@@ -3297,7 +3305,7 @@ a.product-grid-item:hover img, .product-grid-item:hover img {
 
 .breadcrumb .divider {
     font-size: 15px;
-    font-family: 'Verdana', sans-serif;
+    /*font-family: 'Verdana', sans-serif;*/
     padding: 13px 7px 13px 0;
     color: #bbb
 }
@@ -3912,7 +3920,7 @@ html[xmlns] .slides {
 
 #shopify-product-reviews .spr-review-header-title {
     margin-right: 15px;
-    font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /*font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
     font-weight: 400;
     text-transform: uppercase;
     font-size: 17px;

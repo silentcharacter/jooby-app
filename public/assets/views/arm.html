@@ -7,21 +7,11 @@
     </div>
 
     <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                <h3>Список заказов</h3>
-            </div>
-            <div class="col-sm-4">
-                <h3>Выбраный заказ</h3>
-            </div>
-            <div class="col-sm-4">
-                <h3>График доставки</h3>
-            </div>
-        </div>
         <div class="row match-my-cols">
             <div class="col-sm-4 same-height">
+                <h3>Список заказов <span class="count ">2</span></h3><hr/>
                 <div class="box">
-                    <table class="grid table table-hover ">
+                    <table class="grid table order-list ">
                         <thead>
                         <tr>
                             <th class="ng-admin-column-orderNumber ng-admin-type-string">Номер</th>
@@ -30,7 +20,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="order in orders" ng-click="onClick(order)" ng-class="color(order)">
+                        <tr ng-repeat="order in orders" ng-click="onClick(order)" ng-class="rowClass(order)">
                             <td>
                                 {{order.orderNumber}}
                             </td>
@@ -46,11 +36,12 @@
                 </div>
             </div>
             <div class="col-sm-4 same-height">
+                <h3>Выбраный заказ</h3><hr/>
                 <div class="box" ng-if="order">
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Номер заказа:</label>
                         <div class="col-sm-10">
-                            <p class="form-control-static mb-0">{{order.orderNumber}}</p>
+                            <p class="form-control-static mb-0"><a target="_blank" href="#/orders/edit/{{order.id}}">{{order.orderNumber}}</a></p>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -62,7 +53,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Статус:</label>
                         <div class="col-sm-10">
-                            <p class="form-control-static mb-0">{{order.status}}</p>
+                            <input class="form-control" type="text" value="{{order.status}}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -75,40 +66,87 @@
                     <div class="form-group row">
                         <label for="deliveryDate" class="col-xs-2 col-form-label">Дата доставки</label>
                         <div class="col-xs-10">
-                            <input class="form-control" type="date" ng-model="order.deliveryDate" id="deliveryDate">
+                            <input class="form-control" type="date" ng-model="order.deliveryDate" id="deliveryDate" min="{{today}}">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="deliveryTime" class="col-sm-2 col-form-label">Время доставки:</label>
+                        <label for="deliveryTime" class="col-sm-2 col-form-label">Интервал:</label>
                         <div class="col-sm-10">
-                            <select class="form-control" id="deliveryTime" ng-options="item as item.label for item in times track by item.value" ng-model="order.deliveryTime">
+                            <select class="form-control" id="deliveryTime" ng-model="order.deliveryTime">
+                                <option ng-repeat="option in times1">{{option}}</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="example-text-input" class="col-xs-2 col-form-label">Text</label>
+                        <label class="col-xs-2 col-form-label">Улица</label>
                         <div class="col-xs-10">
-                            <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+                            <input class="form-control" type="search" ng-model="order.streetName" data-animation="am-flip-x" bs-options="address as address for address in getAddress($viewValue)"  bs-typeahead>
                         </div>
                     </div>
+                    <!--<i class="fa fa-home"></i> -->
+
                     <div class="form-group row">
-                        <label for="example-search-input" class="col-xs-2 col-form-label">Search</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" type="search" value="How do I shoot web" id="example-search-input">
+                        <label class="col-xs-2 col-form-label">Дом/под./кв.</label>
+                        <div class="col-xs-3">
+                            <input class="form-control" type="text" ng-model="order.streetNumber">
+                        </div>
+                        <div class="col-xs-3">
+                            <input class="form-control" type="text" ng-model="order.entrance">
+                        </div>
+                        <div class="col-xs-3">
+                            <input class="form-control" type="text" ng-model="order.flat">
                         </div>
                     </div>
-                    <div style="padding-top: 130px"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Сумма:</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" value="{{order.totalPrice}}" readonly>
+                        </div>
+                    </div>
+
+                    <div style="padding-top: 20px"></div>
+                    <table class="table-striped table">
+                        <tbody>
+                        <tr ng-repeat="entry in order.entries" ng-click="onOrderEntryClick()">
+                            <td>
+                                <table>
+                                    <tr>{{entry.product.name}}</tr>
+                                    <tr ng-repeat="sauce in entry.sauces" class="collapse out">
+                                        <td><small>{{sauce.name}}</small></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                {{entry.color.name}}
+                            </td>
+                            <td>
+                                {{order.totalPrice}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="padding-top: 0px"></div>
                     <div class="form-group row">
                         <div class="offset-sm-2">
-                            <button type="submit" class="btn btn-primary btn-block btn-lg">В доставку</button>
+                            <button type="submit" class="btn btn-primary btn-block btn-lg"><span class="glyphicon glyphicon-ok"></span>&nbsp;В доставку</button>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="col-sm-4 same-height">
+                <h3>График доставки {{deliveryDate | date : "dd-MM-yyyy"}}</h3>
                 <div class="box">
+                    <table class="table grid">
+                        <tbody>
+                        <tr ng-repeat="time in times1"><td>{{time}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -116,6 +154,27 @@
 </div>
 
 <style>
+    .container {
+        width: 100%;
+    }
+    h3 {
+        margin-top: 10px;
+    }
+    hr {
+        margin: 3px;
+    }
+    .count {
+        display: inline-block;
+        text-align: center;
+        background-color: #dff0d8;
+        color: #171616;
+        font-weight: 700;
+        font-size: 15px;
+        min-width: 30px;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 30px
+    }
     [class*="same-height"] {
         padding-top: 1rem;
         padding-bottom: 1rem;
@@ -141,12 +200,8 @@
     .match-my-cols .box a {
         position: relative;
     }
-    .bg-success-selected {
-        background-color: #418d22;
-        font-weight: bold;
-    }
-    .bg-selected {
-        background-color: #B3B5B5;
+    .row-selected {
+        outline: solid black;
         font-weight: bold;
     }
     .col-form-label {
@@ -169,6 +224,16 @@
     .form-group {
         margin-bottom: 3px;
     }
+    .col-xs-3 {
+        padding-right: 0;
+        padding-left: 15px;
+        width: 20%;
+    }
+    .order-list tr:not(.bg-success):hover {
+        background-color: rgba(193, 195, 191, 0.15);
+    }
+    .order-list tr:not(.processed):hover {
+        background-color: rgba(23, 118, 9, 0.71);
+    }
 </style>
-
 

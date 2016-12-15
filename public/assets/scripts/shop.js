@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $("[name='phone']").mask("0000000000");
 
-    $("[name='streetName']").typeahead({
+    $("#streetName").typeahead({
         source: function (query, process) {
             return $.ajax({
                 type: 'POST',
