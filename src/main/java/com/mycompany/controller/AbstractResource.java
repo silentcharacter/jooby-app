@@ -92,9 +92,13 @@ public class AbstractResource<T> extends Jooby {
         }
         String query = queryConditions.stream().collect(Collectors.joining(",", "{", "}"));
         rsp.header("X-Total-Count", collection.count(query, filterValues.toArray()));
-        rsp.send(collection.find(query, filterValues.toArray())
-                .sort(extractSort(req)).limit(perPage).skip((page - 1) * perPage)
-                .as(typeParameterClass));
+        if (!req.param("_count").isSet()) {
+            rsp.send(collection.find(query, filterValues.toArray())
+                  .sort(extractSort(req)).limit(perPage).skip((page - 1) * perPage)
+                  .as(typeParameterClass));
+        } else {
+            rsp.send("");
+        }
     };
 
     private Date safeParse(Object s) {

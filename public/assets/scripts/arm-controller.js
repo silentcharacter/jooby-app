@@ -6,6 +6,13 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', fu
         console.log('Error ' + data)
     });
 
+    var req = new XMLHttpRequest();
+    var filter = encodeURIComponent(JSON.stringify({status: 'Новый'}));
+    req.open('GET', '/api/orders?_count=true&_filters='+filter, false);
+    req.send(null);
+    var headers = req.getAllResponseHeaders().toLowerCase();
+    $scope.newOrders = /\d+/.exec(headers.match(/X-Total-Count: (\d+)/ig)[0])[0];
+
     $http.get('/api/deliveryTypes').success(function (data) {
         $scope.deliveryTypes = data;
     }).error(function (data, status) {
@@ -32,6 +39,10 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', fu
             console.log('Error ' + data)
         });
     };
+
+    $scope.selectedIcon = "";
+    $scope.selectedIcons = ["Globe","Heart"];
+    $scope.icons = [{"value":"Gear","label":"<i class=\"fa fa-gear\"></i> Gear"},{"value":"Globe","label":"<i class=\"fa fa-globe\"></i> Globe"},{"value":"Heart","label":"<i class=\"fa fa-heart\"></i> Heart"},{"value":"Camera","label":"<i class=\"fa fa-camera\"></i> Camera"}];
 
     $scope.rowsCollapsed = false;
     $scope.onOrderEntryClick = function () {
@@ -60,12 +71,15 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', fu
     // handles the callback from the received event
     var handleCallback = function (msg) {
         $scope.$apply(function () {
-            $scope.orders.unshift(JSON.parse(msg.data));
+            var order = JSON.parse(msg.data);
+            $scope.orders.unshift(order);
+            if (order.status === 'Новый') {
+                $scope.newOrders++;
+            }
         });
     };
     var source = new EventSource('/events');
     source.onmessage = function(e) {
-        console.log(e);
         handleCallback(e);
     };
     source.onerror = function(e) {

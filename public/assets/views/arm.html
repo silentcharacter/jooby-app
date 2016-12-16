@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row match-my-cols">
             <div class="col-sm-4 same-height">
-                <h3>Список заказов <span class="count ">2</span></h3><hr/>
+                <h3>Список заказов <span class="count ">{{newOrders}}</span></h3><hr/>
                 <div class="box">
                     <table class="grid table order-list ">
                         <thead>
@@ -36,73 +36,74 @@
                 </div>
             </div>
             <div class="col-sm-4 same-height">
-                <h3>Выбраный заказ</h3><hr/>
                 <div class="box" ng-if="order">
+                    <h3>{{order.name}} <span class="right">{{order.phone}}</span></h3><hr/>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Номер заказа:</label>
-                        <div class="col-sm-10">
-                            <p class="form-control-static mb-0"><a target="_blank" href="#/orders/edit/{{order.id}}">{{order.orderNumber}}</a></p>
+                        <label class="col-sm-4 col-form-label">Заказ:</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-static mb-0"><a target="_blank" href="#/orders/edit/{{order.id}}">{{order.orderNumber}}</a> / {{order.orderDate | date : "dd-MM-yyyy"}}</p>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Дата заказа:</label>
-                        <div class="col-sm-10">
-                            <p class="form-control-static mb-0">{{order.orderDate | date : "dd-MM-yyyy"}}</p>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Статус:</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-4 col-form-label">Статус:</label>
+                        <div class="col-sm-8">
                             <input class="form-control" type="text" value="{{order.status}}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="deliverySelect" class="col-sm-2 col-form-label">Доставка:</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" id="deliverySelect" ng-options="item as item.description for item in deliveryTypes track by item.id" ng-model="order.delivery">
-                            </select>
+                        <label class="col-sm-4 col-form-label">Оплата:</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="text" value="{{order.paymentType.description}}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="deliveryDate" class="col-xs-2 col-form-label">Дата доставки</label>
-                        <div class="col-xs-10">
+                        <label for="deliverySelect" class="col-sm-4 col-form-label">Доставка:</label>
+                        <div class="col-sm-8">
+                            <button id="deliverySelect" type="button" class="btn btn-default form-control" ng-model="order.delivery" data-html="1" data-toggle="true" bs-options="item as item.description for item in deliveryTypes track by item.id" bs-select>
+                                 <span class="caret"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="deliveryDate" class="col-sm-4 col-form-label">Дата доставки:</label>
+                        <div class="col-sm-8">
                             <input class="form-control" type="date" ng-model="order.deliveryDate" id="deliveryDate" min="{{today}}">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="deliveryTime" class="col-sm-2 col-form-label">Интервал:</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" id="deliveryTime" ng-model="order.deliveryTime">
-                                <option ng-repeat="option in times1">{{option}}</option>
-                            </select>
+                        <label for="deliveryTime" class="col-sm-4 col-form-label">Интервал:</label>
+                        <div class="col-sm-8">
+                            <button id="deliveryTime" type="button" class="btn btn-default form-control" ng-model="order.deliveryTime" data-html="1" data-toggle="true" bs-options="item as item for item in times1 track by item" bs-select>
+                                <span class="caret"></span>
+                            </button>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-xs-2 col-form-label">Улица</label>
-                        <div class="col-xs-10">
+                        <label class="col-sm-4 col-form-label">Улица:</label>
+                        <div class="col-sm-8">
                             <input class="form-control" type="search" ng-model="order.streetName" data-animation="am-flip-x" bs-options="address as address for address in getAddress($viewValue)"  bs-typeahead>
                         </div>
                     </div>
                     <!--<i class="fa fa-home"></i> -->
 
-                    <div class="form-group row">
-                        <label class="col-xs-2 col-form-label">Дом/под./кв.</label>
-                        <div class="col-xs-3">
+                    <div class="form-group row inline-inputs">
+                        <label class="col-sm-4 col-form-label">Дом/под./кв.:</label>
+                        <div class="col-sm-3" style="padding-right: 0">
                             <input class="form-control" type="text" ng-model="order.streetNumber">
                         </div>
-                        <div class="col-xs-3">
+                        <div class="col-sm-2" style="padding-right: 0; padding-left: 2px">
                             <input class="form-control" type="text" ng-model="order.entrance">
                         </div>
-                        <div class="col-xs-3">
+                        <div class="col-sm-3" style="padding-left: 2px">
                             <input class="form-control" type="text" ng-model="order.flat">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Сумма:</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-4 col-form-label">Сумма:</label>
+                        <div class="col-sm-8">
                             <input class="form-control" type="text" value="{{order.totalPrice}}" readonly>
                         </div>
                     </div>
@@ -129,10 +130,9 @@
                         </tbody>
                     </table>
 
-                    <div style="padding-top: 0px"></div>
                     <div class="form-group row">
                         <div class="offset-sm-2">
-                            <button type="submit" class="btn btn-primary btn-block btn-lg"><span class="glyphicon glyphicon-ok"></span>&nbsp;В доставку</button>
+                            <button type="submit" class="btn btn-primary btn-block btn-lg"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;В доставку</button>
                         </div>
                     </div>
 
@@ -154,8 +154,8 @@
 </div>
 
 <style>
-    .container {
-        width: 100%;
+    .inline-inputs input{
+        float:left;
     }
     h3 {
         margin-top: 10px;
@@ -206,34 +206,35 @@
     }
     .col-form-label {
         margin-top: 5px;
-        width: 35%;
+        /*width: 30%;*/
     }
     .container {
         margin: 0;
         margin-top: -15px;
+        width: 100%;
     }
     .form-control-static {
         padding-top: 5px;
     }
-    .col-sm-10 {
-        width:65%;
-    }
-    .col-xs-10 {
-        width:65%;
-    }
     .form-group {
         margin-bottom: 3px;
-    }
-    .col-xs-3 {
-        padding-right: 0;
-        padding-left: 15px;
-        width: 20%;
     }
     .order-list tr:not(.bg-success):hover {
         background-color: rgba(193, 195, 191, 0.15);
     }
     .order-list tr:not(.processed):hover {
         background-color: rgba(23, 118, 9, 0.71);
+    }
+    .form-control {
+        text-align: left;
+    }
+    .caret {
+        float: right;
+        /*vertical-align: middle;*/
+        margin-top: 6px;
+    }
+    .right {
+        float: right;
     }
 </style>
 
