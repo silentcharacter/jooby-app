@@ -1,18 +1,25 @@
 angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', function($scope, $http) {
 
+    //get order list
     $http.get('/api/orders').success(function (data) {
         $scope.orders = data;
     }).error(function (data, status) {
         console.log('Error ' + data)
     });
 
-    var req = new XMLHttpRequest();
+    //get new orders count
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState === 4) {
+            var headers = request.getAllResponseHeaders();
+            $scope.newOrders = /\d+/.exec(headers.match(/X-Total-Count: (\d+)/ig)[0])[0];
+        }
+    };
     var filter = encodeURIComponent(JSON.stringify({status: 'Новый'}));
-    req.open('GET', '/api/orders?_count=true&_filters='+filter, false);
-    req.send(null);
-    var headers = req.getAllResponseHeaders().toLowerCase();
-    $scope.newOrders = /\d+/.exec(headers.match(/X-Total-Count: (\d+)/ig)[0])[0];
+    request.open('GET', '/api/orders?_count=true&_filters='+filter, true);
+    request.send(null);
 
+    //get delivery types
     $http.get('/api/deliveryTypes').success(function (data) {
         $scope.deliveryTypes = data;
     }).error(function (data, status) {
@@ -23,16 +30,17 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', fu
         return obj.value;
     });
 
-    var now = new Date;
-    $scope.today = "" + now.getFullYear() + "-" + (now.getMonth()+1) + "-" + now.getDate();
+    $scope.today = formatDate(new Date);
 
+    //on order item click
     $scope.onClick = function (order) {
         $http.get('/shop/order/detailed/' + order.id).success(function (data) {
             $scope.order = data;
             // console.log($scope.order)
-            if ($scope.order.deliveryDate)
+            if ($scope.order.deliveryDate) {
                 $scope.order.deliveryDate = new Date($scope.order.deliveryDate);
-            $scope.deliveryDate = $scope.order.deliveryDate;
+                loadSchedule($scope.order);
+            }
             $scope.rowsCollapsed = false;
             // console.log($scope.order)
         }).error(function (data, status) {
@@ -40,22 +48,47 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', fu
         });
     };
 
-    $scope.selectedIcon = "";
-    $scope.selectedIcons = ["Globe","Heart"];
-    $scope.icons = [{"value":"Gear","label":"<i class=\"fa fa-gear\"></i> Gear"},{"value":"Globe","label":"<i class=\"fa fa-globe\"></i> Globe"},{"value":"Heart","label":"<i class=\"fa fa-heart\"></i> Heart"},{"value":"Camera","label":"<i class=\"fa fa-camera\"></i> Camera"}];
 
+    function loadSchedule(order) {
+        $scope.schedule = {};
+        $scope.activeTimeIntervalPanel = -1;
+        var startDate = formatDate(order.deliveryDate);
+        var d = new Date(Date.parse(startDate));
+        d.setDate(d.getDate() + 1);
+        var endDate = formatDate(d);
+        var filter = {deliveryDate_$gte: startDate, deliveryDate_$lt: endDate};
+        var filterUrl = encodeURIComponent(JSON.stringify(filter));
+        $http.get('/api/orders?_filters='+filterUrl).success(function (data) {
+            for (var i = 0; i < $scope.times1.length; i++) {
+                $scope.schedule[$scope.times1[i]] = data.filter(function (order) {
+                    return order.deliveryTime == $scope.times1[i];
+                })
+            }
+            $scope.deliveryDate = startDate;
+            $scope.activeTimeIntervalPanel = $scope.times1.indexOf(order.deliveryTime);
+        }).error(function (data, status) {
+            console.log('Error ' + data)
+        });
+    }
+
+    $scope.onDeliveryDateChange = function() {
+        loadSchedule($scope.order);
+    };
+
+    //expanding order entries
     $scope.rowsCollapsed = false;
     $scope.onOrderEntryClick = function () {
         if(!$scope.rowsCollapsed) {
-            $(".collapse").addClass("in");
-            $(".collapse").removeClass("out");
+            $(".entries").addClass("in");
+            $(".entries").removeClass("out");
         } else {
-            $(".collapse").addClass("out");
-            $(".collapse").removeClass("in");
+            $(".entries").addClass("out");
+            $(".entries").removeClass("in");
         }
         $scope.rowsCollapsed = !$scope.rowsCollapsed;
     };
 
+    //order list rows color
     $scope.rowClass = function (order) {
         if (order.status == 'Новый') {
             if ($scope.order && $scope.order.id == order.id)
@@ -65,6 +98,13 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', fu
         if ($scope.order && $scope.order.id == order.id)
             return 'row-selected processed';
         return 'processed';
+    };
+    //schedule row color
+    $scope.scheduleRowClass = function (order) {
+        if (order.id == $scope.order.id) {
+            return 'bg-success';
+        }
+        return '';
     };
 
     //SSE
@@ -87,7 +127,6 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', fu
     };
 
     $scope.getAddress = function (query) {
-        // return  ["Alabama","Alaska","Arizona","Arkansas","California"];
         var res = [];
         $.ajax({
             type: 'POST',
@@ -105,8 +144,29 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', fu
             }
             res = Array.from(suggestions);
         });
+
+        // // 1. Создаём новый объект XMLHttpRequest
+        // var xhr = new XMLHttpRequest();
+        // // 2. Конфигурируем его: GET-запрос на URL 'phones.json'
+        // xhr.open('POST', 'https://dadata.ru/api/v1/suggest/address', false);
+        // xhr.setRequestHeader("Content-Type", "application/json");
+        // xhr.setRequestHeader("Authorization", "Token bf69a05b6ce842dcd0cbc159648d19a8c49fdf33");
+        // // 3. Отсылаем запрос
+        // xhr.send(JSON.stringify({"query": "Ярославль " + query}));
+        // // 4. Если код ответа сервера не 200, то это ошибка
+        // if (xhr.status != 200) {
+        //     // обработать ошибку
+        //     alert( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
+        // } else {
+        //     // вывести результат
+        //     return [xhr.responseText];
+        // }
         return res;
     };
 
+    function formatDate(date) {
+        if (!date) return "";
+        return date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
+    }
 }]);
 
