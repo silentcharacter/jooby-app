@@ -51,9 +51,10 @@
     <script type="text/javascript" src="//vk.com/js/api/openapi.js?136"></script>
     <script type="text/javascript">
         VK.Widgets.CommunityMessages("vk_community_messages", 135792195, {
-            expanded: "1",
+            expanded: "0",
             widgetPosition: "left",
-            tooltipButtonText: "Есть вопрос?"
+            tooltipButtonText: "Есть вопрос?",
+            expandTimeout: 15000
         });
     </script>
 
@@ -94,9 +95,6 @@
 
     {{> (lookup . 'templateName') }}
 
-    <!-- VK Widget -->
-    <div id="vk_community_messages"></div>
-
     {{> shop/footer}}
 
     <!-- Modal -->
@@ -107,6 +105,8 @@
         </div>
     </div>
 
+    <!-- VK Widget -->
+    <div id="vk_community_messages"></div>
 </body>
 
 </html>

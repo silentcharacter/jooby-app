@@ -2025,6 +2025,10 @@ label.error {
     content: "\66"
 }
 
+.icon-vk:before {
+    content: url("/assets/image/Vk_thumb.jpg")
+}
+
 .icon-fancy:before {
     content: "\46"
 }
