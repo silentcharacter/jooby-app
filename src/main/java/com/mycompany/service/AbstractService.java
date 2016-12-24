@@ -59,4 +59,11 @@ public abstract class AbstractService<T> {
         collection.insert(obj);
         return obj;
     }
+
+    public T update(Request req, T obj) {
+        Jongo jongo = req.require(Jongo.class);
+        MongoCollection collection = jongo.getCollection(entityName);
+        collection.save(obj);
+        return obj;
+    }
 }

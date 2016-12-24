@@ -40,6 +40,7 @@
                 </div>
             </div>
             <div class="col-sm-4 same-height">
+                <form name="form" class="css-form" novalidate>
                 <div class="box" ng-if="order">
                     <h3>{{order.name}} <span class="right"><a href="tel:{{order.phone}}">{{order.phone}}</a></span></h3><hr/>
                     <div class="form-group row">
@@ -72,17 +73,20 @@
                             </button>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row {{form.deliveryDate.$error.required? 'has-error' : '' }}">
                         <label for="deliveryDate" class="col-sm-4 col-form-label">Дата доставки:</label>
                         <div class="col-sm-8">
-                            <input class="form-control" type="date" ng-model="order.deliveryDate" ng-change="onDeliveryDateChange()" id="deliveryDate" min="{{today}}">
+                            <input class="form-control" name="deliveryDate" required="" type="date" ng-model="deliveryDate"
+                                   ng-change="onDeliveryDateChange(deliveryDate)" id="deliveryDate" min="{{today}}">
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group row {{form.deliveryTime.$error.required? 'has-error' : '' }}">
                         <label for="deliveryTime" class="col-sm-4 col-form-label">Интервал:</label>
                         <div class="col-sm-8">
-                            <button id="deliveryTime" type="button" class="btn btn-default form-control" ng-model="order.deliveryTime" data-html="1" bs-options="item as item for item in times1 track by item" bs-select>
+                            <button id="deliveryTime" required="" name="deliveryTime" type="button" class="btn btn-default form-control"
+                                    ng-model="order.deliveryTime" bs-options="item.value as item.value for item in times1 track by item.value" bs-select
+                                    ng-change="onDeliveryTimeChange(order.deliveryTime)" data-placeholder="Выберите время">
                                 <span class="caret"></span>
                             </button>
                         </div>
@@ -139,48 +143,42 @@
                     </table>
 
                     <div class="form-group row">
-                        <div class="offset-sm-2">
-                            <button type="submit" class="btn btn-primary btn-block btn-lg"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;В доставку</button>
+                        <div class="col-sm-4">
+                            <button class="btn btn-danger btn-lg btn-block">Отменить</button>
+                        </div>
+                        <div class="col-sm-8">
+                            <button ng-click="submit(order)" type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="form.$invalid">
+                                <span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;В доставку
+                            </button>
                         </div>
                     </div>
-
                 </div>
+                </form>
             </div>
             <div class="col-sm-4 same-height">
-                <div class="box" ng-if="order.deliveryDate">
+                <div class="box" ng-if="deliveryDate">
                     <h3>График доставки<span class="right">{{deliveryDate | date : "dd/MM/yyyy"}}</span></h3>
-                    <input class="form-control" type="search" ng-model="activeTimeIntervalPanel"  >
-                    <div class="panel-group" ng-model="activeTimeIntervalPanel" role="tablist" aria-multiselectable="true" bs-collapse>
-                        <div class="panel panel-default" ng-repeat="time in times1">
-                            <div class="panel-heading" role="tab">
-                                <h4 class="panel-title">
-                                    <a bs-collapse-toggle>
-                                        {{ time }}
-                                    </a>
-                                </h4>
-                            </div>
-                            <div class="panel-collapse" role="tabpanel" bs-collapse-target>
-                                <div class="panel-body">
-                                    <table class="table grid">
-                                        <tbody>
-                                        <tr ng-repeat="order in schedule[time]" ng-class="scheduleRowClass(order)">
-                                            <td>
-                                                {{order.orderNumber}}
-                                            </td>
-                                            <td>
-                                                {{order.streetName}}
-                                            </td>
-                                            <td class="text-right">
-                                                {{order.totalPrice}}
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <accordion close-others="true">
+                        <accordion-group heading="{{time.value}}" ng-repeat="time in times1" is-open="time.open">
+                            <table class="table grid">
+                                <tbody>
+                                <tr ng-repeat="order in schedule[time.value]" ng-class="scheduleRowClass(order)">
+                                    <td>
+                                        <a target="_blank" href="#/orders/edit/{{order.id}}">{{order.orderNumber}}</a>
+                                    </td>
+                                    <td>
+                                        {{order.streetName}}&nbsp;{{order.streetNumber}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{order.totalPrice}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </accordion-group>
+                    </accordion>
                 </div>
+                <pre>{{schedule | json}}</pre>
             </div>
         </div>
     </div>
