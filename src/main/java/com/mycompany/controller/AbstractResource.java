@@ -17,7 +17,8 @@ import java.util.stream.Collectors;
 
 public class AbstractResource<T> extends Jooby {
 
-    SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static final String DATE_FILTER_POSTFIX = "_$";
+    private SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     private Class<T> typeParameterClass = null;
     private String entityName = null;
@@ -77,8 +78,9 @@ public class AbstractResource<T> extends Jooby {
                 map.remove("q");
             }
 
-            Map<String, List<String>> groupedFields = map.keySet().stream().filter(key -> key.contains("_$")).collect(
-                  Collectors.groupingBy(fieldName -> fieldName.split("_")[0], Collectors.toList()));
+            Map<String, List<String>> groupedFields = map.keySet().stream()
+                  .filter(key -> key.contains(DATE_FILTER_POSTFIX))
+                  .collect(Collectors.groupingBy(fieldName -> fieldName.split("_")[0], Collectors.toList()));
             groupedFields.forEach((key, value) -> {
                 queryConditions.add(key + ":" + value.stream().map(it -> it.split("_")[1] + ":#").collect(Collectors.joining(",", "{", "}")));
                 filterValues.addAll(value.stream().map(v -> safeParse(map.get(v))).collect(Collectors.toList()));
@@ -102,9 +104,13 @@ public class AbstractResource<T> extends Jooby {
     };
 
     private Date safeParse(Object s) {
+        SimpleDateFormat utc_format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        utc_format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try
         {
-            return FORMAT.parse((String) s);
+            Date localDate = FORMAT.parse((String) s);
+            return format.parse(utc_format.format(localDate));
         }
         catch (ParseException e)
         {

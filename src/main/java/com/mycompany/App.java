@@ -56,9 +56,7 @@ public class App extends Jooby {
 
         use(new ShopApp());
 
-        onStart(r -> {
-            MigrationService.runUpdateScripts(r);
-        });
+        onStart(MigrationService::runUpdateScripts);
 
         //public rest resources
         use(new Todos());

@@ -1,23 +1,29 @@
 angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$alert', function($scope, $http, $alert) {
 
     //get order list
+    $scope.loading = true;
     $http.get('/api/orders').success(function (data) {
         $scope.orders = data;
+        $scope.loading = false;
     }).error(function (data, status) {
+        $scope.loading = false;
         console.log('Error ' + data)
     });
 
-    //get new orders count
-    var request = new XMLHttpRequest();
-    request.onreadystatechange = function () {
-        if (request.readyState === 4) {
-            var headers = request.getAllResponseHeaders();
-            $scope.newOrders = /\d+/.exec(headers.match(/X-Total-Count: (\d+)/ig)[0])[0];
-        }
-    };
-    var filter = encodeURIComponent(JSON.stringify({status: 'Новый'}));
-    request.open('GET', '/api/orders?_count=true&_filters='+filter, true);
-    request.send(null);
+    function getNewOrdersCount() {
+        //get new orders count
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                var headers = request.getAllResponseHeaders();
+                $scope.newOrders = /\d+/.exec(headers.match(/X-Total-Count: (\d+)/ig)[0])[0];
+            }
+        };
+        var filter = encodeURIComponent(JSON.stringify({status: 'Новый'}));
+        request.open('GET', '/api/orders?_count=true&_filters='+filter, true);
+        request.send(null);
+    }
+    getNewOrdersCount();
 
     //get delivery types
     $http.get('/api/deliveryTypes').success(function (data) {
@@ -34,20 +40,25 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     //on order item click
     $scope.onClick = function (order) {
+        $scope.loading = true;
         $http.get('/shop/order/detailed/' + order.id).success(function (data) {
-            $scope.order = data;
             // console.log($scope.order)
-            if ($scope.order.deliveryDate) {
-                $scope.order.deliveryDate = new Date($scope.order.deliveryDate);
-                loadSchedule($scope.order);
-            }
-            $scope.rowsCollapsed = false;
-            // console.log($scope.order)
+            updateOrderInScope(data);
         }).error(function (data, status) {
             console.log('Error ' + data)
         });
     };
 
+    function updateOrderInScope(order) {
+        if (order.deliveryDate) {
+            order.deliveryDate = new Date(order.deliveryDate);
+            loadSchedule(order);
+        } else {
+            $scope.loading = false;
+        }
+        $scope.order = order;
+        $scope.rowsCollapsed = false;
+    }
 
     function loadSchedule(order) {
         $scope.schedule = {};
@@ -57,19 +68,22 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         var endDate = formatDate(d);
         var filter = {deliveryDate_$gte: startDate, deliveryDate_$lt: endDate};
         var filterUrl = encodeURIComponent(JSON.stringify(filter));
+        $scope.loading = true;
         $http.get('/api/orders?_filters='+filterUrl).success(function (data) {
             for (var i = 0; i < $scope.times1.length; i++) {
-                $scope.schedule[$scope.times1[i].value] = data.filter(function (order) {
-                    return order.deliveryTime == $scope.times1[i].value && order.id != $scope.order.id;
+                $scope.schedule[$scope.times1[i].value] = data.filter(function (item) {
+                    return item.deliveryTime == $scope.times1[i].value && item.id != order.id;
                 })
             }
-            $scope.deliveryDate = order.deliveryDate;
             for (var i = 0; i < $scope.times1.length; i++) {
                 $scope.times1[i].open = order.deliveryTime === $scope.times1[i].value;
             }
-            $scope.schedule[order.deliveryTime].push(order);
+            if ($scope.schedule[order.deliveryTime])
+                $scope.schedule[order.deliveryTime].push(order);
+            $scope.loading = false;
         }).error(function (data, status) {
             console.log('Error ' + data);
+            $scope.loading = false;
         });
     }
 
@@ -193,14 +207,20 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     // </div>
 
     $scope.submit = function (order) {
+        order = angular.copy(order);
+        order.deliveryDate = formatDate(order.deliveryDate);
+        console.log(order.deliveryDate)
+        $scope.loading = true;
         $http.post('/shop/order/delivery', order).success(function (data) {
-            $scope.order = data;
+            updateOrderInScope(data);
             updateOrderInList(data);
+            getNewOrdersCount();
             $alert({title: 'Заказ сохранен', content: '',
                 placement: 'top', type: 'info', show: true, container:'.page-header', animation:"am-fade-and-slide-top", duration: 4});
             console.log(data);
         }).error(function (data, status) {
             console.log('Error ' + data);
+            $scope.loading = false;
             $alert({title: 'Ошибка при сохранении заказа!', content: data,
                 placement: 'top', type: 'danger', show: true, container:'.page-header', animation:"am-fade-and-slide-top", duration: 4});
         });
