@@ -25,10 +25,7 @@ import org.pac4j.oauth.client.VkClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -47,7 +44,9 @@ public class App extends Jooby {
             hbs.registerHelper("equal", new EqualHelper());
             hbs.registerHelper("formatDate", new FormatDateHelper());
         }));
-        use(new Jackson());
+        use(new Jackson().doWith(mapper -> {
+            mapper.setTimeZone(TimeZone.getTimeZone("UTC"));
+        }));
 //        session(MongoSessionStore.class);
 
         assets("/assets/**");
@@ -59,9 +58,7 @@ public class App extends Jooby {
 
         use(new ShopApp());
 
-        onStart(r -> {
-            MigrationService.runUpdateScripts(r);
-        });
+        onStart(MigrationService::runUpdateScripts);
 
         //public rest resources
         use(new Todos());
@@ -80,7 +77,7 @@ public class App extends Jooby {
         });
 
         use(new Auth()
-//                        .form("/admin/**", MyUsernamePasswordAuthenticator.class)
+                        .form("/admin/**", MyUsernamePasswordAuthenticator.class)
                         .form("/api/**", MyUsernamePasswordAuthenticator.class)
 //                        .authorizer("admin", "/admin/**", AuthenticationService.authorizerHandler)
                         .client("/google/**", conf -> new Google2Client(conf.getString("google.key"), conf.getString("google.secret")))

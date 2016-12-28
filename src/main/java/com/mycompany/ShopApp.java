@@ -154,7 +154,8 @@ public class ShopApp extends Jooby
 		post("/shop/checkout/payment", req ->
 		{
 			CartService.setPaymentType(req, req.param("payment").value());
-			Order order = CartService.placeOrder(req);
+			Order order = orderService.placeOrder(req);
+			CartService.emptyCart(req);
 			sendEvent(order);
 			if (order != null) {
 				return Results.redirect("/shop/thankyou?order=" + order.orderNumber);
@@ -173,17 +174,14 @@ public class ShopApp extends Jooby
 
 		get("/orderByPhone", request -> orderService.findByPhone(request, request.param("phone").value()));
 
-		get("/shop/order/detailed/:id", request -> CartService.getFetchedOrder(request.param("id").value(), request));
+		//ARM
+		get("/shop/order/detailed/:id", request -> orderService.getFetchedOrder(request.param("id").value(), request));
 
-		get("/test", req -> {
-			Order order = new Order();
-			order.id = "100";
-			order.orderNumber = "100";
-			order.name = "test";
-			order.phone = "234234";
-			sendEvent(order);
-			return "ok";
+		post("/shop/order/delivery", req -> {
+			Map<String, Object> order = req.body().to(Map.class);
+			return orderService.sendToDelivery(order, req);
 		});
+
 
 		sse("/events", sse -> {
 			listeners.add(sse);

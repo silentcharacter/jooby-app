@@ -113,10 +113,17 @@
       <artifactId>jooby-jackson</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.jooby</groupId>
-      <artifactId>jooby-rxjava</artifactId>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.jooby</groupId>-->
+      <!--<artifactId>jooby-rxjava</artifactId>-->
+    <!--</dependency>-->
+
+    <!--<dependency>-->
+      <!--<groupId>joda-time</groupId>-->
+      <!--<artifactId>joda-time</artifactId>-->
+      <!--<version>2.9.6</version>-->
+    <!--</dependency>-->
+
 
   </dependencies>
 

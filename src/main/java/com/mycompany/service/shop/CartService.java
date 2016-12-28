@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,14 +24,9 @@ import java.util.stream.Collectors;
 public class CartService
 {
 
-	private final static Logger logger = LoggerFactory.getLogger(App.class);
-
 	private static DeliveryTypeService deliveryTypeService = new DeliveryTypeService();
 	private static PaymentTypeService paymentTypeService = new PaymentTypeService();
 	private static OrderService orderService = new OrderService();
-	private static ProductService productService = new ProductService();
-	private static ColorService colorService = new ColorService();
-	private static SauceService sauceService = new SauceService();
 
 	public static Cart getSessionCart(Request req)
 	{
@@ -66,35 +62,7 @@ public class CartService
 
 	public static Map<String, Object> getFetchedCart(Request req)
 	{
-		return getOrderMap(req, getSessionCart(req));
-	}
-
-	//todo: move to facade
-	public static Map<String, Object> getFetchedOrder(String orderId, Request req)
-	{
-		return getOrderMap(req, orderService.getById(req, orderId));
-	}
-
-	@SuppressWarnings("unchecked")
-	private static Map<String, Object> getOrderMap(Request req, Cart cart)
-	{
-		ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, Object> map = objectMapper.convertValue(cart, Map.class);
-		map.put("deliveryDate", cart.deliveryDate);
-		map.put("delivery", deliveryTypeService.getById(req, cart.deliveryId));
-		map.put("paymentType", paymentTypeService.getById(req, cart.paymentTypeId));
-		if (cart instanceof Order) {
-			Order order = (Order) cart;
-			map.put("orderDate", order.orderDate);
-		}
-		List<Map> entries = (List) map.get("entries");
-		entries.forEach(entry -> {
-			entry.put("product", productService.getById(req, (String) entry.get("productId")));
-			entry.put("color", colorService.getById(req, (String) entry.get("colorId")));
-			List<String> sauces = (List) entry.get("sauces");
-			entry.put("sauces", sauces.stream().map(sauce -> sauceService.getById(req, sauce)).collect(Collectors.toList()));
-		});
-		return map;
+		return orderService.getOrderMap(req, getSessionCart(req));
 	}
 
 	static String getDumpCartJson() throws IOException
@@ -126,6 +94,11 @@ public class CartService
 			e.printStackTrace();
 		}
 		req.session().set("cart", cartJsonString);
+	}
+
+	public static void emptyCart(Request req)
+	{
+		saveSessionCart(req, getNewCart(req));
 	}
 
 	public static Cart addToCart(Request req, Product product, Integer quantity, Color color, List<Sauce> sauces)
@@ -183,31 +156,6 @@ public class CartService
 		saveSessionCart(req, cart);
 	}
 
-	public static Order placeOrder(Request req)
-	{
-		Optional<String> cartJson = req.session().get("cart").toOptional();
-		ObjectMapper mapper = new ObjectMapper();
-		try
-		{
-			if (!cartJson.isPresent())
-			{
-				return null;
-			}
-			Order order = mapper.readValue(cartJson.get(), Order.class);
-			order.orderNumber = orderService.generateNewOrderNumber(req);
-			order.orderDate = new Date();
-			order.status = OrderStatus.NEW;
-			//needed to solve ng-admin bug not showing embedded linked entities
-			order.sauces = sauceService.getAll(req).stream().map(sauce -> sauce.id).collect(Collectors.toList());
-			orderService.insert(req, order);
-			saveSessionCart(req, getNewCart(req));
-			return order;
-		}
-		catch (IOException e)
-		{
-			logger.error("Error placing order", e);
-		}
-		return null;
-	}
+
 
 }
