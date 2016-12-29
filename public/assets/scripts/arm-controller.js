@@ -42,7 +42,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.onClick = function (order) {
         $scope.loading = true;
         $http.get('/shop/order/detailed/' + order.id).success(function (data) {
-            // console.log($scope.order)
+            console.log(data)
             updateOrderInScope(data);
         }).error(function (data, status) {
             console.log('Error ' + data)
@@ -166,38 +166,21 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             }
             res = Array.from(suggestions);
         });
-
-        // // 1. Создаём новый объект XMLHttpRequest
-        // var xhr = new XMLHttpRequest();
-        // // 2. Конфигурируем его: GET-запрос на URL 'phones.json'
-        // xhr.open('POST', 'https://dadata.ru/api/v1/suggest/address', false);
-        // xhr.setRequestHeader("Content-Type", "application/json");
-        // xhr.setRequestHeader("Authorization", "Token bf69a05b6ce842dcd0cbc159648d19a8c49fdf33");
-        // // 3. Отсылаем запрос
-        // xhr.send(JSON.stringify({"query": "Ярославль " + query}));
-        // // 4. Если код ответа сервера не 200, то это ошибка
-        // if (xhr.status != 200) {
-        //     // обработать ошибку
-        //     alert( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
-        // } else {
-        //     // вывести результат
-        //     return [xhr.responseText];
-        // }
         return res;
     };
 
-    $scope.getLocation = function(val) {
-        return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
-            params: {
-                address: val,
-                sensor: false
-            }
-        }).then(function(response){
-            return response.data.results.map(function(item){
-                return item.formatted_address;
-            });
-        });
-    };
+    // $scope.getLocation = function(val) {
+    //     return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
+    //         params: {
+    //             address: val,
+    //             sensor: false
+    //         }
+    //     }).then(function(response){
+    //         return response.data.results.map(function(item){
+    //             return item.formatted_address;
+    //         });
+    //     });
+    // };
     // <h4>Asynchronous results</h4>
     // <pre>Model: {{asyncSelected | json}}</pre>
     // <input type="text" ng-model="asyncSelected" placeholder="Locations loaded via $http" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
@@ -239,5 +222,18 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         if (!date) return "";
         return date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
     }
+
+    $scope.map = {center: {latitude: 57.6095382, longitude: 39.8788456 }, zoom: 10 };
+    $scope.options = {scrollwheel: true};
+    $scope.coordsUpdates = 0;
+    $scope.dynamicMoveCtr = 0;
+    $scope.markers = [{
+        id: 0,
+        coords: {
+            latitude: 57.6095382, longitude: 39.8788456
+        },
+        options: { draggable: false }
+    }];
+
 }]);
 

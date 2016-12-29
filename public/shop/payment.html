@@ -15,7 +15,7 @@
                 <h2>Доставка</h2>
                 <a class="edit-link edit-link--small" href="/shop/checkout/delivery">
                     {{#equal cart.delivery.name "payable"}}
-                        Платная ({{formatDate cart.deliveryDate day="numeric" month="numeric" year="numeric"}}, {{cart.deliveryTime}})
+                        Платная ({{formatDate cart.deliveryDate}}, {{cart.deliveryTime}})
                     {{else}}
                         Бесплатная
                     {{/equal}}

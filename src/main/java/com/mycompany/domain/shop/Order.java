@@ -19,6 +19,8 @@ public class Order extends Cart
 	//needed to solve ng-admin bug not showing embedded linked entities
 	public List<String> sauces = new ArrayList<>();
 
+	public String lat, lng;
+
 	@Override
 	public String getFullText()
 	{

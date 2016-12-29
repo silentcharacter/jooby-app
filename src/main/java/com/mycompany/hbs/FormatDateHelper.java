@@ -8,16 +8,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class FormatDateHelper implements Helper<Date>
+public class FormatDateHelper implements Helper<Object>
 {
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 	@Override
-	public CharSequence apply(Date param, Options options) throws IOException
+	public CharSequence apply(Object param, Options options) throws IOException
 	{
 		if (param == null) {
 			return "";
 		}
-		return dateFormat.format(param);
+		Date date = param instanceof Date? (Date)param : new Date((Long)param);
+		return dateFormat.format(date);
 	}
 }

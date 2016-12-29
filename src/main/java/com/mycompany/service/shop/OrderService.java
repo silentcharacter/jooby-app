@@ -2,11 +2,19 @@ package com.mycompany.service.shop;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
+import com.google.inject.Inject;
 import com.mongodb.client.MongoDatabase;
 import com.mycompany.domain.shop.Cart;
+import com.mycompany.domain.shop.GeoCodeResults;
 import com.mycompany.domain.shop.Order;
 import com.mycompany.domain.shop.OrderStatus;
 import com.mycompany.service.AbstractService;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.bson.Document;
 import org.jooby.Request;
 import org.slf4j.Logger;
@@ -23,14 +31,9 @@ public class OrderService extends AbstractService<Order>
 {
 
 	private final static Logger logger = LoggerFactory.getLogger(OrderService.class);
-
-	private static ProductService productService = new ProductService();
-	private static ColorService colorService = new ColorService();
-	private static SauceService sauceService = new SauceService();
-	private static DeliveryTypeService deliveryTypeService = new DeliveryTypeService();
-	private static PaymentTypeService paymentTypeService = new PaymentTypeService();
-
-	SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+	private final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+	@Inject
+	private CartService cartService;
 
 	public OrderService()
 	{
@@ -80,8 +83,8 @@ public class OrderService extends AbstractService<Order>
 			order.orderDate = new Date();
 			order.status = OrderStatus.NEW;
 			//needed to solve ng-admin bug not showing embedded linked entities
-			order.sauces = sauceService.getAll(req).stream().map(sauce -> sauce.id).collect(Collectors.toList());
-			insert(req, order);
+			order.sauces = req.require(SauceService.class).getAll().stream().map(sauce -> sauce.id).collect(Collectors.toList());
+			insert(order);
 
 			return order;
 		}
@@ -95,7 +98,7 @@ public class OrderService extends AbstractService<Order>
 	//todo: move to facade
 	public Map<String, Object> getFetchedOrder(String orderId, Request req)
 	{
-		return getOrderMap(req, getById(req, orderId));
+		return getOrderMap(req, getById(orderId));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -103,22 +106,25 @@ public class OrderService extends AbstractService<Order>
 	{
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> map = objectMapper.convertValue(cart, Map.class);
-		map.put("delivery", deliveryTypeService.getById(req, cart.deliveryId));
-		map.put("paymentType", paymentTypeService.getById(req, cart.paymentTypeId));
+		map.put("delivery", req.require(DeliveryTypeService.class).getById(cart.deliveryId));
+		map.put("paymentType", req.require(PaymentTypeService.class).getById(cart.paymentTypeId));
 		List<Map> entries = (List) map.get("entries");
+		SauceService sauceService = req.require(SauceService.class);
+		ProductService productService = req.require(ProductService.class);
+		ColorService colorService = req.require(ColorService.class);
 		entries.forEach(entry ->
 		{
-			entry.put("product", productService.getById(req, (String) entry.get("productId")));
-			entry.put("color", colorService.getById(req, (String) entry.get("colorId")));
+			entry.put("product", productService.getById((String) entry.get("productId")));
+			entry.put("color", colorService.getById((String) entry.get("colorId")));
 			List<String> sauces = (List) entry.get("sauces");
-			entry.put("sauces", sauces.stream().map(sauce -> sauceService.getById(req, sauce)).collect(Collectors.toList()));
+			entry.put("sauces", sauces.stream().map(sauceService::getById).collect(Collectors.toList()));
 		});
 		return map;
 	}
 
 	public Map sendToDelivery(Map<String, Object> order, Request req) throws ParseException
 	{
-		Order saved = getById(req, (String) order.get("id"));
+		Order saved = getById((String) order.get("id"));
 		saved.status = OrderStatus.IN_DELIVERY;
 		saved.deliveryDate = FORMAT.parse((String) order.get("deliveryDate"));
 		saved.deliveryTime = (String) order.get("deliveryTime");
@@ -126,7 +132,38 @@ public class OrderService extends AbstractService<Order>
 		saved.streetNumber = (String) order.get("streetNumber");
 		saved.entrance = (String) order.get("entrance");
 		saved.flat = (String) order.get("flat");
-		update(req, saved);
+		update(saved);
 		return getFetchedOrder(saved.id, req);
+	}
+
+	@Override
+	public void onSave(Order order)
+	{
+		cartService.calculateCart(order);
+		updateCoordinates(order);
+	}
+
+	private void updateCoordinates(Order order)
+	{
+		String url = String.format("http://maps.google.com/maps/api/geocode/json?address=Ярославль+Россия+%s+%s",
+				order.streetName.replaceAll(" ", "+"), order.streetNumber);
+
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpGet request = new HttpGet(url);
+		try
+		{
+			HttpResponse response = client.execute(request);
+			HttpEntity entity = response.getEntity();
+			String strResponse = EntityUtils.toString(entity);
+			ObjectMapper mapper = new ObjectMapper();
+			GeoCodeResults res = mapper.readValue(strResponse, GeoCodeResults.class);
+			order.lat = res.getGeometry().getLat();
+			order.lng = res.getGeometry().getLng();
+		}
+		catch (IOException e)
+		{
+			logger.error("Error getting coordinates", e);
+		}
+
 	}
 }

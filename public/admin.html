@@ -15,6 +15,8 @@
 <script src="/assets/js/angular-strap.js"></script>
 <script src="/assets/js/angular-strap.tpl.js"></script>
 <script src="/assets/js/ui-bootstrap-2.3.1.min.js"></script>
+<script src="/assets/js/lodash.js"></script>
+<script src="/assets/js/angular-google-maps.js"></script>
 
 <script type='text/javascript' >
     window.times = [
@@ -25,7 +27,8 @@
     ];
 </script>
 <script type="text/javascript">
-    var myApp = angular.module('myApp', ['ng-admin', 'googlechart', 'myApp.controllers', 'mgcrea.ngStrap', 'ui.bootstrap']);
+    var myApp = angular.module('myApp', ['ng-admin', 'googlechart', 'myApp.controllers',
+        'mgcrea.ngStrap', 'ui.bootstrap', 'uiGmapgoogle-maps']);
     myApp.config(['NgAdminConfigurationProvider', function(nga) {
         // create an admin application
         var admin = nga.application('Панель администрирования').baseApiUrl('/api/'); // main API endpoint;

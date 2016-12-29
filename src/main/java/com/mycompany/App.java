@@ -77,7 +77,7 @@ public class App extends Jooby {
         });
 
         use(new Auth()
-                        .form("/admin/**", MyUsernamePasswordAuthenticator.class)
+//                        .form("/admin/**", MyUsernamePasswordAuthenticator.class)
                         .form("/api/**", MyUsernamePasswordAuthenticator.class)
 //                        .authorizer("admin", "/admin/**", AuthenticationService.authorizerHandler)
                         .client("/google/**", conf -> new Google2Client(conf.getString("google.key"), conf.getString("google.secret")))

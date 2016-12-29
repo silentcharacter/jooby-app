@@ -2,6 +2,7 @@ package com.mycompany.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.annotation.Deployment;
+import com.mycompany.service.AbstractService;
 import org.bson.types.ObjectId;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
@@ -32,6 +33,10 @@ public class AbstractResource<T> extends Jooby {
         this.entityName = deployment.table();
     }
 
+    protected AbstractService<T> getService(Request req) {
+        return null;
+    }
+
     protected void initializeRoutes() {
         use("/api/" + entityName)
                 .put("/:id", updateHandler)
@@ -45,6 +50,10 @@ public class AbstractResource<T> extends Jooby {
         Jongo jongo = req.require(Jongo.class);
         MongoCollection collection = jongo.getCollection(entityName);
         T object = req.body().to(typeParameterClass);
+        AbstractService<T> service = getService(req);
+        if (service != null) {
+            service.onSave(object);
+        }
         collection.save(object);
         return object;
     };
@@ -157,6 +166,10 @@ public class AbstractResource<T> extends Jooby {
         Jongo jongo = req.require(Jongo.class);
         MongoCollection collection = jongo.getCollection(entityName);
         T object = req.body().to(typeParameterClass);
+        AbstractService<T> service = getService(req);
+        if (service != null) {
+            service.onSave(object);
+        }
         collection.insert(object);
         return object;
     };

@@ -1,6 +1,7 @@
 package com.mycompany.service;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 import com.google.inject.multibindings.StringMapKey;
 import com.mycompany.annotation.Deployment;
 import org.bson.types.ObjectId;
@@ -18,6 +19,8 @@ public abstract class AbstractService<T> {
 
     private Class<T> typeParameterClass = null;
     private String entityName = null;
+    @Inject
+    private Jongo jongo;
 
     public AbstractService(Class<T> typeParameterClass) {
         this.typeParameterClass = typeParameterClass;
@@ -28,42 +31,39 @@ public abstract class AbstractService<T> {
         this.entityName = deployment.table();
     }
 
-    public List<T> getAll(Request req) {
-        return getAll(req, 0, Integer.MAX_VALUE, "{_id: -1}", "{}", Collections.emptyList());
+    private MongoCollection getCollection() {
+        return jongo.getCollection(entityName);
     }
 
-    public List<T> getAll(Request req, Integer page, Integer perPage, String sort, String query, List<Object> filterValues) {
-        Jongo jongo = req.require(Jongo.class);
-        MongoCollection collection = jongo.getCollection(entityName);
-        MongoCursor<T> cursor = collection.find(query, filterValues.toArray())
+    public List<T> getAll() {
+        return getAll(0, Integer.MAX_VALUE, "{_id: -1}", "{}", Collections.emptyList());
+    }
+
+    public List<T> getAll(Integer page, Integer perPage, String sort, String query, List<Object> filterValues) {
+        MongoCursor<T> cursor = getCollection().find(query, filterValues.toArray())
                 .sort(sort).limit(perPage).skip(page * perPage)
                 .as(typeParameterClass);
         return Lists.newArrayList(cursor.iterator());
     }
 
-    public T getById(Request req, String id) {
-        Jongo jongo = req.require(Jongo.class);
-        MongoCollection collection = jongo.getCollection(entityName);
-        return collection.findOne(new ObjectId(id)).as(typeParameterClass);
+    public T getById(String id) {
+        return getCollection().findOne(new ObjectId(id)).as(typeParameterClass);
     }
 
     public T getBy(String field, String value, Request req) {
-        Jongo jongo = req.require(Jongo.class);
-        MongoCollection collection = jongo.getCollection(entityName);
-        return collection.findOne(String.format("{%s: '%s'}", field, value)).as(typeParameterClass);
+        return getCollection().findOne(String.format("{%s: '%s'}", field, value)).as(typeParameterClass);
     }
 
-    public T insert(Request req, T obj) {
-        Jongo jongo = req.require(Jongo.class);
-        MongoCollection collection = jongo.getCollection(entityName);
-        collection.insert(obj);
+    public T insert(T obj) {
+        getCollection().insert(obj);
         return obj;
     }
 
-    public T update(Request req, T obj) {
-        Jongo jongo = req.require(Jongo.class);
-        MongoCollection collection = jongo.getCollection(entityName);
-        collection.save(obj);
+    public T update(T obj) {
+        onSave(obj);
+        getCollection().save(obj);
         return obj;
     }
+
+    public void onSave(T object) {}
 }

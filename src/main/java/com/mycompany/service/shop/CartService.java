@@ -2,33 +2,40 @@ package com.mycompany.service.shop;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mycompany.App;
+import com.google.inject.Inject;
 import com.mycompany.domain.shop.*;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.typesafe.config.Config;
 import org.jooby.Request;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 public class CartService
 {
+	private ProductService productService;
+	private ColorService colorService;
+	private SauceService sauceService;
+	private DeliveryTypeService deliveryTypeService;
+	private PaymentTypeService paymentTypeService;
 
-	private static DeliveryTypeService deliveryTypeService = new DeliveryTypeService();
-	private static PaymentTypeService paymentTypeService = new PaymentTypeService();
-	private static OrderService orderService = new OrderService();
+	@Inject
+	public CartService(ProductService productService, ColorService colorService, SauceService sauceService,
+			DeliveryTypeService deliveryTypeService, PaymentTypeService paymentTypeService)
+	{
+		this.productService = productService;
+		this.colorService = colorService;
+		this.sauceService = sauceService;
+		this.deliveryTypeService = deliveryTypeService;
+		this.paymentTypeService = paymentTypeService;
+	}
 
-	public static Cart getSessionCart(Request req)
+	public Cart getSessionCart(Request req)
 	{
 		Optional<String> cartJson = req.session().get("cart").toOptional();
 		ObjectMapper mapper = new ObjectMapper();
@@ -60,28 +67,28 @@ public class CartService
 		return cart;
 	}
 
-	public static Map<String, Object> getFetchedCart(Request req)
+	public Map<String, Object> getFetchedCart(Request req)
 	{
-		return orderService.getOrderMap(req, getSessionCart(req));
+		return req.require(OrderService.class).getOrderMap(req, getSessionCart(req));
 	}
 
-	static String getDumpCartJson() throws IOException
+	private String getDumpCartJson() throws IOException
 	{
 		byte[] encoded = Files.readAllBytes(Paths.get(System.getProperty("user.dir") + "/public/shop/cart.json"));
 		return new String(encoded, "utf-8");
 	}
 
-	private static Cart getNewCart(Request req)
+	private Cart getNewCart(Request req)
 	{
 		Cart cart = new Cart();
 		DeliveryType deliveryType = deliveryTypeService.getBy("name", DeliveryType.FREE, req);
 		cart.deliveryId = deliveryType.id;
 		cart.deliveryPrice = deliveryType.price;
-		cart.paymentTypeId = paymentTypeService.getBy("name", PaymentType.OFFLINE, req).id;
+		cart.paymentTypeId = req.require(PaymentTypeService.class).getBy("name", PaymentType.OFFLINE, req).id;
 		return cart;
 	}
 
-	private static void saveSessionCart(Request req, Cart cart)
+	private void saveSessionCart(Request req, Cart cart)
 	{
 		String cartJsonString = "";
 		try
@@ -96,12 +103,12 @@ public class CartService
 		req.session().set("cart", cartJsonString);
 	}
 
-	public static void emptyCart(Request req)
+	public void emptyCart(Request req)
 	{
 		saveSessionCart(req, getNewCart(req));
 	}
 
-	public static Cart addToCart(Request req, Product product, Integer quantity, Color color, List<Sauce> sauces)
+	public Cart addToCart(Request req, Product product, Integer quantity, Color color, List<Sauce> sauces)
 	{
 		Cart cart = getSessionCart(req);
 		cart.addEntry(product, quantity, color, sauces);
@@ -109,7 +116,7 @@ public class CartService
 		return cart;
 	}
 
-	public static Cart updateCartRow(Request req, Integer entryNo, Integer quantity)
+	public Cart updateCartRow(Request req, Integer entryNo, Integer quantity)
 	{
 		Cart cart = getSessionCart(req);
 		cart.updateEntry(entryNo, quantity);
@@ -117,7 +124,7 @@ public class CartService
 		return cart;
 	}
 
-	public static Cart removeFromCart(Request req, Integer entryNo)
+	public Cart removeFromCart(Request req, Integer entryNo)
 	{
 		Cart cart = getSessionCart(req);
 		cart.removeEntry(entryNo);
@@ -125,7 +132,17 @@ public class CartService
 		return cart;
 	}
 
-	public static void saveContactInfo(Request req, Cart cartForm)
+	public void calculateCart(Cart cart) {
+		cart.deliveryPrice = deliveryTypeService.getById(cart.deliveryId).price;
+		cart.entries.forEach(e -> {
+			e.productPrice = productService.getById(e.productId).price;
+			e.colorPrice = colorService.getById(e.colorId).price;
+			e.saucePrice = e.sauces.stream().mapToInt(sauce -> sauceService.getById(sauce).price).sum();
+		});
+		cart.calculate();
+	}
+
+	public void saveContactInfo(Request req, Cart cartForm)
 	{
 		Cart cart = getSessionCart(req);
 		cart.name = cartForm.name;
@@ -137,7 +154,7 @@ public class CartService
 		saveSessionCart(req, cart);
 	}
 
-	public static void setDeliveryOptions(Request req, String deliveryType, Date deliveryDate, String deliveryTime)
+	public void setDeliveryOptions(Request req, String deliveryType, Date deliveryDate, String deliveryTime)
 	{
 		Cart cart = getSessionCart(req);
 		DeliveryType delivery = deliveryTypeService.getBy("name", deliveryType, req);
@@ -149,7 +166,7 @@ public class CartService
 		saveSessionCart(req, cart);
 	}
 
-	public static void setPaymentType(Request req, String payment)
+	public void setPaymentType(Request req, String payment)
 	{
 		Cart cart = getSessionCart(req);
 		cart.paymentTypeId = paymentTypeService.getBy("name", payment, req).id;
