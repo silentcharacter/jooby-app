@@ -184,7 +184,6 @@ public class ShopApp extends Jooby
 
 		sse("/events", sse -> {
 			listeners.add(sse);
-			logger.info("Listeners: " + listeners.size());
 			sse.onClose(() -> listeners.remove(sse));
 			sse.keepAlive(15, TimeUnit.SECONDS);
 		});
@@ -192,7 +191,6 @@ public class ShopApp extends Jooby
 
 	private void sendEvent(Order order)
 	{
-		logger.info("sending events");
 		listeners.forEach(sse -> sse.send(order, "json"));
 	}
 

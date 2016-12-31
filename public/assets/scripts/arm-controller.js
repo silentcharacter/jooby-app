@@ -155,7 +155,6 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     //SSE
     // handles the callback from the received event
     var handleCallback = function (msg) {
-        console.log(msg.data);
         $scope.$apply(function () {
             var order = JSON.parse(msg.data);
             $scope.orders.unshift(order);
@@ -168,9 +167,6 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     source.onopen = function () {
         console.log('opened');
     };
-    source.addEventListener('open', function(e) {
-        console.log('event opened');
-    }, false);
     source.onmessage = function(e) {
         handleCallback(e);
     };
