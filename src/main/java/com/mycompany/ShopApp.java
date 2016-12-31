@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.mycompany.constant.ShopAppConstants.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class ShopApp extends Jooby
@@ -21,6 +23,8 @@ public class ShopApp extends Jooby
 	private static List<String> possibleDateTimes = new ArrayList<String>(){{
 		addAll(Arrays.asList("10:00-13:00", "13:00-16:00", "16:00-19:00", "19:00-22:00"));
 	}};
+
+	private static Logger logger = LoggerFactory.getLogger(ShopApp.class);
 
 	private static List<Sse> listeners = Collections.synchronizedList(new ArrayList<Sse>());
 
@@ -180,6 +184,7 @@ public class ShopApp extends Jooby
 
 		sse("/events", sse -> {
 			listeners.add(sse);
+			logger.info("Listeners: " + listeners.size());
 			sse.onClose(() -> listeners.remove(sse));
 			sse.keepAlive(15, TimeUnit.SECONDS);
 		});
@@ -187,6 +192,7 @@ public class ShopApp extends Jooby
 
 	private void sendEvent(Order order)
 	{
+		logger.info("sending events");
 		listeners.forEach(sse -> sse.send(order, "json"));
 	}
 

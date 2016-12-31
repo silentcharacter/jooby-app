@@ -94,7 +94,6 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
                 orders.push(order);
                 $scope.markers = [];
                 for (var i = 0; i < orders.length; i++) {
-                    console.log('test')
                     $scope.markers.push({
                         id: orders[i].id,
                         coords: {
@@ -158,6 +157,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     var handleCallback = function (msg) {
         $scope.$apply(function () {
             var order = JSON.parse(msg.data);
+            console.log(order);
             $scope.orders.unshift(order);
             if (order.status === 'Новый') {
                 $scope.newOrders++;
