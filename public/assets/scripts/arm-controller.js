@@ -165,6 +165,9 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         });
     };
     var source = new EventSource('/events');
+    source.onopen = function () {
+        console.log('opened');
+    };
     source.onmessage = function(e) {
         handleCallback(e);
     };
