@@ -155,9 +155,9 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     //SSE
     // handles the callback from the received event
     var handleCallback = function (msg) {
+        console.log(msg.data);
         $scope.$apply(function () {
             var order = JSON.parse(msg.data);
-            console.log(order);
             $scope.orders.unshift(order);
             if (order.status === 'Новый') {
                 $scope.newOrders++;
