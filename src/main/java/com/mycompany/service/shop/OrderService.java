@@ -145,8 +145,8 @@ public class OrderService extends AbstractService<Order>
 
 	private void updateCoordinates(Order order)
 	{
-		String url = String.format("http://maps.google.com/maps/api/geocode/json?address=Ярославль+Россия+%s+%s",
-				order.streetName.replaceAll(" ", "+"), order.streetNumber);
+		String url = String.format("http://maps.google.com/maps/api/geocode/json?address=Россия+Ярославль+%s+%s",
+				order.streetName.trim().replaceAll(" ", "+"), order.streetNumber.trim());
 
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpGet request = new HttpGet(url);

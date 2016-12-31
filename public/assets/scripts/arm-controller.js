@@ -10,6 +10,11 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         console.log('Error ' + data)
     });
 
+    $scope.detailedView = false;
+    $scope.switchView = function() {
+        $scope.detailedView = !$scope.detailedView;
+    };
+
     function getNewOrdersCount() {
         //get new orders count
         var request = new XMLHttpRequest();
@@ -42,7 +47,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.onClick = function (order) {
         $scope.loading = true;
         $http.get('/shop/order/detailed/' + order.id).success(function (data) {
-            console.log(data)
+            // console.log(data)
             updateOrderInScope(data);
         }).error(function (data, status) {
             console.log('Error ' + data)
@@ -58,6 +63,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         }
         $scope.order = order;
         $scope.rowsCollapsed = false;
+        $scope.detailedView = true;
     }
 
     function loadSchedule(order) {
@@ -78,8 +84,21 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             for (var i = 0; i < $scope.times1.length; i++) {
                 $scope.times1[i].open = order.deliveryTime === $scope.times1[i].value;
             }
-            if ($scope.schedule[order.deliveryTime])
-                $scope.schedule[order.deliveryTime].push(order);
+            var orders = $scope.schedule[order.deliveryTime];
+            if (orders) {
+                orders.push(order);
+                $scope.markers = [];
+                for (var i = 0; i < orders.length; i++) {
+                    console.log('test')
+                    $scope.markers.push({
+                        id: orders[i].id,
+                        coords: {
+                            latitude: orders[i].lat, longitude: orders[i].lng
+                        },
+                        options: { draggable: false }
+                    });
+                }
+            }
             $scope.loading = false;
         }).error(function (data, status) {
             console.log('Error ' + data);
@@ -192,7 +211,6 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.submit = function (order) {
         order = angular.copy(order);
         order.deliveryDate = formatDate(order.deliveryDate);
-        console.log(order.deliveryDate)
         $scope.loading = true;
         $http.post('/shop/order/delivery', order).success(function (data) {
             updateOrderInScope(data);
@@ -200,7 +218,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             getNewOrdersCount();
             $alert({title: 'Заказ сохранен', content: '',
                 placement: 'top', type: 'info', show: true, container:'.page-header', animation:"am-fade-and-slide-top", duration: 4});
-            console.log(data);
+            // console.log(data);
         }).error(function (data, status) {
             console.log('Error ' + data);
             $scope.loading = false;
@@ -223,17 +241,9 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         return date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
     }
 
-    $scope.map = {center: {latitude: 57.6095382, longitude: 39.8788456 }, zoom: 10 };
+    $scope.map = {center: {latitude: 57.6363519, longitude: 39.8788456 }, zoom: 10 };
     $scope.options = {scrollwheel: true};
-    $scope.coordsUpdates = 0;
-    $scope.dynamicMoveCtr = 0;
-    $scope.markers = [{
-        id: 0,
-        coords: {
-            latitude: 57.6095382, longitude: 39.8788456
-        },
-        options: { draggable: false }
-    }];
+    $scope.markers = [];
 
 }]);
 

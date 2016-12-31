@@ -1,15 +1,25 @@
 <div class="row">
     <div class="">
-        <ma-view-actions><ma-back-button></ma-back-button></ma-view-actions>
         <div class="page-header">
-            <h2>Обработка заказов</h2>
+            <h2>Обработка заказов
+                <span class="count ">{{newOrders}}</span>
+                <a class="btn btn-default right" ng-if="detailedView" ng-click="switchView()">
+                    <span class="glyphicon glyphicon-chevron-left" ></span>&nbsp;
+                    <span class="hidden-xs ng-binding">К списку</span>
+                </a>
+                <a class="btn btn-default right" ng-if="!detailedView && order" ng-click="switchView()">
+                    <span class="glyphicon glyphicon-chevron-right" ></span>&nbsp;
+                    <span class="hidden-xs ng-binding">К заказу</span>
+                </a>
+            </h2>
+
         </div>
     </div>
 
     <div class="container">
         <div class="row match-my-cols">
-            <div class="col-sm-4 same-height">
-                <h3>Список заказов <span class="count ">{{newOrders}}</span></h3><hr/>
+            <div class="col-sm-12 same-height" ng-show="!detailedView">
+                <h3>Список заказов</h3><hr/>
                 <div class="box">
                     <table class="grid table order-list ">
                         <thead>
@@ -39,7 +49,7 @@
                     </table>
                 </div>
             </div>
-            <div class="col-sm-4 same-height">
+            <div class="col-sm-6 same-height" ng-show="detailedView">
                 <form name="form" class="css-form" novalidate>
                 <div class="box" ng-if="order">
                     <h3>{{order.name}} <span class="right"><a href="tel:{{order.phone}}">{{order.phone}}</a></span></h3><hr/>
@@ -117,10 +127,10 @@
 
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label">Координаты:</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-4" style="padding-right: 2px">
                             <input class="form-control" type="text" value="{{order.lat}}" readonly>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-4" style="padding-left: 2px">
                             <input class="form-control" type="text" value="{{order.lng}}" readonly>
                         </div>
                     </div>
@@ -128,7 +138,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label">Сумма:</label>
                         <div class="col-sm-8">
-                            <input class="form-control" type="text" value="{{order.totalPrice}}" readonly>
+                            <input class="form-control" type="text" value="{{order.totalPrice}}" readonly style="text-align: right">
                         </div>
                     </div>
 
@@ -168,10 +178,17 @@
                 </div>
                 </form>
             </div>
-            <div class="col-sm-4 same-height">
+            <div class="col-sm-6 same-height" ng-show="detailedView">
                 <div class="box" ng-if="order.deliveryDate">
                     <h3>График доставки<span class="right">{{order.deliveryDate | date : "dd/MM/yyyy"}}</span></h3>
-                    <accordion close-others="true">
+                    <div id="map_canvas" ng-show="schedule[order.deliveryTime].length">
+                        <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options">
+                            <ui-gmap-marker ng-repeat="marker in markers" coords="marker.coords" options="marker.options" idkey="marker.id">
+                            </ui-gmap-marker>
+                        </ui-gmap-google-map>
+                    </div>
+                    <br/>
+                    <accordion close-others="true" >
                         <accordion-group heading="{{time.value}}" ng-repeat="time in times1" is-open="time.open">
                             <table class="table grid">
                                 <tbody>
@@ -188,12 +205,6 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div id="map_canvas" ng-show="schedule[time.value].length">
-                                <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options">
-                                    <ui-gmap-marker ng-repeat="marker in markers" coords="marker.coords" options="marker.options" idkey="marker.id">
-                                    </ui-gmap-marker>
-                                </ui-gmap-google-map>
-                            </div>
                             <div ng-hide="schedule[time.value].length">
                                 Пока нет заказов
                             </div>
@@ -267,6 +278,9 @@
         margin: 3px;
     }
     .count {
+        position: fixed;
+        margin-left: 10px;
+        margin-top: 2px;
         display: inline-block;
         text-align: center;
         background-color: #dff0d8;
