@@ -51,6 +51,7 @@
             </div>
             <div class="col-sm-6 same-height" ng-show="detailedView">
                 <form name="form" class="css-form" novalidate>
+                <fieldset ng-disabled="order.status=='Отменен'">
                 <div class="box" ng-if="order">
                     <h3>{{order.name}} <span class="right"><a href="tel:{{order.phone}}">{{order.phone}}</a></span></h3><hr/>
                     <div class="form-group row">
@@ -164,9 +165,12 @@
                         </tbody>
                     </table>
 
-                    <div class="form-group row">
+                    <div class="form-group row" ng-show="!cancelConfirm">
+                        <div style="padding-bottom: 15px">
+                            <br/>
+                        </div>
                         <div class="col-sm-4">
-                            <button class="btn btn-danger btn-lg btn-block">Отменить</button>
+                            <button ng-click="showCancelConfirm(true)" class="btn btn-danger btn-lg btn-block">Отменить</button>
                         </div>
                         <div class="col-sm-8">
                             <button ng-click="submit(order)" type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="form.$invalid">
@@ -174,8 +178,28 @@
                             </button>
                         </div>
                     </div>
+                    <div class="form-group row" ng-show="cancelConfirm && order.status!='Отменен'">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div style="padding-bottom: 5px">
+                                    Вы уверены, что хотите отменить заказ?
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-4">
+                                        <button ng-click="showCancelConfirm(false)" class="btn btn-lg btn-block">Назад</button>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <button ng-click="cancel(order)" class="btn btn-danger btn-lg btn-block">
+                                            Отменить заказ
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!--<pre>{{form | json}}</pre>-->
                 </div>
+                </fieldset>
                 </form>
             </div>
             <div class="col-sm-6 same-height" ng-show="detailedView">
@@ -278,9 +302,7 @@
         margin: 3px;
     }
     .count {
-        position: fixed;
         margin-left: 10px;
-        margin-top: 2px;
         display: inline-block;
         text-align: center;
         background-color: #dff0d8;

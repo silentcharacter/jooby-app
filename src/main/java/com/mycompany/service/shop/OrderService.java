@@ -34,6 +34,18 @@ public class OrderService extends AbstractService<Order>
 	private final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	@Inject
 	private CartService cartService;
+	@Inject
+	private DeliveryTypeService deliveryTypeService;
+	@Inject
+	private PaymentTypeService paymentTypeService;
+	@Inject
+	private SauceService sauceService;
+	@Inject
+	private ProductService productService;
+	@Inject
+	private ColorService colorService;
+	@Inject
+	private MongoDatabase db;
 
 	public OrderService()
 	{
@@ -42,7 +54,6 @@ public class OrderService extends AbstractService<Order>
 
 	private String generateNewOrderNumber(Request req)
 	{
-		MongoDatabase db = req.require(MongoDatabase.class);
 		Document doc = db.runCommand(new Document("$eval", "getNextSequence('orderNumber')"));
 		String result = String.valueOf(doc.getDouble("retval").intValue());
 		while (result.length() < 8)
@@ -52,14 +63,14 @@ public class OrderService extends AbstractService<Order>
 		return result;
 	}
 
-	public Map<String, String> findByPhone(Request req, String phone)
+	public Map<String, String> findByPhone(String phone)
 	{
 		Map<String, String> map = new HashMap<>();
 		if (Strings.isNullOrEmpty(phone))
 		{
 			return map;
 		}
-		Order order = getBy("phone", phone, req);
+		Order order = getBy("phone", phone);
 		map.put("name", order.name);
 		map.put("streetName", order.streetName);
 		map.put("streetNumber", order.streetNumber);
@@ -83,7 +94,7 @@ public class OrderService extends AbstractService<Order>
 			order.orderDate = new Date();
 			order.status = OrderStatus.NEW;
 			//needed to solve ng-admin bug not showing embedded linked entities
-			order.sauces = req.require(SauceService.class).getAll().stream().map(sauce -> sauce.id).collect(Collectors.toList());
+			order.sauces = sauceService.getAll().stream().map(sauce -> sauce.id).collect(Collectors.toList());
 			insert(order);
 
 			return order;
@@ -96,22 +107,19 @@ public class OrderService extends AbstractService<Order>
 	}
 
 	//todo: move to facade
-	public Map<String, Object> getFetchedOrder(String orderId, Request req)
+	public Map<String, Object> getFetchedOrder(String orderId)
 	{
-		return getOrderMap(req, getById(orderId));
+		return getOrderMap(getById(orderId));
 	}
 
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> getOrderMap(Request req, Cart cart)
+	public Map<String, Object> getOrderMap(Cart cart)
 	{
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> map = objectMapper.convertValue(cart, Map.class);
-		map.put("delivery", req.require(DeliveryTypeService.class).getById(cart.deliveryId));
-		map.put("paymentType", req.require(PaymentTypeService.class).getById(cart.paymentTypeId));
+		map.put("delivery", deliveryTypeService.getById(cart.deliveryId));
+		map.put("paymentType", paymentTypeService.getById(cart.paymentTypeId));
 		List<Map> entries = (List) map.get("entries");
-		SauceService sauceService = req.require(SauceService.class);
-		ProductService productService = req.require(ProductService.class);
-		ColorService colorService = req.require(ColorService.class);
 		entries.forEach(entry ->
 		{
 			entry.put("product", productService.getById((String) entry.get("productId")));
@@ -122,7 +130,7 @@ public class OrderService extends AbstractService<Order>
 		return map;
 	}
 
-	public Map sendToDelivery(Map<String, Object> order, Request req) throws ParseException
+	public Map sendToDelivery(Map<String, Object> order) throws ParseException
 	{
 		Order saved = getById((String) order.get("id"));
 		saved.status = OrderStatus.IN_DELIVERY;
@@ -133,7 +141,7 @@ public class OrderService extends AbstractService<Order>
 		saved.entrance = (String) order.get("entrance");
 		saved.flat = (String) order.get("flat");
 		update(saved);
-		return getFetchedOrder(saved.id, req);
+		return getFetchedOrder(saved.id);
 	}
 
 	@Override
@@ -165,5 +173,13 @@ public class OrderService extends AbstractService<Order>
 			logger.error("Error getting coordinates", e);
 		}
 
+	}
+
+	public Map cancelOrder(String id)
+	{
+		Order order = getById(id);
+		order.status = OrderStatus.CANCELLED;
+		update(order);
+		return getFetchedOrder(order.id);
 	}
 }

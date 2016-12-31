@@ -69,7 +69,7 @@ public class CartService
 
 	public Map<String, Object> getFetchedCart(Request req)
 	{
-		return req.require(OrderService.class).getOrderMap(req, getSessionCart(req));
+		return req.require(OrderService.class).getOrderMap(getSessionCart(req));
 	}
 
 	private String getDumpCartJson() throws IOException
@@ -81,10 +81,10 @@ public class CartService
 	private Cart getNewCart(Request req)
 	{
 		Cart cart = new Cart();
-		DeliveryType deliveryType = deliveryTypeService.getBy("name", DeliveryType.FREE, req);
+		DeliveryType deliveryType = deliveryTypeService.getBy("name", DeliveryType.FREE);
 		cart.deliveryId = deliveryType.id;
 		cart.deliveryPrice = deliveryType.price;
-		cart.paymentTypeId = req.require(PaymentTypeService.class).getBy("name", PaymentType.OFFLINE, req).id;
+		cart.paymentTypeId = req.require(PaymentTypeService.class).getBy("name", PaymentType.OFFLINE).id;
 		return cart;
 	}
 
@@ -157,7 +157,7 @@ public class CartService
 	public void setDeliveryOptions(Request req, String deliveryType, Date deliveryDate, String deliveryTime)
 	{
 		Cart cart = getSessionCart(req);
-		DeliveryType delivery = deliveryTypeService.getBy("name", deliveryType, req);
+		DeliveryType delivery = deliveryTypeService.getBy("name", deliveryType);
 		cart.deliveryId = delivery.id;
 		cart.deliveryPrice = delivery.price;
 		cart.deliveryDate = deliveryDate;
@@ -169,7 +169,7 @@ public class CartService
 	public void setPaymentType(Request req, String payment)
 	{
 		Cart cart = getSessionCart(req);
-		cart.paymentTypeId = paymentTypeService.getBy("name", payment, req).id;
+		cart.paymentTypeId = paymentTypeService.getBy("name", payment).id;
 		saveSessionCart(req, cart);
 	}
 

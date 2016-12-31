@@ -10,6 +10,10 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         console.log('Error ' + data)
     });
 
+    $scope.cancelConfirm = false;
+    $scope.showCancelConfirm = function (bool) {
+        $scope.cancelConfirm = bool;
+    };
     $scope.detailedView = false;
     $scope.switchView = function() {
         $scope.detailedView = !$scope.detailedView;
@@ -55,6 +59,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     };
 
     function updateOrderInScope(order) {
+        $scope.cancelConfirm = false;
         if (order.deliveryDate) {
             order.deliveryDate = new Date(order.deliveryDate);
             loadSchedule(order);
@@ -208,6 +213,25 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     //     <i class="glyphicon glyphicon-remove"></i> No Results Found
     // </div>
 
+    $scope.cancel = function (order) {
+        order = angular.copy(order);
+        $scope.loading = true;
+        $http.delete('/shop/order/' + order.id).success(function (data) {
+            updateOrderInScope(data);
+            updateOrderInList(data);
+            getNewOrdersCount();
+            $alert({title: 'Заказ ' + data.orderNumber + ' отменен', content: '',
+                placement: 'top', type: 'info', show: true, container:'.page-header', animation:"am-fade-and-slide-top", duration: 4});
+            // console.log(data);
+        }).error(function (data, status) {
+            console.log('Error ' + data);
+            $scope.cancelConfirm = false;
+            $scope.loading = false;
+            $alert({title: 'Ошибка при отмене заказа!', content: data,
+                placement: 'top', type: 'danger', show: true, container:'.page-header', animation:"am-fade-and-slide-top", duration: 4});
+        });
+    };
+
     $scope.submit = function (order) {
         order = angular.copy(order);
         order.deliveryDate = formatDate(order.deliveryDate);
@@ -216,7 +240,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             updateOrderInScope(data);
             updateOrderInList(data);
             getNewOrdersCount();
-            $alert({title: 'Заказ сохранен', content: '',
+            $alert({title: 'Заказ ' + data.orderNumber + ' сохранен', content: '',
                 placement: 'top', type: 'info', show: true, container:'.page-header', animation:"am-fade-and-slide-top", duration: 4});
             // console.log(data);
         }).error(function (data, status) {

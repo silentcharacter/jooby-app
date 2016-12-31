@@ -50,7 +50,7 @@ public abstract class AbstractService<T> {
         return getCollection().findOne(new ObjectId(id)).as(typeParameterClass);
     }
 
-    public T getBy(String field, String value, Request req) {
+    public T getBy(String field, String value) {
         return getCollection().findOne(String.format("{%s: '%s'}", field, value)).as(typeParameterClass);
     }
 

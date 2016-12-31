@@ -1,5 +1,6 @@
 package com.mycompany;
 
+import com.google.inject.Inject;
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.shop.*;
@@ -31,7 +32,6 @@ public class ShopApp extends Jooby
 		use(new Colors());
 		use(new Sauces());
 		use(new GlobalConfigs());
-
 
 		get("/shop", req -> Results.html("shop/shop")
 				.put("templateName", "shop/main")
@@ -160,23 +160,23 @@ public class ShopApp extends Jooby
 		get("/shop/thankyou", req -> {
 				String orderNumber = req.param("order").value();
 				return Results.html("shop/checkout")
-					.put("cart", req.require(OrderService.class).getBy("orderNumber", orderNumber, req))
+					.put("cart", req.require(OrderService.class).getBy("orderNumber", orderNumber))
 					.put("step", "thankyou")
 					.put("orderNumber", orderNumber)
 					.put("templateName", "shop/thankyou");
 		});
 
-		get("/orderByPhone", request ->
-				request.require(OrderService.class).findByPhone(request, request.param("phone").value()));
+		get("/orderByPhone", request -> request.require(OrderService.class).findByPhone(request.param("phone").value()));
 
 		//ARM
-		get("/shop/order/detailed/:id", req -> req.require(OrderService.class).getFetchedOrder(req.param("id").value(), req));
+		get("/shop/order/detailed/:id", req -> req.require(OrderService.class).getFetchedOrder(req.param("id").value()));
 
 		post("/shop/order/delivery", req -> {
 			Map<String, Object> order = req.body().to(Map.class);
-			return req.require(OrderService.class).sendToDelivery(order, req);
+			return req.require(OrderService.class).sendToDelivery(order);
 		});
 
+		delete("/shop/order/:id", req -> req.require(OrderService.class).cancelOrder(req.param("id").value()));
 
 		sse("/events", sse -> {
 			listeners.add(sse);
