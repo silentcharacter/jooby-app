@@ -168,6 +168,9 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     source.onopen = function () {
         console.log('opened');
     };
+    source.addEventListener('open', function(e) {
+        console.log('event opened');
+    }, false);
     source.onmessage = function(e) {
         handleCallback(e);
     };
