@@ -164,7 +164,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             }
         });
     };
-    var source = new EventSource('/events');
+    var source = new EventSource('https://localhost:8443/events');
     source.onopen = function () {
         console.log('opened');
     };
