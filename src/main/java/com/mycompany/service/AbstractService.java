@@ -55,6 +55,7 @@ public abstract class AbstractService<T> {
     }
 
     public T insert(T obj) {
+        onSave(obj);
         getCollection().insert(obj);
         return obj;
     }
