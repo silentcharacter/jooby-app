@@ -25,7 +25,9 @@
                         <thead>
                         <tr>
                             <th class="ng-admin-type-string">Номер</th>
-                            <th class="ng-admin-type-datetime">Дата</th>
+                            <th class="ng-admin-type-datetime">Дата заказа</th>
+                            <th class="ng-admin-type-datetime">Дата доставки</th>
+                            <th class="ng-admin-type-datetime">Время доставки</th>
                             <th class="ng-admin-type-string">Статус</th>
                             <th class="ng-admin-type-string">Сумма</th>
                         </tr>
@@ -37,6 +39,12 @@
                             </td>
                             <td>
                                 {{order.orderDate | date : "dd-MM-yyyy"}}
+                            </td>
+                            <td>
+                                {{order.deliveryDate | date : "dd-MM-yyyy"}}
+                            </td>
+                            <td>
+                                {{order.deliveryTime}}
                             </td>
                             <td>
                                 {{order.status}}
@@ -202,10 +210,10 @@
                 </fieldset>
                 </form>
             </div>
-            <div class="col-sm-6 same-height" ng-show="detailedView">
+            <div class="col-sm-6 same-height" ng-if="detailedView">
                 <div class="box" ng-if="order.deliveryDate">
                     <h3>График доставки<span class="right">{{order.deliveryDate | date : "dd/MM/yyyy"}}</span></h3>
-                    <div id="map_canvas" ng-show="schedule[order.deliveryTime].length">
+                    <div id="map_canvas" ng-if="schedule[order.deliveryTime].length">
                         <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options">
                             <ui-gmap-marker ng-repeat="marker in markers" coords="marker.coords" options="marker.options" idkey="marker.id">
                             </ui-gmap-marker>
@@ -247,29 +255,8 @@
 </div>
 
 <style>
-    .map-responsive{
-        overflow:hidden;
-        /*padding-bottom:56.25%;*/
-        position:relative;
-        /*height:100px;*/
-    }
-    #map_canvas {
-        height: 200px;
-        width: 100%;
-        margin: 0px;
-    }
+    .angular-google-map-container { height: 250px; }
 
-    #map_canvas {
-        position: relative;
-    }
-
-    .angular-google-map-container {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-    }
     #loadingDiv{
         position:fixed;
         top:0px;
@@ -366,8 +353,4 @@
         float: right;
     }
 </style>
-<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwn3SpHj61PVeyKuxkZSxcIprf1keZhXI"-->
-        <!--async defer></script>-->
-<!--<link href="https://code.google.com/apis/maps/documentation/javascript/examples/standard.css" rel="stylesheet" type="text/css" />-->
-<!--<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyAwn3SpHj61PVeyKuxkZSxcIprf1keZhXI"></script>-->
 </body>

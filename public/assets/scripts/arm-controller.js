@@ -1,4 +1,5 @@
-angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$alert', function($scope, $http, $alert) {
+angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$alert',
+    function($scope, $http, $alert) {
 
     //get order list
     $scope.loading = true;
@@ -51,7 +52,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.onClick = function (order) {
         $scope.loading = true;
         $http.get('/shop/order/detailed/' + order.id).success(function (data) {
-            // console.log(data)
+            // console.log($scope.map.control.getGMap())
             updateOrderInScope(data);
         }).error(function (data, status) {
             console.log('Error ' + data)
@@ -91,7 +92,6 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             }
             var orders = $scope.schedule[order.deliveryTime];
             if (orders) {
-                orders.push(order);
                 $scope.markers = [];
                 for (var i = 0; i < orders.length; i++) {
                     $scope.markers.push({
@@ -99,9 +99,17 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
                         coords: {
                             latitude: orders[i].lat, longitude: orders[i].lng
                         },
-                        options: { draggable: false }
+                        options: { draggable: false}
                     });
                 }
+                orders.push(order);
+                $scope.markers.push({
+                    id: order.id,
+                    coords: {
+                        latitude: order.lat, longitude: order.lng
+                    },
+                    options: { draggable: false, icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png' }
+                });
             }
             $scope.loading = false;
         }).error(function (data, status) {
@@ -163,7 +171,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             }
         });
     };
-    var source = new EventSource('https://igolni.com/events');
+    var source = new EventSource('/events');
     source.onopen = function () {
         console.log('opened');
     };
@@ -264,10 +272,16 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     function formatDate(date) {
         if (!date) return "";
-        return date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
+        var month = "" + date.getMonth()+1;
+        if (month.length == 1)
+            month = "0" + month;
+        var day = "" + date.getDate();
+        if (day.length == 1)
+            day = "0" + day;
+        return date.getFullYear() + "-" + month + "-" + day;
     }
 
-    $scope.map = {center: {latitude: 57.6363519, longitude: 39.8788456 }, zoom: 10 };
+    $scope.map = {center: {latitude: 57.6363519, longitude: 39.8788456 }, zoom: 10};
     $scope.options = {scrollwheel: true};
     $scope.markers = [];
 
