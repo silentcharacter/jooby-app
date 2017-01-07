@@ -5,6 +5,7 @@ import com.mycompany.controller.News;
 import com.mycompany.controller.Roles;
 import com.mycompany.controller.Todos;
 import com.mycompany.controller.Users;
+import com.mycompany.controller.shop.Orders;
 import com.mycompany.hbs.EqualHelper;
 import com.mycompany.hbs.FormatDateHelper;
 import com.mycompany.service.AuthenticationService;
@@ -94,6 +95,7 @@ public class App extends Jooby {
         //secure routes
         get("/admin", req -> Results.html("admin"));
 
+        use(new Orders());
         //secure rest resources
         use(new Users());
         use(new Roles());
