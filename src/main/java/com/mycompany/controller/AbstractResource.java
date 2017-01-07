@@ -97,7 +97,11 @@ public class AbstractResource<T> extends Jooby {
             });
 
             map.forEach((key, value) -> {
-                queryConditions.add(key + ": #");
+                if (value instanceof List) {
+                    queryConditions.add(key + ": { $in:#}");
+                } else {
+                    queryConditions.add(key + ": #");
+                }
                 filterValues.add(extractValue(value));
             });
         }

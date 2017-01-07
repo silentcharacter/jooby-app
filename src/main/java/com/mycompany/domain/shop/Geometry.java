@@ -6,9 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
 
-/**
- * Created by Ilya on 29.12.2016.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Geometry
 {

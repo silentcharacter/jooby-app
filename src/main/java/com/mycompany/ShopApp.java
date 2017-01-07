@@ -1,10 +1,11 @@
 package com.mycompany;
 
-import com.google.inject.Inject;
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.shop.*;
 import org.jooby.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -12,8 +13,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.mycompany.constant.ShopAppConstants.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class ShopApp extends Jooby
@@ -28,8 +27,10 @@ public class ShopApp extends Jooby
 
 	private static List<Sse> listeners = Collections.synchronizedList(new ArrayList<Sse>());
 
+	private static CartService cartService;
+	private static GoogleMapsService googleMapsService;
+
 	{
-		use(new Orders());
 		use(new PaymentTypes());
 		use(new DeliveryTypes());
 		use(new Products());
@@ -37,14 +38,19 @@ public class ShopApp extends Jooby
 		use(new Sauces());
 		use(new GlobalConfigs());
 
+		onStart(registry -> {
+			cartService = registry.require(CartService.class);
+			googleMapsService = registry.require(GoogleMapsService.class);
+		});
+
 		get("/shop", req -> Results.html("shop/shop")
 				.put("templateName", "shop/main")
 				.put("products", req.require(ProductService.class).getAll())
 				.put("colors", req.require(ColorService.class).getAll())
 				.put("sauces", req.require(SauceService.class).getAll())
-				.put("cart", req.require(CartService.class).getFetchedCart(req)));
+				.put("cart", cartService.getFetchedCart(req)));
 
-		get("/cart", req -> Results.json(req.require(CartService.class).getFetchedCart(req)));
+		get("/cart", req -> Results.json(cartService.getFetchedCart(req)));
 
 		post("/cart", req ->
 		{
@@ -59,21 +65,20 @@ public class ShopApp extends Jooby
 								.collect(Collectors.toList())
 				);
 			}
-			return req.require(CartService.class).addToCart(req, product, req.param("quantity").intValue(), color, sauceList);
+			return cartService.addToCart(req, product, req.param("quantity").intValue(), color, sauceList);
 		});
 
 		put("/cart", req ->
 		{
-			CartService cartService = req.require(CartService.class);
 			cartService.updateCartRow(req, req.param("entryNo").intValue(), req.param("quantity").intValue());
 			return cartService.getFetchedCart(req);
 		});
 
-		delete("/cart", req -> req.require(CartService.class).removeFromCart(req, req.param("entryNo").intValue()));
+		delete("/cart", req -> cartService.removeFromCart(req, req.param("entryNo").intValue()));
 
 		get("/shop/checkout/**", (req, rsp, chain) -> {
 			//todo: optimize
-			Cart cart = req.require(CartService.class).getSessionCart(req);
+			Cart cart = cartService.getSessionCart(req);
 			if (cart.isEmpty()) {
 				rsp.redirect("/shop");
 			}
@@ -82,7 +87,7 @@ public class ShopApp extends Jooby
 
 		get("/shop/checkout", req ->
 		{
-			Map cart = req.require(CartService.class).getFetchedCart(req);
+			Map cart = cartService.getFetchedCart(req);
 			return Results.html("shop/checkout")
 					.put("cart", cart)
 					.put("cartForm", cart)
@@ -104,15 +109,15 @@ public class ShopApp extends Jooby
 						.put("cartForm", cartForm)
 						.put("errorMessage", validationResult.message)
 						.put("errorField", validationResult.fieldName)
-						.put("cart", req.require(CartService.class).getFetchedCart(req));
+						.put("cart", cartService.getFetchedCart(req));
 			}
-			req.require(CartService.class).saveContactInfo(req, cartForm);
+			cartService.saveContactInfo(req, cartForm);
 			return Results.redirect("/shop/checkout/delivery");
 		});
 
 		get("/shop/checkout/delivery", req ->
 		{
-			Cart cart = req.require(CartService.class).getSessionCart(req);
+			Cart cart = cartService.getSessionCart(req);
 			ValidationResult validationResult = OrderValidator.validateContacts(cart);
 			if (!validationResult.equals(ValidationResult.OK))
 			{
@@ -120,7 +125,7 @@ public class ShopApp extends Jooby
 			}
 			View view = Results.html("shop/checkout")
 					.put("step", "delivery")
-					.put("cart", req.require(CartService.class).getFetchedCart(req))
+					.put("cart", cartService.getFetchedCart(req))
 					.put("templateName", "shop/delivery")
 					.put("breadcrumbs", DELIVERY_BREADCRUMB);
 			populateDatesAndTimes(view, req);
@@ -129,7 +134,6 @@ public class ShopApp extends Jooby
 
 		post("/shop/checkout/delivery", req ->
 		{
-			CartService cartService = req.require(CartService.class);
 			if (req.param("deliveryDate").isSet()) {
 				cartService.setDeliveryOptions(req,
 						req.param("delivery").value(),
@@ -143,13 +147,12 @@ public class ShopApp extends Jooby
 
 		get("/shop/checkout/payment", req -> Results.html("shop/checkout")
 				.put("step", "payment")
-				.put("cart", req.require(CartService.class).getFetchedCart(req))
+				.put("cart", cartService.getFetchedCart(req))
 				.put("templateName", "shop/payment")
 				.put("breadcrumbs", PAYMENT_BREADCRUMB));
 
 		post("/shop/checkout/payment", req ->
 		{
-			CartService cartService = req.require(CartService.class);
 			cartService.setPaymentType(req, req.param("payment").value());
 			OrderService orderService = req.require(OrderService.class);
 			Order order = orderService.placeOrder(req);
@@ -181,6 +184,16 @@ public class ShopApp extends Jooby
 		});
 
 		delete("/shop/order/:id", req -> req.require(OrderService.class).cancelOrder(req.param("id").value()));
+
+		get("/shop/coordinates/:streetName/:streetNumber", req -> {
+			Geometry geometry = googleMapsService.getCoordinates(req.param("streetName").value(), req.param("streetNumber").value());
+			if (geometry == null)
+				return "";
+			Map<String, String> res = new HashMap<>();
+			res.put("lat", geometry.getLat());
+			res.put("lng", geometry.getLng());
+			return res;
+		});
 
 		sse("/events", sse -> {
 			listeners.add(sse);

@@ -16,6 +16,6 @@ public class GeoCodeResults
 	public List<GeoCodeResult> results;
 
 	public Geometry getGeometry() {
-		return results.get(0).geometry;
+		return results.isEmpty()? null : results.get(0).geometry;
 	}
 }

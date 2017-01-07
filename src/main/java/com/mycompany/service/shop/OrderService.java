@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.mongodb.client.MongoDatabase;
-import com.mycompany.domain.shop.Cart;
-import com.mycompany.domain.shop.GeoCodeResults;
-import com.mycompany.domain.shop.Order;
-import com.mycompany.domain.shop.OrderStatus;
+import com.mycompany.domain.shop.*;
 import com.mycompany.service.AbstractService;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -46,6 +43,8 @@ public class OrderService extends AbstractService<Order>
 	private ColorService colorService;
 	@Inject
 	private MongoDatabase db;
+	@Inject
+	private GoogleMapsService googleMapsService;
 
 	public OrderService()
 	{
@@ -153,26 +152,11 @@ public class OrderService extends AbstractService<Order>
 
 	private void updateCoordinates(Order order)
 	{
-		String url = String.format("http://maps.google.com/maps/api/geocode/json?address=Россия+Ярославль+%s+%s",
-				order.streetName.trim().replaceAll(" ", "+"), order.streetNumber.trim());
-
-		HttpClient client = HttpClientBuilder.create().build();
-		HttpGet request = new HttpGet(url);
-		try
-		{
-			HttpResponse response = client.execute(request);
-			HttpEntity entity = response.getEntity();
-			String strResponse = EntityUtils.toString(entity);
-			ObjectMapper mapper = new ObjectMapper();
-			GeoCodeResults res = mapper.readValue(strResponse, GeoCodeResults.class);
-			order.lat = res.getGeometry().getLat();
-			order.lng = res.getGeometry().getLng();
+		Geometry geometry = googleMapsService.getCoordinates(order.streetName, order.streetNumber);
+		if (geometry != null) {
+			order.lat = geometry.getLat();
+			order.lng = geometry.getLng();
 		}
-		catch (IOException e)
-		{
-			logger.error("Error getting coordinates", e);
-		}
-
 	}
 
 	public Map cancelOrder(String id)

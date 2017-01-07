@@ -1,15 +1,27 @@
-angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$alert',
-    function($scope, $http, $alert) {
+angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$alert', function($scope, $http, $alert) {
 
     //get order list
     $scope.loading = true;
-    $http.get('/api/orders').success(function (data) {
-        $scope.orders = data;
-        $scope.loading = false;
-    }).error(function (data, status) {
-        $scope.loading = false;
-        console.log('Error ' + data)
-    });
+    $scope.currentPage = 1;
+    $scope.pageSize = 10;
+    $scope.total = 1000;
+    $scope.onPageChange = function (currentPage) {
+        $scope.currentPage = currentPage;
+        getList();
+    };
+    function getList() {
+        var filter = encodeURIComponent(JSON.stringify({status: ['Новый', 'В доставке']}));
+        $http.get('/api/orders?_filters=' + filter + '&_page=' + $scope.currentPage + '&_perPage=' + $scope.pageSize)
+            .success(function (data, status, headers, config) {
+                $scope.orders = data;
+                $scope.loading = false;
+                $scope.total = headers('X-Total-Count');
+            }).error(function (data, status) {
+            $scope.loading = false;
+            console.log('Error ' + data)
+        });
+    }
+    getList();
 
     $scope.cancelConfirm = false;
     $scope.showCancelConfirm = function (bool) {
@@ -22,16 +34,12 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     function getNewOrdersCount() {
         //get new orders count
-        var request = new XMLHttpRequest();
-        request.onreadystatechange = function () {
-            if (request.readyState === 4) {
-                var headers = request.getAllResponseHeaders();
-                $scope.newOrders = /\d+/.exec(headers.match(/X-Total-Count: (\d+)/ig)[0])[0];
-            }
-        };
         var filter = encodeURIComponent(JSON.stringify({status: 'Новый'}));
-        request.open('GET', '/api/orders?_count=true&_filters='+filter, true);
-        request.send(null);
+        $http.get('/api/orders?_count=true&_filters='+filter).success(function (data, status, headers, config) {
+            $scope.newOrders = headers('X-Total-Count');
+        }).error(function (data, status) {
+            console.log('Error ' + data)
+        });
     }
     getNewOrdersCount();
 
@@ -72,6 +80,33 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         $scope.detailedView = true;
     }
 
+    function addMarker(order, green) {
+        var marker = {
+            id: order.id,
+            coords: {
+                latitude: order.lat, longitude: order.lng
+            },
+            options: {draggable: false}
+        };
+        if (green) {
+            marker.options.icon = 'https://maps.google.com/mapfiles/ms/icons/green-dot.png';
+        }
+        $scope.markers.push(marker);
+    }
+
+    function removeMarker(order) {
+        var ind = -1;
+        for (var i = 0; i < $scope.markers.length; i++) {
+            if ($scope.markers[i].id == order.id) {
+                ind = i;
+                break;
+            }
+        }
+        if (ind > -1) {
+            $scope.markers.splice(ind, 1);
+        }
+    }
+
     function loadSchedule(order) {
         $scope.schedule = {};
         var startDate = formatDate(order.deliveryDate);
@@ -94,22 +129,10 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             if (orders) {
                 $scope.markers = [];
                 for (var i = 0; i < orders.length; i++) {
-                    $scope.markers.push({
-                        id: orders[i].id,
-                        coords: {
-                            latitude: orders[i].lat, longitude: orders[i].lng
-                        },
-                        options: { draggable: false}
-                    });
+                    addMarker(orders[i]);
                 }
                 orders.push(order);
-                $scope.markers.push({
-                    id: order.id,
-                    coords: {
-                        latitude: order.lat, longitude: order.lng
-                    },
-                    options: { draggable: false, icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png' }
-                });
+                addMarker(order, true);
             }
             $scope.loading = false;
         }).error(function (data, status) {
@@ -126,6 +149,23 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.onDeliveryTimeChange = function(deliveryTime) {
         $scope.order.deliveryTime = deliveryTime;
         loadSchedule($scope.order);
+    };
+
+    $scope.onAddressChange = function() {
+        if ($scope.order.streetName.length < 4)
+            return;
+        // console.log($scope.order.streetName + $scope.order.streetNumber)
+        var url = '/shop/coordinates/' + $scope.order.streetName + '/' +$scope.order.streetNumber;
+        $http.get(url).success(function (data) {
+            $scope.order.lat = data.lat;
+            $scope.order.lng = data.lng;
+            removeMarker($scope.order);
+            addMarker($scope.order, true);
+            $scope.loading = false;
+        }).error(function (data, status) {
+            $scope.loading = false;
+            console.log('Error ' + data)
+        });
     };
 
     //expanding order entries

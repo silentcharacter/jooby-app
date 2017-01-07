@@ -14,9 +14,11 @@
 <script src="/assets/js/ng-google-chart.js" type="text/javascript"></script>
 <script src="/assets/js/angular-strap.js"></script>
 <script src="/assets/js/angular-strap.tpl.js"></script>
-<script src="/assets/js/ui-bootstrap-2.3.1.min.js"></script>
+<!--<script src="/assets/js/ui-bootstrap-2.3.1.min.js"></script>-->
+<!--<script src="/assets/js/ui-bootstrap-tpls-2.4.0.min.js"></script>-->
 <script src="/assets/js/lodash.js"></script>
 <script src="/assets/js/angular-google-maps.js"></script>
+<script src="/assets/js/paging.min.js"></script>
 
 
 <script type='text/javascript' >
@@ -29,7 +31,7 @@
 </script>
 <script type="text/javascript">
     var myApp = angular.module('myApp', ['ng-admin', 'googlechart', 'myApp.controllers',
-        'mgcrea.ngStrap', 'ui.bootstrap', 'uiGmapgoogle-maps']);
+        'mgcrea.ngStrap', 'uiGmapgoogle-maps', 'bw.paging']);
     myApp.config(['NgAdminConfigurationProvider', function(nga) {
         // create an admin application
         var admin = nga.application('Панель администрирования').baseApiUrl('/api/'); // main API endpoint;
@@ -254,7 +256,7 @@
         ];
 
         var orders = nga.entity('orders');
-        orders.listView().title('Заказы').fields([
+        orders.listView().title('Заказы').perPage(10).fields([
             nga.field('orderNumber').isDetailLink(true).label("Номер"),
             nga.field('orderDate', 'datetime').label("Дата"),
             nga.field('status').label("Статус"),
@@ -356,7 +358,7 @@
 
         admin.dashboard(nga.dashboard().template($('#dashboardTemplate').html())
             .addCollection(nga.collection(globalConfigs).name('globalConfigs').title('Настройки').fields(globalConfigs.listView().fields()))
-            .addCollection(nga.collection(orders).name('orders').title('Заказы').fields(orders.listView().fields()))
+            .addCollection(nga.collection(orders).name('orders').title('Заказы').perPage(10) .fields(orders.listView().fields()))
         );
 
         // attach the admin application to the DOM and run it
