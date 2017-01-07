@@ -1,6 +1,5 @@
 angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$alert', function($scope, $http, $alert) {
 
-    //get order list
     $scope.loading = true;
     $scope.currentPage = 1;
     $scope.pageSize = 10;
@@ -9,8 +8,10 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         $scope.currentPage = currentPage;
         getList();
     };
+
+    //get order list
     function getList() {
-        var filter = encodeURIComponent(JSON.stringify({status: ['Новый', 'В доставке']}));
+        var filter = encodeURIComponent(JSON.stringify({status: ['Новый', 'В доставке', 'Отменен']}));
         $http.get('/api/orders?_filters=' + filter + '&_page=' + $scope.currentPage + '&_perPage=' + $scope.pageSize)
             .success(function (data, status, headers, config) {
                 $scope.orders = data;
@@ -60,7 +61,6 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.onClick = function (order) {
         $scope.loading = true;
         $http.get('/shop/order/detailed/' + order.id).success(function (data) {
-            // console.log($scope.map.control.getGMap())
             updateOrderInScope(data);
         }).error(function (data, status) {
             console.log('Error ' + data)
@@ -187,6 +187,11 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             if ($scope.order && $scope.order.id == order.id)
                 return 'bg-success row-selected';
             return 'bg-success';
+        }
+        if (order.status == 'Отменен') {
+            if ($scope.order && $scope.order.id == order.id)
+                return 'bg-warning row-selected';
+            return 'bg-warning';
         }
         if ($scope.order && $scope.order.id == order.id)
             return 'row-selected processed';

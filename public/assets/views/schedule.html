@@ -1,0 +1,87 @@
+<link rel="stylesheet" href="/assets/css/admin.css">
+
+<div class="row">
+    <div class="page-header">
+        <h2>График доставки</h2>
+    </div>
+
+    <div class="container">
+        <form name="datepickerForm" class="datepickerForm" role="form">
+            <div class="form-group row" ng-class="{'has-error': datepickerForm.date.$invalid}">
+                <label class="col-form-label col-sm-4">
+                    <i class="fa fa-calendar"></i>&nbsp;Дата доставки
+                </label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" ng-model="deliveryDate" name="date" data-autoclose="1"
+                           data-date-format="dd-MM-yyyy" bs-datepicker ng-change="onDeliveryDateChange(deliveryDate)">
+                    <!--data-min-date="today"-->
+
+                </div>
+            </div>
+        </form>
+        <accordion close-others="false" >
+            <accordion-group heading="{{time.value}}" ng-repeat="time in times1" is-open="time.open">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div ng-show="schedule[time.value].length">
+                            <table class="grid table">
+                                <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>Номер</th>
+                                    <th>Адрес</th>
+                                    <th>Клиент</th>
+                                    <th>Состав</th>
+                                    <th>Сумма</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="order in schedule[time.value]" >
+                                    <td>
+                                        {{order.num}}
+                                    </td>
+                                    <td>
+                                        <a target="_blank" href="#/orders/edit/{{order.id}}">{{order.orderNumber}}</a>
+                                    </td>
+                                    <td>
+                                        {{order.streetName}}&nbsp;{{order.streetNumber}}
+                                    </td>
+                                    <td>
+                                        {{order.phone}}&nbsp;{{order.name}}
+                                    </td>
+                                    <td>
+                                        <!--<span ng-repeat="entry in order.entries">-->
+                                        <!--{{entry.entryNo}}. {{entry.productId}} {{entry.quantity}}-->
+                                        <!--</span>-->
+                                    </td>
+                                    <td class="text-right">
+                                        {{order.totalPrice}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <button>Печать</button>
+                        </div>
+                        <div ng-hide="schedule[time.value].length">
+                            Пока нет заказов
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div ng-if="schedule[time.value].length">
+                            <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options">
+                                <ui-gmap-marker ng-repeat="marker in markers[time.value]" coords="marker.coords" options="marker.options" idkey="marker.id">
+                                </ui-gmap-marker>
+                            </ui-gmap-google-map>
+                        </div>
+                    </div>
+            </accordion-group>
+        </accordion>
+
+        </div>
+        <div id="loadingDiv" style="display: {{loading? 'block' : 'none'}}">
+            <div>
+                <h7>Загрузка...</h7>
+            </div>
+        </div>
+    </div>
+</div>

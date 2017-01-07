@@ -14,12 +14,9 @@
 <script src="/assets/js/ng-google-chart.js" type="text/javascript"></script>
 <script src="/assets/js/angular-strap.js"></script>
 <script src="/assets/js/angular-strap.tpl.js"></script>
-<!--<script src="/assets/js/ui-bootstrap-2.3.1.min.js"></script>-->
-<!--<script src="/assets/js/ui-bootstrap-tpls-2.4.0.min.js"></script>-->
 <script src="/assets/js/lodash.js"></script>
 <script src="/assets/js/angular-google-maps.js"></script>
 <script src="/assets/js/paging.min.js"></script>
-
 
 <script type='text/javascript' >
     window.times = [
@@ -343,11 +340,14 @@
                     .addChild(nga.menu(sauces).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Соусы'))
                 )
                 .addChild(nga.menu(globalConfigs).icon('<span class="glyphicon glyphicon-cog"></span>').title('Настройки'))
-                .addChild(nga.menu().title('Отчеты').link('/stats').active(function(path) {
+                .addChild(nga.menu().title('Отчеты').icon('<span class="glyphicon glyphicon-signal"></span>').link('/stats').active(function(path) {
                     return path.indexOf('/stats') === 0;
                 }))
-                .addChild(nga.menu().title('Обработка заказов').link('/arm').active(function(path) {
+                .addChild(nga.menu().title('Обработка заказов').icon('<span class="glyphicon glyphicon-earphone"></span>').link('/arm').active(function(path) {
                     return path.indexOf('/arm') === 0;
+                }))
+                .addChild(nga.menu().title('График доставки').icon('<span class="glyphicon glyphicon-calendar"></span>').link('/schedule').active(function(path) {
+                    return path.indexOf('/schedule') === 0;
                 }))
                 .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Пользователи'))
                 .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
@@ -393,6 +393,11 @@
             url: '/arm',
             templateUrl: '/assets/views/arm.html',
             controller: 'ARMCtrl'
+        }).state('schedule', {
+            parent: 'main',
+            url: '/schedule',
+            templateUrl: '/assets/views/schedule.html',
+            controller: 'ScheduleCtrl'
         });
     });
 
@@ -429,6 +434,7 @@
 </script>
 <script src="/assets/scripts/arm-controller.js" type="text/javascript"></script>
 <script src="/assets/scripts/chart-controller.js" type="text/javascript"></script>
+<script src="/assets/scripts/schedule-controller.js" type="text/javascript"></script>
 
 </body>
 </html>
