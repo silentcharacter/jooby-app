@@ -3,6 +3,7 @@ package com.mycompany;
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.shop.*;
+import com.typesafe.config.Config;
 import org.jooby.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +29,11 @@ public class ShopApp extends Jooby
 	private static List<Sse> listeners = Collections.synchronizedList(new ArrayList<Sse>());
 
 	private static CartService cartService;
+	private static OrderService orderService;
 	private static GoogleMapsService googleMapsService;
 
 	{
+//		use(new Orders());
 		use(new PaymentTypes());
 		use(new DeliveryTypes());
 		use(new Products());
@@ -40,6 +43,7 @@ public class ShopApp extends Jooby
 
 		onStart(registry -> {
 			cartService = registry.require(CartService.class);
+			orderService = registry.require(OrderService.class);
 			googleMapsService = registry.require(GoogleMapsService.class);
 		});
 
@@ -173,17 +177,17 @@ public class ShopApp extends Jooby
 					.put("templateName", "shop/thankyou");
 		});
 
-		get("/orderByPhone", request -> request.require(OrderService.class).findByPhone(request.param("phone").value()));
+		get("/orderByPhone", request -> orderService.findByPhone(request.param("phone").value()));
 
 		//ARM
-		get("/shop/order/detailed/:id", req -> req.require(OrderService.class).getFetchedOrder(req.param("id").value()));
+		get("/shop/order/detailed/:id", req -> orderService.getFetchedOrder(req.param("id").value()));
 
 		post("/shop/order/delivery", req -> {
 			Map<String, Object> order = req.body().to(Map.class);
-			return req.require(OrderService.class).sendToDelivery(order);
+			return orderService.sendToDelivery(order);
 		});
 
-		delete("/shop/order/:id", req -> req.require(OrderService.class).cancelOrder(req.param("id").value()));
+		delete("/shop/order/:id", req -> orderService.cancelOrder(req.param("id").value()));
 
 		get("/shop/coordinates/:streetName/:streetNumber", req -> {
 			Geometry geometry = googleMapsService.getCoordinates(req.param("streetName").value(), req.param("streetNumber").value());
@@ -193,6 +197,21 @@ public class ShopApp extends Jooby
 			res.put("lat", geometry.getLat());
 			res.put("lng", geometry.getLng());
 			return res;
+		});
+
+		get("/shop/admin/schedule", req -> {
+			String date = req.param("date").value();
+			List<String> times = req.param("time").isSet()? Collections.singletonList(req.param("time").value()) : possibleDateTimes;
+			Map<String, List<Map<String, Object>>> orders = new HashMap<>();
+			for (String dateTime : times) {
+				List<Map<String, Object>> orderList = orderService.getDeliverySchedule(date, dateTime);
+				if (orderList.size() > 0) {
+					orders.put(dateTime, orderList);
+				}
+			}
+			Long d = (Long)orders.values().iterator().next().get(0).get("deliveryDate");
+			return Results.html("/shop/schedule").put("date", d).put("orders", orders)
+					.put("googleMapKey", req.require(Config.class).getString("google.map.key"));
 		});
 
 		sse("/events", sse -> {

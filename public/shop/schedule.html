@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>График доставки</title>
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            padding: 5px;
+        }
+        h2 {
+            margin-top: 10px;
+        }
+        @media print {
+            .page-break {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+{{#each orders}}
+<h2>График доставки на {{formatDate date}} {{@key}}</h2>
+<div class="row page-break">
+    <img src="https://maps.googleapis.com/maps/api/staticmap?size=600x400&maptype=roadmap{{#each this}}&markers=color:red%7Clabel:{{inc @index}}%7C{{lat}},{{lng}}{{/each}}&key={{googleMapKey}}">
+    <table class="grid table">
+        <thead>
+        <tr>
+            <th>№</th>
+            <th>Номер</th>
+            <th>Адрес</th>
+            <th>Клиент</th>
+            <th>Состав</th>
+            <th>Сумма</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {{#each this}}
+        <tr>
+            <td>
+                {{inc @index}}
+            </td>
+            <td>
+                {{orderNumber}}
+            </td>
+            <td>
+                {{streetName}}&nbsp;{{streetNumber}}
+            </td>
+            <td>
+                {{phone}}<br/>{{name}}
+            </td>
+            <td>
+                {{#each entries}}
+                    {{inc @index}}. {{product.name}} ({{quantity}}кг) <br/>
+                {{/each}}
+            </td>
+            <td class="text-right">
+                {{totalPrice}}
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+<br/>
+{{/each}}
+</body>
+</html>

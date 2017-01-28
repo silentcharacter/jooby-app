@@ -2,23 +2,24 @@
 
 <div class="row">
     <div class="page-header">
-        <h2>График доставки</h2>
-    </div>
-
-    <div class="container">
-        <form name="datepickerForm" class="datepickerForm" role="form">
+        <form name="datepickerForm" role="form">
             <div class="form-group row" ng-class="{'has-error': datepickerForm.date.$invalid}">
                 <label class="col-form-label col-sm-4">
-                    <i class="fa fa-calendar"></i>&nbsp;Дата доставки
+                    <h3>График доставки на</h3>
                 </label>
-                <div class="col-sm-8">
+                <div class="col-sm-6" style="padding-top: 15px">
                     <input type="text" class="form-control" ng-model="deliveryDate" name="date" data-autoclose="1"
                            data-date-format="dd-MM-yyyy" bs-datepicker ng-change="onDeliveryDateChange(deliveryDate)">
                     <!--data-min-date="today"-->
-
+                </div>
+                <div class="col-sm-2" style="padding-top: 15px">
+                    <button ng-click="printClick(deliveryDate)" class="btn btn-default" style="width: 100%">Печать</button>
                 </div>
             </div>
         </form>
+    </div>
+
+    <div class="container" style="padding-top: 10px">
         <accordion close-others="false" >
             <accordion-group heading="{{time.value}}" ng-repeat="time in times1" is-open="time.open">
                 <div class="row">
@@ -60,7 +61,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <button>Печать</button>
+                            <button ng-click="printClick(deliveryDate, time.value)" class="btn btn-default btn-lg">Печать</button>
                         </div>
                         <div ng-hide="schedule[time.value].length">
                             Пока нет заказов

@@ -72,5 +72,14 @@ angular.module('myApp.controllers').controller('ScheduleCtrl', ['$scope', '$http
     $scope.map = {center: {latitude: 57.6363519, longitude: 39.8788456 }, zoom: 10};
     $scope.options = {scrollwheel: true};
 
+    $scope.printClick = function(date, time) {
+        console.log(time)
+        if (time) {
+            window.open('/shop/admin/schedule?date='+ formatDate(date) + '&time=' + time);
+        } else {
+            window.open('/shop/admin/schedule?date='+ formatDate(date));
+        }
+    }
+
 }]);
 

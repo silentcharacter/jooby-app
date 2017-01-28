@@ -8,15 +8,14 @@ import com.mycompany.controller.Users;
 import com.mycompany.controller.shop.Orders;
 import com.mycompany.hbs.EqualHelper;
 import com.mycompany.hbs.FormatDateHelper;
+import com.mycompany.hbs.IncHelper;
 import com.mycompany.service.AuthenticationService;
 import com.mycompany.service.MigrationService;
 import org.jooby.Jooby;
 import org.jooby.Results;
-import org.jooby.Sse;
 import org.jooby.hbs.Hbs;
 import org.jooby.json.Jackson;
 import org.jooby.mongodb.Jongoby;
-import org.jooby.mongodb.MongoSessionStore;
 import org.jooby.mongodb.Mongodb;
 import org.jooby.pac4j.Auth;
 import org.pac4j.oauth.client.FacebookClient;
@@ -26,12 +25,8 @@ import org.pac4j.oauth.client.VkClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Optional;
+import java.util.TimeZone;
 
 
 public class App extends Jooby {
@@ -44,6 +39,7 @@ public class App extends Jooby {
         use(new Hbs().doWith((hbs, config) -> {
             hbs.registerHelper("equal", new EqualHelper());
             hbs.registerHelper("formatDate", new FormatDateHelper());
+            hbs.registerHelper("inc", new IncHelper());
         }));
         use(new Jackson().doWith(mapper -> {
             mapper.setTimeZone(TimeZone.getTimeZone("UTC"));

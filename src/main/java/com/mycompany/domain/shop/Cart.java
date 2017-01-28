@@ -35,6 +35,7 @@ public class Cart extends Entity
         totalPrice = 0;
         subTotalPrice = 0;
         totalCount = 0;
+        int i = 0;
         for (OrderEntry entry : entries) {
             int rowTotalPrice = entry.productPrice * entry.quantity;
             rowTotalPrice += entry.colorPrice;
@@ -42,6 +43,7 @@ public class Cart extends Entity
             entry.totalPrice = rowTotalPrice;
             subTotalPrice += rowTotalPrice;
             totalCount += entry.quantity;
+            entry.entryNo = i;
         }
         totalPrice = subTotalPrice + deliveryPrice;
     }

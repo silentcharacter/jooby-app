@@ -31,7 +31,7 @@ public abstract class AbstractService<T> {
         this.entityName = deployment.table();
     }
 
-    private MongoCollection getCollection() {
+    protected MongoCollection getCollection() {
         return jongo.getCollection(entityName);
     }
 

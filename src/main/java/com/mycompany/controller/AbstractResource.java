@@ -3,6 +3,7 @@ package com.mycompany.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.annotation.Deployment;
 import com.mycompany.service.AbstractService;
+import com.mycompany.util.DateUtils;
 import org.bson.types.ObjectId;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
@@ -10,17 +11,12 @@ import org.jooby.Jooby;
 import org.jooby.Request;
 import org.jooby.Route;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class AbstractResource<T> extends Jooby {
 
     private static final String DATE_FILTER_POSTFIX = "_$";
-    private SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-
     private Class<T> typeParameterClass = null;
     private String entityName = null;
 
@@ -92,7 +88,7 @@ public class AbstractResource<T> extends Jooby {
                   .collect(Collectors.groupingBy(fieldName -> fieldName.split("_")[0], Collectors.toList()));
             groupedFields.forEach((key, value) -> {
                 queryConditions.add(key + ":" + value.stream().map(it -> it.split("_")[1] + ":#").collect(Collectors.joining(",", "{", "}")));
-                filterValues.addAll(value.stream().map(v -> safeParse(map.get(v))).collect(Collectors.toList()));
+                filterValues.addAll(value.stream().map(v -> DateUtils.safeParseUTC(map.get(v))).collect(Collectors.toList()));
                 value.forEach(map::remove);
             });
 
@@ -115,22 +111,6 @@ public class AbstractResource<T> extends Jooby {
             rsp.send("");
         }
     };
-
-    private Date safeParse(Object s) {
-        SimpleDateFormat utc_format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        utc_format.setTimeZone(TimeZone.getTimeZone("UTC"));
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        try
-        {
-            Date localDate = FORMAT.parse((String) s);
-            return format.parse(utc_format.format(localDate));
-        }
-        catch (ParseException e)
-        {
-            return new Date();
-        }
-    }
-
 
     private Object extractValue(Object value) {
         if (!(value instanceof String)) {

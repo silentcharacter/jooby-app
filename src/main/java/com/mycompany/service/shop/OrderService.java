@@ -6,13 +6,9 @@ import com.google.inject.Inject;
 import com.mongodb.client.MongoDatabase;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.AbstractService;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
+import com.mycompany.util.DateUtils;
 import org.bson.Document;
+import org.jongo.MongoCursor;
 import org.jooby.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 
 public class OrderService extends AbstractService<Order>
@@ -165,5 +162,14 @@ public class OrderService extends AbstractService<Order>
 		order.status = OrderStatus.CANCELLED;
 		update(order);
 		return getFetchedOrder(order.id);
+	}
+
+	public List<Map<String, Object>> getDeliverySchedule(String dateStr, String time)
+	{
+		Date dateStart = DateUtils.safeParseUTC(dateStr);
+		Date dateEnd = new Date(dateStart.getTime() + 1000 * 3600 * 24);
+		MongoCursor<Order> cursor = getCollection()
+				.find("{deliveryDate:{$gte:#,$lt:#}, deliveryTime:#}", dateStart, dateEnd, time).as(Order.class);
+		return StreamSupport.stream(cursor.spliterator(), false).map(this::getOrderMap).collect(Collectors.toList());
 	}
 }
