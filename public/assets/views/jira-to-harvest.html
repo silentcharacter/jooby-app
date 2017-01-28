@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Export jira to harvest</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+    <h1>Preferences</h1>
+    <p>User name: <input type="text" id="user" value="ilya.igolnikov"></p>
+    <p>Start date: <input type="text" id="datepicker1" class="datepicker">
+    End date: <input type="text" id="datepicker2" class="datepicker"></p>
+    <p>Meetings task id: <input type="text" id="meetingsId" value="5880229">
+    Hybris Development task id: <input type="text" id="hybrisTaskId" value="3222850">
+    Jira meetings task key: <input type="text" id="jiraMeetings" value="TDSC-644"></p>
+    <h1>1. Send POST request to jira and paste response into text area</h1>
+    url: https://zaelab.atlassian.net/rest/api/latest/search<br/>
+    method: post<br/>
+    headers:<br/>
+        'Content-Type': 'application/json',<br/>
+        'Accept': 'application/json'
+    <br/>
+    Data:<br/>
+    <div id="query"></div>
+    <p><textarea rows="15" cols="145" id="jiraResponse"></textarea></p>
+    <h1>2. Send GET request to jira and paste response into text area</h1>
+    url: <span id="meetingsUrl">https://zaelab.atlassian.net/rest/api/latest/issue/TDSC-644/worklog</span><br/>
+    method: get<br/>
+    headers:<br/>
+        'Content-Type': 'application/json',<br/>
+        'Accept': 'application/json'
+    <br/>
+    <p><textarea rows="15" cols="145" id="jiraResponse1"></textarea></p>
+    <h1>3. Send POST request to harvest for each json in text area</h1>
+    url: https://zaelab.harvestapp.com/daily/add<br/>
+    method: post<br/>
+    headers:<br/>
+    'Content-Type': 'application/json',<br/>
+    'Accept': 'application/json'
+    <br/>
+    Data:<br/>
+    <p><textarea rows="15" cols="145" id="harvestPost"></textarea></p>
+</body>
+<script>
+    $(".datepicker").datepicker();
+    $(".datepicker").datepicker("option", "dateFormat", "yy-mm-dd");
+    $("#datepicker1").val(getLastSunday());
+    $("#datepicker2").val(getSaturday());
+    $(".datepicker").change(setData);
+    $("#jiraMeetings").change(setData);
+    $("#user").change(setData);
+
+    function getLastSunday() {
+        var d = new Date();
+        var day = d.getDay(),
+                diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+        return formatDate(new Date(d.setDate(diff - 1)));
+    }
+
+    function getSaturday() {
+        var d = new Date();
+        var day = d.getDay(),
+                diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+        return formatDate(new Date(d.setDate(diff + 5)));
+    }
+
+    function formatDate(date) {
+        if (!date) return "";
+        var month = "" + date.getMonth()+1;
+        if (month.length == 1)
+            month = "0" + month;
+        var day = "" + date.getDate();
+        if (day.length == 1)
+            day = "0" + day;
+        return date.getFullYear() + "-" + month + "-" + day;
+    }
+
+    function setData() {
+        var user = $("#user").val();
+        var startDate = $("#datepicker1").val();
+        var endDate = $("#datepicker2").val();
+        var data = {
+            "jql":"(worklogDate >= " + startDate + " and worklogDate <= " + endDate + " and worklogAuthor in ('" + user + "'))",
+            "fields":["worklog","issuekey","summary","parent"],"expand":[""],"maxResults":200,"startAt":0
+        };
+        $('#query').html(JSON.stringify(data));
+        var jiraMeetings = $('#jiraMeetings').val();
+        $('#meetingsUrl').text('https://zaelab.atlassian.net/rest/api/latest/issue/' + jiraMeetings + '/worklog');
+    }
+    setData();
+
+    $('#jiraResponse').bind('paste', function () {
+        setTimeout(function() {
+            parseResponse();
+        }, 100);
+    });
+
+    $('#jiraResponse1').bind('paste', function () {
+        setTimeout(function() {
+            parseResponse();
+        }, 100);
+    });
+
+    function parseResponse() {
+        var harvestPost = $('#harvestPost');
+        harvestPost.val('');
+
+        var user = $("#user").val();
+        var start = Date.parse($("#datepicker1").val());
+        var end = Date.parse($("#datepicker2").val());
+        var jiraMeetings = $('#jiraMeetings').val();
+        var meetingsId = $('#meetingsId').val();
+        var hybrisTaskId = $('#hybrisTaskId').val();
+        var res = '';
+        var n = 1;
+
+        var text = $('#jiraResponse').val();
+        if (text) {
+            var data = JSON.parse(text);
+            for (var i=0; i < data.issues.length ;i++) {
+                var issue = data.issues[i];
+                for (var j=0; j < issue.fields.worklog.worklogs.length ;j++) {
+                    var wl = issue.fields.worklog.worklogs[j];
+                    var date = wl.started.substr(0, wl.started.indexOf('T'));
+                    var dateVal = Date.parse(date);
+                    if (wl.author.key === user && dateVal > start - 1 && dateVal < end + 1 && jiraMeetings != issue.key) {
+                        var worklog = {
+                            "notes": issue.key + ' ' + issue.fields.summary + (wl.comment? ' - ' + wl.comment : ''),
+                            "hours": wl.timeSpentSeconds/3600,
+                            "project_id": "11674948",
+                            "task_id": hybrisTaskId,
+                            "spent_at": date
+                        };
+                        res += n++ + ')\n' + JSON.stringify(worklog) + "\n\n"
+                    }
+                }
+            }
+        }
+
+        text = $('#jiraResponse1').val();
+        if (text) {
+            var data = JSON.parse(text);
+            for (var i=0; i < data.worklogs.length ;i++) {
+                var worklog = data.worklogs[i];
+                var date = worklog.started.substr(0, worklog.started.indexOf('T'));
+                var dateVal = Date.parse(date);
+                if (worklog.author.key === user && dateVal > start - 1 && dateVal < end + 1) {
+                    var wl = {
+                        "notes": 'Meeting',
+                        "hours": worklog.timeSpentSeconds/3600,
+                        "project_id": "11674948",
+                        "task_id": meetingsId,
+                        "spent_at": date
+                    };
+                    res += n++ + ')\n' + JSON.stringify(wl) + "\n\n"
+                }
+            }
+        }
+
+        harvestPost.val(res);
+    }
+
+
+</script>
+</html>
