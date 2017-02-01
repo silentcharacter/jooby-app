@@ -12,8 +12,8 @@
     <p>User name: <input type="text" id="user" value="ilya.igolnikov"></p>
     <p>Start date: <input type="text" id="datepicker1" class="datepicker">
     End date: <input type="text" id="datepicker2" class="datepicker"></p>
-    <p>Meetings task id: <input type="text" id="meetingsId" value="5880229">
-    Hybris Development task id: <input type="text" id="hybrisTaskId" value="3222850">
+    <p>Harvest Meetings task id: <input type="text" id="meetingsId" value="5880229">
+    Harvest Hybris Development task id: <input type="text" id="hybrisTaskId" value="3222850">
     Jira meetings task key: <input type="text" id="jiraMeetings" value="TDSC-644"></p>
     <h1>1. Send POST request to jira and paste response into text area</h1>
     url: https://zaelab.atlassian.net/rest/api/latest/search<br/>
@@ -44,31 +44,33 @@
     <p><textarea rows="35" cols="190" id="harvestPost"></textarea></p>
 </body>
 <script>
+    Date.prototype.endOfWeek = function(){
+        return new Date(
+                this.getFullYear(),
+                this.getMonth(),
+                this.getDate() + 6 - this.getDay()
+        );
+    };
+    Date.prototype.startOfWeek = function(){
+        return new Date(
+                this.getFullYear(),
+                this.getMonth(),
+                this.getDate() - 6 + this.getDay()
+        );
+    };
+    var now = new Date();
+
     $(".datepicker").datepicker();
     $(".datepicker").datepicker("option", "dateFormat", "yy-mm-dd");
-    $("#datepicker1").val(getLastSunday());
-    $("#datepicker2").val(getSaturday());
+    $("#datepicker1").val(formatDate(now.startOfWeek()));
+    $("#datepicker2").val(formatDate(now.endOfWeek()));
     $(".datepicker").change(setData);
     $("#jiraMeetings").change(setData);
     $("#user").change(setData);
 
-    function getLastSunday() {
-        var d = new Date();
-        var day = d.getDay(),
-                diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-        return formatDate(new Date(d.setDate(diff - 1)));
-    }
-
-    function getSaturday() {
-        var d = new Date();
-        var day = d.getDay(),
-                diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-        return formatDate(new Date(d.setDate(diff + 5)));
-    }
-
     function formatDate(date) {
         if (!date) return "";
-        var month = "" + date.getMonth()+1;
+        var month = "" + (date.getMonth()+1);
         if (month.length == 1)
             month = "0" + month;
         var day = "" + date.getDate();
