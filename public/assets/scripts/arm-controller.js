@@ -317,7 +317,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     function formatDate(date) {
         if (!date) return "";
-        var month = "" + date.getMonth()+1;
+        var month = "" + (date.getMonth()+1);
         if (month.length == 1)
             month = "0" + month;
         var day = "" + date.getDate();
