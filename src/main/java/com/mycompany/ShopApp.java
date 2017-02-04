@@ -2,7 +2,9 @@ package com.mycompany;
 
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
+import com.mycompany.service.SmsService;
 import com.mycompany.service.shop.*;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import com.typesafe.config.Config;
 import org.jooby.*;
 import org.slf4j.Logger;
@@ -31,6 +33,7 @@ public class ShopApp extends Jooby
 	private static CartService cartService;
 	private static OrderService orderService;
 	private static GoogleMapsService googleMapsService;
+	private static SmsService smsService;
 
 	{
 //		use(new Orders());
@@ -45,6 +48,7 @@ public class ShopApp extends Jooby
 			cartService = registry.require(CartService.class);
 			orderService = registry.require(OrderService.class);
 			googleMapsService = registry.require(GoogleMapsService.class);
+			smsService = registry.require(SmsService.class);
 		});
 
 		get("/shop", req -> Results.html("shop/shop")
@@ -162,6 +166,7 @@ public class ShopApp extends Jooby
 			Order order = orderService.placeOrder(req);
 			cartService.emptyCart(req);
 			sendEvent(order);
+			smsService.sendOrderConfirmationSms(order);
 			if (order != null) {
 				return Results.redirect("/shop/thankyou?order=" + order.orderNumber);
 			}

@@ -9,6 +9,7 @@ public class GlobalConfig extends Entity
 	public String name;
 	public int deliveryGap;
 	public int deliveryDaysRange;
+	public String smsTemplate;
 
 	@Override
 	public String getFullText()
