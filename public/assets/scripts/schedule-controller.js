@@ -75,9 +75,9 @@ angular.module('myApp.controllers').controller('ScheduleCtrl', ['$scope', '$http
     $scope.printClick = function(date, time) {
         console.log(time)
         if (time) {
-            window.open('/shop/admin/schedule?date='+ formatDate(date) + '&time=' + time);
+            window.open('/admin/schedule?date='+ formatDate(date) + '&time=' + time);
         } else {
-            window.open('/shop/admin/schedule?date='+ formatDate(date));
+            window.open('/admin/schedule?date='+ formatDate(date));
         }
     }
 

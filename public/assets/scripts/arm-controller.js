@@ -60,7 +60,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     //on order item click
     $scope.onClick = function (order) {
         $scope.loading = true;
-        $http.get('/shop/order/detailed/' + order.id).success(function (data) {
+        $http.get('/order/detailed/' + order.id).success(function (data) {
             updateOrderInScope(data);
         }).error(function (data, status) {
             console.log('Error ' + data)
@@ -155,7 +155,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         if ($scope.order.streetName.length < 4)
             return;
         // console.log($scope.order.streetName + $scope.order.streetNumber)
-        var url = '/shop/coordinates/' + $scope.order.streetName + '/' +$scope.order.streetNumber;
+        var url = '/coordinates/' + $scope.order.streetName + '/' +$scope.order.streetNumber;
         $http.get(url).success(function (data) {
             $scope.order.lat = data.lat;
             $scope.order.lng = data.lng;
@@ -271,7 +271,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.cancel = function (order) {
         order = angular.copy(order);
         $scope.loading = true;
-        $http.delete('/shop/order/' + order.id).success(function (data) {
+        $http.delete('/order/' + order.id).success(function (data) {
             updateOrderInScope(data);
             updateOrderInList(data);
             getNewOrdersCount();
@@ -291,7 +291,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         order = angular.copy(order);
         order.deliveryDate = formatDate(order.deliveryDate);
         $scope.loading = true;
-        $http.post('/shop/order/delivery', order).success(function (data) {
+        $http.post('/order/delivery', order).success(function (data) {
             updateOrderInScope(data);
             updateOrderInList(data);
             getNewOrdersCount();

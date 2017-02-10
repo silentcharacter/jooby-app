@@ -51,7 +51,7 @@ public class App extends Jooby {
         assets("/sp-push-manifest.json", "/assets/js/sp-push-manifest.json");
         assets("/sp-push-worker.js", "/assets/js/sp-push-worker.js");
 
-        get("/", req -> Results.html("angular").put("profile", AuthenticationService.getUserProfile(req)));
+        get("/todo", req -> Results.html("angular").put("profile", AuthenticationService.getUserProfile(req)));
 
         use(new ShopApp());
 

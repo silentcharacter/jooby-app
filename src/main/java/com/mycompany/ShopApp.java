@@ -51,7 +51,7 @@ public class ShopApp extends Jooby
 			smsService = registry.require(SmsService.class);
 		});
 
-		get("/shop", req -> Results.html("shop/shop")
+		get("/", req -> Results.html("shop/shop")
 				.put("templateName", "shop/main")
 				.put("products", req.require(ProductService.class).getAll())
 				.put("colors", req.require(ColorService.class).getAll())
@@ -84,16 +84,16 @@ public class ShopApp extends Jooby
 
 		delete("/cart", req -> cartService.removeFromCart(req, req.param("entryNo").intValue()));
 
-		get("/shop/checkout/**", (req, rsp, chain) -> {
+		get("/checkout/**", (req, rsp, chain) -> {
 			//todo: optimize
 			Cart cart = cartService.getSessionCart(req);
 			if (cart.isEmpty()) {
-				rsp.redirect("/shop");
+				rsp.redirect("/");
 			}
 			chain.next(req, rsp);
 		});
 
-		get("/shop/checkout", req ->
+		get("/checkout", req ->
 		{
 			Map cart = cartService.getFetchedCart(req);
 			return Results.html("shop/checkout")
@@ -104,7 +104,7 @@ public class ShopApp extends Jooby
 					.put("breadcrumbs", CONTACT_BREADCRUMB);
 		});
 
-		post("/shop/checkout", req ->
+		post("/checkout", req ->
 		{
 			Cart cartForm = req.body().to(Cart.class);
 			ValidationResult validationResult = OrderValidator.validateContacts(cartForm);
@@ -120,16 +120,16 @@ public class ShopApp extends Jooby
 						.put("cart", cartService.getFetchedCart(req));
 			}
 			cartService.saveContactInfo(req, cartForm);
-			return Results.redirect("/shop/checkout/delivery");
+			return Results.redirect("/checkout/delivery");
 		});
 
-		get("/shop/checkout/delivery", req ->
+		get("/checkout/delivery", req ->
 		{
 			Cart cart = cartService.getSessionCart(req);
 			ValidationResult validationResult = OrderValidator.validateContacts(cart);
 			if (!validationResult.equals(ValidationResult.OK))
 			{
-				return Results.redirect("/shop/checkout");
+				return Results.redirect("/checkout");
 			}
 			View view = Results.html("shop/checkout")
 					.put("step", "delivery")
@@ -140,7 +140,7 @@ public class ShopApp extends Jooby
 			return view;
 		});
 
-		post("/shop/checkout/delivery", req ->
+		post("/checkout/delivery", req ->
 		{
 			if (req.param("deliveryDate").isSet()) {
 				cartService.setDeliveryOptions(req,
@@ -150,16 +150,16 @@ public class ShopApp extends Jooby
 			} else {
 				cartService.setDeliveryOptions(req, req.param("delivery").value(), null, null);
 			}
-			return Results.redirect("/shop/checkout/payment");
+			return Results.redirect("/checkout/payment");
 		});
 
-		get("/shop/checkout/payment", req -> Results.html("shop/checkout")
+		get("/checkout/payment", req -> Results.html("shop/checkout")
 				.put("step", "payment")
 				.put("cart", cartService.getFetchedCart(req))
 				.put("templateName", "shop/payment")
 				.put("breadcrumbs", PAYMENT_BREADCRUMB));
 
-		post("/shop/checkout/payment", req ->
+		post("/checkout/payment", req ->
 		{
 			cartService.setPaymentType(req, req.param("payment").value());
 			OrderService orderService = req.require(OrderService.class);
@@ -168,12 +168,12 @@ public class ShopApp extends Jooby
 			sendEvent(order);
 			smsService.sendOrderConfirmationSms(order);
 			if (order != null) {
-				return Results.redirect("/shop/thankyou?order=" + order.orderNumber);
+				return Results.redirect("/thankyou?order=" + order.orderNumber);
 			}
 			throw new RuntimeException("Order not placed");
 		});
 
-		get("/shop/thankyou", req -> {
+		get("/thankyou", req -> {
 				String orderNumber = req.param("order").value();
 				return Results.html("shop/checkout")
 					.put("cart", req.require(OrderService.class).getBy("orderNumber", orderNumber))
@@ -185,16 +185,16 @@ public class ShopApp extends Jooby
 		get("/orderByPhone", request -> orderService.findByPhone(request.param("phone").value()));
 
 		//ARM
-		get("/shop/order/detailed/:id", req -> orderService.getFetchedOrder(req.param("id").value()));
+		get("/order/detailed/:id", req -> orderService.getFetchedOrder(req.param("id").value()));
 
-		post("/shop/order/delivery", req -> {
+		post("/order/delivery", req -> {
 			Map<String, Object> order = req.body().to(Map.class);
 			return orderService.sendToDelivery(order);
 		});
 
-		delete("/shop/order/:id", req -> orderService.cancelOrder(req.param("id").value()));
+		delete("/order/:id", req -> orderService.cancelOrder(req.param("id").value()));
 
-		get("/shop/coordinates/:streetName/:streetNumber", req -> {
+		get("/coordinates/:streetName/:streetNumber", req -> {
 			Geometry geometry = googleMapsService.getCoordinates(req.param("streetName").value(), req.param("streetNumber").value());
 			if (geometry == null)
 				return "";
@@ -204,7 +204,7 @@ public class ShopApp extends Jooby
 			return res;
 		});
 
-		get("/shop/admin/schedule", req -> {
+		get("/admin/schedule", req -> {
 			String date = req.param("date").value();
 			List<String> times = req.param("time").isSet()? Collections.singletonList(req.param("time").value()) : possibleDateTimes;
 			Map<String, List<Map<String, Object>>> orders = new HashMap<>();
