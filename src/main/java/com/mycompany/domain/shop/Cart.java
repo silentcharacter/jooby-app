@@ -43,7 +43,7 @@ public class Cart extends Entity
             entry.totalPrice = rowTotalPrice;
             subTotalPrice += rowTotalPrice;
             totalCount += entry.quantity;
-            entry.entryNo = i;
+            entry.entryNo = i++;
         }
         totalPrice = subTotalPrice + deliveryPrice;
     }

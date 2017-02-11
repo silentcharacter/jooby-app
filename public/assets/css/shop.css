@@ -4738,3 +4738,34 @@ form[action="/cart/add"]:after, form[action^="/cart/add"]:after {
 .on-sale {
     padding-bottom: 20px;
 }
+
+
+/*******************/
+
+a:hover {
+    text-decoration: none;
+}
+a:visited {
+    text-decoration: none;
+    outline: none;
+}
+a:focus {
+    outline: none;
+    text-decoration: none;
+}
+li > a:hover {
+    color: white;
+}
+.icon-cart {
+    text-decoration: none;
+    color: white;
+}
+.header-cart-btn:focus {
+    outline: none;
+    text-decoration: none;
+}
+.add-to-cart{
+    background: #204a80;
+    color: white;
+}
+

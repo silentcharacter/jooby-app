@@ -31,7 +31,7 @@
                 <div class="grid">
                     <div class="grid-item one-half medium-down--one-third text-right">
                         <div class="ajaxifyCart--qty">
-                            <input type="text" class="ajaxifyCart--num" value="{{quantity}} кг" min="0" data-id="{{product.id}}" aria-label="quantity">
+                            <input type="text" readonly value="{{quantity}} кг" min="0">
                             <span onclick="modifyCart({{entryNo}},{{math quantity '+' 1}})" class="ajaxifyCart--qty-adjuster ajaxifyCart--add">+</span>
                             <span onclick="modifyCart({{entryNo}},{{math quantity '-' 1}})" class="ajaxifyCart--qty-adjuster ajaxifyCart--minus">-</span>
                         </div>
