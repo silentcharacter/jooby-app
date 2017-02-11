@@ -7,6 +7,7 @@ import com.mycompany.domain.shop.GlobalConfig;
 import com.mycompany.domain.shop.Order;
 import com.mycompany.service.shop.GlobalConfigService;
 import com.typesafe.config.Config;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -34,6 +35,10 @@ public class SmsService
 	public boolean sendOrderConfirmationSms(Order order) throws UnsupportedEncodingException
 	{
 		GlobalConfig globalConfig = globalConfigService.getAll().get(0);
+
+		if (!BooleanUtils.isTrue(globalConfig.sendSms)) {
+			return false;
+		}
 
 		String text = String.format(globalConfig.smsTemplate, order.orderNumber);
 		String phone = order.phone.replace("+7", "8");

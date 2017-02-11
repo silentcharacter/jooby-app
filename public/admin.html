@@ -163,6 +163,7 @@
         globalConfigs.creationView().title('Настройки').fields([
             nga.field('deliveryGap', 'number').label("Время до ближайшей доставки (ч)"),
             nga.field('deliveryDaysRange', 'number').label("Кол-во дней в форме выбора доставки"),
+            nga.field('sendSms', 'boolean').label("Отправлять смс о подтверждении заказа"),
             nga.field('smsTemplate', 'text').label("Шаблон смс о подтверждении заказа"),
         ]);
         globalConfigs.editionView().fields(globalConfigs.creationView().fields()).title('Настройки');

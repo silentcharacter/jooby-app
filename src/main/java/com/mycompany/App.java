@@ -64,7 +64,7 @@ public class App extends Jooby {
 
         //auth routes
         get("/userProfile", AuthenticationService::getProfilePageData);
-        get("/login", ((request, response) -> response.redirect("/#/login")));
+        get("/login", ((request, response) -> response.redirect("/todo#/login")));
         post("/register", AuthenticationService.registrationHandler);
         get("**", (req, rsp, chain) -> {
             Optional<String> profileId = req.session().get(Auth.ID).toOptional();

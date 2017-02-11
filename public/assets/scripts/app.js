@@ -22,7 +22,7 @@ app.config(function ($routeProvider) {
     }).when('/registrationSuccess', {
         template: '<h3>Регистрация успешно завершена!</h3>' +
         'На ваш почтовый ящик выслано письмо с подтверждением. <p>' +
-        'Теперь Вы можете <a href="#/login">войти</a>.'
+        'Теперь Вы можете <a href="/login">войти</a>.'
     }).otherwise({
         redirectTo: '/'
     })

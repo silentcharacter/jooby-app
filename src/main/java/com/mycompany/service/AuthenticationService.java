@@ -63,7 +63,7 @@ public class AuthenticationService {
         MongoCollection roles = jongo.getCollection("roles");
         user.roles = Collections.singletonList(roles.findOne("{name: 'Пользователь'}").as(Role.class).id);
         users.insert(user);
-        rsp.redirect("/#/registrationSuccess");
+        rsp.redirect("/todo/#/registrationSuccess");
     };
 
 //    public static Authorizer authorizerHandler = (ctx, profile) -> {
