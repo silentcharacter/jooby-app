@@ -106,7 +106,7 @@ public class ShopApp extends Jooby
 
 		post("/checkout", req ->
 		{
-			Cart cartForm = req.body().to(Cart.class);
+			Cart cartForm = req.params(Cart.class);
 			ValidationResult validationResult = OrderValidator.validateContacts(cartForm);
 			if (!validationResult.equals(ValidationResult.OK))
 			{
@@ -214,7 +214,7 @@ public class ShopApp extends Jooby
 					orders.put(dateTime, orderList);
 				}
 			}
-			Long d = (Long)orders.values().iterator().next().get(0).get("deliveryDate");
+			Date d = (Date)orders.values().iterator().next().get(0).get("deliveryDate");
 			return Results.html("/shop/schedule").put("date", d).put("orders", orders)
 					.put("googleMapKey", req.require(Config.class).getString("google.map.key"));
 		});

@@ -14,7 +14,7 @@ angular.module('myApp.controllers').controller('ScheduleCtrl', ['$scope', '$http
         $scope.schedule = {};
         $scope.markers = {};
         var startDate = formatDate($scope.deliveryDate);
-        var d = new Date(Date.parse(startDate));
+        var d = new Date(startDate);
         d.setDate(d.getDate() + 1);
         var endDate = formatDate(d);
         var filter = {deliveryDate_$gte: startDate, deliveryDate_$lt: endDate};
@@ -60,7 +60,7 @@ angular.module('myApp.controllers').controller('ScheduleCtrl', ['$scope', '$http
 
     function formatDate(date) {
         if (!date) return "";
-        var month = "" + date.getMonth()+1;
+        var month = "" + (date.getMonth()+1);
         if (month.length == 1)
             month = "0" + month;
         var day = "" + date.getDate();

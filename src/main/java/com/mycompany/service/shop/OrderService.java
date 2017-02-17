@@ -115,6 +115,9 @@ public class OrderService extends AbstractService<Order>
 		Map<String, Object> map = objectMapper.convertValue(cart, Map.class);
 		map.put("delivery", deliveryTypeService.getById(cart.deliveryId));
 		map.put("paymentType", paymentTypeService.getById(cart.paymentTypeId));
+		if (map.get("deliveryDate") != null) {
+			map.put("deliveryDate", new Date((Long)map.get("deliveryDate")));
+		}
 		List<Map> entries = (List) map.get("entries");
 		entries.forEach(entry ->
 		{
