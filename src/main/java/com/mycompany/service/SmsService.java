@@ -43,7 +43,7 @@ public class SmsService
 		String text = String.format(globalConfig.smsTemplate, order.orderNumber);
 		String phone = order.phone.replace("+7", "8");
 		phone = phone.length() == 10? "8" + phone : phone;
-		String url = String.format("https://gate.smsaero.ru/send/?user=%s&password=%s&text=%s&digital=1&answer=json&from=NEWS&to=%s",
+		String url = String.format("https://gate.smsaero.ru/send/?user=%s&password=%s&text=%s&digital=0&answer=json&from=SUN+FOOD&to=%s",
 				URLEncoder.encode(config.getString("smsaero.user"), "utf-8"), config.getString("smsaero.password"),
 				URLEncoder.encode(text, "utf-8"), phone);
 		HttpClient client = HttpClientBuilder.create().build();
