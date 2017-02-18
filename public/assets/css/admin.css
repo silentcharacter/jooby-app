@@ -1,3 +1,30 @@
+body {
+    height: 100%;
+}
+#page-wrapper {
+    position: relative;
+    height: 800px;
+}
+.height100 {
+    height: 100%;
+}
+.test {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    padding-left: 20px;
+}
+paging {
+    position: absolute;
+    bottom: 0;
+    padding-bottom: 200px;
+}
+.page-header {
+    padding-left: 20px;
+}
+
 .angular-google-map-container { height: 250px; }
 
 #loadingDiv{
@@ -45,20 +72,6 @@ hr {
     border-radius: 30px;
     margin-bottom: -10px;
 }
-/*equal height*/
-[class*="same-height"] {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    /*!*background-color: rgba(86,61,124,.15);*!*/
-    border: 1px solid rgba(86,61,124,.2);
-}
-.row.match-my-cols {
-    overflow: hidden;
-}
-.row.match-my-cols [class*="same-height"]{
-    margin-bottom: -999999px;
-    padding-bottom: 999999px;
-}
 .row-selected {
     outline: solid black;
     font-weight: bold;
@@ -78,11 +91,14 @@ hr {
 .form-group {
     margin-bottom: 3px;
 }
-.order-list tr:not(.bg-success):hover {
+.order-list tr.processed:hover {
     background-color: rgba(193, 195, 191, 0.15);
 }
-.order-list tr:not(.processed):hover {
-    background-color: rgba(23, 118, 9, 0.71);
+.order-list tr.bg-success:hover {
+    background-color: rgba(37, 199, 11, 0.71);
+}
+.order-list tr.bg-warning:hover {
+    background-color: #fce5bf;
 }
 .form-control {
     text-align: left;

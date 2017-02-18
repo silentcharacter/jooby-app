@@ -1,7 +1,6 @@
 <link rel="stylesheet" href="/assets/css/admin.css">
 
-<div class="row">
-    <div class="">
+<div class="row test">
         <div class="page-header">
             <h2>Обработка заказов
                 <span class="count ">{{newOrders}}</span>
@@ -15,14 +14,11 @@
                 </a>
             </h2>
 
-        </div>
     </div>
 
-    <div class="container">
-        <div class="row match-my-cols">
-            <div class="col-sm-12 same-height" ng-show="!detailedView">
-                <h3>Список заказов</h3><hr/>
-                <div class="box">
+    <div class="container height100">
+        <div class="row height100">
+            <div class="col-sm-12 height100" ng-show="!detailedView">
                     <table class="grid table order-list ">
                         <thead>
                         <tr>
@@ -57,27 +53,26 @@
                         </tr>
                         </tbody>
                     </table>
-                    <paging
-                            page="currentPage"
-                            page-size="pageSize"
-                            total="total"
-                            text-next-class="glyphicon glyphicon-chevron-right"
-                            text-prev-class="glyphicon glyphicon-chevron-left"
-                            text-first-class="glyphicon glyphicon-backward"
-                            text-last-class="glyphicon glyphicon-forward"
-                            class="small"
-                            text-title-page="Страница {page}"
-                            show-prev-next="true"
-                            show-first-last="true"
-                            paging-action="onPageChange(page)"
-                    >
-                    </paging>
-                </div>
+                <paging class="pull-bottom"
+                        page="currentPage"
+                        page-size="pageSize"
+                        total="total"
+                        text-next-class="glyphicon glyphicon-chevron-right"
+                        text-prev-class="glyphicon glyphicon-chevron-left"
+                        text-first-class="glyphicon glyphicon-backward"
+                        text-last-class="glyphicon glyphicon-forward"
+                        class="small"
+                        text-title-page="Страница {page}"
+                        show-prev-next="true"
+                        show-first-last="true"
+                        paging-action="onPageChange(page)"
+                >
+                </paging>
             </div>
-            <div class="col-sm-6 same-height" ng-show="detailedView">
+            <div class="col-sm-6" ng-show="detailedView">
                 <form name="form" class="css-form" novalidate>
                 <fieldset ng-disabled="order.status=='Отменен'">
-                <div class="box" ng-if="order">
+                <div class="" ng-if="order">
                     <h3>{{order.name}} <span class="right"><a href="tel:{{order.phone}}">{{order.phone}}</a></span></h3><hr/>
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label">Заказ:</label>
@@ -227,7 +222,7 @@
                 </fieldset>
                 </form>
             </div>
-            <div class="col-sm-6 same-height" ng-if="detailedView">
+            <div class="col-sm-6" ng-if="detailedView">
                 <div class="box" ng-if="order.deliveryDate">
                     <h3>График доставки<span class="right">{{order.deliveryDate | date : "dd/MM/yyyy"}}</span></h3>
                     <div id="map_canvas" ng-if="schedule[order.deliveryTime].length">
@@ -260,7 +255,6 @@
                         </accordion-group>
                     </accordion>
                 </div>
-                <!--<pre>{{schedule | json}}</pre>-->
             </div>
         </div>
         <div id="loadingDiv" style="display: {{loading? 'block' : 'none'}}">
@@ -271,3 +265,6 @@
     </div>
 </div>
 
+<style>
+
+</style>
