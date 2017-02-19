@@ -273,7 +273,7 @@
                     .sortDir('DESC'),
             nga.field('commands button', 'template')
                     .label('')
-                    .template('<ma-filtered-list-button entity-name="orders" filter="{ customerId: entry.values.id }"></ma-filtered-list-button>'),
+                    .template('<ma-filtered-list-button label="Все заказы этого покупателя" entity-name="orders" filter="{ customerId: entry.values.id }"></ma-filtered-list-button>'),
 
         ]);
         customers.editionView().fields(customers.creationView().fields()).title('Редактирование покупателя');
