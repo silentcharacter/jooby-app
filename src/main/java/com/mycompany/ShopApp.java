@@ -43,6 +43,7 @@ public class ShopApp extends Jooby
 		use(new Colors());
 		use(new Sauces());
 		use(new GlobalConfigs());
+		use(new Customers());
 
 		onStart(registry -> {
 			cartService = registry.require(CartService.class);

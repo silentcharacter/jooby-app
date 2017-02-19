@@ -39,6 +39,8 @@ public class OrderService extends AbstractService<Order>
 	@Inject
 	private ColorService colorService;
 	@Inject
+	private CustomerService customerService;
+	@Inject
 	private MongoDatabase db;
 	@Inject
 	private GoogleMapsService googleMapsService;
@@ -78,17 +80,18 @@ public class OrderService extends AbstractService<Order>
 	public Order placeOrder(Request req)
 	{
 		Optional<String> cartJson = req.session().get("cart").toOptional();
+		if (!cartJson.isPresent())
+		{
+			return null;
+		}
 		ObjectMapper mapper = new ObjectMapper();
 		try
 		{
-			if (!cartJson.isPresent())
-			{
-				return null;
-			}
 			Order order = mapper.readValue(cartJson.get(), Order.class);
 			order.orderNumber = generateNewOrderNumber(req);
 			order.orderDate = new Date();
 			order.status = OrderStatus.NEW;
+			linkToCustomer(order);
 			//needed to solve ng-admin bug not showing embedded linked entities
 			order.sauces = sauceService.getAll().stream().map(sauce -> sauce.id).collect(Collectors.toList());
 			insert(order);
@@ -100,6 +103,19 @@ public class OrderService extends AbstractService<Order>
 			logger.error("Error placing order", e);
 		}
 		return null;
+	}
+
+	private void linkToCustomer(Order order)
+	{
+		Customer customer = customerService.getBy("phone", order.phone);
+		if (customer == null) {
+			customer = new Customer();
+			customer.name = order.name;
+			customer.phone = order.phone;
+			customer.address = String.format("%s %s %s", order.streetName, order.streetNumber, order.flat);
+			customer = customerService.insert(customer);
+		}
+		order.customerId = customer.id;
 	}
 
 	//todo: move to facade
@@ -147,6 +163,7 @@ public class OrderService extends AbstractService<Order>
 	public void onSave(Order order)
 	{
 		cartService.calculateCart(order);
+		linkToCustomer(order);
 		updateCoordinates(order);
 	}
 

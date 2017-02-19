@@ -3,13 +3,16 @@ package com.mycompany.service;
 import com.mycompany.domain.Role;
 import com.mycompany.domain.User;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.types.ObjectId;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jooby.Request;
 import org.jooby.Route;
 import org.jooby.pac4j.Auth;
 import org.jooby.pac4j.AuthStore;
+import org.pac4j.core.authorization.authorizer.Authorizer;
 import org.pac4j.core.profile.CommonProfile;
+import org.pac4j.oauth.profile.google2.Google2Profile;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,6 +20,8 @@ import java.util.Map;
 import java.util.Optional;
 
 public class AuthenticationService {
+
+    private static String ADMIN_NAME = "Администратор";
 
     public static Route.Handler socialLoginHandler = (req, rsp) -> {
         CommonProfile profile = getUserProfile(req);
@@ -38,6 +43,16 @@ public class AuthenticationService {
             if (role != null)
                 user.roles = Collections.singletonList(role.id);
             users.insert(user);
+        } else {
+            User user = users.findOne("{profileId : #}", profile.getId()).as(User.class);
+            if (user != null && user.roles != null) {
+                MongoCollection roles = jongo.getCollection("roles");
+                for (String role : user.roles) {
+                    profile.addRole(roles.findOne(new ObjectId(role)).as(Role.class).name);
+                }
+                AuthStore<CommonProfile> store = req.require(AuthStore.class);
+                store.set(profile);
+            }
         }
         Optional<String> redirectUrl = req.session().get("redirectUrl").toOptional();
         if (redirectUrl.isPresent()) {
@@ -66,14 +81,22 @@ public class AuthenticationService {
         rsp.redirect("/todo/#/registrationSuccess");
     };
 
-//    public static Authorizer authorizerHandler = (ctx, profile) -> {
-//        if (!(profile instanceof HttpProfile || profile instanceof Google2Profile)) {
-//            return false;
-//        }
-//        final HttpProfile httpProfile = (HttpProfile) profile;
-//        final String username = httpProfile.getUsername();
-//        return true;
-//    };
+    public static Authorizer authorizerHandler = (ctx, profiles) -> {
+        for (Object profile : profiles) {
+            if (profile instanceof CommonProfile) {
+                CommonProfile commonProfile = (CommonProfile)profile;
+                if (commonProfile.getRoles() != null) {
+                    for (String role : commonProfile.getRoles())
+                    {
+                        if (ADMIN_NAME.equals(role)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    };
 
     private static User getCurrentUser(Request req, CommonProfile profile) {
         Jongo jongo = req.require(Jongo.class);

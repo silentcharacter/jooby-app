@@ -245,6 +245,40 @@
         sauces.editionView().fields(sauces.creationView().fields()).title('Редактирование соуса');
         admin.addEntity(sauces);
 
+        var customers = nga.entity('customers');
+        customers.listView().title('Соусы').fields([
+            nga.field('name').isDetailLink(true).label("Имя"),
+            nga.field('phone').label("Телефон"),
+            nga.field('comment').label("Комментарий"),
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по покупателям' })
+        ]);
+        customers.creationView().title('Создание покупателя').fields([
+            nga.field('name').label("Имя"),
+            nga.field('phone').label("Телефон"),
+            nga.field('comment', 'text').label("Комментарий"),
+            nga.field('orders', 'referenced_list')
+                    .label('Последние заказы')
+                    .targetEntity(nga.entity('orders'))
+                    .targetReferenceField('customerId')
+                    .targetFields([
+                        nga.field('orderNumber').label("Номер").isDetailLink(true),
+                        nga.field('orderDate', 'datetime').label("Дата"),
+                        nga.field('status').label("Статус"),
+                        nga.field('totalPrice', 'number').label("Сумма"),
+                    ])
+//                    .listActions(['<ma-edit-button entry="::entry" entity="::entity" size="xs" label="Details"></ma-edit-button>'])
+                    .perPage(5)
+                    .sortField('date')
+                    .sortDir('DESC'),
+            nga.field('commands button', 'template')
+                    .label('')
+                    .template('<ma-filtered-list-button entity-name="orders" filter="{ customerId: entry.values.id }"></ma-filtered-list-button>'),
+
+        ]);
+        customers.editionView().fields(customers.creationView().fields()).title('Редактирование покупателя');
+        admin.addEntity(customers);
+
         var orderStatuses = [
             { value: 'Новый', label: 'Новый' },
             { value: 'Обработан', label: 'Обработан' },
@@ -259,7 +293,7 @@
             nga.field('orderNumber').isDetailLink(true).label("Номер"),
             nga.field('orderDate', 'datetime').label("Дата"),
             nga.field('status').label("Статус"),
-            nga.field('name').label("Клиент"),
+            nga.field('name').label("Покупатель"),
             nga.field('phone').label("Телефон"),
             nga.field('totalPrice', 'number').label("Сумма"),
         ]).filters([
@@ -269,14 +303,28 @@
             nga.field('deliveryDate_$lt', 'date').label('Дата доставки до'),
             nga.field('orderDate_$gte', 'date').label("Дата заказа с"),
             nga.field('orderDate_$lt', 'date').label('Дата заказа до'),
+            nga.field('customerId', 'reference').label('Покупатель').attributes({ placeholder: 'Выберите покупателя' })
+                    .pinned(true)
+                    .targetEntity(customers)
+                    .targetField(nga.field('name'))
+                    .remoteComplete(true, {
+                        refreshDelay: 200,
+                        searchQuery: function(search) { return { q: search }; }
+                    })
         ]);
         orders.creationView().title('Создание заказа').fields([
             nga.field('orderNumber').isDetailLink(true).label("Номер"),
             nga.field('orderDate', 'datetime').label("Дата"),
             nga.field('deliveryDate', 'datetime').label("Доставить").format('yyyy-MM-dd'),
-            nga.field('deliveryTime', 'choice').label("Интервал").choices(window.times),
+            nga.field('deliveryTime', 'choice').attributes({ placeholder: 'Выберите значение' }).label("Интервал").choices(window.times),
             nga.field('status', 'choice').label("Статус").choices(orderStatuses),
-            nga.field('name').label("Клиент"),
+            nga.field('name').label("Имя покупателя"),
+            nga.field('phone').label("Телефон"),
+            nga.field('customerId', 'reference').label("Покупатель")
+                    .targetEntity(customers)
+                    .targetField(nga.field('name'))
+                    .editable(false)
+                    .singleApiCall(ids => ({'id': ids })),
             nga.field('totalPrice', 'number').label("Сумма").cssClasses('col-sm-2').format('$0.00'),
             nga.field('deliveryId', 'reference').label("Способ доставки")
                     .targetEntity(deliveryTypes)
@@ -351,6 +399,7 @@
                 .addChild(nga.menu().title('График доставки').icon('<span class="glyphicon glyphicon-calendar"></span>').link('/schedule').active(function(path) {
                     return path.indexOf('/schedule') === 0;
                 }))
+                .addChild(nga.menu(customers).icon('<span class="glyphicon glyphicon-king"></span>').title('Покупатели'))
                 .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Пользователи'))
                 .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
                 .addChild(nga.menu(todo).icon('<span class="glyphicon glyphicon-list-alt"></span>').title('Задачи'))

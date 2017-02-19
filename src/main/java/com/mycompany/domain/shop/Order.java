@@ -16,6 +16,8 @@ public class Order extends Cart
 
 	public OrderStatus status;
 
+	public String customerId;
+
 	//needed to solve ng-admin bug not showing embedded linked entities
 	public List<String> sauces = new ArrayList<>();
 
