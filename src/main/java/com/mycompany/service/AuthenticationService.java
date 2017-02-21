@@ -1,58 +1,56 @@
 package com.mycompany.service;
 
+import com.google.inject.Inject;
 import com.mycompany.domain.Role;
 import com.mycompany.domain.User;
 import org.apache.commons.lang3.StringUtils;
-import org.bson.types.ObjectId;
-import org.jongo.Jongo;
-import org.jongo.MongoCollection;
 import org.jooby.Request;
+import org.jooby.Response;
 import org.jooby.Route;
 import org.jooby.pac4j.Auth;
 import org.jooby.pac4j.AuthStore;
 import org.pac4j.core.authorization.authorizer.Authorizer;
+import org.pac4j.core.context.WebContext;
+import org.pac4j.core.exception.HttpAction;
 import org.pac4j.core.profile.CommonProfile;
-import org.pac4j.oauth.profile.google2.Google2Profile;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 
 public class AuthenticationService {
 
     private static String ADMIN_NAME = "Администратор";
 
-    public static Route.Handler socialLoginHandler = (req, rsp) -> {
+    @Inject
+    private UserService userService;
+    @Inject
+    private RoleService roleService;
+
+    public void handleSocLogin(Request req, Response rsp) throws Throwable {
         CommonProfile profile = getUserProfile(req);
         if (profile == null) {
             rsp.redirect("/");
             return;
         }
         String email = extractEmail(req, profile);
-        Jongo jongo = req.require(Jongo.class);
-        MongoCollection users = jongo.getCollection("users");
-        if (users.count("{email : #}", email) == 0 && users.count("{profileId : #}", profile.getId()) == 0) {
+        User userByEmail = userService.getBy("email", email);
+        User userByProfileId = userService.getBy("profileId", profile.getId());
+        if (userByEmail == null && userByProfileId == null) {
             User user = new User();
             user.profileId = profile.getId();
             user.firstName = Optional.ofNullable(profile.getFirstName()).orElse(profile.getDisplayName());
             user.lastName = profile.getFamilyName();
             user.email = email;
-            MongoCollection roles = jongo.getCollection("roles");
-            Role role = roles.findOne("{name: 'Пользователь'}").as(Role.class);
+            Role role = roleService.getBy("name", "Пользователь");
             if (role != null)
                 user.roles = Collections.singletonList(role.id);
-            users.insert(user);
-        } else {
-            User user = users.findOne("{profileId : #}", profile.getId()).as(User.class);
-            if (user != null && user.roles != null) {
-                MongoCollection roles = jongo.getCollection("roles");
-                for (String role : user.roles) {
-                    profile.addRole(roles.findOne(new ObjectId(role)).as(Role.class).name);
-                }
-                AuthStore<CommonProfile> store = req.require(AuthStore.class);
-                store.set(profile);
+            userService.insert(user);
+        } else if (userByProfileId != null && userByProfileId.roles != null) {
+            for (String role : userByProfileId.roles) {
+                profile.addRole(roleService.getById(role).name);
             }
+            AuthStore<CommonProfile> store = req.require(AuthStore.class);
+            store.set(profile);
         }
         Optional<String> redirectUrl = req.session().get("redirectUrl").toOptional();
         if (redirectUrl.isPresent()) {
@@ -62,12 +60,11 @@ public class AuthenticationService {
         rsp.redirect("/");
     };
 
-    public static Route.Handler registrationHandler = (req, rsp) -> {
+    public void handleRegistration(Request req, Response rsp) throws Throwable {
         User user = req.body().to(User.class);
         user.email = user.email.trim();
-        Jongo jongo = req.require(Jongo.class);
-        MongoCollection users = jongo.getCollection("users");
-        if (users.count("{email : #}", user.email) > 0) {
+        User userByEmail = userService.getBy("email", user.email);
+        if (userByEmail != null) {
             rsp.send("Пользователь с указанным email уже зарегистрирован!");
             return;
         }
@@ -75,13 +72,12 @@ public class AuthenticationService {
             rsp.send("Указанные пароли не совпадают!");
             return;
         }
-        MongoCollection roles = jongo.getCollection("roles");
-        user.roles = Collections.singletonList(roles.findOne("{name: 'Пользователь'}").as(Role.class).id);
-        users.insert(user);
+        user.roles = Collections.singletonList(roleService.getBy("name", "Пользователь").id);
+        userService.insert(user);
         rsp.redirect("/todo/#/registrationSuccess");
     };
 
-    public static Authorizer authorizerHandler = (ctx, profiles) -> {
+    public boolean isAuthorized(WebContext ctx, List<CommonProfile> profiles) throws HttpAction {
         for (Object profile : profiles) {
             if (profile instanceof CommonProfile) {
                 CommonProfile commonProfile = (CommonProfile)profile;
@@ -98,17 +94,15 @@ public class AuthenticationService {
         return false;
     };
 
-    private static User getCurrentUser(Request req, CommonProfile profile) {
-        Jongo jongo = req.require(Jongo.class);
-        MongoCollection users = jongo.getCollection("users");
+    private User getCurrentUser(Request req, CommonProfile profile) {
         if (profile == null) {
             return null;
         }
         String email = AuthenticationService.extractEmail(req, profile);
         if (!StringUtils.isEmpty(email)) {
-            return users.findOne("{email : #}", email).as(User.class);
+            return userService.getBy("email", email);
         }
-        return users.findOne("{profileId : #}", profile.getId()).as(User.class);
+        return userService.getBy("profileId", profile.getId());
     }
 
     private static String extractEmail(Request req, CommonProfile profile) {
@@ -139,7 +133,7 @@ public class AuthenticationService {
         return null;
     }
 
-    public static Map<String, Object> getProfilePageData(Request req) {
+    public Map<String, Object> getProfilePageData(Request req) {
         Map<String, Object> response = new HashMap<>();
         CommonProfile profile = getUserProfile(req);
         if (profile != null) {

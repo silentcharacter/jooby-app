@@ -19,6 +19,7 @@ public class User extends Entity{
     public String phone;
     public Date birthDate;
     public String password;
+    public String passwordConfirm;
     public String website;
     public List<String> roles;
 

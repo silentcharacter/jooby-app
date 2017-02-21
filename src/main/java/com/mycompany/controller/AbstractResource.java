@@ -2,62 +2,70 @@ package com.mycompany.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.annotation.Deployment;
+import com.mycompany.domain.Entity;
 import com.mycompany.service.AbstractService;
+import com.mycompany.service.SearchResult;
 import com.mycompany.util.DateUtils;
 import org.bson.types.ObjectId;
-import org.jongo.Jongo;
-import org.jongo.MongoCollection;
 import org.jooby.Jooby;
 import org.jooby.Request;
-import org.jooby.Route;
+import org.jooby.Response;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class AbstractResource<T> extends Jooby {
+public class AbstractResource<T extends Entity> extends Jooby {
 
     private static final String DATE_FILTER_POSTFIX = "_$";
     private Class<T> typeParameterClass = null;
+    private Class<? extends AbstractService<T>> serviceClass = null;
+    protected AbstractService<T> service = null;
     private String entityName = null;
 
-    public AbstractResource(Class<T> typeParameterClass) {
+    public AbstractResource(Class<T> typeParameterClass, Class<? extends AbstractService<T>> serviceClass) {
         this.typeParameterClass = typeParameterClass;
         Deployment deployment = typeParameterClass.getAnnotation(Deployment.class);
         if (deployment == null) {
             throw new RuntimeException("Invalid entity - no deployment annotation!");
         }
         this.entityName = deployment.table();
+        this.serviceClass = serviceClass;
+
+        initializeRoutes();
     }
 
-    protected AbstractService<T> getService(Request req) {
-        return null;
+    {
+        onStart(registry -> service = registry.require(serviceClass));
     }
 
-    protected void initializeRoutes() {
+    private void initializeRoutes() {
         use("/api/" + entityName)
-                .put("/:id", updateHandler)
-                .get("/", getListHandler)
-                .get("/:id", getByIdHandler)
-                .post("/", insertHandler)
-                .delete("/:id", deleteHandler);
+                .put("/:id", this::update)
+                .get("/", this::getList)
+                .get("/:id", this::getById)
+                .post("/", this::insert)
+                .delete("/:id", this::deleteHandler);
     }
 
-    private Route.OneArgHandler updateHandler = req -> {
-        Jongo jongo = req.require(Jongo.class);
-        MongoCollection collection = jongo.getCollection(entityName);
-        T object = req.body().to(typeParameterClass);
-        AbstractService<T> service = getService(req);
-        if (service != null) {
-            service.onSave(object);
-        }
-        collection.save(object);
-        return object;
-    };
+    protected T update(Request req) throws Exception {
+        return service.update(req.body().to(typeParameterClass));
+    }
+
+    protected T getById(Request req) {
+        return service.getById(req.param("id").value());
+    }
+
+    protected T insert(Request req) throws Exception {
+        return service.insert(req.body().to(typeParameterClass));
+    }
+
+    protected String deleteHandler(Request req) {
+        return service.remove(req.param("id").value());
+    }
 
     @SuppressWarnings("unchecked")
-    protected Route.Handler getListHandler = (req, rsp) -> {
-        Jongo jongo = req.require(Jongo.class);
-        MongoCollection collection = jongo.getCollection(entityName);
+    protected void getList(Request req, Response rsp) throws Throwable
+    {
         Integer page = 1;
         Integer perPage = 10000;
         if (req.param("_page").isSet()) {
@@ -101,16 +109,15 @@ public class AbstractResource<T> extends Jooby {
                 filterValues.add(extractValue(value));
             });
         }
-        String query = queryConditions.stream().collect(Collectors.joining(",", "{", "}"));
-        rsp.header("X-Total-Count", collection.count(query, filterValues.toArray()));
-        if (!req.param("_count").isSet()) {
-            rsp.send(collection.find(query, filterValues.toArray())
-                  .sort(extractSort(req)).limit(perPage).skip((page - 1) * perPage)
-                  .as(typeParameterClass));
+        SearchResult<T> searchResult = service.getList(queryConditions, filterValues, extractSort(req),
+              req.param("_count").isSet(), page, perPage);
+        rsp.header("X-Total-Count", searchResult.count);
+        if (searchResult.result != null) {
+            rsp.send(searchResult.result);
         } else {
             rsp.send("");
         }
-    };
+    }
 
     private Object extractValue(Object value) {
         if (!(value instanceof String)) {
@@ -139,30 +146,5 @@ public class AbstractResource<T> extends Jooby {
         }
         return sort;
     }
-
-    private Route.OneArgHandler getByIdHandler = req -> {
-        Jongo jongo = req.require(Jongo.class);
-        MongoCollection collection = jongo.getCollection(entityName);
-        return collection.findOne(new ObjectId(req.param("id").value())).as(typeParameterClass);
-    };
-
-    private Route.OneArgHandler insertHandler = req -> {
-        Jongo jongo = req.require(Jongo.class);
-        MongoCollection collection = jongo.getCollection(entityName);
-        T object = req.body().to(typeParameterClass);
-        AbstractService<T> service = getService(req);
-        if (service != null) {
-            service.onSave(object);
-        }
-        collection.insert(object);
-        return object;
-    };
-
-    private Route.OneArgHandler deleteHandler = req -> {
-        Jongo jongo = req.require(Jongo.class);
-        MongoCollection collection = jongo.getCollection(entityName);
-        collection.remove(new ObjectId(req.param("id").value()));
-        return req.param("id").value();
-    };
 
 }

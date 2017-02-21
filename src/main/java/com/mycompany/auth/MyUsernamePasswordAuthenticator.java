@@ -3,6 +3,10 @@ package com.mycompany.auth;
 import com.google.inject.Inject;
 import com.mycompany.domain.Role;
 import com.mycompany.domain.User;
+import com.mycompany.service.RoleService;
+import com.mycompany.service.UserService;
+import com.typesafe.config.Config;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
@@ -17,15 +21,12 @@ import org.slf4j.LoggerFactory;
 
 public class MyUsernamePasswordAuthenticator implements Authenticator<UsernamePasswordCredentials>
 {
-
     protected static final Logger logger = LoggerFactory.getLogger(MyUsernamePasswordAuthenticator.class);
 
-    private Jongo jongo;
-
     @Inject
-    public MyUsernamePasswordAuthenticator(Jongo jongo) {
-        this.jongo = jongo;
-    }
+    private UserService userService;
+    @Inject
+    private RoleService roleService;
 
     public void validate(UsernamePasswordCredentials credentials, WebContext context) {
         if (credentials == null) {
@@ -36,17 +37,18 @@ public class MyUsernamePasswordAuthenticator implements Authenticator<UsernamePa
         String username = credentials.getUsername();
         String password = credentials.getPassword();
         if (CommonHelper.isBlank(username)) {
-            this.throwsException("Username cannot be blank");
+            throwsException("Username cannot be blank");
         }
 
         if (CommonHelper.isBlank(password)) {
-            this.throwsException("Password cannot be blank");
+            throwsException("Password cannot be blank");
         }
 
-        MongoCollection users = jongo.getCollection("users");
-        User user = users.findOne("{email:#}", credentials.getUsername()).as(User.class);
-        if (user == null || !credentials.getPassword().equals(user.password)) {
-            this.throwsException("Password doesn't match");
+        User user = userService.getBy("email", credentials.getUsername());
+        String passHash = userService.hashPassword(credentials.getUsername(), credentials.getPassword());
+        if (user == null || !passHash.equals(user.password)) {
+            throwsException("Password doesn't match");
+            return;
         }
 
         CommonProfile profile = new CommonProfile();
@@ -57,15 +59,14 @@ public class MyUsernamePasswordAuthenticator implements Authenticator<UsernamePa
         profile.addAttribute("family_name", user.lastName);
         profile.addAttribute("display_name", user.firstName + " " + user.lastName);
         if (user.roles != null) {
-            MongoCollection roles = jongo.getCollection("roles");
             for (String role : user.roles) {
-                profile.addRole(roles.findOne(new ObjectId(role)).as(Role.class).name);
+                profile.addRole(roleService.getById(role).name);
             }
         }
         credentials.setUserProfile(profile);
     }
 
-    protected void throwsException(String message) {
+    private void throwsException(String message) throws CredentialsException {
         logger.error(message);
         throw new CredentialsException(message);
     }

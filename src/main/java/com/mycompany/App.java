@@ -34,6 +34,8 @@ public class App extends Jooby {
 
     final static Logger logger = LoggerFactory.getLogger(App.class);
 
+    private static AuthenticationService authenticationService;
+
     {
         use(new Mongodb());
         use(new Jongoby());
@@ -57,16 +59,19 @@ public class App extends Jooby {
 
         use(new ShopApp());
 
-        onStart(MigrationService::runUpdateScripts);
+        onStart(registry -> {
+            authenticationService = registry.require(AuthenticationService.class);
+            MigrationService.runUpdateScripts(registry);
+        });
 
         //public rest resources
         use(new Todos());
         use(new News());
 
         //auth routes
-        get("/userProfile", AuthenticationService::getProfilePageData);
+        get("/userProfile", (req) -> authenticationService.getProfilePageData(req));
         get("/login", ((request, response) -> response.redirect("/todo#/login")));
-        post("/register", AuthenticationService.registrationHandler);
+        post("/register", (req, res) -> authenticationService.handleRegistration(req, res));
         get("**", (req, rsp, chain) -> {
             Optional<String> profileId = req.session().get(Auth.ID).toOptional();
             if (!profileId.isPresent() && req.path().contains("admin")) {
@@ -85,17 +90,17 @@ public class App extends Jooby {
         use(new Auth()
                         .form("/admin/**", MyUsernamePasswordAuthenticator.class)
                         .form("/api/**", MyUsernamePasswordAuthenticator.class)
-                        .authorizer("admin", "/admin/**", AuthenticationService.authorizerHandler)
+                        .authorizer("admin", "/admin/**", (ctx, profiles) -> authenticationService.isAuthorized(ctx, profiles))
                         .client("/google/**", conf -> new Google2Client(conf.getString("google.key"), conf.getString("google.secret")))
                         .client("/vk/**", conf -> new VkClient(conf.getString("vk.key"), conf.getString("vk.secret")))
                         .client("/facebook/**", conf -> new FacebookClient(conf.getString("facebook.key"), conf.getString("facebook.secret")))
                         .client("/twitter/**", conf -> new TwitterClient(conf.getString("twitter.key"), conf.getString("twitter.secret")))
         );
 
-        get("/facebook", AuthenticationService.socialLoginHandler);
-        get("/twitter", AuthenticationService.socialLoginHandler);
-        get("/google", AuthenticationService.socialLoginHandler);
-        get("/vk", AuthenticationService.socialLoginHandler);
+        get("/facebook", (req, rsp) -> authenticationService.handleSocLogin(req, rsp));
+        get("/twitter", (req, rsp) -> authenticationService.handleSocLogin(req, rsp));
+        get("/google", (req, rsp) -> authenticationService.handleSocLogin(req, rsp));
+        get("/vk", (req, rsp) -> authenticationService.handleSocLogin(req, rsp));
 
         //secure routes
         get("/admin", req -> Results.html("admin"));

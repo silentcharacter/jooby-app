@@ -2,20 +2,19 @@ package com.mycompany.service;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-import com.google.inject.multibindings.StringMapKey;
 import com.mycompany.annotation.Deployment;
+import com.mycompany.domain.Entity;
 import org.bson.types.ObjectId;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
-import org.jooby.Jooby;
-import org.jooby.Request;
-import org.jooby.Route;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public abstract class AbstractService<T> {
+
+public abstract class AbstractService<T extends Entity> {
 
     private Class<T> typeParameterClass = null;
     private String entityName = null;
@@ -46,6 +45,20 @@ public abstract class AbstractService<T> {
         return Lists.newArrayList(cursor.iterator());
     }
 
+    public SearchResult<T> getList(List<String> queryConditions, List<Object> filterValues, String sort, boolean onlyCount,
+          int page, int perPage) throws Throwable {
+
+        MongoCollection collection = jongo.getCollection(entityName);
+        String query = queryConditions.stream().collect(Collectors.joining(",", "{", "}"));
+        SearchResult<T> searchResult = new SearchResult<T>();
+        searchResult.count = collection.count(query, filterValues.toArray());
+        if (!onlyCount) {
+            searchResult.result = collection.find(query, filterValues.toArray()).sort(sort)
+                  .limit(perPage).skip((page - 1) * perPage).as(typeParameterClass);
+        }
+        return searchResult;
+    }
+
     public T getById(String id) {
         return getCollection().findOne(new ObjectId(id)).as(typeParameterClass);
     }
@@ -67,4 +80,9 @@ public abstract class AbstractService<T> {
     }
 
     public void onSave(T object) {}
+
+    public String remove(String id) {
+        getCollection().remove(new ObjectId(id));
+        return id;
+    }
 }

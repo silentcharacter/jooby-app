@@ -73,6 +73,7 @@
             nga.field('email', 'email').validation({ required: true }),
             nga.field('profileId').label('ID профиля'),
             nga.field('password').label('Пароль'),
+            nga.field('passwordConfirm').label('Подтверждение пароля'),
             nga.field('roles', 'reference_many').label("Роли")
                     .targetEntity(role)
                     .targetField(nga.field('name'))
@@ -246,7 +247,7 @@
         admin.addEntity(sauces);
 
         var customers = nga.entity('customers');
-        customers.listView().title('Соусы').fields([
+        customers.listView().title('Покупатели').fields([
             nga.field('name').isDetailLink(true).label("Имя"),
             nga.field('phone').label("Телефон"),
             nga.field('comment').label("Комментарий"),

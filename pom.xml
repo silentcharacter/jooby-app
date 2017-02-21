@@ -155,7 +155,6 @@
       <plugin>
         <groupId>org.jooby</groupId>
         <artifactId>jooby-maven-plugin</artifactId>
-        <!--<version>1.0.0.CR8</version>-->
         <configuration>
           <mainClass>${application.class}</mainClass>
           <compiler>on</compiler>

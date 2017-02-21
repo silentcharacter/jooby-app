@@ -34,6 +34,9 @@ public class ShopApp extends Jooby
 	private static OrderService orderService;
 	private static GoogleMapsService googleMapsService;
 	private static SmsService smsService;
+	private static ProductService productService;
+	private static ColorService colorService;
+	private static SauceService sauceService;
 
 	{
 //		use(new Orders());
@@ -50,13 +53,16 @@ public class ShopApp extends Jooby
 			orderService = registry.require(OrderService.class);
 			googleMapsService = registry.require(GoogleMapsService.class);
 			smsService = registry.require(SmsService.class);
+			productService = registry.require(ProductService.class);
+			colorService = registry.require(ColorService.class);
+			sauceService = registry.require(SauceService.class);
 		});
 
 		get("/", req -> Results.html("shop/shop")
 				.put("templateName", "shop/main")
-				.put("products", req.require(ProductService.class).getAll())
-				.put("colors", req.require(ColorService.class).getAll())
-				.put("sauces", req.require(SauceService.class).getAll())
+				.put("products", productService.getAll())
+				.put("colors", colorService.getAll())
+				.put("sauces", sauceService.getAll())
 				.put("cart", cartService.getFetchedCart(req)));
 
 		get("/cart", req -> Results.json(cartService.getFetchedCart(req)));
@@ -177,7 +183,7 @@ public class ShopApp extends Jooby
 		get("/thankyou", req -> {
 				String orderNumber = req.param("order").value();
 				return Results.html("shop/checkout")
-					.put("cart", req.require(OrderService.class).getBy("orderNumber", orderNumber))
+					.put("cart", orderService.getFetchedOrderByNumber(orderNumber))
 					.put("step", "thankyou")
 					.put("orderNumber", orderNumber)
 					.put("templateName", "shop/thankyou");

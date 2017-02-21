@@ -118,10 +118,14 @@ public class OrderService extends AbstractService<Order>
 		order.customerId = customer.id;
 	}
 
-	//todo: move to facade
 	public Map<String, Object> getFetchedOrder(String orderId)
 	{
 		return getOrderMap(getById(orderId));
+	}
+
+	public Map<String, Object> getFetchedOrderByNumber(String orderNumber)
+	{
+		return getOrderMap(getBy("orderNumber", orderNumber));
 	}
 
 	@SuppressWarnings("unchecked")
