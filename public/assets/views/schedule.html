@@ -51,9 +51,9 @@
                                         {{order.phone}}&nbsp;{{order.name}}
                                     </td>
                                     <td>
-                                        <!--<span ng-repeat="entry in order.entries">-->
-                                        <!--{{entry.entryNo}}. {{entry.productId}} {{entry.quantity}}-->
-                                        <!--</span>-->
+                                        <div ng-repeat="entry in order.entries">
+                                        {{$index + 1}}. {{entry.product.name}} {{entry.quantity}} кг.
+                                        </div>
                                     </td>
                                     <td class="text-right">
                                         {{order.totalPrice}}

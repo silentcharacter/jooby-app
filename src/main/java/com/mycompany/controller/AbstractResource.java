@@ -109,6 +109,12 @@ public class AbstractResource<T extends Entity> extends Jooby {
                 filterValues.add(extractValue(value));
             });
         }
+        sendResult(req, rsp, page, perPage, filterValues, queryConditions);
+    }
+
+    protected void sendResult(Request req, Response rsp, Integer page, Integer perPage, List<Object> filterValues,
+          List<String> queryConditions) throws Throwable
+    {
         SearchResult<T> searchResult = service.getList(queryConditions, filterValues, extractSort(req),
               req.param("_count").isSet(), page, perPage);
         rsp.header("X-Total-Count", searchResult.count);
@@ -130,7 +136,7 @@ public class AbstractResource<T extends Entity> extends Jooby {
         return value;
     }
 
-    private String extractSort(Request req) {
+    protected String extractSort(Request req) {
         String sort = "{_id: -1}";
         if (req.param("_sortField").isSet()) {
             sort = "{%s : %d %s}";

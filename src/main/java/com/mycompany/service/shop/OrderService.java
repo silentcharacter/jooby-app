@@ -142,9 +142,13 @@ public class OrderService extends AbstractService<Order>
 		entries.forEach(entry ->
 		{
 			entry.put("product", productService.getById((String) entry.get("productId")));
-			entry.put("color", colorService.getById((String) entry.get("colorId")));
-			List<String> sauces = (List) entry.get("sauces");
-			entry.put("sauces", sauces.stream().map(sauceService::getById).collect(Collectors.toList()));
+			if (entry.get("colorId") != null) {
+				entry.put("color", colorService.getById((String) entry.get("colorId")));
+			}
+			if (entry.get("sauces") != null) {
+				List<String> sauces = (List) entry.get("sauces");
+				entry.put("sauces", sauces.stream().map(sauceService::getById).collect(Collectors.toList()));
+			}
 		});
 		return map;
 	}

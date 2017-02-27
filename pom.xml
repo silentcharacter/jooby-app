@@ -102,15 +102,20 @@
       <version>${pac4j.version}</version>
     </dependency>
 
-    <!--<dependency>-->
-      <!--<groupId>org.jooby</groupId>-->
-      <!--<artifactId>jooby-swagger</artifactId>-->
-      <!--<version>${jooby.version}</version>-->
-    <!--</dependency>-->
+    <dependency>
+      <groupId>org.jooby</groupId>
+      <artifactId>jooby-metrics</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.jooby</groupId>
       <artifactId>jooby-jackson</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.dropwizard.metrics</groupId>
+      <artifactId>metrics-servlets</artifactId>
+      <version>${metrics.version}</version>
     </dependency>
 
     <!--<dependency>-->

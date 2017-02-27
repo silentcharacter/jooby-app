@@ -136,8 +136,12 @@ public class CartService
 		cart.deliveryPrice = deliveryTypeService.getById(cart.deliveryId).price;
 		cart.entries.forEach(e -> {
 			e.productPrice = productService.getById(e.productId).price;
-			e.colorPrice = colorService.getById(e.colorId).price;
-			e.saucePrice = e.sauces.stream().mapToInt(sauce -> sauceService.getById(sauce).price).sum();
+			if (e.colorId != null) {
+				e.colorPrice = colorService.getById(e.colorId).price;
+			}
+			if (e.sauces != null) {
+				e.saucePrice = e.sauces.stream().mapToInt(sauce -> sauceService.getById(sauce).price).sum();
+			}
 		});
 		cart.calculate();
 	}

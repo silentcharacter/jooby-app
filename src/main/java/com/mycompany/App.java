@@ -1,5 +1,11 @@
 package com.mycompany;
 
+import com.codahale.metrics.ConsoleReporter;
+import com.codahale.metrics.JmxReporter;
+import com.codahale.metrics.jvm.FileDescriptorRatioGauge;
+import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
+import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
+import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
 import com.mycompany.auth.MyUsernamePasswordAuthenticator;
 import com.mycompany.controller.News;
 import com.mycompany.controller.Roles;
@@ -15,9 +21,11 @@ import org.jooby.Jooby;
 import org.jooby.Results;
 import org.jooby.hbs.Hbs;
 import org.jooby.json.Jackson;
+import org.jooby.metrics.Metrics;
 import org.jooby.mongodb.Jongoby;
 import org.jooby.mongodb.MongoSessionStore;
 import org.jooby.mongodb.Mongodb;
+import org.jooby.netty.Netty;
 import org.jooby.pac4j.Auth;
 import org.pac4j.oauth.client.FacebookClient;
 import org.pac4j.oauth.client.Google2Client;
@@ -28,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 
 public class App extends Jooby {
@@ -44,9 +53,23 @@ public class App extends Jooby {
             hbs.registerHelper("formatDate", new FormatDateHelper());
             hbs.registerHelper("inc", new IncHelper());
         }));
-        use(new Jackson().doWith(mapper -> {
-            mapper.setTimeZone(TimeZone.getTimeZone("UTC"));
-        }));
+        use(new Jackson().doWith(mapper -> mapper.setTimeZone(TimeZone.getTimeZone("UTC"))));
+
+        use(new Metrics()
+              .request()
+              .threadDump()
+              .ping()
+//              .healthCheck("db", new DatabaseHealthCheck())
+              .metric("memory", new MemoryUsageGaugeSet())
+              .metric("threads", new ThreadStatesGaugeSet())
+              .metric("gc", new GarbageCollectorMetricSet())
+              .metric("fs", new FileDescriptorRatioGauge())
+              .reporter(registry -> {
+                  JmxReporter reporter = JmxReporter.forRegistry(registry).build();
+                  reporter.start();
+                  return reporter;
+              })
+        );
 //        session(MongoSessionStore.class);
 
         assets("/assets/**");

@@ -6,6 +6,8 @@ import com.typesafe.config.Config;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
+
 
 public class UserService extends AbstractService<User>
 {
@@ -36,5 +38,17 @@ public class UserService extends AbstractService<User>
 	public String hashPassword(String login, String pass)
 	{
 		return DigestUtils.sha1Hex(login + pass + config.getString("application.secret"));
+	}
+
+	@Override
+	public SearchResult<User> getList(List<String> queryConditions, List<Object> filterValues, String sort, boolean onlyCount,
+			int page, int perPage) throws Throwable
+	{
+		SearchResult<User> result = super.getList(queryConditions, filterValues, sort, onlyCount, page, perPage);
+		result.result.forEach(user -> {
+			user.password = "";
+			user.passwordConfirm = "";
+		});
+		return result;
 	}
 }
