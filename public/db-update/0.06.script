@@ -1,0 +1,6 @@
+var ret = db.deliveryTypes.findOne({name:'free'});
+db.orders.update(
+    { deliveryId: ret._id.str},
+    { $set: {deliveryTime: 'Бесплатная'}},
+    { multi: true}
+);

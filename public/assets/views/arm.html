@@ -98,7 +98,7 @@
                         <label for="deliverySelect" class="col-sm-4 col-form-label">Доставка:</label>
                         <div class="col-sm-8">
                             <button id="deliverySelect" type="button" class="btn btn-default form-control" ng-model="order.delivery"
-                                    data-html="1" data-placeholder="Выберите значение"
+                                    data-html="1" data-placeholder="Выберите значение" ng-change="onDeliveryTypeChange(order.delivery)"
                                     bs-options="item as item.description for item in deliveryTypes track by item.id" bs-select>
                                  <span class="caret"></span>
                             </button>
@@ -116,7 +116,7 @@
                         <label for="deliveryTime" class="col-sm-4 col-form-label">Интервал:</label>
                         <div class="col-sm-8">
                             <button id="deliveryTime" required="" name="deliveryTime" type="button" class="btn btn-default form-control"
-                                    ng-model="order.deliveryTime" bs-options="item.value as item.value for item in times1 track by item.value" bs-select
+                                    ng-model="order.deliveryTime" bs-options="item.value as item.value for item in timesOrder track by item.value" bs-select
                                     ng-change="onDeliveryTimeChange(order.deliveryTime)" data-placeholder="Выберите время">
                                 <span class="caret"></span>
                             </button>
@@ -223,17 +223,17 @@
                 </form>
             </div>
             <div class="col-sm-6" ng-if="detailedView">
-                <div class="box" ng-if="order.deliveryDate">
+                <div class="box">
                     <h3>График доставки<span class="right">{{order.deliveryDate | date : "dd/MM/yyyy"}}</span></h3>
-                    <div id="map_canvas" ng-if="schedule[order.deliveryTime].length">
+                    <div id="map_canvas">
                         <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options">
                             <ui-gmap-marker ng-repeat="marker in markers" coords="marker.coords" options="marker.options" idkey="marker.id">
                             </ui-gmap-marker>
                         </ui-gmap-google-map>
                     </div>
                     <br/>
-                    <accordion close-others="true" >
-                        <accordion-group heading="{{time.value}}" ng-repeat="time in times1" is-open="time.open">
+                    <accordion close-others="true" ng-if="order.deliveryDate">
+                        <accordion-group heading="{{time.value}}" ng-repeat="time in timesAll" is-open="time.open">
                             <table class="table grid">
                                 <tbody>
                                 <tr ng-repeat="order in schedule[time.value]" ng-class="scheduleRowClass(order)">

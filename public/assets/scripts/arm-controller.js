@@ -51,7 +51,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         console.log('Error ' + data)
     });
 
-    $scope.times1 = window.times.map(function(obj) {
+    $scope.timesAll = window.times.map(function(obj) {
         return {value: obj.value, open: false};
     });
 
@@ -73,11 +73,29 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             order.deliveryDate = new Date(order.deliveryDate);
             loadSchedule(order);
         } else {
+            $scope.markers = [];
+            addMarker(order, true);
             $scope.loading = false;
         }
         $scope.order = order;
+        setOrderTimes(order);
         $scope.rowsCollapsed = false;
         $scope.detailedView = true;
+    }
+
+    function setOrderTimes(order) {
+        $scope.timesOrder = window.times.filter(function (obj) {
+            return obj.tag == order.delivery.name;
+        }).map(function (obj) {
+            return {value: obj.value, open: false};
+        });
+        if ($scope.timesOrder.length == 1) {
+            $scope.order.deliveryTime = $scope.timesOrder[0].value;
+            $scope.onDeliveryTimeChange($scope.order.deliveryTime);
+        }
+        if ($scope.timesOrder.filter(function (obj) {return obj.value == $scope.order.deliveryTime}).length == 0) {
+            $scope.order.deliveryTime = null;
+        }
     }
 
     function addMarker(order, green) {
@@ -117,13 +135,13 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         var filterUrl = encodeURIComponent(JSON.stringify(filter));
         $scope.loading = true;
         $http.get('/api/orders?_filters='+filterUrl).success(function (data) {
-            for (var i = 0; i < $scope.times1.length; i++) {
-                $scope.schedule[$scope.times1[i].value] = data.filter(function (item) {
-                    return item.deliveryTime == $scope.times1[i].value && item.id != order.id;
+            for (var i = 0; i < $scope.timesAll.length; i++) {
+                $scope.schedule[$scope.timesAll[i].value] = data.filter(function (item) {
+                    return item.deliveryTime == $scope.timesAll[i].value && item.id != order.id;
                 })
             }
-            for (var i = 0; i < $scope.times1.length; i++) {
-                $scope.times1[i].open = order.deliveryTime === $scope.times1[i].value;
+            for (var i = 0; i < $scope.timesAll.length; i++) {
+                $scope.timesAll[i].open = order.deliveryTime === $scope.timesAll[i].value;
             }
             var orders = $scope.schedule[order.deliveryTime];
             if (orders) {
@@ -140,6 +158,11 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             $scope.loading = false;
         });
     }
+
+    $scope.onDeliveryTypeChange = function(delivery) {
+        $scope.order.delivery = delivery;
+        setOrderTimes($scope.order);
+    };
 
     $scope.onDeliveryDateChange = function(deliveryDate) {
         $scope.order.deliveryDate = deliveryDate;

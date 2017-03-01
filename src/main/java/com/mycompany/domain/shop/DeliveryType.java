@@ -7,5 +7,6 @@ import com.mycompany.annotation.Deployment;
 public class DeliveryType extends Product {
 
 	public static String FREE = "free";
+	public static String FREE_NAME = "Бесплатная";
 
 }

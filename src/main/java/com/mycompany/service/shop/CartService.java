@@ -133,7 +133,11 @@ public class CartService
 	}
 
 	public void calculateCart(Cart cart) {
-		cart.deliveryPrice = deliveryTypeService.getById(cart.deliveryId).price;
+		DeliveryType deliveryType = deliveryTypeService.getById(cart.deliveryId);
+		cart.deliveryPrice = deliveryType.price;
+		if (deliveryType.name.equals(DeliveryType.FREE)) {
+			cart.deliveryTime = DeliveryType.FREE_NAME;
+		}
 		cart.entries.forEach(e -> {
 			e.productPrice = productService.getById(e.productId).price;
 			if (e.colorId != null) {
