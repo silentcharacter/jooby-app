@@ -118,6 +118,13 @@
       <version>${metrics.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.mindrot</groupId>
+      <artifactId>jbcrypt</artifactId>
+      <version>0.3m</version>
+    </dependency>
+
+
     <!--<dependency>-->
       <!--<groupId>org.jooby</groupId>-->
       <!--<artifactId>jooby-rxjava</artifactId>-->

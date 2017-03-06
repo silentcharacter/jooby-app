@@ -63,6 +63,7 @@ public class CartService
 		{
 			e.printStackTrace();
 			cart = getNewCart(req);
+			saveSessionCart(req, cart);
 		}
 		return cart;
 	}

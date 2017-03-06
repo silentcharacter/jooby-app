@@ -20,6 +20,7 @@ public class User extends Entity{
     public Date birthDate;
     public String password;
     public String passwordConfirm;
+    public String salt;
     public String website;
     public List<String> roles;
 

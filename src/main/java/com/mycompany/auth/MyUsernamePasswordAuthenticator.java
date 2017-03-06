@@ -45,8 +45,7 @@ public class MyUsernamePasswordAuthenticator implements Authenticator<UsernamePa
         }
 
         User user = userService.getBy("email", credentials.getUsername());
-        String passHash = userService.hashPassword(credentials.getUsername(), credentials.getPassword());
-        if (user == null || !passHash.equals(user.password)) {
+        if (user == null || !userService.validatePassword(user, credentials.getUsername(), credentials.getPassword())) {
             throwsException("Password doesn't match");
             return;
         }
