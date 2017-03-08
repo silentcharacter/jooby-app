@@ -192,7 +192,7 @@ public class ShopApp extends Jooby
 		get("/orderByPhone", request -> orderService.findByPhone(request.param("phone").value()));
 
 		//ARM
-		get("/order/detailed/:id", req -> orderService.getFetchedOrder(req.param("id").value()));
+		get("/order/detailed/:orderNumber", req -> orderService.getFetchedOrderByNumber(req.param("orderNumber").value()));
 
 		post("/order/delivery", req -> {
 			Map<String, Object> order = req.body().to(Map.class);

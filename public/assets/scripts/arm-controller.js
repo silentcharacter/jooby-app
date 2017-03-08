@@ -1,4 +1,4 @@
-angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$alert', function($scope, $http, $alert) {
+angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$alert', '$state', '$stateParams', function($scope, $http, $alert, $state, $stateParams) {
 
     $scope.loading = true;
     $scope.currentPage = 1;
@@ -31,6 +31,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.detailedView = false;
     $scope.switchView = function() {
         $scope.detailedView = !$scope.detailedView;
+        $state.go('arm', {orderNo: $scope.detailedView? $scope.order.orderNumber:''}, {notify: false})
     };
 
     function getNewOrdersCount() {
@@ -60,7 +61,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     //on order item click
     $scope.onClick = function (order) {
         $scope.loading = true;
-        $http.get('/order/detailed/' + order.id).success(function (data) {
+        $http.get('/order/detailed/' + order.orderNumber).success(function (data) {
             updateOrderInScope(data);
         }).error(function (data, status) {
             console.log('Error ' + data)
@@ -81,6 +82,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         setOrderTimes(order);
         $scope.rowsCollapsed = false;
         $scope.detailedView = true;
+        $state.go('arm', {orderNo: order.orderNumber}, {notify: false})
     }
 
     function setOrderTimes(order) {
@@ -352,6 +354,10 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.map = {center: {latitude: 57.6363519, longitude: 39.8788456 }, zoom: 10};
     $scope.options = {scrollwheel: true};
     $scope.markers = [];
+
+    if ($stateParams.orderNo) {
+        $scope.onClick({orderNumber:$stateParams.orderNo});
+    }
 
 }]);
 

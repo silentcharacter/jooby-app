@@ -395,11 +395,11 @@
                 .addChild(nga.menu().title('Отчеты').icon('<span class="glyphicon glyphicon-signal"></span>').link('/stats').active(function(path) {
                     return path.indexOf('/stats') === 0;
                 }))
-                .addChild(nga.menu().title('Обработка заказов').icon('<span class="glyphicon glyphicon-earphone"></span>').link('/arm').active(function(path) {
-                    return path.indexOf('/arm') === 0;
+                .addChild(nga.menu().title('Обработка заказов').icon('<span class="glyphicon glyphicon-earphone"></span>').link('/arm/').active(function(path) {
+                    return path.indexOf('/arm/') === 0;
                 }))
-                .addChild(nga.menu().title('График доставки').icon('<span class="glyphicon glyphicon-calendar"></span>').link('/schedule').active(function(path) {
-                    return path.indexOf('/schedule') === 0;
+                .addChild(nga.menu().title('График доставки').icon('<span class="glyphicon glyphicon-calendar"></span>').link('/schedule/').active(function(path) {
+                    return path.indexOf('/schedule/') === 0;
                 }))
                 .addChild(nga.menu(customers).icon('<span class="glyphicon glyphicon-king"></span>').title('Покупатели'))
                 .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Пользователи'))
@@ -443,12 +443,12 @@
             controller: 'GenericChartCtrl'
         }).state('arm', {
             parent: 'main',
-            url: '/arm',
+            url: '/arm/:orderNo',
             templateUrl: '/assets/views/arm.html',
             controller: 'ARMCtrl'
         }).state('schedule', {
             parent: 'main',
-            url: '/schedule',
+            url: '/schedule/:date',
             templateUrl: '/assets/views/schedule.html',
             controller: 'ScheduleCtrl'
         });

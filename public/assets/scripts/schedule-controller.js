@@ -1,10 +1,17 @@
-angular.module('myApp.controllers').controller('ScheduleCtrl', ['$scope', '$http', '$alert', function($scope, $http, $alert) {
+angular.module('myApp.controllers').controller('ScheduleCtrl', ['$scope', '$http', '$alert', '$state', '$stateParams',
+    function($scope, $http, $alert, $state, $stateParams) {
 
     $scope.loading = true;
 
-    var d = new Date();
-    d.setDate(d.getDate() + 1);
-    $scope.deliveryDate = d;
+    if ($stateParams.date) {
+        var d = new Date($stateParams.date);
+        $scope.deliveryDate = d;
+    } else {
+        d = new Date();
+        d.setDate(d.getDate() + 1);
+        $scope.deliveryDate = d;
+        $state.go('schedule', {date: formatDate(d)}, {notify: false})
+    }
 
     $scope.times1 = window.times.map(function(obj) {
         return {value: obj.value, open: true};
@@ -56,6 +63,7 @@ angular.module('myApp.controllers').controller('ScheduleCtrl', ['$scope', '$http
 
     $scope.onDeliveryDateChange = function(deliveryDate) {
         $scope.deliveryDate = deliveryDate;
+        $state.go('schedule', {date: formatDate(deliveryDate)}, {notify: false})
         getList();
     };
 
