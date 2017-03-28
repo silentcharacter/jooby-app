@@ -1,12 +1,15 @@
 package com.mycompany;
 
+import com.google.common.hash.Hasher;
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.SmsService;
 import com.mycompany.service.shop.*;
+import com.sun.crypto.provider.HmacSHA1;
 import com.sun.org.apache.xpath.internal.operations.Or;
 import com.typesafe.config.Config;
 import org.jooby.*;
+import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,6 +106,19 @@ public class ShopApp extends Jooby
 		get("/checkout", req ->
 		{
 			Map cart = cartService.getFetchedCart(req);
+			if (req.cookie("foodsun").isSet()) {
+				String cookie = req.cookie("foodsun").value();
+				String[] decoded = new String(Base64.getDecoder().decode(cookie)).split(",");
+				if (decoded.length == 2 && BCrypt.checkpw(decoded[0], decoded[1])) {
+					Order previousOrder = orderService.getBy("orderNumber", decoded[0]);
+					cart.put("phone", previousOrder.phone);
+					cart.put("name", previousOrder.name);
+					cart.put("streetName", previousOrder.streetName);
+					cart.put("streetNumber", previousOrder.streetNumber);
+					cart.put("entrance", previousOrder.entrance);
+					cart.put("flat", previousOrder.flat);
+				}
+			}
 			return Results.html("shop/checkout")
 					.put("cart", cart)
 					.put("cartForm", cart)
@@ -171,22 +187,26 @@ public class ShopApp extends Jooby
 			cartService.setPaymentType(req, req.param("payment").value());
 			OrderService orderService = req.require(OrderService.class);
 			Order order = orderService.placeOrder(req);
+			if (order == null) {
+				throw new RuntimeException("Order not placed");
+			}
 			cartService.emptyCart(req);
 			sendEvent(order);
 			smsService.sendOrderConfirmationSms(order);
-			if (order != null) {
-				return Results.redirect("/thankyou?order=" + order.orderNumber);
-			}
-			throw new RuntimeException("Order not placed");
+			return Results.redirect("/thankyou?order=" + order.orderNumber);
 		});
 
-		get("/thankyou", req -> {
-				String orderNumber = req.param("order").value();
-				return Results.html("shop/checkout")
-					.put("cart", orderService.getFetchedOrderByNumber(orderNumber))
-					.put("step", "thankyou")
-					.put("orderNumber", orderNumber)
-					.put("templateName", "shop/thankyou");
+		get("/thankyou", (req, rsp, chain) -> {
+			String orderNumber = req.param("order").value();
+			String salt = BCrypt.gensalt();
+			String hash = BCrypt.hashpw(orderNumber, salt);
+			String encoded = Base64.getEncoder().encodeToString(String.format("%s,%s", orderNumber, hash).getBytes());
+			rsp.cookie("foodsun", encoded);
+			rsp.send(Results.html("shop/checkout")
+				.put("cart", orderService.getFetchedOrderByNumber(orderNumber))
+				.put("step", "thankyou")
+				.put("orderNumber", orderNumber)
+				.put("templateName", "shop/thankyou"));
 		});
 
 		get("/orderByPhone", request -> orderService.findByPhone(request.param("phone").value()));

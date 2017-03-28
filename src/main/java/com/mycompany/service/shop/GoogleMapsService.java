@@ -37,6 +37,7 @@ public class GoogleMapsService
 		catch (IOException e)
 		{
 			logger.error("Error getting coordinates", e);
+			return null;
 		}
 		return res;
 	}

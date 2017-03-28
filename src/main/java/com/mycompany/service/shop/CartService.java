@@ -54,7 +54,7 @@ public class CartService
 				}
 				else
 				{
-					cart = getNewCart(req);
+					cart = getNewCart();
 				}
 				saveSessionCart(req, cart);
 			}
@@ -62,7 +62,7 @@ public class CartService
 		catch (IOException e)
 		{
 			e.printStackTrace();
-			cart = getNewCart(req);
+			cart = getNewCart();
 			saveSessionCart(req, cart);
 		}
 		return cart;
@@ -79,13 +79,13 @@ public class CartService
 		return new String(encoded, "utf-8");
 	}
 
-	private Cart getNewCart(Request req)
+	public Cart getNewCart()
 	{
 		Cart cart = new Cart();
 		DeliveryType deliveryType = deliveryTypeService.getBy("name", DeliveryType.FREE);
 		cart.deliveryId = deliveryType.id;
 		cart.deliveryPrice = deliveryType.price;
-		cart.paymentTypeId = req.require(PaymentTypeService.class).getBy("name", PaymentType.OFFLINE).id;
+		cart.paymentTypeId = paymentTypeService.getBy("name", PaymentType.OFFLINE).id;
 		return cart;
 	}
 
@@ -106,7 +106,7 @@ public class CartService
 
 	public void emptyCart(Request req)
 	{
-		saveSessionCart(req, getNewCart(req));
+		saveSessionCart(req, getNewCart());
 	}
 
 	public Cart addToCart(Request req, Product product, Integer quantity, Color color, List<Sauce> sauces)

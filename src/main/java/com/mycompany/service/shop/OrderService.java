@@ -125,6 +125,9 @@ public class OrderService extends AbstractService<Order>
 
 	public Map<String, Object> getFetchedOrderByNumber(String orderNumber)
 	{
+		if ("new".equals(orderNumber)) {
+			return getOrderMap(cartService.getNewCart());
+		}
 		return getOrderMap(getBy("orderNumber", orderNumber));
 	}
 

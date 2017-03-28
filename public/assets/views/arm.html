@@ -54,21 +54,29 @@
                         </tr>
                         </tbody>
                     </table>
-                <paging class="pull-bottom"
-                        page="currentPage"
-                        page-size="pageSize"
-                        total="total"
-                        text-next-class="glyphicon glyphicon-chevron-right"
-                        text-prev-class="glyphicon glyphicon-chevron-left"
-                        text-first-class="glyphicon glyphicon-backward"
-                        text-last-class="glyphicon glyphicon-forward"
-                        class="small"
-                        text-title-page="Страница {page}"
-                        show-prev-next="true"
-                        show-first-last="true"
-                        paging-action="onPageChange(page)"
-                >
-                </paging>
+                <div class="pull-bottom">
+                    <b>
+                        {{(currentPage-1) * pageSize + 1}} - {{currentPage * pageSize > total? total : currentPage * pageSize}} из {{total}}
+                    </b><br/>
+                    <paging
+                            page="currentPage"
+                            page-size="pageSize"
+                            total="total"
+                            text-next-class="glyphicon glyphicon-chevron-right"
+                            text-prev-class="glyphicon glyphicon-chevron-left"
+                            text-first-class="glyphicon glyphicon-backward"
+                            text-last-class="glyphicon glyphicon-forward"
+                            class="small"
+                            text-title-page="Страница {page}"
+                            show-prev-next="true"
+                            show-first-last="true"
+                            paging-action="onPageChange(page)"
+                    >
+                    </paging>
+
+
+                </div>
+
             </div>
             <div class="col-sm-6" ng-show="detailedView">
                 <form name="form" class="css-form" novalidate>
