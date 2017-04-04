@@ -11,6 +11,7 @@ public class GlobalConfig extends Entity
 	public int deliveryDaysRange;
 	public String smsTemplate;
 	public Boolean sendSms;
+	public String smsTemplateAdmin;
 
 	@Override
 	public String getFullText()

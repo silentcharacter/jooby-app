@@ -1,5 +1,10 @@
 angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$alert', '$state', '$stateParams', function($scope, $http, $alert, $state, $stateParams) {
 
+    String.prototype.replaceAll = function(search, replacement) {
+        var target = this;
+        return target.replace(new RegExp(search, 'g'), replacement);
+    };
+
     $scope.loading = true;
     $scope.currentPage = 1;
     $scope.pageSize = 10;
@@ -8,10 +13,13 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         $scope.currentPage = currentPage;
         getList();
     };
+    $scope.statusNew = window.NEW;
+    $scope.statusClarification = window.CLARIFICATION;
+    $scope.statusInDelivery = window.IN_DELIVERY;
 
     //get order list
     function getList() {
-        var filter = encodeURIComponent(JSON.stringify({status: ['Новый', 'В доставке', 'Отменен']}));
+        var filter = encodeURIComponent(JSON.stringify({status: [window.NEW, window.CLARIFICATION, window.IN_DELIVERY, window.CANCELED]}));
         $http.get('/api/orders?_filters=' + filter + '&_page=' + $scope.currentPage + '&_perPage=' + $scope.pageSize)
             .success(function (data, status, headers, config) {
                 $scope.orders = data;
@@ -70,6 +78,19 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     function updateOrderInScope(order) {
         $scope.cancelConfirm = false;
+        $scope.order = order;
+        $scope.rowsCollapsed = false;
+        $scope.detailedView = true;
+        if (!order.orderNumber) {
+            order.id = 'new';
+            order.orderNumber = 'new';
+            order.deliveryDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+            $http.get('/api/products').success(function (data) {
+                $scope.products = data;
+            }).error(function (data, status) {
+                console.log('Error ' + data)
+            });
+        }
         if (order.deliveryDate) {
             order.deliveryDate = new Date(order.deliveryDate);
             loadSchedule(order);
@@ -78,10 +99,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             addMarker(order, true);
             $scope.loading = false;
         }
-        $scope.order = order;
         setOrderTimes(order);
-        $scope.rowsCollapsed = false;
-        $scope.detailedView = true;
         $state.go('arm', {orderNo: order.orderNumber}, {notify: false})
     }
 
@@ -102,7 +120,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     function addMarker(order, green) {
         var marker = {
-            id: order.id,
+            id: order.id? order.id : 'new',
             coords: {
                 latitude: order.lat, longitude: order.lng
             },
@@ -133,7 +151,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         var d = new Date(Date.parse(startDate));
         d.setDate(d.getDate() + 1);
         var endDate = formatDate(d);
-        var filter = {deliveryDate_$gte: startDate, deliveryDate_$lt: endDate};
+        var filter = {deliveryDate_$gte: startDate, deliveryDate_$lt: endDate, status: [window.NEW, window.CLARIFICATION, window.IN_DELIVERY]};
         var filterUrl = encodeURIComponent(JSON.stringify(filter));
         $scope.loading = true;
         $http.get('/api/orders?_filters='+filterUrl).success(function (data) {
@@ -152,6 +170,9 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
                     addMarker(orders[i]);
                 }
                 orders.push(order);
+                orders.sort(function (o1, o2) {
+                    return -o1.orderNumber.localeCompare(o2.orderNumber);
+                });
                 addMarker(order, true);
             }
             $scope.loading = false;
@@ -164,6 +185,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.onDeliveryTypeChange = function(delivery) {
         $scope.order.delivery = delivery;
         setOrderTimes($scope.order);
+        updateTotal();
     };
 
     $scope.onDeliveryDateChange = function(deliveryDate) {
@@ -273,6 +295,64 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         return res;
     };
 
+    $scope.onCustomerSelect = function (customer) {
+        var arr = customer.split(' ');
+        var phone = '', name = '';
+        var i;
+        for (i = 0; i < arr.length; i++) {
+            if (/^[\d-\+\(\)]+$/.test(arr[i])) {
+                phone += arr[i] + ' ';
+            } else {
+                break;
+            }
+        }
+        phone = phone.trim();
+        for (var j = i; j < arr.length; j++) {
+            name += arr[j] + ' ';
+        }
+        name = name.trim();
+
+        $scope.$apply(function() {
+            $scope.order.name = name;
+            $scope.order.phone = phone;
+        });
+
+        var data = {_filters:JSON.stringify({phone:phone}), _page:1, _perPage:1};
+        $.ajax({
+            type: 'GET',
+            url: '/api/orders',
+            data: data,
+        }).done(function (result) {
+            if (result && result.length > 0) {
+                $scope.$apply(function() {
+                    $scope.order.streetName = result[0].streetName;
+                    $scope.order.streetNumber = result[0].streetNumber;
+                    $scope.order.entrance = result[0].entrance;
+                    $scope.order.flat = result[0].flat;
+                    $scope.onAddressChange();
+                });
+            }
+        });
+    };
+
+    $scope.findCustomers = function (query) {
+        var res = [];
+        var data = {_filters:JSON.stringify({q:query}), _page:1, _perPage:10};
+        $.ajax({
+            type: 'GET',
+            url: '/api/customers',
+            async: false,
+            data: data,
+        }).done(function (result) {
+            var suggestions = new Set();
+            for (var s of result) {
+                suggestions.add(s.phone + ' ' + s.name);
+            }
+            res = Array.from(suggestions);
+        });
+        return res;
+    };
+
     // $scope.getLocation = function(val) {
     //     return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
     //         params: {
@@ -312,17 +392,25 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         });
     };
 
-    $scope.submit = function (order) {
+    $scope.submit = function (order, toDelivery) {
         order = angular.copy(order);
         order.deliveryDate = formatDate(order.deliveryDate);
+        order.toDelivery = toDelivery;
         $scope.loading = true;
-        $http.post('/order/delivery', order).success(function (data) {
+        var url = '/order/delivery';
+        if (order.orderNumber == 'new') {
+            url = '/order/place';
+        }
+        $http.post(url, order).success(function (data) {
             updateOrderInScope(data);
             updateOrderInList(data);
             getNewOrdersCount();
+            if ($stateParams.orderNo == 'new') {
+                $state.go('arm', {orderNo: data.orderNumber}, {notify: false})
+            }
             $alert({title: 'Заказ ' + data.orderNumber + ' сохранен', content: '',
                 placement: 'top', type: 'info', show: true, container:'.page-header', animation:"am-fade-and-slide-top", duration: 4});
-            // console.log(data);
+            // console.log(order.delivery);
         }).error(function (data, status) {
             console.log('Error ' + data);
             $scope.loading = false;
@@ -331,13 +419,71 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         });
     };
 
+    $scope.discardNew = function () {
+        $scope.onClick({orderNumber:'new'});
+    };
+
+    $scope.addProduct = function (product) {
+        if (!$scope.order.entries) {
+            $scope.order.entries = [];
+        }
+        for (var i = 0; i < $scope.order.entries.length; i++) {
+            if ($scope.order.entries[i].product.id === product.id) {
+                $scope.order.entries[i].quantity++;
+                $scope.order.entries[i].totalPrice = $scope.order.entries[i].quantity * $scope.order.entries[i].product.price;
+                $scope.quantityChanged($scope.order.entries[i]);
+                return;
+            }
+        }
+        var entry = {product: product, quantity: 1, totalPrice: product.price};
+        $scope.order.entries.push(entry);
+        $scope.quantityChanged(entry);
+    };
+
+    $scope.quantityChanged = function (entry) {
+        entry.totalPrice = entry.quantity * entry.product.price;
+        updateTotal();
+    };
+
+    $scope.removeEntry = function (entry) {
+        $scope.order.entries.splice($scope.order.entries.indexOf(entry), 1);
+        updateTotal();
+    };
+
+    $scope.isEmpty = function () {
+        return !$scope.order.entries || $scope.order.entries.length == 0;
+    };
+
+    $scope.getSkypePhone = function () {
+        if ($scope.order && $scope.order.phone) {
+            var phone = $scope.order.phone.replaceAll('-','').replaceAll(' ','').trim();
+            if (phone.length == 10 && phone.startsWith('9')) {
+                phone = '+7' + phone;
+            }
+            if (phone.length == 11 && phone.startsWith('8')) {
+                phone = '+7' + phone.substr(1, 10);
+            }
+            return phone;
+        }
+        return '';
+    };
+
+    function updateTotal() {
+        $scope.order.totalPrice = 0;
+        for (var i = 0; i < $scope.order.entries.length; i++) {
+            $scope.order.totalPrice += $scope.order.entries[i].totalPrice;
+        }
+        $scope.order.totalPrice += $scope.order.delivery.price;
+    }
+
     function updateOrderInList(order) {
         for (var i = 0; i < $scope.orders.length; i++) {
             if ($scope.orders[i].id === order.id) {
                 $scope.orders[i] = order;
-                break;
+                return;
             }
         }
+        $scope.orders.unshift(order);
     }
 
     function formatDate(date) {

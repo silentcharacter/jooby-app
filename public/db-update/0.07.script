@@ -1,0 +1,4 @@
+db.globalConfigs.update(
+    {},
+    { $set: { smsTemplateAdmin: 'Ваш заказ №%s создан. Доставка: %s%s. foodsun.ru'} }
+);

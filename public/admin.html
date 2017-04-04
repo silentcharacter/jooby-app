@@ -26,6 +26,10 @@
         {value:"19:00-22:00", label: "19:00-22:00", tag: 'payable'},
         {value:"Бесплатная", label: "Бесплатная", tag: 'free'},
     ];
+    window.IN_DELIVERY = 'В доставке';
+    window.NEW = 'Новый';
+    window.CLARIFICATION = 'Требует уточнения';
+    window.CANCELED = 'Отменен';
 </script>
 <script type="text/javascript">
     var myApp = angular.module('myApp', ['ng-admin', 'googlechart', 'myApp.controllers',
@@ -167,6 +171,7 @@
             nga.field('deliveryDaysRange', 'number').label("Кол-во дней в форме выбора доставки"),
             nga.field('sendSms', 'boolean').label("Отправлять смс о подтверждении заказа"),
             nga.field('smsTemplate', 'text').label("Шаблон смс о подтверждении заказа"),
+            nga.field('smsTemplateAdmin', 'text').label("Шаблон смс о заказе, созданном менеджером"),
         ]);
         globalConfigs.editionView().fields(globalConfigs.creationView().fields()).title('Настройки');
         admin.addEntity(globalConfigs);
@@ -282,9 +287,10 @@
         admin.addEntity(customers);
 
         var orderStatuses = [
-            { value: 'Новый', label: 'Новый' },
+            { value: window.NEW, label: window.NEW },
             { value: 'Обработан', label: 'Обработан' },
-            { value: 'Отменен', label: 'Отменен' },
+            { value: window.CLARIFICATION, label: window.CLARIFICATION },
+            { value: window.CANCELED, label: window.CANCELED },
             { value: 'В доставке', label: 'В доставке' },
             { value: 'Доставлен', label: 'Доставлен' },
             { value: 'Не доставлен', label: 'Не доставлен' },
@@ -318,6 +324,10 @@
             nga.field('orderNumber').isDetailLink(true).label("Номер"),
             nga.field('orderDate', 'datetime').label("Дата"),
             nga.field('deliveryDate', 'datetime').label("Доставить").format('yyyy-MM-dd'),
+            nga.field('deliveryId', 'reference').label("Способ доставки")
+                    .targetEntity(deliveryTypes)
+                    .targetField(nga.field('description'))
+                    .singleApiCall(ids => ({'id': ids })),
             nga.field('deliveryTime', 'choice').attributes({ placeholder: 'Выберите значение' }).label("Интервал").choices(window.times),
             nga.field('status', 'choice').label("Статус").choices(orderStatuses),
             nga.field('name').label("Имя покупателя"),
@@ -328,10 +338,6 @@
                     .editable(false)
                     .singleApiCall(ids => ({'id': ids })),
             nga.field('totalPrice', 'number').label("Сумма").cssClasses('col-sm-2').format('$0.00'),
-            nga.field('deliveryId', 'reference').label("Способ доставки")
-                    .targetEntity(deliveryTypes)
-                    .targetField(nga.field('description'))
-                    .singleApiCall(ids => ({'id': ids })),
             nga.field('deliveryPrice').label('Стоимость доставки'),
             nga.field('paymentTypeId', 'reference').label("Способ оплаты")
                     .targetEntity(paymentTypes)

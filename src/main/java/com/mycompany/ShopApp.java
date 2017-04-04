@@ -105,7 +105,7 @@ public class ShopApp extends Jooby
 
 		get("/checkout", req ->
 		{
-			Map cart = cartService.getFetchedCart(req);
+			Map<String, Object> cart = cartService.getFetchedCart(req);
 			if (req.cookie("foodsun").isSet()) {
 				String cookie = req.cookie("foodsun").value();
 				String[] decoded = new String(Base64.getDecoder().decode(cookie)).split(",");
@@ -192,7 +192,7 @@ public class ShopApp extends Jooby
 			}
 			cartService.emptyCart(req);
 			sendEvent(order);
-			smsService.sendOrderConfirmationSms(order);
+			smsService.sendOrderConfirmationSms(order, false);
 			return Results.redirect("/thankyou?order=" + order.orderNumber);
 		});
 
@@ -221,6 +221,12 @@ public class ShopApp extends Jooby
 
 		delete("/order/:id", req -> orderService.cancelOrder(req.param("id").value()));
 
+		post("/order/place", req-> {
+			Order order = orderService.createOrder(req.body().to(Map.class));
+			smsService.sendOrderConfirmationSms(order, true);
+			return orderService.getFetchedOrder(order.id);
+		});
+
 		get("/coordinates/:streetName/:streetNumber", req -> {
 			Geometry geometry = googleMapsService.getCoordinates(req.param("streetName").value(), req.param("streetNumber").value());
 			if (geometry == null)
@@ -233,7 +239,9 @@ public class ShopApp extends Jooby
 
 		get("/admin/schedule", req -> {
 			String date = req.param("date").value();
-			List<String> times = req.param("time").isSet()? Collections.singletonList(req.param("time").value()) : possibleDateTimes;
+			List<String> possibleTimes = new ArrayList<>(possibleDateTimes);
+			possibleTimes.add("Бесплатная");
+			List<String> times = req.param("time").isSet()? Collections.singletonList(req.param("time").value()) : possibleTimes;
 			Map<String, List<Map<String, Object>>> orders = new HashMap<>();
 			for (String dateTime : times) {
 				List<Map<String, Object>> orderList = orderService.getDeliverySchedule(date, dateTime);

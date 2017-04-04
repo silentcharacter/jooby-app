@@ -2,9 +2,9 @@ package com.mycompany.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
-import com.mycompany.domain.shop.GeoCodeResults;
 import com.mycompany.domain.shop.GlobalConfig;
 import com.mycompany.domain.shop.Order;
+import com.mycompany.service.shop.DeliveryTypeService;
 import com.mycompany.service.shop.GlobalConfigService;
 import com.typesafe.config.Config;
 import org.apache.commons.lang3.BooleanUtils;
@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.net.URLEncoder;
 
@@ -26,13 +27,16 @@ import java.net.URLEncoder;
 public class SmsService
 {
 	private final static Logger logger = LoggerFactory.getLogger(SmsService.class);
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 	@Inject
 	private Config config;
 	@Inject
 	private GlobalConfigService globalConfigService;
+	@Inject
+	private DeliveryTypeService deliveryTypeService;
 
-	public boolean sendOrderConfirmationSms(Order order) throws UnsupportedEncodingException
+	public boolean sendOrderConfirmationSms(Order order, boolean createdByAdmin) throws UnsupportedEncodingException
 	{
 		GlobalConfig globalConfig = globalConfigService.getAll().get(0);
 
@@ -40,7 +44,13 @@ public class SmsService
 			return false;
 		}
 
-		String text = String.format(globalConfig.smsTemplate, order.orderNumber);
+		String text;
+		if (!createdByAdmin) {
+			text = String.format(globalConfig.smsTemplate, order.orderNumber);
+		} else {
+			String deliveryTime = deliveryTypeService.isFree(order.deliveryId)? "" : " " + order.deliveryTime;
+			text = String.format(globalConfig.smsTemplateAdmin, order.orderNumber, dateFormat.format(order.deliveryDate), deliveryTime);
+		}
 		String phone = order.phone.replace("+7", "8");
 		phone = phone.length() == 10? "8" + phone : phone;
 		String url = String.format("https://gate.smsaero.ru/send/?user=%s&password=%s&text=%s&digital=0&answer=json&from=SUN+FOOD&to=%s",

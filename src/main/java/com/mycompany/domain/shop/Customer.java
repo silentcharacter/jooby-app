@@ -1,11 +1,12 @@
 package com.mycompany.domain.shop;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mycompany.annotation.Deployment;
 import com.mycompany.domain.Entity;
 
 import java.util.Optional;
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Deployment(table = "customers")
 public class Customer extends Entity
 {
@@ -19,4 +20,5 @@ public class Customer extends Entity
         return Optional.ofNullable(name).orElse("").toLowerCase() + " " + Optional.ofNullable(comment).orElse("").toLowerCase()
             + " " + Optional.ofNullable(phone).orElse("").toLowerCase() + " " + Optional.ofNullable(address).orElse("").toLowerCase();
     }
+
 }

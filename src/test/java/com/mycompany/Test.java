@@ -12,4 +12,13 @@ public class Test
 		String regexp = "(?i)^https?://tdsc-prod\\.[^/]+(|/.*|\\?.*)$";
 		System.out.println(s.matches(regexp));
 	}
+
+	@org.junit.Test
+	public void test() throws Exception
+	{
+		Double d1 = 198d;
+		Double d2 = 17.33d;
+		System.out.println(d1+ d2);
+
+	}
 }

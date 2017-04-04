@@ -6,6 +6,8 @@ import com.mycompany.domain.Entity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 
 public class Cart extends Entity
 {
@@ -89,5 +91,13 @@ public class Cart extends Entity
     @JsonIgnore
     public boolean isEmpty() {
         return entries.isEmpty();
+    }
+
+    public void setDelivery(Map delivery) {
+        deliveryId = (String) delivery.get("id");
+    }
+
+    public void setPaymentType(Map paymentType) {
+        paymentTypeId = (String) paymentType.get("id");
     }
 }

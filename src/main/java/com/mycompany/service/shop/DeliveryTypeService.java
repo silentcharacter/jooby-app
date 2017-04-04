@@ -11,4 +11,8 @@ public class DeliveryTypeService extends AbstractService<DeliveryType> {
 		super(DeliveryType.class);
 	}
 
+	public boolean isFree(String deliveryTypeId) {
+		return DeliveryType.FREE.equals(getById(deliveryTypeId).name);
+	}
+
 }

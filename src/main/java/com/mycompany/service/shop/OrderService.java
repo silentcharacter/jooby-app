@@ -7,6 +7,8 @@ import com.mongodb.client.MongoDatabase;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.AbstractService;
 import com.mycompany.util.DateUtils;
+import com.mycompany.util.ObjectUtil;
+import org.apache.commons.lang3.BooleanUtils;
 import org.bson.Document;
 import org.jongo.MongoCursor;
 import org.jooby.Request;
@@ -50,7 +52,7 @@ public class OrderService extends AbstractService<Order>
 		super(Order.class);
 	}
 
-	private String generateNewOrderNumber(Request req)
+	private String generateNewOrderNumber()
 	{
 		Document doc = db.runCommand(new Document("$eval", "getNextSequence('orderNumber')"));
 		String result = String.valueOf(doc.getDouble("retval").intValue());
@@ -88,7 +90,7 @@ public class OrderService extends AbstractService<Order>
 		try
 		{
 			Order order = mapper.readValue(cartJson.get(), Order.class);
-			order.orderNumber = generateNewOrderNumber(req);
+			order.orderNumber = generateNewOrderNumber();
 			order.orderDate = new Date();
 			order.status = OrderStatus.NEW;
 			linkToCustomer(order);
@@ -103,6 +105,24 @@ public class OrderService extends AbstractService<Order>
 			logger.error("Error placing order", e);
 		}
 		return null;
+	}
+
+	public Order createOrder(Map map) throws ParseException
+	{
+		ObjectMapper mapper = new ObjectMapper();
+		map.put("orderDate", new Date());
+		map.put("deliveryDate", FORMAT.parse((String)map.get("deliveryDate")));
+		map.remove("id");
+		Order order = mapper.convertValue(map, Order.class);
+		order.orderNumber = generateNewOrderNumber();
+		order.orderDate = new Date();
+		order.status = OrderStatus.IN_DELIVERY;
+		linkToCustomer(order);
+		//needed to solve ng-admin bug not showing embedded linked entities
+		order.sauces = sauceService.getAll().stream().map(sauce -> sauce.id).collect(Collectors.toList());
+		insert(order);
+
+		return order;
 	}
 
 	private void linkToCustomer(Order order)
@@ -158,14 +178,20 @@ public class OrderService extends AbstractService<Order>
 
 	public Map sendToDelivery(Map<String, Object> order) throws ParseException
 	{
-		Order saved = getById((String) order.get("id"));
-		saved.status = OrderStatus.IN_DELIVERY;
+		Order saved = getById(ObjectUtil.getValue(order, "id"));
+		Boolean toDelivery = ObjectUtil.getValue(order, "toDelivery");
+		if (BooleanUtils.isTrue(toDelivery)) {
+			saved.status = OrderStatus.IN_DELIVERY;
+		} else if (saved.status == OrderStatus.NEW) {
+			saved.status = OrderStatus.CLARIFICATION;
+		}
 		saved.deliveryDate = FORMAT.parse((String) order.get("deliveryDate"));
-		saved.deliveryTime = (String) order.get("deliveryTime");
-		saved.streetName = (String) order.get("streetName");
-		saved.streetNumber = (String) order.get("streetNumber");
-		saved.entrance = (String) order.get("entrance");
-		saved.flat = (String) order.get("flat");
+		saved.deliveryId = ObjectUtil.getValue(order, "delivery.id");
+		saved.deliveryTime = ObjectUtil.getValue(order, "deliveryTime");
+		saved.streetName = ObjectUtil.getValue(order, "streetName");
+		saved.streetNumber = ObjectUtil.getValue(order, "streetNumber");
+		saved.entrance = ObjectUtil.getValue(order, "entrance");
+		saved.flat = ObjectUtil.getValue(order, "flat");
 		update(saved);
 		return getFetchedOrder(saved.id);
 	}

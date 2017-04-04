@@ -7,6 +7,8 @@ public enum OrderStatus
 {
 	NEW("Новый"),
 
+	CLARIFICATION("Требует уточнения"),
+
 	PROCESSED("Обработан"),
 
 	CANCELLED("Отменен"),
