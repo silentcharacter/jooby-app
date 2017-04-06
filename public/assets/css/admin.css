@@ -87,10 +87,16 @@ hr {
     background-color: rgba(193, 195, 191, 0.15);
 }
 .order-list tr.bg-success:hover {
-    background-color: rgba(37, 199, 11, 0.71);
+    background-color: rgba(37, 199, 11, 0.5);
 }
 .order-list tr.bg-warning:hover {
     background-color: #fce5bf;
+}
+.bg-clarification {
+    background-color: rgba(223, 240, 216, 0.3);
+}
+.order-list tr.bg-clarification:hover {
+    background-color: rgba(223, 240, 216, 0.6);
 }
 .form-control {
     text-align: left;

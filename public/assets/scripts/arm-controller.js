@@ -44,7 +44,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     function getNewOrdersCount() {
         //get new orders count
-        var filter = encodeURIComponent(JSON.stringify({status: 'Новый'}));
+        var filter = encodeURIComponent(JSON.stringify({status: window.NEW}));
         $http.get('/api/orders?_count=true&_filters='+filter).success(function (data, status, headers, config) {
             $scope.newOrders = headers('X-Total-Count');
         }).error(function (data, status) {
@@ -230,12 +230,17 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     //order list rows color
     $scope.rowClass = function (order) {
-        if (order.status == 'Новый') {
+        if (order.status == window.NEW) {
             if ($scope.order && $scope.order.id == order.id)
                 return 'bg-success row-selected';
             return 'bg-success';
         }
-        if (order.status == 'Отменен') {
+        if (order.status == window.CLARIFICATION) {
+            if ($scope.order && $scope.order.id == order.id)
+                return 'bg-clarification row-selected';
+            return 'bg-clarification';
+        }
+        if (order.status == window.CANCELED) {
             if ($scope.order && $scope.order.id == order.id)
                 return 'bg-warning row-selected';
             return 'bg-warning';
@@ -258,7 +263,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         $scope.$apply(function () {
             var order = JSON.parse(msg.data);
             $scope.orders.unshift(order);
-            if (order.status === 'Новый') {
+            if (order.status === window.NEW) {
                 $scope.newOrders++;
             }
         });
