@@ -5,7 +5,7 @@ import com.mycompany.annotation.Deployment;
 import com.mycompany.domain.Entity;
 import com.mycompany.service.AbstractService;
 import com.mycompany.service.SearchResult;
-import com.mycompany.util.DateUtils;
+import com.mycompany.util.Utils;
 import org.bson.types.ObjectId;
 import org.jooby.Jooby;
 import org.jooby.Request;
@@ -96,7 +96,7 @@ public class AbstractResource<T extends Entity> extends Jooby {
                   .collect(Collectors.groupingBy(fieldName -> fieldName.split("_")[0], Collectors.toList()));
             groupedFields.forEach((key, value) -> {
                 queryConditions.add(key + ":" + value.stream().map(it -> it.split("_")[1] + ":#").collect(Collectors.joining(",", "{", "}")));
-                filterValues.addAll(value.stream().map(v -> DateUtils.safeParseUTC(map.get(v))).collect(Collectors.toList()));
+                filterValues.addAll(value.stream().map(v -> Utils.safeParseUTC(map.get(v))).collect(Collectors.toList()));
                 value.forEach(map::remove);
             });
 

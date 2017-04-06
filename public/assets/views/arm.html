@@ -286,7 +286,7 @@
                         </table>
 
                         <div class="form-group row phone {{form.phone.$error.required? 'has-error' : '' }}">
-                            <label class="col-sm-4 col-form-label">Телефон/Покупатель:</label>
+                            <label class="col-sm-4 col-form-label" ng-bind-html="getCustomerLabel()"></label>
                             <div class="col-sm-4" style="padding-right: 2px">
                                 <input class="form-control" type="search" ng-model="order.phone" name="phone" required
                                        bs-options="customer as customer for customer in findCustomers($viewValue)" bs-typeahead

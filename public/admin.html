@@ -263,7 +263,6 @@
         customers.creationView().title('Создание покупателя').fields([
             nga.field('name').label("Имя"),
             nga.field('phone').label("Телефон"),
-            nga.field('comment', 'text').label("Комментарий"),
             nga.field('orders', 'referenced_list')
                     .label('Последние заказы')
                     .targetEntity(nga.entity('orders'))
@@ -281,6 +280,14 @@
             nga.field('commands button', 'template')
                     .label('')
                     .template('<ma-filtered-list-button label="Все заказы этого покупателя" entity-name="orders" filter="{ customerId: entry.values.id }"></ma-filtered-list-button>'),
+            nga.field('comment', 'text').label("Комментарий"),
+            nga.field('addresses', 'embedded_list').label('Адреса')
+                    .targetFields([
+                        nga.field('streetName').label('Улица'),
+                        nga.field('streetNumber').label('Дом'),
+                        nga.field('entrance').label('Подъезд'),
+                        nga.field('flat').label('Квартира'),
+                    ]),
 
         ]);
         customers.editionView().fields(customers.creationView().fields()).title('Редактирование покупателя');

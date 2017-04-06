@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.mycompany.domain.shop.*;
+import com.mycompany.util.Utils;
 import com.typesafe.config.Config;
 import org.jooby.Request;
 
@@ -154,7 +155,7 @@ public class CartService
 	{
 		Cart cart = getSessionCart(req);
 		cart.name = cartForm.name;
-		cart.phone = cartForm.phone;
+		cart.phone = Utils.formatPhone(cartForm.phone);
 		cart.streetName = cartForm.streetName;
 		cart.streetNumber = cartForm.streetNumber;
 		cart.entrance = cartForm.entrance;

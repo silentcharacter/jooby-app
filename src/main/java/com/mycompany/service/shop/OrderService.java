@@ -6,8 +6,7 @@ import com.google.inject.Inject;
 import com.mongodb.client.MongoDatabase;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.AbstractService;
-import com.mycompany.util.DateUtils;
-import com.mycompany.util.ObjectUtil;
+import com.mycompany.util.Utils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.bson.Document;
 import org.jongo.MongoCursor;
@@ -127,13 +126,22 @@ public class OrderService extends AbstractService<Order>
 
 	private void linkToCustomer(Order order)
 	{
+		order.phone = Utils.formatPhone(order.phone);
 		Customer customer = customerService.getBy("phone", order.phone);
 		if (customer == null) {
 			customer = new Customer();
 			customer.name = order.name;
 			customer.phone = order.phone;
-			customer.address = String.format("%s %s %s", order.streetName, order.streetNumber, order.flat);
+			customer.addresses = Collections.singletonList(
+					new Address(order.streetName, order.streetNumber, order.entrance, order.flat));
 			customer = customerService.insert(customer);
+		} else {
+			Optional<Address> address = customer.addresses.stream().filter(a -> a.streetName.equals(order.streetName)
+					&& a.streetNumber.equals(order.streetNumber) && a.flat.equals(order.flat)).findFirst();
+			if (!address.isPresent()) {
+				customer.addresses.add(new Address(order.streetName, order.streetNumber, order.entrance, order.flat));
+				customerService.update(customer);
+			}
 		}
 		order.customerId = customer.id;
 	}
@@ -178,20 +186,20 @@ public class OrderService extends AbstractService<Order>
 
 	public Map sendToDelivery(Map<String, Object> order) throws ParseException
 	{
-		Order saved = getById(ObjectUtil.getValue(order, "id"));
-		Boolean toDelivery = ObjectUtil.getValue(order, "toDelivery");
+		Order saved = getById(Utils.getValue(order, "id"));
+		Boolean toDelivery = Utils.getValue(order, "toDelivery");
 		if (BooleanUtils.isTrue(toDelivery)) {
 			saved.status = OrderStatus.IN_DELIVERY;
 		} else if (saved.status == OrderStatus.NEW) {
 			saved.status = OrderStatus.CLARIFICATION;
 		}
 		saved.deliveryDate = FORMAT.parse((String) order.get("deliveryDate"));
-		saved.deliveryId = ObjectUtil.getValue(order, "delivery.id");
-		saved.deliveryTime = ObjectUtil.getValue(order, "deliveryTime");
-		saved.streetName = ObjectUtil.getValue(order, "streetName");
-		saved.streetNumber = ObjectUtil.getValue(order, "streetNumber");
-		saved.entrance = ObjectUtil.getValue(order, "entrance");
-		saved.flat = ObjectUtil.getValue(order, "flat");
+		saved.deliveryId = Utils.getValue(order, "delivery.id");
+		saved.deliveryTime = Utils.getValue(order, "deliveryTime");
+		saved.streetName = Utils.getValue(order, "streetName");
+		saved.streetNumber = Utils.getValue(order, "streetNumber");
+		saved.entrance = Utils.getValue(order, "entrance");
+		saved.flat = Utils.getValue(order, "flat");
 		update(saved);
 		return getFetchedOrder(saved.id);
 	}
@@ -200,6 +208,7 @@ public class OrderService extends AbstractService<Order>
 	public void onSave(Order order)
 	{
 		cartService.calculateCart(order);
+		order.phone = Utils.formatPhone(order.phone);
 		linkToCustomer(order);
 		updateCoordinates(order);
 	}
@@ -223,7 +232,7 @@ public class OrderService extends AbstractService<Order>
 
 	public List<Map<String, Object>> getDeliverySchedule(String dateStr, String time)
 	{
-		Date dateStart = DateUtils.safeParseUTC(dateStr);
+		Date dateStart = Utils.safeParseUTC(dateStr);
 		Date dateEnd = new Date(dateStart.getTime() + 1000 * 3600 * 24);
 		MongoCursor<Order> cursor = getCollection()
 				.find("{deliveryDate:{$gte:#,$lt:#}, deliveryTime:#}", dateStart, dateEnd, time).as(Order.class);

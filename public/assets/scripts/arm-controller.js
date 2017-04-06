@@ -325,16 +325,20 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         var data = {_filters:JSON.stringify({phone:phone}), _page:1, _perPage:1};
         $.ajax({
             type: 'GET',
-            url: '/api/orders',
+            url: '/api/customers',
             data: data,
         }).done(function (result) {
             if (result && result.length > 0) {
                 $scope.$apply(function() {
-                    $scope.order.streetName = result[0].streetName;
-                    $scope.order.streetNumber = result[0].streetNumber;
-                    $scope.order.entrance = result[0].entrance;
-                    $scope.order.flat = result[0].flat;
-                    $scope.onAddressChange();
+                    var address = result[0].addresses[0];
+                    if (address) {
+                        $scope.order.streetName = address.streetName;
+                        $scope.order.streetNumber = address.streetNumber;
+                        $scope.order.entrance = address.entrance;
+                        $scope.order.flat = address.flat;
+                        $scope.order.customerId = address.id;
+                        $scope.onAddressChange();
+                    }
                 });
             }
         });
@@ -457,6 +461,12 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     $scope.isEmpty = function () {
         return !$scope.order.entries || $scope.order.entries.length == 0;
+    };
+
+    $scope.getCustomerLabel = function () {
+        if ($scope.order.customerId)
+            return 'Телефон/<a href="#/customers/edit/' + $scope.order.customerId + '" target="_blank">Покупатель</a>';
+        return 'Телефон/Покупатель';
     };
 
     $scope.getSkypePhone = function () {

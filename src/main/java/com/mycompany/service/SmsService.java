@@ -6,6 +6,7 @@ import com.mycompany.domain.shop.GlobalConfig;
 import com.mycompany.domain.shop.Order;
 import com.mycompany.service.shop.DeliveryTypeService;
 import com.mycompany.service.shop.GlobalConfigService;
+import com.mycompany.util.Utils;
 import com.typesafe.config.Config;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.http.HttpEntity;
@@ -51,8 +52,7 @@ public class SmsService
 			String deliveryTime = deliveryTypeService.isFree(order.deliveryId)? "" : " " + order.deliveryTime;
 			text = String.format(globalConfig.smsTemplateAdmin, order.orderNumber, dateFormat.format(order.deliveryDate), deliveryTime);
 		}
-		String phone = order.phone.replace("+7", "8");
-		phone = phone.length() == 10? "8" + phone : phone;
+		String phone = Utils.formatPhone(order.phone).replace("+7", "8");
 		String url = String.format("https://gate.smsaero.ru/send/?user=%s&password=%s&text=%s&digital=0&answer=json&from=SUN+FOOD&to=%s",
 				URLEncoder.encode(config.getString("smsaero.user"), "utf-8"), config.getString("smsaero.password"),
 				URLEncoder.encode(text, "utf-8"), phone);
