@@ -110,15 +110,15 @@ public class App extends Jooby {
             }
         });
 
-//        use(new Auth()
-//                        .form("/admin/**", MyUsernamePasswordAuthenticator.class)
-//                        .form("/api/**", MyUsernamePasswordAuthenticator.class)
-//                        .authorizer("admin", "/admin/**", (ctx, profiles) -> authenticationService.isAuthorized(ctx, profiles))
-//                        .client("/google/**", conf -> new Google2Client(conf.getString("google.key"), conf.getString("google.secret")))
-//                        .client("/vk/**", conf -> new VkClient(conf.getString("vk.key"), conf.getString("vk.secret")))
-//                        .client("/facebook/**", conf -> new FacebookClient(conf.getString("facebook.key"), conf.getString("facebook.secret")))
-//                        .client("/twitter/**", conf -> new TwitterClient(conf.getString("twitter.key"), conf.getString("twitter.secret")))
-//        );
+        use(new Auth()
+                        .form("/admin/**", MyUsernamePasswordAuthenticator.class)
+                        .form("/api/**", MyUsernamePasswordAuthenticator.class)
+                        .authorizer("admin", "/admin/**", (ctx, profiles) -> authenticationService.isAuthorized(ctx, profiles))
+                        .client("/google/**", conf -> new Google2Client(conf.getString("google.key"), conf.getString("google.secret")))
+                        .client("/vk/**", conf -> new VkClient(conf.getString("vk.key"), conf.getString("vk.secret")))
+                        .client("/facebook/**", conf -> new FacebookClient(conf.getString("facebook.key"), conf.getString("facebook.secret")))
+                        .client("/twitter/**", conf -> new TwitterClient(conf.getString("twitter.key"), conf.getString("twitter.secret")))
+        );
 
         get("/facebook", (req, rsp) -> authenticationService.handleSocLogin(req, rsp));
         get("/twitter", (req, rsp) -> authenticationService.handleSocLogin(req, rsp));
