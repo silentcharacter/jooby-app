@@ -17,6 +17,7 @@ public class Customer extends Entity
     public String name;
     public String comment;
     public String phone;
+    public Integer totalOrdered = 0;
     public List<Address> addresses = new ArrayList<>();
 
     @Override

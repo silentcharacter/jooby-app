@@ -50,7 +50,7 @@ public abstract class AbstractService<T extends Entity> {
 
         MongoCollection collection = jongo.getCollection(entityName);
         String query = queryConditions.stream().collect(Collectors.joining(",", "{", "}"));
-        SearchResult<T> searchResult = new SearchResult<T>();
+        SearchResult<T> searchResult = new SearchResult<>();
         searchResult.count = collection.count(query, filterValues.toArray());
         if (!onlyCount) {
             searchResult.result = collection.find(query, filterValues.toArray()).sort(sort)

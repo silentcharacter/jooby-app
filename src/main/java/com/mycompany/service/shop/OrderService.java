@@ -134,14 +134,18 @@ public class OrderService extends AbstractService<Order>
 			customer.phone = order.phone;
 			customer.addresses = Collections.singletonList(
 					new Address(order.streetName, order.streetNumber, order.entrance, order.flat));
+			customer.totalOrdered = getAll(0, Integer.MAX_VALUE, "", "{customerId:#}", Collections.singletonList(customer.id)).stream()
+					.filter(o -> !o.orderNumber.equals(order.orderNumber)).mapToInt(o -> o.totalPrice).sum() + order.totalPrice;
 			customer = customerService.insert(customer);
 		} else {
 			Optional<Address> address = customer.addresses.stream().filter(a -> a.streetName.equals(order.streetName)
 					&& a.streetNumber.equals(order.streetNumber) && a.flat.equals(order.flat)).findFirst();
 			if (!address.isPresent()) {
 				customer.addresses.add(new Address(order.streetName, order.streetNumber, order.entrance, order.flat));
-				customerService.update(customer);
 			}
+			customer.totalOrdered = getAll(0, Integer.MAX_VALUE, "", "{customerId:#}", Collections.singletonList(customer.id)).stream()
+					.filter(o -> !o.orderNumber.equals(order.orderNumber)).mapToInt(o -> o.totalPrice).sum() + order.totalPrice;
+			customerService.update(customer);
 		}
 		order.customerId = customer.id;
 	}

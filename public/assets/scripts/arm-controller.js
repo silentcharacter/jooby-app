@@ -336,7 +336,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
                         $scope.order.streetNumber = address.streetNumber;
                         $scope.order.entrance = address.entrance;
                         $scope.order.flat = address.flat;
-                        $scope.order.customerId = address.id;
+                        $scope.order.customerId = result[0].id;
                         $scope.onAddressChange();
                     }
                 });

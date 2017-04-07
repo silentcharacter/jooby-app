@@ -12,7 +12,6 @@ public class CustomerService extends AbstractService<Customer> {
 		super(Customer.class);
 	}
 
-
 	@Override
 	public void onSave(Customer customer)
 	{

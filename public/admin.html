@@ -277,6 +277,7 @@
                     .perPage(5)
                     .sortField('orderNumber')
                     .sortDir('DESC'),
+            nga.field('totalOrdered', 'number').label('Всего заказов на'),
             nga.field('commands button', 'template')
                     .label('')
                     .template('<ma-filtered-list-button label="Все заказы этого покупателя" entity-name="orders" filter="{ customerId: entry.values.id }"></ma-filtered-list-button>'),
