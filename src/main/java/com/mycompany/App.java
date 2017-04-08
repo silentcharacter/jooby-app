@@ -1,12 +1,10 @@
 package com.mycompany;
 
-import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.jvm.FileDescriptorRatioGauge;
 import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
 import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
 import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
-import com.mycompany.auth.MyUsernamePasswordAuthenticator;
 import com.mycompany.controller.News;
 import com.mycompany.controller.Roles;
 import com.mycompany.controller.Todos;
@@ -25,18 +23,12 @@ import org.jooby.metrics.Metrics;
 import org.jooby.mongodb.Jongoby;
 import org.jooby.mongodb.MongoSessionStore;
 import org.jooby.mongodb.Mongodb;
-import org.jooby.netty.Netty;
 import org.jooby.pac4j.Auth;
-import org.pac4j.oauth.client.FacebookClient;
-import org.pac4j.oauth.client.Google2Client;
-import org.pac4j.oauth.client.TwitterClient;
-import org.pac4j.oauth.client.VkClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 
 public class App extends Jooby {
@@ -70,7 +62,7 @@ public class App extends Jooby {
                   return reporter;
               })
         );
-//        session(MongoSessionStore.class);
+        session(MongoSessionStore.class);
 
         assets("/assets/**");
         assets("/favicon.ico", "/assets/favicon.ico");
@@ -136,7 +128,7 @@ public class App extends Jooby {
     }
 
     public static void main(final String[] args) throws Exception {
-        new App().start(args);
+        run(App::new, args);
     }
 
 }

@@ -1,12 +1,9 @@
 package com.mycompany;
 
-import com.google.common.hash.Hasher;
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.SmsService;
 import com.mycompany.service.shop.*;
-import com.sun.crypto.provider.HmacSHA1;
-import com.sun.org.apache.xpath.internal.operations.Or;
 import com.typesafe.config.Config;
 import org.jooby.*;
 import org.mindrot.jbcrypt.BCrypt;
