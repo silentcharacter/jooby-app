@@ -383,15 +383,16 @@
                 </fieldset>
                 </form>
             </div>
-            <div class="col-sm-6" ng-if="detailedView">
+            <div class="col-sm-6" >
                 <div class="box">
                     <h3>График доставки<span class="right">{{order.deliveryDate | date : "dd/MM/yyyy"}}</span></h3>
                     <div id="map_canvas">
-                        <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options">
+                        <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" control="myGoogleMap">
                             <ui-gmap-marker ng-repeat="marker in markers" coords="marker.coords" options="marker.options" idkey="marker.id">
                             </ui-gmap-marker>
                         </ui-gmap-google-map>
                     </div>
+                    <!--<pre>{{markers | json}}</pre>-->
                     <br/>
                     <accordion close-others="true" ng-if="order.deliveryDate">
                         <accordion-group heading="{{time.value}} ({{schedule[time.value].length}})" ng-repeat="time in timesAll" is-open="time.open">

@@ -1,4 +1,4 @@
-angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$alert', '$state', '$stateParams', function($scope, $http, $alert, $state, $stateParams) {
+angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$alert', '$state', '$stateParams', '$timeout', function($scope, $http, $alert, $state, $stateParams, $timeout) {
 
     String.prototype.replaceAll = function(search, replacement) {
         var target = this;
@@ -119,6 +119,8 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     }
 
     function addMarker(order, green) {
+        if (!order.lat || !order.lng)
+            return;
         var marker = {
             id: order.id? order.id : 'new',
             coords: {
@@ -159,21 +161,20 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
                 $scope.schedule[$scope.timesAll[i].value] = data.filter(function (item) {
                     return item.deliveryTime == $scope.timesAll[i].value && item.id != order.id;
                 })
-            }
-            for (var i = 0; i < $scope.timesAll.length; i++) {
                 $scope.timesAll[i].open = order.deliveryTime === $scope.timesAll[i].value;
             }
             var orders = $scope.schedule[order.deliveryTime];
-            if (orders) {
-                $scope.markers = [];
-                for (var i = 0; i < orders.length; i++) {
-                    addMarker(orders[i]);
-                }
-                orders.push(order);
-                orders.sort(function (o1, o2) {
-                    return -o1.orderNumber.localeCompare(o2.orderNumber);
-                });
-                addMarker(order, true);
+            if (!orders) {
+                orders = [];
+                $scope.schedule[order.deliveryTime] = orders;
+            }
+            orders.push(order);
+            orders.sort(function (o1, o2) {
+                return -o1.orderNumber.localeCompare(o2.orderNumber);
+            });
+            $scope.markers = [];
+            for (var i = 0; i < orders.length; i++) {
+                addMarker(orders[i], order.id == orders[i].id);
             }
             $scope.loading = false;
         }).error(function (data, status) {
@@ -515,6 +516,15 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.map = {center: {latitude: 57.6363519, longitude: 39.8788456 }, zoom: 10};
     $scope.options = {scrollwheel: true};
     $scope.markers = [];
+    $scope.myGoogleMap = {};
+    $scope.visible = false;
+    $scope.$watch("visible", function(newvalue) {
+            $timeout(function() {
+                if ($scope.myGoogleMap.refresh)
+                    var map = $scope.myGoogleMap.refresh();
+            }, 0);
+        });
+
 
     if ($stateParams.orderNo) {
         $scope.onClick({orderNumber:$stateParams.orderNo});
