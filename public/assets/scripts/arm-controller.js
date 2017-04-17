@@ -126,7 +126,8 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             coords: {
                 latitude: order.lat, longitude: order.lng
             },
-            options: {draggable: false}
+            options: {draggable: false},
+            label: order.orderNumber
         };
         if (green) {
             marker.options.icon = 'https://maps.google.com/mapfiles/ms/icons/green-dot.png';
@@ -177,6 +178,11 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
                 addMarker(orders[i], order.id == orders[i].id);
             }
             $scope.loading = false;
+
+            $scope.map.showMap = false;
+            $timeout(function () {
+                $scope.map.showMap = true;
+            });
         }).error(function (data, status) {
             console.log('Error ' + data);
             $scope.loading = false;
@@ -513,18 +519,10 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         return date.getFullYear() + "-" + month + "-" + day;
     }
 
-    $scope.map = {center: {latitude: 57.6363519, longitude: 39.8788456 }, zoom: 10};
+    $scope.map = {center: {latitude: 57.6363519, longitude: 39.8788456 }, zoom: 10, showMap: true};
     $scope.options = {scrollwheel: true};
     $scope.markers = [];
-    $scope.myGoogleMap = {};
     $scope.visible = false;
-    $scope.$watch("visible", function(newvalue) {
-            $timeout(function() {
-                if ($scope.myGoogleMap.refresh)
-                    var map = $scope.myGoogleMap.refresh();
-            }, 0);
-        });
-
 
     if ($stateParams.orderNo) {
         $scope.onClick({orderNumber:$stateParams.orderNo});
