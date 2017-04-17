@@ -87,7 +87,7 @@ public class AbstractResource<T extends Entity> extends Jooby {
 
             if (map.containsKey("q")) {
                 queryConditions.add("fullText: {$regex: #}");
-                filterValues.add(String.format(".*%s.*", map.get("q").toString().toLowerCase()));
+                filterValues.add(String.format(".*%s.*", map.get("q").toString().toLowerCase().replace("+", "\\+")));
                 map.remove("q");
             }
 
