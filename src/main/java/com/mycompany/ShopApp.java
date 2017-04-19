@@ -5,11 +5,15 @@ import com.mycompany.domain.shop.*;
 import com.mycompany.service.SmsService;
 import com.mycompany.service.shop.*;
 import com.typesafe.config.Config;
+import org.bson.types.Binary;
 import org.jooby.*;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -256,7 +260,26 @@ public class ShopApp extends Jooby
 			sse.onClose(() -> listeners.remove(sse));
 			sse.keepAlive(15, TimeUnit.SECONDS);
 		});
+
+		post("/shop/image/:productId", req -> {
+			try (Upload upload = req.file("file")) {
+				FileInputStream inputStream = new FileInputStream(upload.file());
+				byte b[] = new byte[inputStream.available()];
+				inputStream.read(b);
+				Product product = productService.getById(req.param("productId").value());
+				product.image = new Binary(b);
+				productService.update(product);
+			} catch (IOException e) {
+				logger.error("Error uploading image", e);
+			}
+			return Results.ok();
+		});
+
+		get("/image/product/:productId", (req, rsp) -> {
+			rsp.type("image/jpeg").send(productService.getById(req.param("productId").value()).image.getData());
+		});
 	}
+
 
 	private void sendEvent(Order order)
 	{
