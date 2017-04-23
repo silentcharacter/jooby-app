@@ -35,24 +35,24 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="order in orders" ng-click="onClick(order)" ng-class="rowClass(order)">
+                        <tr ng-repeat="order1 in orders" ng-click="onClick(order1)" ng-class="rowClass(order1)">
                             <td>
-                                {{order.orderNumber}}
+                                {{order1.orderNumber}}
                             </td>
                             <td>
-                                {{order.orderDate | date : "dd-MM-yyyy"}}
+                                {{order1.orderDate | date : "dd-MM-yyyy"}}
                             </td>
                             <td>
-                                {{order.deliveryDate | date : "dd-MM-yyyy"}}
+                                {{order1.deliveryDate | date : "dd-MM-yyyy"}}
                             </td>
                             <td>
-                                {{order.deliveryTime}}
+                                {{order1.deliveryTime}}
                             </td>
                             <td>
-                                {{order.status}}
+                                {{order1.status}}
                             </td>
                             <td class="text-right">
-                                {{order.totalPrice}}
+                                {{order1.totalPrice}}
                             </td>
                         </tr>
                         </tbody>
@@ -201,9 +201,6 @@
                         </table>
 
                         <div class="form-group row" ng-show="!cancelConfirm">
-                            <div style="padding-bottom: 15px">
-                                <br/>
-                            </div>
                             <div ng-if="order.status == statusInDelivery">
                                 <div class="col-sm-4">
                                     <button ng-click="showCancelConfirm(true)" class="btn btn-danger btn-lg btn-block">
@@ -237,7 +234,7 @@
                         <div class="form-group row" ng-show="cancelConfirm && order.status!='Отменен'">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <div style="padding-bottom: 5px">
+                                    <div style="padding-bottom: 5px; padding-top: 0">
                                         Вы уверены, что хотите отменить заказ?
                                     </div>
                                     <div class="form-group row">

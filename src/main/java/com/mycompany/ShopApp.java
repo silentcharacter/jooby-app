@@ -1,5 +1,6 @@
 package com.mycompany;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.SmsService;
@@ -41,6 +42,7 @@ public class ShopApp extends Jooby
 	private static ProductService productService;
 	private static ColorService colorService;
 	private static SauceService sauceService;
+	private static ObjectMapper mapper = new ObjectMapper();
 
 	{
 //		use(new Orders());
@@ -213,7 +215,17 @@ public class ShopApp extends Jooby
 		get("/orderByPhone", request -> orderService.findByPhone(request.param("phone").value()));
 
 		//ARM
-		get("/order/detailed/:orderNumber", req -> orderService.getFetchedOrderByNumber(req.param("orderNumber").value()));
+		get("/order/detailed/:orderNumber", req -> {
+			Order voiceOrder = null;
+			if (req.session().get("voiceOrder").isSet()) {
+				try {
+					voiceOrder = mapper.readValue(req.session().get("voiceOrder").value(), Order.class);
+				} finally {
+					req.session().unset("voiceOrder");
+				}
+			}
+			return orderService.getFetchedOrderByNumber(req.param("orderNumber").value(), voiceOrder);
+		});
 
 		post("/order/delivery", req -> {
 			Map<String, Object> order = req.body().to(Map.class);
@@ -277,6 +289,13 @@ public class ShopApp extends Jooby
 
 		get("/image/product/:productId", (req, rsp) -> {
 			rsp.type("image/jpeg").send(productService.getById(req.param("productId").value()).image.getData());
+		});
+
+		get("/voice", req -> Results.html("/shop/voice"));
+		post("/voice", req -> {
+			Order order = orderService.parseOrderFromString(req.param("content").value());
+			req.session().set("voiceOrder", mapper.writeValueAsString(order));
+			return Results.redirect("/admin#/arm/new");
 		});
 	}
 

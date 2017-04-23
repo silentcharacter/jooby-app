@@ -8,6 +8,7 @@ import com.mycompany.domain.shop.*;
 import com.mycompany.service.AbstractService;
 import com.mycompany.util.Utils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.jongo.MongoCursor;
 import org.jooby.Request;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -154,12 +157,28 @@ public class OrderService extends AbstractService<Order>
 		return getOrderMap(getById(orderId));
 	}
 
-	public Map<String, Object> getFetchedOrderByNumber(String orderNumber)
-	{
+	public Map<String, Object> getFetchedOrderByNumber(String orderNumber) {
+		return getFetchedOrderByNumber(orderNumber, null);
+	}
+
+	public Map<String, Object> getFetchedOrderByNumber(String orderNumber, Order voiceOrder) {
 		if ("new".equals(orderNumber)) {
-			return getOrderMap(cartService.getNewCart());
+			return getOrderMap(populateWIthVoiceOrder(cartService.getNewCart(), voiceOrder));
 		}
 		return getOrderMap(getBy("orderNumber", orderNumber));
+	}
+
+	private Cart populateWIthVoiceOrder(Cart newCart, Order voiceOrder) {
+		if (voiceOrder == null) {
+			return newCart;
+		}
+		newCart.entries = voiceOrder.entries;
+		newCart.name = voiceOrder.name;
+		newCart.streetName = voiceOrder.streetName;
+		newCart.streetNumber = voiceOrder.streetNumber;
+		newCart.flat = voiceOrder.flat;
+		newCart.calculate();
+		return newCart;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -173,8 +192,7 @@ public class OrderService extends AbstractService<Order>
 			map.put("deliveryDate", new Date((Long)map.get("deliveryDate")));
 		}
 		List<Map> entries = (List) map.get("entries");
-		entries.forEach(entry ->
-		{
+		entries.forEach(entry -> {
 			entry.put("product", productService.getById((String) entry.get("productId")));
 			if (entry.get("colorId") != null) {
 				entry.put("color", colorService.getById((String) entry.get("colorId")));
@@ -240,5 +258,33 @@ public class OrderService extends AbstractService<Order>
 		MongoCursor<Order> cursor = getCollection()
 				.find("{deliveryDate:{$gte:#,$lt:#}, deliveryTime:#}", dateStart, dateEnd, time).as(Order.class);
 		return StreamSupport.stream(cursor.spliterator(), false).map(this::getOrderMap).collect(Collectors.toList());
+	}
+
+	public Order parseOrderFromString(String content) {
+		if (StringUtils.isBlank(content)) {
+			return null;
+		}
+		Order order = new Order();
+		order.entries = new ArrayList<>();
+		String[] parts = content.split("адрес|имя");
+		Pattern pattern = Pattern.compile("(.*?)(\\d+)");
+		Matcher matcher = pattern.matcher(parts[0]);
+		int i = 0;
+		while (matcher.find()) {
+			List<Product> found = productService.fullTextSearch(matcher.group(1).trim().toLowerCase());
+			if (found.isEmpty()) {
+				continue;
+			}
+			order.entries.add(new OrderEntry(found.get(0), Integer.valueOf(matcher.group(2)), null, null, i++));
+		}
+		pattern = Pattern.compile("(.*?)(\\d+)([\\s,а,б,в,г,д,е,ж]+)(\\d+)");
+		matcher = pattern.matcher(parts[1]);
+		if (matcher.find()) {
+			order.streetName = matcher.group(1);
+			order.streetNumber = matcher.group(2) + matcher.group(3).trim();
+			order.flat = matcher.group(4);
+		}
+		order.name = parts[2];
+		return order;
 	}
 }

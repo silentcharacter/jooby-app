@@ -35,10 +35,14 @@ public class OrderEntry extends Entity
         this.productId = product.id;
         this.productPrice = product.price;
         this.quantity = quantity;
-        this.colorId = color.id;
-        this.colorPrice = color.price;
-        this.saucePrice = sauces.stream().mapToInt(sauce -> sauce.price).sum();
-        this.sauces = sauces.stream().map(sauce -> sauce.id).collect(Collectors.toList());
+        if (color != null) {
+            this.colorId = color.id;
+            this.colorPrice = color.price;
+        }
+        if (sauces != null) {
+            this.saucePrice = sauces.stream().mapToInt(sauce -> sauce.price).sum();
+            this.sauces = sauces.stream().map(sauce -> sauce.id).collect(Collectors.toList());
+        }
         this.entryNo = entryNo;
     }
 

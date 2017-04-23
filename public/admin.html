@@ -401,27 +401,27 @@
         admin.addEntity(orders);
 
         admin.menu(nga.menu()
-                .addChild(nga.menu(orders).icon('<span class="glyphicon glyphicon-shopping-cart"></span>').title('Заказы'))
-                .addChild(nga.menu().title('Справочники')
-                    .addChild(nga.menu(paymentTypes).icon('<span class="glyphicon glyphicon-ruble"></span>').title('Способы оплаты'))
-                    .addChild(nga.menu(deliveryTypes).icon('<span class="glyphicon glyphicon-plane"></span>').title('Способы доставки'))
-                    .addChild(nga.menu(products).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Продукты'))
-                    .addChild(nga.menu(colors).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Цвета теста'))
-                    .addChild(nga.menu(sauces).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Соусы'))
-                )
-                .addChild(nga.menu(globalConfigs).icon('<span class="glyphicon glyphicon-cog"></span>').title('Настройки'))
-                .addChild(nga.menu().title('Отчеты').icon('<span class="glyphicon glyphicon-signal"></span>').link('/stats').active(function(path) {
-                    return path.indexOf('/stats') === 0;
-                }))
                 .addChild(nga.menu().title('Обработка заказов').icon('<span class="glyphicon glyphicon-earphone"></span>').link('/arm/').active(function(path) {
                     return path.indexOf('/arm/') === 0;
                 }))
                 .addChild(nga.menu().title('График доставки').icon('<span class="glyphicon glyphicon-calendar"></span>').link('/schedule/').active(function(path) {
                     return path.indexOf('/schedule/') === 0;
                 }))
+                .addChild(nga.menu(orders).icon('<span class="glyphicon glyphicon-shopping-cart"></span>').title('Все зказы'))
+                .addChild(nga.menu().title('Справочники')
+                    .addChild(nga.menu(paymentTypes).icon('<span class="glyphicon glyphicon-ruble"></span>').title('Способы оплаты'))
+                    .addChild(nga.menu(deliveryTypes).icon('<span class="glyphicon glyphicon-plane"></span>').title('Способы доставки'))
+                    .addChild(nga.menu(products).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Продукты'))
+                    .addChild(nga.menu(colors).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Цвета теста'))
+                    .addChild(nga.menu(sauces).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Соусы'))
+                    .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
+                )
+                .addChild(nga.menu(globalConfigs).icon('<span class="glyphicon glyphicon-cog"></span>').title('Настройки'))
+                .addChild(nga.menu().title('Отчеты').icon('<span class="glyphicon glyphicon-signal"></span>').link('/stats').active(function(path) {
+                    return path.indexOf('/stats') === 0;
+                }))
                 .addChild(nga.menu(customers).icon('<span class="glyphicon glyphicon-king"></span>').title('Покупатели'))
-                .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Пользователи'))
-                .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
+                .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Сотрудники'))
                 .addChild(nga.menu(todo).icon('<span class="glyphicon glyphicon-list-alt"></span>').title('Задачи'))
                 .addChild(nga.menu(news).icon('<span class="glyphicon glyphicon-flash"></span>').title('Новости'))
                 .addChild(nga.menu().link('/exit').icon('<span class="glyphicon glyphicon-log-out"></span>').title('Выход'))

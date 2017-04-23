@@ -35,7 +35,12 @@ public abstract class AbstractService<T extends Entity> {
     }
 
     public List<T> getAll() {
-        return getAll(0, Integer.MAX_VALUE, "{_id: -1}", "{}", Collections.emptyList());
+        return getAll(0, 1, "{_id: -1}", "{}", Collections.emptyList());
+    }
+
+    public List<T> fullTextSearch(String q) {
+        return getAll(0, Integer.MAX_VALUE, "{_id: -1}", "{fullText: {$regex: #}}",
+              Collections.singletonList(String.format(".*%s.*", q)));
     }
 
     public List<T> getAll(Integer page, Integer perPage, String sort, String query, List<Object> filterValues) {
