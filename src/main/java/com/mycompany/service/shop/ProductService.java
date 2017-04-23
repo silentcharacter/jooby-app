@@ -11,7 +11,16 @@ public class ProductService extends AbstractService<Product> {
         super(Product.class);
     }
 
-//    @Override
+    @Override
+    public void onSave(Product product)
+    {
+        if (product.image == null) {
+            Product old = getById(product.id);
+            product.image = old.image;
+        }
+    }
+
+    //    @Override
 //    public Product getById(String id)
 //    {
 //        Product product = super.getById(id);

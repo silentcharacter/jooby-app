@@ -221,7 +221,7 @@
             nga.field('price', 'number').label("Цена"),
         ]);
         products.editionView().fields(products.creationView().fields(),
-            nga.field('preview', 'template').label('Картинка').template((entry) => `<img src="/image/product/${entry.values.id}" />`),
+            nga.field('preview', 'template').label('Картинка').template((entry) => `<img id ="prodImg" src="/image/product/${entry.values.id}" />`),
             nga.field('image', 'file').label('Обновить').uploadInformation({'url': '/shop/image/'})
         ).title('Редактирование продукта');
         admin.addEntity(products);
