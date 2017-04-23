@@ -295,7 +295,7 @@ public class ShopApp extends Jooby
 		post("/voice", req -> {
 			Order order = orderService.parseOrderFromString(req.param("content").value());
 			req.session().set("voiceOrder", mapper.writeValueAsString(order));
-			return Results.redirect("/admin#/arm/new");
+			return Results.redirect("/admin/arm/new");
 		});
 	}
 

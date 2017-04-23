@@ -123,7 +123,12 @@ public class App extends Jooby {
         get("/vk", (req, rsp) -> authenticationService.handleSocLogin(req, rsp));
 
         //secure routes
-        get("/admin", req -> Results.html("admin"));
+        get("/admin/**", req -> {
+            if (req.path().length() > 7) {
+                return Results.redirect(req.path().replace("/admin/", "/admin/#"));
+            }
+            return Results.html("admin");
+        });
 
         use(new Orders());
         //secure rest resources
