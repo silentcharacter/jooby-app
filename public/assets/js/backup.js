@@ -17,6 +17,7 @@ this.WriteQueries.updateOne(n,r,this.originEntityId)
 .then(function(){
     t.progression.done(),t.notification.log("Изменения сохранены.",{addnCls:"humane-flatty-success"}),
     //$state.go($state.get('edit'), { entity: entity.name(), entry: $scope.entry});
-    location.reload();
+    if (n.entity._name == 'orders')
+            location.reload();
 },
 this.handleError.bind(this))}
