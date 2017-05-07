@@ -5,10 +5,12 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         return target.replace(new RegExp(search, 'g'), replacement);
     };
 
+    $scope.today = formatDate(new Date);
     $scope.loading = true;
     $scope.currentPage = 1;
     $scope.pageSize = 10;
     $scope.total = 1000;
+    $scope.filter = '';
     $scope.onPageChange = function (currentPage) {
         $scope.currentPage = currentPage;
         getList();
@@ -19,7 +21,9 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     //get order list
     function getList() {
-        var filter = encodeURIComponent(JSON.stringify({status: [window.NEW, window.CLARIFICATION, window.IN_DELIVERY, window.CANCELED]}));
+        var filter = encodeURIComponent(JSON.stringify(
+            {status: [window.NEW, window.CLARIFICATION, window.IN_DELIVERY, window.CANCELED],deliveryDate_$gte:$scope.today,q:$scope.filter}
+        ));
         $http.get('/api/orders?_filters=' + filter + '&_page=' + $scope.currentPage + '&_perPage=' + $scope.pageSize)
             .success(function (data, status, headers, config) {
                 $scope.orders = data;
@@ -31,6 +35,11 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         });
     }
     getList();
+
+    $scope.filterChanged = function(filter) {
+    $scope.filter = filter;
+        getList();
+    };
 
     $scope.cancelConfirm = false;
     $scope.showCancelConfirm = function (bool) {
@@ -63,8 +72,6 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.timesAll = window.times.map(function(obj) {
         return {value: obj.value, open: false};
     });
-
-    $scope.today = formatDate(new Date);
 
     //on order item click
     $scope.onClick = function (order) {

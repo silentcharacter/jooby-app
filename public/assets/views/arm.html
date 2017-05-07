@@ -3,7 +3,6 @@
 <div class="row all-page-heght">
     <div class="page-header">
         <h2>Обработка заказов {{orderNo}}
-            <!--<span class="count ">{{newOrders}}</span>-->
             <span class="badge">{{newOrders}}</span>
             <a class="btn btn-default right" ng-if="detailedView" ng-click="switchView()">
                 <span class="glyphicon glyphicon-chevron-left" ></span>&nbsp;
@@ -17,6 +16,15 @@
                 <span class="glyphicon glyphicon-plus" ></span>&nbsp;
                 <span class="hidden-xs ng-binding">Создать</span>
             </a>
+            <div class="col-sm-3 right" ng-if="!detailedView">
+                <div class="input-group ">
+                    <input type="text" ng-model="filter" placeholder="Искать по заказам" ng-change="filterChanged(filter)"
+                           class="form-control ng-pristine ng-valid ng-touched">
+                    <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </span>
+                </div>
+            </div>
         </h2>
     </div>
 
