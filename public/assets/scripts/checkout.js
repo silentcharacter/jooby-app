@@ -1,18 +1,18 @@
 $(document).ready(function () {
-$('select').niceSelect();
-            //redraw time select options depending on date select value
-            $($('div .nice-select')[0]).find('li').each(function( index ) {
-                $(this).click(function () {
-                    var s = $('#datesSelect option[value="' + $(this).text().trim() + '"]').attr('data');
-                    $("#timeSelect option").remove();
-                    var array = s.split(',');
-                    for (var i = 0; i < array.length; i++) {
-                        $("#timeSelect").append('<option value="' + array[i] +'">' + array[i] + '</option>');
-                    }
-                    $('.nice-select')[1].remove();
-                    $('select').niceSelect();
-                });
-            });
+    $('select').niceSelect();
+    //redraw time select options depending on date select value
+    $($('div .nice-select')[0]).find('li').each(function( index ) {
+        $(this).click(function () {
+            var s = $('#datesSelect option[value="' + $(this).text().trim() + '"]').attr('data');
+            $("#timeSelect option").remove();
+            var array = s.split(',');
+            for (var i = 0; i < array.length; i++) {
+                $("#timeSelect").append('<option value="' + array[i] +'">' + array[i] + '</option>');
+            }
+            $('.nice-select')[1].remove();
+            $('select').niceSelect();
+        });
+    });
 
     $('#phone').focusout(function() {
         if ($(this).val() && !$('#name').val()) {
