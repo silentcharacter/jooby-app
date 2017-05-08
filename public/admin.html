@@ -407,7 +407,7 @@
                 .addChild(nga.menu().title('График доставки').icon('<span class="glyphicon glyphicon-calendar"></span>').link('/schedule/').active(function(path) {
                     return path.indexOf('/schedule/') === 0;
                 }))
-                .addChild(nga.menu(orders).icon('<span class="glyphicon glyphicon-shopping-cart"></span>').title('Все зказы'))
+                .addChild(nga.menu(orders).icon('<span class="glyphicon glyphicon-shopping-cart"></span>').title('Все заказы'))
                 .addChild(nga.menu().title('Справочники')
                     .addChild(nga.menu(paymentTypes).icon('<span class="glyphicon glyphicon-ruble"></span>').title('Способы оплаты'))
                     .addChild(nga.menu(deliveryTypes).icon('<span class="glyphicon glyphicon-plane"></span>').title('Способы доставки'))

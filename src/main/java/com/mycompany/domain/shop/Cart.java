@@ -3,10 +3,7 @@ package com.mycompany.domain.shop;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mycompany.domain.Entity;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class Cart extends Entity
@@ -51,7 +48,13 @@ public class Cart extends Entity
     }
 
     public void addEntry(Product product, Integer quantity, Color color, List<Sauce> sauces) {
-        entries.add(new OrderEntry(product, quantity, color, sauces, entries.size()));
+        Optional<OrderEntry> entry = entries.stream().filter(e -> e.productId.equals(product.id)).findAny();
+        String colorId = color == null? "" : color.id;
+        if (!entry.isPresent() || !colorId.equals(Optional.ofNullable(entry.get().colorId).orElse(""))) {
+            entries.add(new OrderEntry(product, quantity, color, sauces, entries.size()));
+        } else {
+            entry.get().quantity++;
+        }
         calculate();
     }
 

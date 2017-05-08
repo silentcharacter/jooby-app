@@ -75,12 +75,11 @@ public class ShopApp extends Jooby
 
 		post("/cart", req ->
 		{
-			Product product = req.require(ProductService.class).getById(req.param("productId").value());
-			Color color = req.param("colorId").isSet() ? req.require(ColorService.class).getById(req.param("colorId").value()) : null;
+			Product product = productService.getById(req.param("productId").value());
+			Color color = req.param("colorId").isSet() ? colorService.getById(req.param("colorId").value()) : null;
 			List<Sauce> sauceList = new ArrayList<>();
 			if (req.param("sauces[]").isSet())
 			{
-				SauceService sauceService = req.require(SauceService.class);
 				sauceList.addAll(
 						req.param("sauces[]").toList().stream().map(sauceService::getById)
 								.collect(Collectors.toList())

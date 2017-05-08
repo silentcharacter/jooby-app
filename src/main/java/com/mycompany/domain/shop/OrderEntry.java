@@ -54,7 +54,7 @@ public class OrderEntry extends Entity
         colorId = (String) color.get("id");
     }
 
-    public void setSauces(List<Map> sauces) {
-        this.sauces = sauces.stream().map(el -> (String)el.get("id")).collect(Collectors.toList());
-    }
+//    public void setSauces(List<Map> sauces) {
+//        this.sauces = sauces.stream().map(el -> (String)el.get("id")).collect(Collectors.toList());
+//    }
 }

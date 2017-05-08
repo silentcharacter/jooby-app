@@ -309,8 +309,8 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             data: JSON.stringify({"query": "Ярославль " + query}),
         }).done(function (result) {
             var suggestions = new Set();
-            for (var s of result.suggestions) {
-                suggestions.add(s.data.street_with_type);
+            for (var i = 0; i < result.suggestions.length; i++) {
+                suggestions.add(result.suggestions[i].data.street_with_type);
             }
             res = Array.from(suggestions);
         });
@@ -371,8 +371,8 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             data: data,
         }).done(function (result) {
             var suggestions = new Set();
-            for (var s of result) {
-                suggestions.add(s.phone + ' ' + s.name);
+            for (var i = 0; i < result.length; i++) {
+                suggestions.add(result[i].phone + ' ' + result[i].name);
             }
             res = Array.from(suggestions);
         });

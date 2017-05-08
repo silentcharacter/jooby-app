@@ -1,7 +1,12 @@
 package com.mycompany;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mycompany.domain.shop.Cart;
+import com.mycompany.domain.shop.Product;
+import com.mycompany.domain.shop.Sauce;
 import com.mycompany.util.Utils;
 
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,6 +47,28 @@ public class Test
 			System.out.println("group 4: " + matcher.group(4));
 		}
 
+	}
+
+	@org.junit.Test
+	public void testCartSerialization() throws Exception
+	{
+		Cart cart = new Cart();
+		cart.deliveryPrice = 12;
+		Product product = new Product();
+		product.name = "name";
+		product.id = "213";
+		product.price = 1;
+		Sauce sauce = new Sauce();
+		sauce.price = 1;
+		sauce.name = "name";
+		sauce.id = "21333";
+		cart.addEntry(product, 1, null, Collections.singletonList(sauce));
+
+		ObjectMapper mapper = new ObjectMapper();
+		String cartJsonString = mapper.writeValueAsString(cart);
+		System.out.println(cartJsonString);
+		cart = mapper.readValue(cartJsonString, Cart.class);
+		System.out.println(cart);
 	}
 
 }
