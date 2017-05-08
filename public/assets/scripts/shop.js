@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $(".description" ).each(function( index ) {
         $(this).html($(this).text());
     });
