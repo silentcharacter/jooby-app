@@ -139,7 +139,7 @@ public class App extends Jooby {
         });
 
         get("/_log", (req, rsp) -> {
-            rsp.type("text/plain").send(new File(System.getProperty("user.dir") + "\\jooby-app.log"));
+            rsp.type("text/plain").send(new File(System.getProperty("user.dir") + "/jooby-app.log"));
         });
 
         use(new Orders());
