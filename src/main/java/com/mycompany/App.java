@@ -18,6 +18,7 @@ import com.mycompany.service.AuthenticationService;
 import com.mycompany.service.MigrationService;
 import org.jooby.Jooby;
 import org.jooby.Results;
+import org.jooby.assets.Assets;
 import org.jooby.hbs.Hbs;
 import org.jooby.json.Jackson;
 import org.jooby.metrics.Metrics;
@@ -75,6 +76,8 @@ public class App extends Jooby {
         assets("/sp-push-manifest.json", "/assets/js/sp-push-manifest.json");
         assets("/sp-push-worker.js", "/assets/js/sp-push-worker.js");
 
+        use(new Assets());
+
         get("/todo", req -> Results.html("angular").put("profile", AuthenticationService.getUserProfile(req)));
 
         use(new ShopApp());
@@ -105,6 +108,8 @@ public class App extends Jooby {
             if (err.statusCode() == 403) {
                 rsp.send("Доступ запрещен!");
             }
+            err.printStackTrace();
+            rsp.send("Внутренняя ошибка!");
         });
 
         use(new Auth()

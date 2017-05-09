@@ -151,15 +151,18 @@
     <dependency>
       <groupId>org.jooby</groupId>
       <artifactId>jooby-assets</artifactId>
+      <version>${jooby.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jooby</groupId>
       <artifactId>jooby-assets-uglify</artifactId>
+      <version>${jooby.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jooby</groupId>
       <artifactId>jooby-assets-clean-css</artifactId>
+      <version>${jooby.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -177,6 +180,18 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.jooby</groupId>
+        <artifactId>jooby-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>assets</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
 
       <!-- Build jooby.zip | jooby.war -->
@@ -200,17 +215,6 @@
             <vmArg>-Xmx100m</vmArg>
           </vmArgs>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.jooby</groupId>
-        <artifactId>jooby-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>assets</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
