@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="15 seconds" debug="false">
 
-  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>jooby-app.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover
+      Once any of the below condition met, it will change the file name as below and compressed it. -->
+
+      <fileNamePattern>logFile.%d{yyyy-MM-dd}.%i.log.zip
+      </fileNamePattern>
+
+      <!-- keep 5 days' worth of history -->
+      <maxHistory>5</maxHistory>
+      <!-- or whenever the file size reaches 10MB -->
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>10MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
 
     <encoder>
       <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>

@@ -17,6 +17,7 @@ import com.mycompany.hbs.IncHelper;
 import com.mycompany.service.AuthenticationService;
 import com.mycompany.service.MigrationService;
 import org.jooby.Jooby;
+import org.jooby.RequestLogger;
 import org.jooby.Results;
 import org.jooby.assets.Assets;
 import org.jooby.hbs.Hbs;
@@ -68,6 +69,7 @@ public class App extends Jooby {
                   return reporter;
               })
         );
+        use("*", new RequestLogger().latency().extended());
         session(MongoSessionStore.class);
 
         assets("/assets/**");
