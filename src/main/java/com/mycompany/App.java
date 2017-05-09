@@ -106,10 +106,10 @@ public class App extends Jooby {
         err((req, rsp, err) -> {
             // do what ever you want here
             if (err.statusCode() == 403) {
-                rsp.send("Доступ запрещен!");
+                rsp.send(Results.html("shop/shop").put("templateName", "shop/error"));
             }
             err.printStackTrace();
-            rsp.send("Внутренняя ошибка!");
+            rsp.send(Results.html("shop/shop").put("templateName", "shop/error"));
         });
 
         use(new Auth()
