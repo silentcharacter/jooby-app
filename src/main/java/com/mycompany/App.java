@@ -34,6 +34,7 @@ import org.pac4j.oauth.client.VkClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.Optional;
 import java.util.TimeZone;
 
@@ -135,6 +136,10 @@ public class App extends Jooby {
                 return Results.redirect(req.path().replace("/admin/", "/admin/#"));
             }
             return Results.html("admin");
+        });
+
+        get("/_log", (req, rsp) -> {
+            rsp.type("text/plain").send(new File(System.getProperty("user.dir") + "\\jooby-app.log"));
         });
 
         use(new Orders());
