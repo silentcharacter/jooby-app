@@ -48,6 +48,8 @@ public class OrderService extends AbstractService<Order>
 	private MongoDatabase db;
 	@Inject
 	private GoogleMapsService googleMapsService;
+	@Inject
+	private DistrictService districtService;
 
 	public OrderService()
 	{
@@ -202,6 +204,11 @@ public class OrderService extends AbstractService<Order>
 				entry.put("sauces", sauces.stream().map(sauceService::getById).collect(Collectors.toList()));
 			}
 		});
+		if (cart instanceof Order) {
+			Order order = (Order)cart;
+			if (order.districtId != null)
+				map.put("districtName", districtService.getByIdShort(((Order)cart).districtId).name);
+		}
 		return map;
 	}
 
@@ -240,6 +247,8 @@ public class OrderService extends AbstractService<Order>
 		if (geometry != null) {
 			order.lat = geometry.getLat();
 			order.lng = geometry.getLng();
+			District district = googleMapsService.defineDistrict(geometry);
+			order.districtId = district != null? district.id : null;
 		}
 	}
 

@@ -256,6 +256,23 @@
         sauces.editionView().fields(sauces.creationView().fields()).title('Редактирование соуса');
         admin.addEntity(sauces);
 
+        var districts = nga.entity('districts');
+        districts.listView().title('Районы').fields([
+            nga.field('name').isDetailLink(true).label("Название"),
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по районам' })
+        ]);
+        districts.creationView().title('Создание района').fields([
+            nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
+            nga.field('points', 'embedded_list').label('Границы')
+                    .targetFields([
+                        nga.field('x').label('x'),
+                        nga.field('y').label('y'),
+                    ]),
+        ]);
+        districts.editionView().fields(districts.creationView().fields()).title('Редактирование района');
+        admin.addEntity(districts);
+
         var customers = nga.entity('customers');
         customers.listView().title('Покупатели').fields([
             nga.field('name').isDetailLink(true).label("Имя"),
@@ -359,6 +376,10 @@
             nga.field('streetNumber').label("Дом").cssClasses('col-sm-2'),
             nga.field('entrance').label("Подъезд").cssClasses('col-sm-2'),
             nga.field('flat').label("Квартира").cssClasses('col-sm-2'),
+            nga.field('districtId', 'reference').label("Район")
+                    .targetEntity(districts)
+                    .targetField(nga.field('name'))
+                    .singleApiCall(ids => ({'id': ids })),
             nga.field('sauces', 'reference_many').label('')
                     .targetEntity(sauces)
                     .targetField(nga.field('name'))
@@ -415,6 +436,7 @@
                     .addChild(nga.menu(colors).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Цвета теста'))
                     .addChild(nga.menu(sauces).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Соусы'))
                     .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
+                    .addChild(nga.menu(districts).icon('<span class="glyphicon glyphicon-map-marker"></span>').title('Районы'))
                 )
                 .addChild(nga.menu(globalConfigs).icon('<span class="glyphicon glyphicon-cog"></span>').title('Настройки'))
                 .addChild(nga.menu().title('Отчеты').icon('<span class="glyphicon glyphicon-signal"></span>').link('/stats').active(function(path) {

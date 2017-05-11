@@ -38,6 +38,7 @@
                             <th class="ng-admin-type-datetime">Дата заказа</th>
                             <th class="ng-admin-type-datetime">Дата доставки</th>
                             <th class="ng-admin-type-datetime">Время доставки</th>
+                            <th class="ng-admin-type-datetime">Район</th>
                             <th class="ng-admin-type-string">Статус</th>
                             <th class="ng-admin-type-string">Сумма</th>
                         </tr>
@@ -55,6 +56,9 @@
                             </td>
                             <td>
                                 {{order1.deliveryTime}}
+                            </td>
+                            <td>
+                                {{order1.districtName}}
                             </td>
                             <td>
                                 {{order1.status}}
