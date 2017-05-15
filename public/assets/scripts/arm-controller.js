@@ -216,7 +216,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     };
 
     $scope.onAddressChange = function() {
-        if ($scope.order.streetName.length < 4)
+        if (!$scope.order.streetName || $scope.order.streetName.length < 4)
             return;
         // console.log($scope.order.streetName + $scope.order.streetNumber)
         var url = '/coordinates/' + $scope.order.streetName + '/' +$scope.order.streetNumber;
@@ -296,25 +296,41 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         console.log(e);
     };
 
-    $scope.getAddress = function (query) {
-        var res = [];
-        $.ajax({
-            type: 'POST',
-            url: 'https://dadata.ru/api/v1/suggest/address',
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Token bf69a05b6ce842dcd0cbc159648d19a8c49fdf33"
-            },
-            async: false,
-            data: JSON.stringify({"query": "Ярославль " + query}),
-        }).done(function (result) {
+    $scope.getAddress = function(viewValue) {
+        var req = {
+             method: 'POST',
+             url: 'https://dadata.ru/api/v1/suggest/address',
+             headers: {
+               "Content-Type": "application/json",
+               "Authorization": "Token bf69a05b6ce842dcd0cbc159648d19a8c49fdf33"
+             },
+             data: JSON.stringify({"query": "Ярославль " + viewValue})
+        };
+
+        return $http(req).then(function(result) {
+            if (!result || !result.data || !result.data.suggestions)
+                return [];
             var suggestions = new Set();
-            for (var i = 0; i < result.suggestions.length; i++) {
-                suggestions.add(result.suggestions[i].data.street_with_type);
+            for (var i = 0; i < result.data.suggestions.length; i++) {
+              suggestions.add(result.data.suggestions[i].data.street_with_type);
             }
-            res = Array.from(suggestions);
+            return Array.from(suggestions);
         });
-        return res;
+    };
+
+    $scope.findCustomers = function (query) {
+        var req = {
+             method: 'GET',
+             url: '/api/customers',
+             data: {_filters:JSON.stringify({q:query}), _page:1, _perPage:10}
+        };
+        return $http(req).then(function(result) {
+            var suggestions = new Set();
+            for (var i = 0; i < result.data.length; i++) {
+                suggestions.add(result.data[i].phone + ' ' + result.data[i].name);
+            }
+            return Array.from(suggestions);
+        });
     };
 
     $scope.onCustomerSelect = function (customer) {
@@ -361,43 +377,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         });
     };
 
-    $scope.findCustomers = function (query) {
-        var res = [];
-        var data = {_filters:JSON.stringify({q:query}), _page:1, _perPage:10};
-        $.ajax({
-            type: 'GET',
-            url: '/api/customers',
-            async: false,
-            data: data,
-        }).done(function (result) {
-            var suggestions = new Set();
-            for (var i = 0; i < result.length; i++) {
-                suggestions.add(result[i].phone + ' ' + result[i].name);
-            }
-            res = Array.from(suggestions);
-        });
-        return res;
-    };
 
-    // $scope.getLocation = function(val) {
-    //     return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
-    //         params: {
-    //             address: val,
-    //             sensor: false
-    //         }
-    //     }).then(function(response){
-    //         return response.data.results.map(function(item){
-    //             return item.formatted_address;
-    //         });
-    //     });
-    // };
-    // <h4>Asynchronous results</h4>
-    // <pre>Model: {{asyncSelected | json}}</pre>
-    // <input type="text" ng-model="asyncSelected" placeholder="Locations loaded via $http" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
-    //     <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-    //     <div ng-show="noResults">
-    //     <i class="glyphicon glyphicon-remove"></i> No Results Found
-    // </div>
 
     $scope.cancel = function (order) {
         order = angular.copy(order);
