@@ -51,14 +51,10 @@ public class UserService extends AbstractService<User>
 	}
 
 	@Override
-	public SearchResult<User> getList(List<String> queryConditions, List<Object> filterValues, String sort, boolean onlyCount,
-			int page, int perPage) throws Throwable
+	protected User listReaderCallback(User user)
 	{
-		SearchResult<User> result = super.getList(queryConditions, filterValues, sort, onlyCount, page, perPage);
-		result.result.forEach(user -> {
-			user.password = "";
-			user.passwordConfirm = "";
-		});
-		return result;
+		user.password = "";
+		user.passwordConfirm = "";
+		return user;
 	}
 }

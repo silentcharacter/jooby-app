@@ -1,5 +1,6 @@
 package com.mycompany.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.mycompany.annotation.Deployment;
@@ -8,6 +9,8 @@ import org.bson.types.ObjectId;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
+import org.jongo.bson.Bson;
+import org.jongo.bson.BsonDocument;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +23,7 @@ public abstract class AbstractService<T extends Entity> {
     private String entityName = null;
     @Inject
     private Jongo jongo;
+    private ObjectMapper mapper = new ObjectMapper();
 
     public AbstractService(Class<T> typeParameterClass) {
         this.typeParameterClass = typeParameterClass;
@@ -59,9 +63,16 @@ public abstract class AbstractService<T extends Entity> {
         searchResult.count = collection.count(query, filterValues.toArray());
         if (!onlyCount) {
             searchResult.result = collection.find(query, filterValues.toArray()).sort(sort)
-                  .limit(perPage).skip((page - 1) * perPage).as(typeParameterClass);
+                  .limit(perPage).skip((page - 1) * perPage).map(dbObject -> {
+							 BsonDocument bsonDocument = Bson.createDocument(dbObject);
+							 return listReaderCallback(jongo.getMapper().getUnmarshaller().unmarshall(bsonDocument, typeParameterClass));
+						});
         }
         return searchResult;
+    }
+
+    protected T listReaderCallback(T t) {
+        return t;
     }
 
     public T getById(String id) {

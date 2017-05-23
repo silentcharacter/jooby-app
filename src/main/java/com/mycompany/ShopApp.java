@@ -288,7 +288,7 @@ public class ShopApp extends Jooby
 		});
 
 		get("/image/product/:productId", (req, rsp) -> {
-			rsp.type("image/jpeg").send(productService.getById(req.param("productId").value()).image.getData());
+			rsp.type("image/jpeg").send(productService.getProductImage(req.param("productId").value()).getData());
 		});
 
 		get("/voice", req -> Results.html("/shop/voice"));
