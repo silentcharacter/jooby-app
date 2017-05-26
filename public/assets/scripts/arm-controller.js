@@ -276,25 +276,25 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     //SSE
     // handles the callback from the received event
-    var handleCallback = function (msg) {
-        $scope.$apply(function () {
-            var order = JSON.parse(msg.data);
-            $scope.orders.unshift(order);
-            if (order.status === window.NEW) {
-                $scope.newOrders++;
-            }
-        });
-    };
-    var source = new EventSource('/events');
-    source.onopen = function () {
-        console.log('opened');
-    };
-    source.onmessage = function(e) {
-        handleCallback(e);
-    };
-    source.onerror = function(e) {
-        console.log(e);
-    };
+//    var handleCallback = function (msg) {
+//        $scope.$apply(function () {
+//            var order = JSON.parse(msg.data);
+//            $scope.orders.unshift(order);
+//            if (order.status === window.NEW) {
+//                $scope.newOrders++;
+//            }
+//        });
+//    };
+//    var source = new EventSource('/events');
+//    source.onopen = function () {
+//        console.log('opened');
+//    };
+//    source.onmessage = function(e) {
+//        handleCallback(e);
+//    };
+//    source.onerror = function(e) {
+//        console.log(e);
+//    };
 
     $scope.getAddress = function(viewValue) {
         var req = {
