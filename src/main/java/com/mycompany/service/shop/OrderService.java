@@ -195,7 +195,9 @@ public class OrderService extends AbstractService<Order>
 		}
 		List<Map> entries = (List) map.get("entries");
 		entries.forEach(entry -> {
-			entry.put("product", productService.getById((String) entry.get("productId")));
+			Product product = productService.getById((String) entry.get("productId"));
+			product.image = null;
+			entry.put("product", product);
 			if (entry.get("colorId") != null) {
 				entry.put("color", colorService.getById((String) entry.get("colorId")));
 			}

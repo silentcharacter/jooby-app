@@ -1,28 +1,8 @@
-body {
-    height: 100%;
-}
 #page-wrapper {
-    position: relative;
-    height: 800px;
-}
-.height100 {
-    height: 100%;
-}
-.all-page-heght {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
     padding-left: 20px;
-}
-.pull-bottom {
-    position: absolute;
-    bottom: 0;
-    padding-bottom: 200px;
 }
 .page-header {
-    padding-left: 20px;
+    padding-left: 10px;
 }
 
 .angular-google-map-container { height: 250px; }
@@ -70,12 +50,13 @@ hr {
 }
 .col-form-label {
     margin-top: 5px;
-    /*width: 30%;*/
 }
 .container {
     margin: 0;
     margin-top: -15px;
     width: 100%;
+    padding-left: 5px;
+    padding-right: 0;
 }
 .form-control-static {
     padding-top: 5px;
@@ -166,4 +147,7 @@ hr {
     }
 }
 
-
+.pagination {
+    margin: 0;
+    padding-top: 5px;
+}

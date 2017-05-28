@@ -12,6 +12,8 @@ import org.jooby.Request;
 import org.jooby.Response;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class AbstractResource<T extends Entity> extends Jooby {
@@ -101,6 +103,16 @@ public class AbstractResource<T extends Entity> extends Jooby {
             });
 
             map.forEach((key, value) -> {
+                if (key.equals("$or")) {
+                    Pattern pattern = Pattern.compile("(ISODate..)(\\d{4}-\\d{2}-\\d{2})");
+                    String stringValue = value.toString();
+                    Matcher matcher = pattern.matcher(stringValue);
+                    while (matcher.find()) {
+                        filterValues.add(Utils.safeParseUTC(matcher.group(2)));
+                    }
+                    queryConditions.add("$or:" + stringValue.replaceAll("ISODate\\('\\d{4}-\\d{2}-\\d{2}'\\)", "#"));
+                    return;
+                }
                 if (value instanceof List) {
                     queryConditions.add(key + ": { $in:#}");
                 } else {

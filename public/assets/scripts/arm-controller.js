@@ -21,8 +21,10 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     //get order list
     function getList() {
-        var filter = encodeURIComponent(JSON.stringify(
-            {status: [window.NEW, window.CLARIFICATION, window.IN_DELIVERY, window.CANCELED],deliveryDate_$gte:$scope.today,q:$scope.filter}
+        var filter = encodeURIComponent(JSON.stringify({
+            status: [window.NEW, window.CLARIFICATION, window.IN_DELIVERY, window.CANCELED],
+            $or: "[{deliveryDate: {$gte: ISODate('" + $scope.today + "')}}, {deliveryDate:null}, {status: '" + window.NEW + "'}]",
+            q: $scope.filter}
         ));
         $http.get('/api/orders?_filters=' + filter + '&_page=' + $scope.currentPage + '&_perPage=' + $scope.pageSize)
             .success(function (data, status, headers, config) {
@@ -49,6 +51,11 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.switchView = function() {
         $scope.detailedView = !$scope.detailedView;
         $state.go('arm', {orderNo: $scope.detailedView? $scope.order.orderNumber:''}, {notify: false})
+    };
+    $scope.openNew = function() {
+        $scope.detailedView = true;
+        $state.go('arm', {orderNo: 'new'}, {notify: false});
+        $scope.onClick({orderNumber:'new'});
     };
 
     function getNewOrdersCount() {
@@ -276,25 +283,26 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     //SSE
     // handles the callback from the received event
-//    var handleCallback = function (msg) {
-//        $scope.$apply(function () {
-//            var order = JSON.parse(msg.data);
-//            $scope.orders.unshift(order);
-//            if (order.status === window.NEW) {
-//                $scope.newOrders++;
-//            }
-//        });
-//    };
-//    var source = new EventSource('/events');
-//    source.onopen = function () {
-//        console.log('opened');
-//    };
-//    source.onmessage = function(e) {
-//        handleCallback(e);
-//    };
-//    source.onerror = function(e) {
-//        console.log(e);
-//    };
+    var handleCallback = function (msg) {
+        $scope.$apply(function () {
+            var order = JSON.parse(msg.data);
+            $scope.orders.unshift(order);
+            if (order.status === window.NEW) {
+                $scope.newOrders++;
+            }
+            $scope.total++;
+        });
+    };
+    var source = new EventSource('/events');
+    source.onopen = function () {
+        console.log('opened');
+    };
+    source.onmessage = function(e) {
+        handleCallback(e);
+    };
+    source.onerror = function(e) {
+        console.log(e);
+    };
 
     $scope.getAddress = function(viewValue) {
         var req = {
@@ -496,6 +504,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             }
         }
         $scope.orders.unshift(order);
+        $scope.total++;
     }
 
     function formatDate(date) {

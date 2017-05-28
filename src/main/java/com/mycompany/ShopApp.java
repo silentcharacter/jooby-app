@@ -33,7 +33,7 @@ public class ShopApp extends Jooby
 
 	private static Logger logger = LoggerFactory.getLogger(ShopApp.class);
 
-	private static List<Sse> listeners = Collections.synchronizedList(new ArrayList<Sse>());
+	private static Set<Sse> listeners = Collections.synchronizedSet(new HashSet<Sse>());
 
 	private static CartService cartService;
 	private static OrderService orderService;

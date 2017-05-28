@@ -1,9 +1,9 @@
 <link rel="stylesheet" href="/assets/css/admin.css">
 
-<div class="row all-page-heght">
-    <div class="page-header row">
+<div class="row">
+    <div class="page-header row" style="padding-bottom: 10px">
         <div class="col-xs-7 col-sm-6 col-md-5" style="padding-left: 0">
-            <h3>
+            <h3 style="margin-bottom: 0; margin-top:5px">
                 Обработка заказов {{orderNo}}
                 <span class="badge">{{newOrders}}</span>
             </h3>
@@ -18,7 +18,7 @@
                     <span class="glyphicon glyphicon-chevron-right" ></span>&nbsp;
                     <span class="hidden-xs hidden-small-tablet ng-binding">К заказу</span>
                 </a>
-                <a href="#/arm/new" class="btn btn-default  right" style="margin-right: 10px">
+                <a class="btn btn-default right" style="margin-right: 10px" ng-click="openNew()">
                     <span class="glyphicon glyphicon-plus" ></span>&nbsp;
                     <span class="hidden-xs hidden-small-tablet ng-binding">Создать</span>
                 </a>
@@ -26,81 +26,82 @@
         </div>
     </div>
 
-    <div class="container height100">
-        <div class="row height100">
-            <div class="col-sm-12 height100" ng-show="!detailedView">
-                <div class="col-md-4 col-sm-5 col-xs-5" style="padding-left: 5px; padding-top: 5px">
+    <div class="container" >
+        <div ng-if="!detailedView">
+            <div class="row">
+                <div class="col-md-4 col-sm-5 col-xs-5" style="padding-left: 15px; padding-top: 5px">
                     <div class="input-group ">
                         <input type="text" ng-model="filter" placeholder="Искать по заказам" ng-change="filterChanged(filter)"
                                class="form-control ng-pristine ng-valid ng-touched">
                         <span class="input-group-addon">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </span>
+                        <i class="glyphicon glyphicon-search"></i>
+                    </span>
                     </div>
                 </div>
-                <table class="grid table order-list ">
-                    <thead>
-                    <tr>
-                        <th class="ng-admin-type-string">Номер</th>
-                        <th class="ng-admin-type-datetime">Дата заказа</th>
-                        <th class="ng-admin-type-datetime">Дата доставки</th>
-                        <th class="ng-admin-type-datetime">Время доставки</th>
-                        <th class="ng-admin-type-datetime">Район</th>
-                        <th class="ng-admin-type-string">Статус</th>
-                        <th class="ng-admin-type-string">Сумма</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="order1 in orders" ng-click="onClick(order1)" ng-class="rowClass(order1)">
-                        <td>
-                            {{order1.orderNumber}}
-                        </td>
-                        <td>
-                            {{order1.orderDate | date : "dd-MM-yyyy"}}
-                        </td>
-                        <td>
-                            {{order1.deliveryDate | date : "dd-MM-yyyy"}}
-                        </td>
-                        <td>
-                            {{order1.deliveryTime}}
-                        </td>
-                        <td>
-                            {{order1.districtName}}
-                        </td>
-                        <td>
-                            {{order1.status}}
-                        </td>
-                        <td class="text-right">
-                            {{order1.totalPrice}}
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="pull-bottom">
-                    <b>
-                        {{(currentPage-1) * pageSize + 1}} - {{currentPage * pageSize > total? total : currentPage * pageSize}} из {{total}}
-                    </b><br/>
-                    <paging
-                            page="currentPage"
-                            page-size="pageSize"
-                            total="total"
-                            text-next-class="glyphicon glyphicon-chevron-right"
-                            text-prev-class="glyphicon glyphicon-chevron-left"
-                            text-first-class="glyphicon glyphicon-backward"
-                            text-last-class="glyphicon glyphicon-forward"
-                            class="small"
-                            text-title-page="Страница {page}"
-                            show-prev-next="true"
-                            show-first-last="true"
-                            paging-action="onPageChange(page)"
-                    >
-                    </paging>
-
-
-                </div>
-
             </div>
-            <div class="col-md-6 col-sm-12" ng-show="detailedView">
+            <hr/>
+            <paging
+                    page="currentPage"
+                    page-size="pageSize"
+                    total="total"
+                    text-next-class="glyphicon glyphicon-chevron-right"
+                    text-prev-class="glyphicon glyphicon-chevron-left"
+                    text-first-class="glyphicon glyphicon-backward"
+                    text-last-class="glyphicon glyphicon-forward"
+                    class="small"
+                    text-title-page="Страница {page}"
+                    show-prev-next="true"
+                    show-first-last="true"
+                    paging-action="onPageChange(page)"
+            >
+            </paging>
+            <span style="position: relative; top: -10px">&nbsp;&nbsp;
+                <b>
+                    {{(currentPage-1) * pageSize + 1}} - {{currentPage * pageSize > total? total : currentPage * pageSize}} из {{total}}
+                </b>
+            </span>
+            <table class="grid table order-list">
+                <thead>
+                <tr>
+                    <th class="ng-admin-type-string">Номер</th>
+                    <th class="ng-admin-type-datetime">Дата заказа</th>
+                    <th class="ng-admin-type-datetime">Дата доставки</th>
+                    <th class="ng-admin-type-datetime">Время доставки</th>
+                    <th class="ng-admin-type-datetime">Район</th>
+                    <th class="ng-admin-type-string">Статус</th>
+                    <th class="ng-admin-type-string">Сумма</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="order1 in orders" ng-click="onClick(order1)" ng-class="rowClass(order1)">
+                    <td>
+                        {{order1.orderNumber}}
+                    </td>
+                    <td>
+                        {{order1.orderDate | date : "dd-MM-yyyy"}}
+                    </td>
+                    <td>
+                        {{order1.deliveryDate | date : "dd-MM-yyyy"}}
+                    </td>
+                    <td>
+                        {{order1.deliveryTime}}
+                    </td>
+                    <td>
+                        {{order1.districtName}}
+                    </td>
+                    <td>
+                        {{order1.status}}
+                    </td>
+                    <td class="text-right">
+                        {{order1.totalPrice}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row" ng-if="detailedView">
+            <div class="col-md-6 col-sm-12" >
                 <form name="form" class="css-form" novalidate>
                 <fieldset ng-disabled="order.status=='Отменен'">
                     <div ng-if="order.orderNumber!='new'">
@@ -418,7 +419,7 @@
                 </fieldset>
                 </form>
             </div>
-            <div class="col-md-6 hidden-xs-default hidden-sm-default" ng-if="detailedView">
+            <div class="col-md-6 hidden-xs-default hidden-sm-default" >
                 <div class="box">
                     <h4>График доставки<span class="right">{{order.deliveryDate | date : "dd/MM/yyyy"}}</span></h4>
                     <div id="map_canvas">

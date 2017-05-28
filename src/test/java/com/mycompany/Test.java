@@ -53,6 +53,20 @@ public class Test
 	}
 
 	@org.junit.Test
+	public void test3() throws Exception
+	{
+		String line = "[{deliveryDate: {$gte: ISODate('2017-05-28'), $lt: ISODate('2017-05-29')}}, {deliveryDate:null}]";
+		Pattern pattern = Pattern.compile("(ISODate\\(')(\\d{4}-\\d{2}-\\d{2})");
+		Matcher matcher = pattern.matcher(line);
+		while (matcher.find()) {
+//			System.out.println("group 0: " + matcher.group(0));
+			System.out.println("group 1: " + matcher.group(1));
+			System.out.println("group 2: " + matcher.group(2));
+//			System.out.println("group 3: " + matcher.group(3));
+		}
+	}
+
+	@org.junit.Test
 	public void testCartSerialization() throws Exception
 	{
 		Cart cart = new Cart();
