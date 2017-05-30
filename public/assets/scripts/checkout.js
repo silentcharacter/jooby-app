@@ -43,9 +43,11 @@ $(document).ready(function () {
                 },
                 data: JSON.stringify({"query": "Ярославль " + query}),
                 success: function (result) {
+                    if (!result || !result.suggestions)
+                        return [];
                     var suggestions = new Set();
-                    for (var s in result.suggestions) {
-                        suggestions.add(s.data.street_with_type);
+                    for (var i = 0; i < result.suggestions.length; i++) {
+                        suggestions.add(result.suggestions[i].data.street_with_type);
                     }
                     return process(Array.from(suggestions));
                 }

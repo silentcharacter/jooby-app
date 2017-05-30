@@ -114,7 +114,7 @@ public class ShopApp extends Jooby
 				String[] decoded = new String(Base64.getDecoder().decode(cookie)).split(",");
 				if (decoded.length == 2 && BCrypt.checkpw(decoded[0], decoded[1])) {
 					Order previousOrder = orderService.getBy("orderNumber", decoded[0]);
-					cart.put("phone", previousOrder.phone);
+					cart.put("phone", previousOrder.phone.replace("+7", ""));
 					cart.put("name", previousOrder.name);
 					cart.put("streetName", previousOrder.streetName);
 					cart.put("streetNumber", previousOrder.streetNumber);
