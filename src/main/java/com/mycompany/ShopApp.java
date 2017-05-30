@@ -262,7 +262,7 @@ public class ShopApp extends Jooby
 					orders.put(dateTime, orderList);
 				}
 			}
-			Date d = (Date)orders.values().iterator().next().get(0).get("deliveryDate");
+			Date d = new Date((Long)orders.values().iterator().next().get(0).get("deliveryDate"));
 			return Results.html("/shop/schedule").put("date", d).put("orders", orders)
 					.put("googleMapKey", req.require(Config.class).getString("google.map.key"));
 		});

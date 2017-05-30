@@ -41,9 +41,9 @@
             </div>
             <hr/>
             <paging
-                    page="currentPage"
-                    page-size="pageSize"
-                    total="total"
+                    page="paging.currentPage"
+                    page-size="paging.pageSize"
+                    total="paging.total"
                     text-next-class="glyphicon glyphicon-chevron-right"
                     text-prev-class="glyphicon glyphicon-chevron-left"
                     text-first-class="glyphicon glyphicon-backward"
@@ -57,7 +57,7 @@
             </paging>
             <span style="position: relative; top: -10px">&nbsp;&nbsp;
                 <b>
-                    {{(currentPage-1) * pageSize + 1}} - {{currentPage * pageSize > total? total : currentPage * pageSize}} из {{total}}
+                    {{(paging.currentPage-1) * paging.pageSize + 1}} - {{paging.currentPage * paging.pageSize > paging.total? paging.total : paging.currentPage * paging.pageSize}} из {{paging.total}}
                 </b>
             </span>
             <table class="grid table order-list">
@@ -265,7 +265,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row" ng-show="cancelConfirm && order.status!='Отменен'">
+                        <div class="form-group row cancel-panel" ng-show="cancelConfirm && order.status!='Отменен'">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <div style="padding-bottom: 5px; padding-top: 0">
@@ -465,7 +465,3 @@
         </div>
     </div>
 </div>
-
-<style>
-
-</style>

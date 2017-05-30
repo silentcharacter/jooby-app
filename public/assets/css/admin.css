@@ -148,6 +148,18 @@ hr {
 }
 
 .pagination {
+    padding-top: 0;
     margin: 0;
-    padding-top: 5px;
+}
+.panel-heading {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+.cancel-panel {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+hr {
+    padding-bottom: 5px;
+    margin-top: 5px
 }

@@ -7,12 +7,10 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     $scope.today = formatDate(new Date);
     $scope.loading = true;
-    $scope.currentPage = 1;
-    $scope.pageSize = 10;
-    $scope.total = 1000;
+    $scope.paging = {total: 1000, pageSize: 10, currentPage: 1};
     $scope.filter = '';
     $scope.onPageChange = function (currentPage) {
-        $scope.currentPage = currentPage;
+        $scope.paging.currentPage = currentPage;
         getList();
     };
     $scope.statusNew = window.NEW;
@@ -26,11 +24,11 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             $or: "[{deliveryDate: {$gte: ISODate('" + $scope.today + "')}}, {deliveryDate:null}, {status: '" + window.NEW + "'}]",
             q: $scope.filter}
         ));
-        $http.get('/api/orders?_filters=' + filter + '&_page=' + $scope.currentPage + '&_perPage=' + $scope.pageSize)
+        $http.get('/api/orders?_filters=' + filter + '&_page=' + $scope.paging.currentPage + '&_perPage=' + $scope.paging.pageSize)
             .success(function (data, status, headers, config) {
                 $scope.orders = data;
                 $scope.loading = false;
-                $scope.total = headers('X-Total-Count');
+                $scope.paging.total = headers('X-Total-Count');
             }).error(function (data, status) {
             $scope.loading = false;
             console.log('Error ' + data)
@@ -39,7 +37,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     getList();
 
     $scope.filterChanged = function(filter) {
-    $scope.filter = filter;
+        $scope.filter = filter;
         getList();
     };
 
@@ -196,10 +194,10 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             }
             $scope.loading = false;
 
-            $scope.map.showMap = false;
-            $timeout(function () {
-                $scope.map.showMap = true;
-            });
+//            $scope.map.showMap = false;
+//            $timeout(function () {
+//                $scope.map.showMap = true;
+//            });
         }).error(function (data, status) {
             console.log('Error ' + data);
             $scope.loading = false;
@@ -290,7 +288,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             if (order.status === window.NEW) {
                 $scope.newOrders++;
             }
-            $scope.total++;
+            $scope.paging.total++;
         });
     };
     var source = new EventSource('/events');
@@ -386,7 +384,6 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     };
 
 
-
     $scope.cancel = function (order) {
         order = angular.copy(order);
         $scope.loading = true;
@@ -395,14 +392,14 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             updateOrderInList(data);
             getNewOrdersCount();
             $alert({title: 'Заказ ' + data.orderNumber + ' отменен', content: '',
-                placement: 'top', type: 'info', show: true, container:'.page-header', animation:"am-fade-and-slide-top", duration: 4});
+                placement: 'top-right', type: 'info', show: true, container:'body', animation:"am-fade-and-slide-top", duration: 4});
             // console.log(data);
         }).error(function (data, status) {
             console.log('Error ' + data);
             $scope.cancelConfirm = false;
             $scope.loading = false;
             $alert({title: 'Ошибка при отмене заказа!', content: data,
-                placement: 'top', type: 'danger', show: true, container:'.page-header', animation:"am-fade-and-slide-top", duration: 4});
+                placement: 'top-right', type: 'danger', show: true, container:'body', animation:"am-fade-and-slide-top", duration: 4});
         });
     };
 
@@ -423,13 +420,13 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
                 $state.go('arm', {orderNo: data.orderNumber}, {notify: false})
             }
             $alert({title: 'Заказ ' + data.orderNumber + ' сохранен', content: '',
-                placement: 'top', type: 'info', show: true, container:'.page-header', animation:"am-fade-and-slide-top", duration: 4});
+                placement: 'top-right', type: 'info', show: true, container:'body', animation:"am-fade-and-slide-top", duration: 4, show: true});
             // console.log(order.delivery);
         }).error(function (data, status) {
             console.log('Error ' + data);
             $scope.loading = false;
             $alert({title: 'Ошибка при сохранении заказа!', content: data,
-                placement: 'top', type: 'danger', show: true, container:'.page-header', animation:"am-fade-and-slide-top", duration: 4});
+                placement: 'top-right', type: 'danger', show: true, container:'body', animation:"am-fade-and-slide-top", duration: 4});
         });
     };
 
@@ -504,7 +501,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             }
         }
         $scope.orders.unshift(order);
-        $scope.total++;
+        $scope.paging.total++;
     }
 
     function formatDate(date) {
