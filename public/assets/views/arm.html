@@ -168,30 +168,33 @@
 
                         <div class="form-group row inline-inputs">
                             <label class="col-sm-4 col-xs-4 col-form-label">Дом/под./кв.:</label>
-                            <div class="col-sm-2 col-xs-2 {{form.streetNumber.$error.required? 'has-error' : '' }}" style="padding-right: 5px">
+                            <div class="col-sm-2 col-xs-2 {{form.streetNumber.$error.required? 'has-error' : '' }}" style="padding-right: 2px">
                                 <input class="form-control"type="number" ng-model="order.streetNumber" ng-change="onAddressChange()" name="streetNumber" required>
                             </div>
-                            <div class="col-sm-1 col-xs-1" style="padding-right: 5px;padding-left: 5px;">
+                            <div class="col-sm-1 col-xs-1" style="padding-right: 2px;padding-left: 2px;">
                                 <input class="form-control"type="text" ng-model="order.litera" ng-change="onAddressChange()" style="padding:0; padding-left:2px">
                             </div>
-                            <div class="col-sm-2 col-xs-2" style="padding-right: 5px;padding-left: 5px;">
+                            <div class="col-sm-2 col-xs-2" style="padding-right: 2px;padding-left: 2px;">
                                 <input class="form-control"type="number" ng-model="order.korpus" ng-change="onAddressChange()">
                             </div>
-                            <div class="col-sm-1 col-xs-1" style="padding-right: 5px; padding-left: 5px; ">
+                            <div class="col-sm-1 col-xs-1" style="padding-right: 2px; padding-left: 2px; ">
                                 <input class="form-control" type="number" ng-model="order.entrance" style="padding:0; padding-left:2px">
                             </div>
-                            <div class="col-sm-2 col-xs-2 {{form.flat.$error.required? 'has-error' : '' }}" style="padding-left: 5px">
+                            <div class="col-sm-2 col-xs-2 {{form.flat.$error.required? 'has-error' : '' }}" style="padding-left: 2px">
                                 <input class="form-control" type="number" ng-model="order.flat" name="flat" required>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-4 col-xs-4 col-form-label">Координаты:</label>
-                            <div class="col-sm-4 col-xs-4" style="padding-right: 2px">
+                            <label class="col-sm-4 col-xs-4 col-form-label">Коорд./№ дома:</label>
+                            <div class="col-sm-2 col-xs-2" style="padding-right: 2px">
                                 <input class="form-control" type="text" value="{{order.lat}}" readonly>
                             </div>
-                            <div class="col-sm-4 col-xs-4" style="padding-left: 2px">
+                            <div class="col-sm-2 col-xs-2" style="padding-left: 2px;padding-right: 2px">
                                 <input class="form-control" type="text" value="{{order.lng}}" readonly>
+                            </div>
+                            <div class="col-sm-4 col-xs-4" style="padding-left: 2px">
+                                <input class="form-control" type="text" value="{{order.originalStreetNumber}}" readonly>
                             </div>
                         </div>
 
@@ -372,30 +375,33 @@
 
                         <div class="form-group row inline-inputs">
                             <label class="col-sm-4 col-xs-4 col-form-label">Дом/под./кв.:</label>
-                            <div class="col-sm-2 col-xs-2 {{form.streetNumber.$error.required? 'has-error' : '' }}" style="padding-right: 5px">
+                            <div class="col-sm-2 col-xs-2 {{form.streetNumber.$error.required? 'has-error' : '' }}" style="padding-right: 2px">
                                 <input class="form-control"type="number" ng-model="order.streetNumber" ng-change="onAddressChange()" name="streetNumber" required>
                             </div>
-                            <div class="col-sm-1 col-xs-1" style="padding-right: 5px;padding-left: 5px;">
+                            <div class="col-sm-1 col-xs-1" style="padding-right: 2px;padding-left: 2px;">
                                 <input class="form-control"type="text" ng-model="order.litera" ng-change="onAddressChange()" style="padding:0; padding-left:2px">
                             </div>
-                            <div class="col-sm-2 col-xs-2" style="padding-right: 5px;padding-left: 5px;">
+                            <div class="col-sm-2 col-xs-2" style="padding-right: 2px;padding-left: 2px;">
                                 <input class="form-control"type="number" ng-model="order.korpus" ng-change="onAddressChange()">
                             </div>
-                            <div class="col-sm-1 col-xs-1" style="padding-right: 5px; padding-left: 5px; ">
+                            <div class="col-sm-1 col-xs-1" style="padding-right: 2px; padding-left: 2px; ">
                                 <input class="form-control" type="number" ng-model="order.entrance" style="padding:0; padding-left:2px">
                             </div>
-                            <div class="col-sm-2 col-xs-2 {{form.flat.$error.required? 'has-error' : '' }}" style="padding-left: 5px">
+                            <div class="col-sm-2 col-xs-2 {{form.flat.$error.required? 'has-error' : '' }}" style="padding-left: 2px">
                                 <input class="form-control" type="number" ng-model="order.flat" name="flat" required>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-4 col-xs-4 col-form-label">Координаты:</label>
-                            <div class="col-sm-4 col-xs-4" style="padding-right: 2px">
+                            <label class="col-sm-4 col-xs-4 col-form-label">Коорд./№ дома:</label>
+                            <div class="col-sm-2 col-xs-2" style="padding-right: 2px">
                                 <input class="form-control" type="text" value="{{order.lat}}" readonly>
                             </div>
-                            <div class="col-sm-4 col-xs-4" style="padding-left: 2px">
+                            <div class="col-sm-2 col-xs-2" style="padding-left: 2px;padding-right: 2px">
                                 <input class="form-control" type="text" value="{{order.lng}}" readonly>
+                            </div>
+                            <div class="col-sm-4 col-xs-4" style="padding-left: 2px">
+                                <input class="form-control" type="text" value="{{order.originalStreetNumber}}" readonly>
                             </div>
                         </div>
 
