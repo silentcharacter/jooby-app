@@ -194,10 +194,10 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             }
             $scope.loading = false;
 
-//            $scope.map.showMap = false;
-//            $timeout(function () {
-//                $scope.map.showMap = true;
-//            });
+            $scope.map.showMap = false;
+            $timeout(function () {
+                $scope.map.showMap = true;
+            });
         }).error(function (data, status) {
             console.log('Error ' + data);
             $scope.loading = false;
@@ -223,8 +223,9 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
     $scope.onAddressChange = function() {
         if (!$scope.order.streetName || $scope.order.streetName.length < 4)
             return;
-        // console.log($scope.order.streetName + $scope.order.streetNumber)
-        var url = '/coordinates/' + $scope.order.streetName + '/' +$scope.order.streetNumber;
+        var streetNumber = $scope.order.streetNumber + ($scope.order.litera? $scope.order.litera : '') + ($scope.order.korpus? ('к' + $scope.order.korpus) : '');
+        console.log($scope.order.streetName + '/' + streetNumber);
+        var url = '/coordinates/' + $scope.order.streetName + '/' + streetNumber;
         $http.get(url).success(function (data) {
             $scope.order.lat = data.lat;
             $scope.order.lng = data.lng;

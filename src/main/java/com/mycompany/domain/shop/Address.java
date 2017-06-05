@@ -10,18 +10,22 @@ import java.util.Optional;
 public class Address extends Entity
 {
     public String streetName;
-    public String streetNumber;
-    public String entrance;
-    public String flat;
+    public Integer streetNumber;
+    public String litera;
+    public Integer korpus;
+    public Integer entrance;
+    public Integer flat;
 
     public Address()
     {
     }
 
-    public Address(String streetName, String streetNumber, String entrance, String flat)
+    public Address(String streetName, Integer streetNumber, String litera, Integer korpus, Integer entrance, Integer flat)
     {
         this.streetName = streetName;
         this.streetNumber = streetNumber;
+        this.litera = litera;
+        this.korpus = korpus;
         this.entrance = entrance;
         this.flat = flat;
     }

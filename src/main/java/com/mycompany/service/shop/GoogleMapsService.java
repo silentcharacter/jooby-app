@@ -26,13 +26,24 @@ public class GoogleMapsService
 	@Inject
 	private DistrictService districtService;
 
-	public Geometry getCoordinates(String streetName, String streetNumber) {
-		String url = String.format("http://maps.google.com/maps/api/geocode/json?address=Россия+Ярославль+%s+%s",
-				streetName.trim().replaceAll(" ", "+"), streetNumber.trim());
+	public Geometry getCoordinates(String streetName, Integer streetNumber, String litera, Integer korpus) {
+		StringBuilder streetNumberSb = new StringBuilder(streetNumber.toString());
+		if (litera != null) {
+			streetNumberSb.append(litera);
+		}
+		if (korpus != null) {
+			streetNumberSb.append("к").append(korpus.toString());
+		}
+		return getCoordinates(streetName, streetNumberSb.toString());
+	}
 
-		Geometry res = new Geometry();
+	public Geometry getCoordinates(String streetName, String streetNumber) {
+		StringBuilder url = new StringBuilder("http://maps.google.com/maps/api/geocode/json?address=Россия+Ярославль+");
+		url.append(streetName.trim().replaceAll("\\s", "+")).append("+");
+		url.append(streetNumber);
+		Geometry res;
 		HttpClient client = HttpClientBuilder.create().build();
-		HttpGet request = new HttpGet(url);
+		HttpGet request = new HttpGet(url.toString());
 		try
 		{
 			HttpResponse response = client.execute(request);

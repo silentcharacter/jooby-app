@@ -6,6 +6,7 @@ import com.mycompany.domain.shop.*;
 import com.mycompany.service.SmsService;
 import com.mycompany.service.shop.*;
 import com.typesafe.config.Config;
+import org.apache.commons.lang3.StringUtils;
 import org.bson.types.Binary;
 import org.jooby.*;
 import org.mindrot.jbcrypt.BCrypt;
@@ -109,7 +110,7 @@ public class ShopApp extends Jooby
 		get("/checkout", req ->
 		{
 			Map<String, Object> cart = cartService.getFetchedCart(req);
-			if (req.cookie("foodsun").isSet()) {
+			if (req.cookie("foodsun").isSet() && StringUtils.isEmpty(cart.get("phone").toString())) {
 				String cookie = req.cookie("foodsun").value();
 				String[] decoded = new String(Base64.getDecoder().decode(cookie)).split(",");
 				if (decoded.length == 2 && BCrypt.checkpw(decoded[0], decoded[1])) {

@@ -21,6 +21,8 @@ public class Order extends Cart
 
 	public String districtId;
 
+	public String comment;
+
 	//needed to solve ng-admin bug not showing embedded linked entities
 	public List<String> sauces = new ArrayList<>();
 

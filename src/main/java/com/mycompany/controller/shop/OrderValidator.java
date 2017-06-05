@@ -17,20 +17,9 @@ public class OrderValidator
 		if (StringUtils.isEmpty(order.streetName)) {
 			return new ValidationResult("streetName", "Заполните поле 'Улица'");
 		}
-		if (StringUtils.isEmpty(order.streetNumber)) {
-			return new ValidationResult("streetNumber", "Заполните поле 'Номер дома'");
+		if (StringUtils.isEmpty(order.originalStreetNumber)) {
+			return new ValidationResult("originalStreetNumber", "Заполните поле 'Номер дома'");
 		}
-		if (StringUtils.isEmpty(order.flat)) {
-			return new ValidationResult("flat", "Заполните поле 'Квартира/офис'");
-		}
-//		if (order.deliveryId.equals("paidDelivery")) {
-//			if (StringUtils.isEmpty(order.deliveryDate) || order.deliveryDate.equals("NULL")) {
-//				return new ValidationResult("deliveryDate", "Выберите дату доставки");
-//			}
-//			if (StringUtils.isEmpty(order.deliveryTime) || order.deliveryTime.equals("NULL")) {
-//				return new ValidationResult("deliveryTime", "Выберите время доставки");
-//			}
-//		}
 		return ValidationResult.OK;
 	}
 }

@@ -11,9 +11,12 @@ public class Cart extends Entity
     public String name;
     public String phone;
     public String streetName;
-    public String streetNumber;
-    public String entrance;
-    public String flat;
+    public Integer streetNumber;
+    public String originalStreetNumber;
+    public String litera;
+    public Integer korpus;
+    public Integer entrance;
+    public Integer flat;
     public String deliveryId;
     public Integer deliveryPrice;
     public Date deliveryDate;

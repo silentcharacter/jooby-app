@@ -67,9 +67,9 @@ public class OrderService extends AbstractService<Order>
 		return result;
 	}
 
-	public Map<String, String> findByPhone(String phone)
+	public Map<String, Object> findByPhone(String phone)
 	{
-		Map<String, String> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		if (Strings.isNullOrEmpty(phone))
 		{
 			return map;
@@ -97,7 +97,8 @@ public class OrderService extends AbstractService<Order>
 			order.orderNumber = generateNewOrderNumber();
 			order.orderDate = new Date();
 			order.status = OrderStatus.NEW;
-			linkToCustomer(order);
+			parseStreetNumber(order);
+//			linkToCustomer(order);
 			//needed to solve ng-admin bug not showing embedded linked entities
 			order.sauces = sauceService.getAll().stream().map(sauce -> sauce.id).collect(Collectors.toList());
 			insert(order);
@@ -111,6 +112,16 @@ public class OrderService extends AbstractService<Order>
 		return null;
 	}
 
+	private void parseStreetNumber(Order order) {
+		String[] parts = order.originalStreetNumber.toLowerCase().split("к");
+		if (parts.length > 1) {
+			order.korpus = Integer.valueOf(parts[1].replaceAll("[^\\d.]", ""));
+		}
+		parts = parts[0].split("/");
+		order.streetNumber = Integer.valueOf(parts[0].replaceAll("[^\\d.]", ""));
+		order.litera = parts[0].replaceAll("[\\d.]", "");
+	}
+
 	public Order createOrder(Map map) throws ParseException
 	{
 		ObjectMapper mapper = new ObjectMapper();
@@ -121,7 +132,7 @@ public class OrderService extends AbstractService<Order>
 		order.orderNumber = generateNewOrderNumber();
 		order.orderDate = new Date();
 		order.status = OrderStatus.IN_DELIVERY;
-		linkToCustomer(order);
+//		linkToCustomer(order);
 		//needed to solve ng-admin bug not showing embedded linked entities
 		order.sauces = sauceService.getAll().stream().map(sauce -> sauce.id).collect(Collectors.toList());
 		insert(order);
@@ -138,14 +149,14 @@ public class OrderService extends AbstractService<Order>
 			customer.name = order.name;
 			customer.phone = order.phone;
 			customer.addresses = Collections.singletonList(
-					new Address(order.streetName, order.streetNumber, order.entrance, order.flat));
+					new Address(order.streetName, order.streetNumber, order.litera, order.korpus, order.entrance, order.flat));
 			customer.totalOrdered = order.totalPrice;
 			customer = customerService.insert(customer);
 		} else {
 			Optional<Address> address = customer.addresses.stream().filter(a -> a.streetName.equals(order.streetName)
 					&& a.streetNumber.equals(order.streetNumber) && a.flat.equals(order.flat)).findFirst();
 			if (!address.isPresent()) {
-				customer.addresses.add(new Address(order.streetName, order.streetNumber, order.entrance, order.flat));
+				customer.addresses.add(new Address(order.streetName, order.streetNumber, order.litera, order.korpus, order.entrance, order.flat));
 			}
 			customer.totalOrdered = getAll(0, Integer.MAX_VALUE, "", "{customerId:#}", Collections.singletonList(customer.id)).stream()
 					.filter(o -> !o.orderNumber.equals(order.orderNumber)).mapToInt(o -> o.totalPrice).sum() + order.totalPrice;
@@ -238,14 +249,14 @@ public class OrderService extends AbstractService<Order>
 	public void onSave(Order order)
 	{
 		cartService.calculateCart(order);
-		order.phone = Utils.formatPhone(order.phone);
+//		order.phone = Utils.formatPhone(order.phone);
 		linkToCustomer(order);
 		updateCoordinates(order);
 	}
 
 	private void updateCoordinates(Order order)
 	{
-		Geometry geometry = googleMapsService.getCoordinates(order.streetName, order.streetNumber);
+		Geometry geometry = googleMapsService.getCoordinates(order.streetName, order.streetNumber, order.litera, order.korpus);
 		if (geometry != null) {
 			order.lat = geometry.getLat();
 			order.lng = geometry.getLng();
@@ -292,8 +303,14 @@ public class OrderService extends AbstractService<Order>
 		matcher = pattern.matcher(parts[1]);
 		if (matcher.find()) {
 			order.streetName = matcher.group(1);
-			order.streetNumber = matcher.group(2) + matcher.group(3).trim();
-			order.flat = matcher.group(4);
+			try {
+				//todo: test it!
+				order.streetNumber = Integer.valueOf(matcher.group(2));
+				order.litera = matcher.group(3).trim();
+				order.flat = Integer.valueOf(matcher.group(4));
+			} catch (NumberFormatException ex) {
+				logger.error("error parsing order from string", ex);
+			}
 		}
 		order.name = parts[2];
 		return order;

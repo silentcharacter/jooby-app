@@ -157,7 +157,7 @@ public class CartService
 		cart.name = cartForm.name;
 		cart.phone = Utils.formatPhone(cartForm.phone);
 		cart.streetName = cartForm.streetName;
-		cart.streetNumber = cartForm.streetNumber;
+		cart.originalStreetNumber = cartForm.originalStreetNumber;
 		cart.entrance = cartForm.entrance;
 		cart.flat = cartForm.flat;
 		saveSessionCart(req, cart);

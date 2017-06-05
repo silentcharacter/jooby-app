@@ -43,7 +43,7 @@
                     <div class="field--third field field--optional field--show-floating-label">
                         <label class="field__label" for="streetNumber">Номер дома</label>
                         <div class="field__input-wrapper">
-                            <input placeholder="Номер дома" class="field__input" type="text" name="streetNumber" id="streetNumber" value="{{cartForm.streetNumber}}"/>
+                            <input placeholder="Номер дома" class="field__input" type="text" name="originalStreetNumber" id="streetNumber" value="{{cartForm.originalStreetNumber}}"/>
                         </div>
                     </div>
                     <div class="field--third field field--optional field--show-floating-label">
@@ -61,18 +61,15 @@
                 </div>
             </div>
         </div>
-        <!--<div class="section section&#45;&#45;half-spacing-top section&#45;&#45;optional">-->
-        <!--<div class="section__content">-->
-        <!--<div class="checkbox-wrapper">-->
-        <!--<div class="checkbox__input">-->
-        <!--<input size="30" type="hidden" value="false" name="checkout[remember_me]" />-->
-        <!--<input name="checkout[remember_me]" type="hidden" value="0" /><input class="input-checkbox" data-backup="remember_me" type="checkbox" value="1" name="checkout[remember_me]" id="checkout_remember_me" />-->
-        <!--</div>-->
-        <!--<label class="checkbox__label" for="checkout_remember_me">-->
-        <!--Save this information for next time-->
-        <!--</label>          </div>-->
-        <!--</div>-->
-        <!--</div>-->
+
+        <div class="section">
+            <div class="checkbox__input">
+                <input class="input-checkbox" type="checkbox" name="remember_me" id="checkout_remember_me" checked/>
+            </div>
+            <label class="checkbox__label" for="checkout_remember_me">
+                Сохранить данные для следующего раза
+            </label>
+        </div>
 
     </div>
 

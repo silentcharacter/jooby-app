@@ -158,25 +158,30 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row {{form.streetName.$error.required? 'has-error' : '' }}">
                             <label class="col-sm-4 col-xs-4 col-form-label">Улица:</label>
                             <div class="col-sm-8 col-xs-8">
-                                <input class="form-control" type="search" ng-model="order.streetName" ng-change="onAddressChange()"
-                                       bs-options="address as address for address in getAddress($viewValue)"  bs-typeahead>
+                                <input class="form-control" type="search" ng-model="order.streetName" ng-change="onAddressChange()" name="streetName"
+                                       bs-options="address as address for address in getAddress($viewValue)"  bs-typeahead required>
                             </div>
                         </div>
-                        <!--<i class="fa fa-home"></i> -->
 
                         <div class="form-group row inline-inputs">
                             <label class="col-sm-4 col-xs-4 col-form-label">Дом/под./кв.:</label>
-                            <div class="col-sm-3 col-xs-3" style="padding-right: 0">
-                                <input class="form-control" type="text" ng-model="order.streetNumber" ng-change="onAddressChange()">
+                            <div class="col-sm-2 col-xs-2 {{form.streetNumber.$error.required? 'has-error' : '' }}" style="padding-right: 5px">
+                                <input class="form-control"type="number" ng-model="order.streetNumber" ng-change="onAddressChange()" name="streetNumber" required>
                             </div>
-                            <div class="col-sm-2 col-xs-2" style="padding-right: 0; padding-left: 2px">
-                                <input class="form-control" type="text" ng-model="order.entrance">
+                            <div class="col-sm-1 col-xs-1" style="padding-right: 5px;padding-left: 5px;">
+                                <input class="form-control"type="text" ng-model="order.litera" ng-change="onAddressChange()" style="padding:0; padding-left:2px">
                             </div>
-                            <div class="col-sm-3 col-xs-3" style="padding-left: 2px">
-                                <input class="form-control" type="text" ng-model="order.flat">
+                            <div class="col-sm-2 col-xs-2" style="padding-right: 5px;padding-left: 5px;">
+                                <input class="form-control"type="number" ng-model="order.korpus" ng-change="onAddressChange()">
+                            </div>
+                            <div class="col-sm-1 col-xs-1" style="padding-right: 5px; padding-left: 5px; ">
+                                <input class="form-control" type="number" ng-model="order.entrance" style="padding:0; padding-left:2px">
+                            </div>
+                            <div class="col-sm-2 col-xs-2 {{form.flat.$error.required? 'has-error' : '' }}" style="padding-left: 5px">
+                                <input class="form-control" type="number" ng-model="order.flat" name="flat" required>
                             </div>
                         </div>
 
@@ -365,16 +370,22 @@
                             </div>
                         </div>
 
-                        <div class="form-group row inline-inputs ">
+                        <div class="form-group row inline-inputs">
                             <label class="col-sm-4 col-xs-4 col-form-label">Дом/под./кв.:</label>
-                            <div class="col-sm-3 col-xs-3 {{form.streetNumber.$error.required? 'has-error' : '' }}" style="padding-right: 0">
-                                <input class="form-control" type="text" ng-model="order.streetNumber" ng-change="onAddressChange()" name="streetNumber" required>
+                            <div class="col-sm-2 col-xs-2 {{form.streetNumber.$error.required? 'has-error' : '' }}" style="padding-right: 5px">
+                                <input class="form-control"type="number" ng-model="order.streetNumber" ng-change="onAddressChange()" name="streetNumber" required>
                             </div>
-                            <div class="col-sm-2 col-xs-2" style="padding-right: 0; padding-left: 2px">
-                                <input class="form-control" type="text" ng-model="order.entrance">
+                            <div class="col-sm-1 col-xs-1" style="padding-right: 5px;padding-left: 5px;">
+                                <input class="form-control"type="text" ng-model="order.litera" ng-change="onAddressChange()" style="padding:0; padding-left:2px">
                             </div>
-                            <div class="col-sm-3 col-xs-3 {{form.flat.$error.required? 'has-error' : '' }}" style="padding-left: 2px">
-                                <input class="form-control" type="text" ng-model="order.flat" name="flat" required>
+                            <div class="col-sm-2 col-xs-2" style="padding-right: 5px;padding-left: 5px;">
+                                <input class="form-control"type="number" ng-model="order.korpus" ng-change="onAddressChange()">
+                            </div>
+                            <div class="col-sm-1 col-xs-1" style="padding-right: 5px; padding-left: 5px; ">
+                                <input class="form-control" type="number" ng-model="order.entrance" style="padding:0; padding-left:2px">
+                            </div>
+                            <div class="col-sm-2 col-xs-2 {{form.flat.$error.required? 'has-error' : '' }}" style="padding-left: 5px">
+                                <input class="form-control" type="number" ng-model="order.flat" name="flat" required>
                             </div>
                         </div>
 
