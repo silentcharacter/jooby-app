@@ -38,6 +38,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
 
     $scope.filterChanged = function(filter) {
         $scope.filter = filter;
+        $scope.loading = true;
         getList();
     };
 
