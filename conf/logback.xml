@@ -28,6 +28,23 @@
     </encoder>
   </appender>
 
+  <logger name="org.mongodb" level="error">
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE" />
+  </logger>
+  <logger name="org.jooby.assets.AssetCompiler" level="error">
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE" />
+  </logger>
+  <logger name="com.github.jknack.handlebars" level="error">
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE" />
+  </logger>
+  <logger name="org.jooby.spi.HttpHandler" level="debug">
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE" />
+  </logger>
+
   <root level="info">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
