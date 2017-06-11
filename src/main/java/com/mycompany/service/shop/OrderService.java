@@ -94,6 +94,7 @@ public class OrderService extends AbstractService<Order>
 		try
 		{
 			Order order = mapper.readValue(cartJson.get(), Order.class);
+			order.channel = Channel.ONLINE;
 			order.orderNumber = generateNewOrderNumber();
 			order.orderDate = new Date();
 			order.status = OrderStatus.NEW;
@@ -129,6 +130,7 @@ public class OrderService extends AbstractService<Order>
 		map.put("deliveryDate", FORMAT.parse((String)map.get("deliveryDate")));
 		map.remove("id");
 		Order order = mapper.convertValue(map, Order.class);
+		order.channel = Channel.PHONE;
 		order.orderNumber = generateNewOrderNumber();
 		order.orderDate = new Date();
 		order.status = OrderStatus.IN_DELIVERY;
@@ -238,9 +240,12 @@ public class OrderService extends AbstractService<Order>
 		saved.deliveryId = Utils.getValue(order, "delivery.id");
 		saved.deliveryTime = Utils.getValue(order, "deliveryTime");
 		saved.streetName = Utils.getValue(order, "streetName");
+		saved.litera = Utils.getValue(order, "litera");
+		saved.korpus = Utils.getValue(order, "korpus");
 		saved.streetNumber = Utils.getValue(order, "streetNumber");
 		saved.entrance = Utils.getValue(order, "entrance");
 		saved.flat = Utils.getValue(order, "flat");
+		saved.comment = Utils.getValue(order, "comment");
 		update(saved);
 		return getFetchedOrder(saved.id);
 	}
@@ -248,10 +253,26 @@ public class OrderService extends AbstractService<Order>
 	@Override
 	public void onSave(Order order)
 	{
+		updateOriginalStreetNumber(order);
 		cartService.calculateCart(order);
 //		order.phone = Utils.formatPhone(order.phone);
 		linkToCustomer(order);
 		updateCoordinates(order);
+	}
+
+	private void updateOriginalStreetNumber(Order order)
+	{
+		if (order.channel == null) {
+			order.channel = Channel.PHONE;
+		}
+		if (order.channel == Channel.PHONE) {
+			StringBuilder sb = new StringBuilder(String.valueOf(order.streetNumber));
+			sb.append(StringUtils.defaultString(order.litera));
+			if (order.korpus != null) {
+				sb.append(" корп. ").append(String.valueOf(order.korpus));
+			}
+			order.originalStreetNumber = sb.toString();
+		}
 	}
 
 	private void updateCoordinates(Order order)
