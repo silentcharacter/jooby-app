@@ -336,4 +336,11 @@ public class OrderService extends AbstractService<Order>
 		order.name = parts[2];
 		return order;
 	}
+
+	@Override
+	protected Order listReaderCallback(Order order)
+	{
+		order.entries = Collections.emptyList();
+		return order;
+	}
 }
