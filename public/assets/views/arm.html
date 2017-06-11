@@ -456,7 +456,7 @@
                                 <tbody>
                                 <tr ng-repeat="order in schedule[time.value]" ng-class="scheduleRowClass(order)">
                                     <td>
-                                        <a href="#/arm/{{order.orderNumber}}">{{order.orderNumber}}</a>
+                                        <a href="" ng-click="onOrderLinkClick(order.orderNumber)">{{order.orderNumber}}</a>
                                     </td>
                                     <td>
                                         {{order.streetName}}&nbsp;{{order.streetNumber}}

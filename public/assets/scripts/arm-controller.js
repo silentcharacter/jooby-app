@@ -56,6 +56,13 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
         $scope.onClick({orderNumber:'new'});
     };
 
+    $scope.onOrderLinkClick = function(orderNumber) {
+        console.log(orderNumber)
+        $scope.detailedView = true;
+        $state.go('arm', {orderNo: orderNumber}, {notify: false});
+        $scope.onClick({orderNumber:orderNumber});
+    };
+
     function getNewOrdersCount() {
         //get new orders count
         var filter = encodeURIComponent(JSON.stringify({status: window.NEW}));
