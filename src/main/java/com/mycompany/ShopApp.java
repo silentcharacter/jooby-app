@@ -118,7 +118,7 @@ public class ShopApp extends Jooby
 					cart.put("phone", previousOrder.phone.replace("+7", ""));
 					cart.put("name", previousOrder.name);
 					cart.put("streetName", previousOrder.streetName);
-					cart.put("streetNumber", previousOrder.streetNumber);
+					cart.put("originalStreetNumber", previousOrder.originalStreetNumber);
 					cart.put("entrance", previousOrder.entrance);
 					cart.put("flat", previousOrder.flat);
 				}
@@ -212,8 +212,6 @@ public class ShopApp extends Jooby
 				.put("orderNumber", orderNumber)
 				.put("templateName", "shop/thankyou"));
 		});
-
-		get("/orderByPhone", request -> orderService.findByPhone(request.param("phone").value()));
 
 		//ARM
 		get("/order/detailed/:orderNumber", req -> {

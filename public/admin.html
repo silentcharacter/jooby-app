@@ -374,7 +374,7 @@
                     .targetField(nga.field('description'))
                     .singleApiCall(ids => ({'id': ids })),
             nga.field("streetName").label('Улица'),
-            nga.field('streetNumber').label("Дом").cssClasses('col-sm-2'),
+            nga.field('originalStreetNumber').label("Дом").cssClasses('col-sm-2'),
             nga.field('entrance').label("Подъезд").cssClasses('col-sm-2'),
             nga.field('flat').label("Квартира").cssClasses('col-sm-2'),
             nga.field('districtId', 'reference').label("Район")
