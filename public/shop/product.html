@@ -1,0 +1,36 @@
+<main class="wrapper main-content" role="main">
+
+    <h2><a href="/">Каталог</a>&nbsp;/&nbsp;{{product.name}}</h2>
+
+    <div class="grid-item large--one-half medium--one-half small--one-whole on-sale">
+        <div class="product-grid-image" style="height: 160px;">
+            <img src="/image/product/{{product.id}}" alt="{{product.name}}">
+        </div>
+    </div>
+
+    <div class="grid-item large--one-half medium--one-half small--one-whole on-sale" style=" text-align: right">
+        <div class="description">{{product.description}}</div>
+        <div class="product-item--price">
+            <span class="h1 medium--left">
+                <small>{{product.price}}<sup>00</sup></small>
+            </span>
+            <span class="sale-tag medium--right has-reviews">
+                Акция
+            </span>
+        </div>
+        <span class="spr-badge" id="spr_badge_330383699" data-rating="4.2631578947368425">
+                    <span class="spr-starrating spr-badge-starrating">
+                        <i class="spr-icon spr-icon-star" style=""></i>
+                        <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star" style=""></i>
+                        <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star-half-alt" style=""></i>
+                    </span>
+                    <span class="spr-badge-caption">19 отзывов</span>
+                </span>
+        <br/>
+        <a class="btn bt-add-product" href="#" role="button" data-toggle="modal" onclick="onAddToCartBtnClick('{{product.id}}')">
+            <span class="icon icon-cart">Купить</span>
+        </a>
+    </div>
+</main>
+
+

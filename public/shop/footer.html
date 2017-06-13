@@ -94,3 +94,53 @@
         </div>
     </div>
 </footer>
+
+<!-- Modal -->
+<div class="modal fade" id="addToCartModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header add-to-cart">
+                <button type="button" class="close add-to-cart" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Добавление в корзину</h4>
+            </div>
+            <div class="modal-body">
+                <form id="addToCartForm" method="post" action="#" >
+                    <input type="hidden" name="productId">
+                    <p>Укажите количество (кг):</p>
+                    <div class="ajaxifyCart--qty">
+                        <input id="quantity" type="text" value="1 кг" name="quantity">
+                        <span onclick="changeInputValue('quantity', 1)" class="ajaxifyCart--qty-adjuster ajaxifyCart--add">+</span>
+                        <span onclick="changeInputValue('quantity', -1)" class="ajaxifyCart--qty-adjuster ajaxifyCart--minus">-</span>
+                    </div>
+                    <hr>
+                    <p>Выберите дополнительные опции:</p>
+                    {{#each sauces}}
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="sauces" value="{{id}}">
+                            {{name}} ({{price}} руб.)
+                        </label>
+                    </div>
+                    {{/each}}
+                    <hr>
+                    {{#each colors}}
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="colorId" value="{{id}}"
+                                   {{#if _default}}
+                                   checked
+                                   {{/if}}
+                            >
+                            {{name}} ({{price}} руб.)
+                        </label>
+                    </div>
+                    {{/each}}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="addToCart()">Добавить</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
