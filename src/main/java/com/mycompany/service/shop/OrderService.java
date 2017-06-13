@@ -197,7 +197,12 @@ public class OrderService extends AbstractService<Order>
 	}
 
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> getOrderMap(Cart cart)
+	public Map<String, Object> getOrderMap(Cart cart) {
+		return getOrderMap(cart, true);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getOrderMap(Cart cart, boolean withEntries)
 	{
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> map = objectMapper.convertValue(cart, Map.class);
@@ -206,19 +211,24 @@ public class OrderService extends AbstractService<Order>
 		if (map.containsValue("deliveryDate")) {
 			map.put("deliveryDate", new Date((Long)map.get("deliveryDate")));
 		}
-		List<Map> entries = (List) map.get("entries");
-		entries.forEach(entry -> {
-			Product product = productService.getById((String) entry.get("productId"));
-			product.image = null;
-			entry.put("product", product);
-			if (entry.get("colorId") != null) {
-				entry.put("color", colorService.getById((String) entry.get("colorId")));
-			}
-			if (entry.get("sauces") != null) {
-				List<String> sauces = (List) entry.get("sauces");
-				entry.put("sauces", sauces.stream().map(sauceService::getById).collect(Collectors.toList()));
-			}
-		});
+		if (withEntries) {
+			List<Map> entries = (List) map.get("entries");
+			entries.forEach(entry -> {
+				Product product = productService.getById((String) entry.get("productId"));
+				product.image = null;
+				entry.put("product", product);
+				if (entry.get("colorId") != null) {
+					entry.put("color", colorService.getById((String) entry.get("colorId")));
+				}
+				if (entry.get("sauces") != null) {
+					List<String> sauces = (List) entry.get("sauces");
+					entry.put("sauces", sauces.stream().map(sauceService::getById).collect(Collectors.toList()));
+				}
+			});
+		} else {
+			map.put("entries", Collections.emptyList());
+		}
+
 		if (cart instanceof Order) {
 			Order order = (Order)cart;
 			if (order.districtId != null)
@@ -337,10 +347,4 @@ public class OrderService extends AbstractService<Order>
 		return order;
 	}
 
-	@Override
-	protected Order listReaderCallback(Order order)
-	{
-		order.entries = Collections.emptyList();
-		return order;
-	}
 }

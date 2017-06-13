@@ -28,7 +28,7 @@ angular.module('myApp.controllers').controller('ScheduleCtrl', ['$scope', '$http
         var filterUrl = encodeURIComponent(JSON.stringify(filter));
         var sort = '&_sortField=orderNumber&_sortDir=ASC';
         $scope.loading = true;
-        $http.get('/api/orders?_filters='+filterUrl+sort).success(function (data) {
+        $http.get('/api/orders?fetched=true&_filters='+filterUrl+sort).success(function (data) {
             for (var i = 0; i < $scope.times1.length; i++) {
                 var orders = data.filter(function (item) {
                     return item.deliveryTime == $scope.times1[i].value;

@@ -28,7 +28,7 @@ public class Orders extends AbstractResource<Order> {
         rsp.header("X-Total-Count", searchResult.count);
         if (searchResult.result != null) {
             rsp.send(StreamSupport.stream(searchResult.result.spliterator(), false)
-                  .map(o -> getOrderService().getOrderMap(o)).collect(Collectors.toList()));
+                  .map(o -> getOrderService().getOrderMap(o, req.param("fetched").isSet())).collect(Collectors.toList()));
         } else {
             rsp.send("");
         }
