@@ -27,9 +27,31 @@
                     <span class="spr-badge-caption">19 отзывов</span>
                 </span>
         <br/>
-        <a class="btn bt-add-product" href="#" role="button" data-toggle="modal" onclick="onAddToCartBtnClick('{{product.id}}')">
-            <span class="icon icon-cart">Купить</span>
-        </a>
+
+
+        <form id="addToCartForm" method="post" action="#" >
+            <hr>
+            <p>Дополнительные опции:</p>
+            {{#each sauces}}
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="sauces" value="{{id}}">
+                    {{name}} ({{price}} руб.)
+                </label>
+            </div>
+            {{/each}}
+        </form>
+        <input type="hidden" name="productId">
+        <div class="row">
+            <div class="ajaxifyCart--qty" style="margin-right: 10px; display: inline-block;">
+                <input id="quantity" type="text" value="1 кг" name="quantity">
+                <span onclick="changeInputValue('quantity', 1)" class="ajaxifyCart--qty-adjuster ajaxifyCart--add">+</span>
+                <span onclick="changeInputValue('quantity', -1)" class="ajaxifyCart--qty-adjuster ajaxifyCart--minus">-</span>
+            </div>
+            <a class="btn bt-add-product" href="#" role="button" data-toggle="modal" onclick="onAddToCartBtnClick('{{product.id}}')">
+                <span class="icon icon-cart">Купить</span>
+            </a>
+        </div>
     </div>
 </main>
 
