@@ -13,6 +13,7 @@ public class Product extends Entity {
     public String description;
     public Integer price;
     public Binary image;
+    public String categoryId;
 
     @Override
     public String getFullText() {
