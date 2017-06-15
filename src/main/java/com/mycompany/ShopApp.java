@@ -117,7 +117,7 @@ public class ShopApp extends Jooby
 		get("/checkout", req ->
 		{
 			Map<String, Object> cart = cartService.getFetchedCart(req);
-			if (req.cookie("foodsun").isSet() && StringUtils.isEmpty(cart.get("phone").toString())) {
+			if (req.cookie("foodsun").isSet() && StringUtils.isEmpty((String)cart.get("phone"))) {
 				String cookie = req.cookie("foodsun").value();
 				String[] decoded = new String(Base64.getDecoder().decode(cookie)).split(",");
 				if (decoded.length == 2 && BCrypt.checkpw(decoded[0], decoded[1])) {

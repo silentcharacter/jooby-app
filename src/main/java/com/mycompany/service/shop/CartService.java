@@ -43,25 +43,14 @@ public class CartService
 		Cart cart;
 		try
 		{
-			if (cartJson.isPresent())
-			{
+			if (cartJson.isPresent()) {
 				cart = mapper.readValue(cartJson.get(), Cart.class);
-			}
-			else
-			{
-				if ("dev".equals(req.require(Config.class).getString("application.env")))
-				{
-					cart = mapper.readValue(getDumpCartJson(), Cart.class);
-				}
-				else
-				{
-					cart = getNewCart();
-				}
+			} else {
+				cart = getNewCart();
 				saveSessionCart(req, cart);
 			}
 		}
-		catch (IOException e)
-		{
+		catch (IOException e) {
 			e.printStackTrace();
 			cart = getNewCart();
 			saveSessionCart(req, cart);
