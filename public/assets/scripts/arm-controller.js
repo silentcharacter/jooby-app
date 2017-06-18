@@ -105,7 +105,8 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             order.id = 'new';
             order.orderNumber = 'new';
             order.deliveryDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
-            $http.get('/api/products').success(function (data) {
+            var filter = encodeURIComponent(JSON.stringify({active: true}));
+            $http.get('/api/products?_filters=' + filter).success(function (data) {
                 $scope.products = data;
             }).error(function (data, status) {
                 console.log('Error ' + data)
