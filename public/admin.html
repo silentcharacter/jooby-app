@@ -243,10 +243,31 @@
         tags.editionView().fields(tags.creationView().fields()).title('Редактирование Тега');
         admin.addEntity(tags);
 
+        var units = nga.entity('units');
+        units.listView().title('Единицы измерения').fields([
+            nga.field('name').isDetailLink(true).label("Имя"),
+            nga.field('label').label("Представление"),
+            nga.field('coefficient', 'number').label("Коэффициент"),
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Поиск...' })
+        ]);
+        units.creationView().title('Создание Единицы Измерения').fields([
+            nga.field('name').validation({ required: true, maxlength: 512 }).label("Имя"),
+            nga.field('label').validation({ required: true, maxlength: 512 }).label("Представление"),
+            nga.field('coefficient', 'number').label("Коэффициент"),
+        ]);
+        units.editionView().fields(units.creationView().fields()).title('Редактирование Единицы Измерения');
+        admin.addEntity(units);
+
         var products = nga.entity('products');
         products.listView().title('Продукты').fields([
             nga.field('name').isDetailLink(true).label("Название"),
             nga.field('price', 'number').label("Цена"),
+            nga.field('unitId', 'reference').isDetailLink(true)
+                    .label('Ед. изм.')
+                    .targetEntity(units)
+                    .targetField(nga.field('name'))
+                    .singleApiCall(ids => ({'id': ids })),
             nga.field('categoryId', 'reference').isDetailLink(true)
                     .label('Категория')
                     .targetEntity(categories)
@@ -255,30 +276,36 @@
             nga.field('tags', 'reference_many').label("Теги")
                     .targetEntity(tags)
                     .targetField(nga.field('name'))
-                    .singleApiCall(ids => ({'id': ids }))
+                    .singleApiCall(ids => ({'id': ids })),
+            nga.field('active', 'boolean').label("Активность"),
         ]).filters([
             nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по продуктам' }),
             nga.field('categoryId', 'reference').label('Категория').attributes({ placeholder: 'Выберите категорию' })
-                .pinned(true)
                 .targetEntity(categories)
                 .targetField(nga.field('name'))
                 .remoteComplete(true, {
                     refreshDelay: 200,
                     searchQuery: function(search) { return { q: search }; }
                 }),
-            nga.field('tags', 'reference').label('Тег').attributes({ placeholder: 'Выберите тег...' })
+            nga.field('tags', 'reference').label('Тег').attributes({ placeholder: 'Выберите тег' })
                 .pinned(true)
                 .targetEntity(tags)
                 .targetField(nga.field('name'))
                 .remoteComplete(true, {
                     refreshDelay: 200,
                     searchQuery: function(search) { return { q: search }; }
-                })
+                }),
+            nga.field('active', 'boolean').label("Активность").pinned(true).attributes({ placeholder: 'Все' }),
         ]);
         products.creationView().title('Создание продукта').fields([
             nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
             nga.field('description', 'wysiwyg').validation({ required: true}).label("Описание"),
             nga.field('price', 'number').label("Цена"),
+            nga.field('unitId', 'reference').label("Ед. изм.")
+                    .targetEntity(units)
+                    .targetField(nga.field('name'))
+                    .singleApiCall(ids => ({'id': ids })),
+            nga.field('active', 'boolean').label("Активность"),
             nga.field('categoryId', 'reference').label("Категория")
                     .targetEntity(categories)
                     .targetField(nga.field('name'))
@@ -507,19 +534,22 @@
                     .addChild(nga.menu(products).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Товары'))
                     .addChild(nga.menu(categories).icon('<span class="glyphicon glyphicon-folder-open"></span>').title('Категории'))
                     .addChild(nga.menu(tags).icon('<span class="glyphicon glyphicon-tags"></span>').title('Теги'))
-                    .addChild(nga.menu(colors).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Цвета теста'))
-                    .addChild(nga.menu(sauces).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Соусы'))
-                    .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
+                    <!--.addChild(nga.menu(colors).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Цвета теста'))-->
+                    <!--.addChild(nga.menu(sauces).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Соусы'))-->
                     .addChild(nga.menu(districts).icon('<span class="glyphicon glyphicon-map-marker"></span>').title('Районы'))
+                    .addChild(nga.menu(units).icon('<span class="glyphicon glyphicon-inbox"></span>').title('Ед. изм.'))
                 )
-                .addChild(nga.menu(globalConfigs).icon('<span class="glyphicon glyphicon-cog"></span>').title('Настройки'))
+                .addChild(nga.menu(customers).icon('<span class="glyphicon glyphicon-king"></span>').title('Покупатели'))
                 .addChild(nga.menu().title('Отчеты').icon('<span class="glyphicon glyphicon-signal"></span>').link('/stats').active(function(path) {
                     return path.indexOf('/stats') === 0;
                 }))
-                .addChild(nga.menu(customers).icon('<span class="glyphicon glyphicon-king"></span>').title('Покупатели'))
-                .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Сотрудники'))
-                .addChild(nga.menu(todo).icon('<span class="glyphicon glyphicon-list-alt"></span>').title('Задачи'))
-                .addChild(nga.menu(news).icon('<span class="glyphicon glyphicon-flash"></span>').title('Новости'))
+                <!--.addChild(nga.menu(todo).icon('<span class="glyphicon glyphicon-list-alt"></span>').title('Задачи'))-->
+                <!--.addChild(nga.menu(news).icon('<span class="glyphicon glyphicon-flash"></span>').title('Новости'))-->
+                .addChild(nga.menu().title('Администрирование').icon('<span class="glyphicon glyphicon-cog"></span>')
+                    .addChild(nga.menu(globalConfigs).icon('<span class="glyphicon glyphicon-wrench"></span>').title('Настройки'))
+                    .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Сотрудники'))
+                    .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
+                )
                 .addChild(nga.menu().link('/exit').icon('<span class="glyphicon glyphicon-log-out"></span>').title('Выход'))
         );
 

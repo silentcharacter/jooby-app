@@ -15,7 +15,9 @@ public class Product extends Entity {
     public Integer price;
     public Binary image;
     public String categoryId;
+    public String unitId;
     public List<String> tags;
+    public boolean active;
 
     @Override
     public String getFullText() {
