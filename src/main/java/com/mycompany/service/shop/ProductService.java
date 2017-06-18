@@ -3,6 +3,7 @@ package com.mycompany.service.shop;
 import com.mycompany.domain.shop.Product;
 import com.mycompany.service.AbstractService;
 import com.mycompany.service.SearchResult;
+import org.apache.commons.lang3.StringUtils;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 
@@ -24,6 +25,8 @@ public class ProductService extends AbstractService<Product> {
     }
 
     public Binary getProductImage(String id) {
+        if (StringUtils.isEmpty(id))
+            return null;
         return getCollection().findOne(new ObjectId(id)).as(Product.class).image;
     }
 
