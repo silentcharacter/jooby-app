@@ -30,6 +30,7 @@ public class OrderService extends AbstractService<Order>
 
 	private final static Logger logger = LoggerFactory.getLogger(OrderService.class);
 	private final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+	private ObjectMapper mapper = new ObjectMapper();
 	@Inject
 	private CartService cartService;
 	@Inject
@@ -40,6 +41,8 @@ public class OrderService extends AbstractService<Order>
 	private SauceService sauceService;
 	@Inject
 	private ProductService productService;
+	@Inject
+	private UnitService unitService;
 	@Inject
 	private ColorService colorService;
 	@Inject
@@ -90,7 +93,6 @@ public class OrderService extends AbstractService<Order>
 		{
 			return null;
 		}
-		ObjectMapper mapper = new ObjectMapper();
 		try
 		{
 			Order order = mapper.readValue(cartJson.get(), Order.class);
@@ -125,7 +127,6 @@ public class OrderService extends AbstractService<Order>
 
 	public Order createOrder(Map map) throws ParseException
 	{
-		ObjectMapper mapper = new ObjectMapper();
 		map.put("orderDate", new Date());
 		map.put("deliveryDate", FORMAT.parse((String)map.get("deliveryDate")));
 		map.remove("id");
@@ -204,8 +205,7 @@ public class OrderService extends AbstractService<Order>
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getOrderMap(Cart cart, boolean withEntries)
 	{
-		ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, Object> map = objectMapper.convertValue(cart, Map.class);
+		Map<String, Object> map = mapper.convertValue(cart, Map.class);
 		map.put("delivery", deliveryTypeService.getById(cart.deliveryId));
 		map.put("paymentType", paymentTypeService.getById(cart.paymentTypeId));
 		if (map.containsValue("deliveryDate")) {
@@ -216,7 +216,11 @@ public class OrderService extends AbstractService<Order>
 			entries.forEach(entry -> {
 				Product product = productService.getById((String) entry.get("productId"));
 				product.image = null;
-				entry.put("product", product);
+				Map<String, Object> productMap = mapper.convertValue(product, Map.class);
+				if (StringUtils.isNotEmpty(product.unitId)) {
+					productMap.put("unit", unitService.getById(product.unitId));
+				}
+				entry.put("product", productMap);
 				if (entry.get("colorId") != null) {
 					entry.put("color", colorService.getById((String) entry.get("colorId")));
 				}

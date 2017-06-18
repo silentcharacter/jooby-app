@@ -71,7 +71,7 @@ public abstract class AbstractService<T extends Entity> {
         return searchResult;
     }
 
-    protected T listReaderCallback(T t) {
+    protected Object listReaderCallback(T t) {
         return t;
     }
 

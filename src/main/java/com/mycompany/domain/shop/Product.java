@@ -1,5 +1,6 @@
 package com.mycompany.domain.shop;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mycompany.annotation.Deployment;
 import com.mycompany.domain.Entity;
 import org.bson.types.Binary;
@@ -7,6 +8,7 @@ import org.bson.types.Binary;
 import java.util.List;
 import java.util.Optional;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Deployment(table = "products")
 public class Product extends Entity {
 

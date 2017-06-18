@@ -1,5 +1,7 @@
 package com.mycompany.service.shop;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 import com.mycompany.domain.shop.Product;
 import com.mycompany.service.AbstractService;
 import com.mycompany.service.SearchResult;
@@ -8,10 +10,16 @@ import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 
 import java.util.List;
+import java.util.Map;
 //import org.apache.commons.codec.binary.Base64;
 
 
 public class ProductService extends AbstractService<Product> {
+
+    private ObjectMapper mapper = new ObjectMapper();
+
+    @Inject
+    private UnitService unitService;
 
     public ProductService() {
         super(Product.class);
@@ -31,10 +39,13 @@ public class ProductService extends AbstractService<Product> {
     }
 
     @Override
-    protected Product listReaderCallback(Product product) {
+    @SuppressWarnings("unchecked")
+    protected Object listReaderCallback(Product product) {
         product.image = null;
         product.description = null;
-        return product;
+        Map<String, Object> map = mapper.convertValue(product, Map.class);
+        map.put("unit", unitService.getById(product.unitId));
+        return map;
     }
 
     //    @Override
