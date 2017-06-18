@@ -44,7 +44,9 @@ public class ProductService extends AbstractService<Product> {
         product.image = null;
         product.description = null;
         Map<String, Object> map = mapper.convertValue(product, Map.class);
-        map.put("unit", unitService.getById(product.unitId));
+        if (StringUtils.isNotEmpty(product.unitId)) {
+            map.put("unit", unitService.getById(product.unitId));
+        }
         return map;
     }
 
