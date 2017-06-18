@@ -19,7 +19,7 @@ public class ProductService extends AbstractService<Product> {
 
     @Override
     public void onSave(Product product) {
-        if (product.image == null) {
+        if (product.image == null && StringUtils.isNotEmpty(product.id)) {
             product.image = getProductImage(product.id);
         }
     }
