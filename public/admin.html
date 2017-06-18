@@ -281,6 +281,7 @@
         ]).filters([
             nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по продуктам' }),
             nga.field('categoryId', 'reference').label('Категория').attributes({ placeholder: 'Выберите категорию' })
+                .pinned(true)
                 .targetEntity(categories)
                 .targetField(nga.field('name'))
                 .remoteComplete(true, {
@@ -288,7 +289,6 @@
                     searchQuery: function(search) { return { q: search }; }
                 }),
             nga.field('tags', 'reference').label('Тег').attributes({ placeholder: 'Выберите тег' })
-                .pinned(true)
                 .targetEntity(tags)
                 .targetField(nga.field('name'))
                 .remoteComplete(true, {
