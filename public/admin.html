@@ -212,12 +212,36 @@
         categories.listView().title('Категории').fields([
             nga.field('name').isDetailLink(true).label("Название"),
         ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Поиск...' })
         ]);
         categories.creationView().title('Создание Категории').fields([
             nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
+            nga.field('products', 'referenced_list')
+                    .label('Содержимое')
+                    .targetEntity(nga.entity('products'))
+                    .targetReferenceField('categoryId')
+                    .targetFields([
+                        nga.field('name').label("Название").isDetailLink(true),
+                        nga.field('price', 'number').label("Цена"),
+                    ])
+                    .perPage(20)
+                    .sortField('name')
+                    .sortDir('ASC'),
         ]);
         categories.editionView().fields(categories.creationView().fields()).title('Редактирование Категории');
         admin.addEntity(categories);
+
+        var tags = nga.entity('tags');
+        tags.listView().title('Теги').fields([
+            nga.field('name').isDetailLink(true).label("Название"),
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Поиск...' })
+        ]);
+        tags.creationView().title('Создание Тега').fields([
+            nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
+        ]);
+        tags.editionView().fields(tags.creationView().fields()).title('Редактирование Тега');
+        admin.addEntity(tags);
 
         var products = nga.entity('products');
         products.listView().title('Продукты').fields([
@@ -227,12 +251,24 @@
                     .label('Категория')
                     .targetEntity(categories)
                     .targetField(nga.field('name'))
+                    .singleApiCall(ids => ({'id': ids })),
+            nga.field('tags', 'reference_many').label("Теги")
+                    .targetEntity(tags)
+                    .targetField(nga.field('name'))
                     .singleApiCall(ids => ({'id': ids }))
         ]).filters([
             nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по продуктам' }),
             nga.field('categoryId', 'reference').label('Категория').attributes({ placeholder: 'Выберите категорию' })
                 .pinned(true)
                 .targetEntity(categories)
+                .targetField(nga.field('name'))
+                .remoteComplete(true, {
+                    refreshDelay: 200,
+                    searchQuery: function(search) { return { q: search }; }
+                }),
+            nga.field('tags', 'reference').label('Тег').attributes({ placeholder: 'Выберите тег...' })
+                .pinned(true)
+                .targetEntity(tags)
                 .targetField(nga.field('name'))
                 .remoteComplete(true, {
                     refreshDelay: 200,
@@ -247,6 +283,14 @@
                     .targetEntity(categories)
                     .targetField(nga.field('name'))
                     .singleApiCall(ids => ({'id': ids })),
+            nga.field('tags', 'reference_many').label("Теги")
+                .targetEntity(tags)
+                .targetField(nga.field('name'))
+                .attributes({ placeholder: 'Выберите тег...' })
+                .remoteComplete(true, {
+                    refreshDelay: 300 ,
+                    searchQuery: search => ({ q: search })
+                }),
         ]);
         products.editionView().fields(products.creationView().fields(),
             nga.field('preview', 'template').label('Картинка').template((entry) => `<img id ="prodImg" src="/image/product/${entry.values.id}" />`),
@@ -461,7 +505,8 @@
                     .addChild(nga.menu(paymentTypes).icon('<span class="glyphicon glyphicon-ruble"></span>').title('Способы оплаты'))
                     .addChild(nga.menu(deliveryTypes).icon('<span class="glyphicon glyphicon-plane"></span>').title('Способы доставки'))
                     .addChild(nga.menu(products).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Товары'))
-                    .addChild(nga.menu(categories).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Категории'))
+                    .addChild(nga.menu(categories).icon('<span class="glyphicon glyphicon-folder-open"></span>').title('Категории'))
+                    .addChild(nga.menu(tags).icon('<span class="glyphicon glyphicon-tags"></span>').title('Теги'))
                     .addChild(nga.menu(colors).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Цвета теста'))
                     .addChild(nga.menu(sauces).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Соусы'))
                     .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
