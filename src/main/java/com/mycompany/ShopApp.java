@@ -69,9 +69,11 @@ public class ShopApp extends Jooby
 			sauceService = registry.require(SauceService.class);
 		});
 
+		get("/design", req -> Results.html("shop/design"));
+
 		get("/", req -> Results.html("shop/shop")
 				.put("templateName", "shop/main")
-				.put("products", productService.getAll())
+				.put("products", productService.getAll("{active: true}"))
 				.put("colors", colorService.getAll())
 				.put("sauces", sauceService.getAll())
 				.put("cart", cartService.getFetchedCart(req)));
