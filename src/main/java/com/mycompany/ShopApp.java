@@ -43,6 +43,7 @@ public class ShopApp extends Jooby
 	private static ProductService productService;
 	private static ColorService colorService;
 	private static SauceService sauceService;
+	private static Config config;
 	private static ObjectMapper mapper = new ObjectMapper();
 
 	{
@@ -67,6 +68,7 @@ public class ShopApp extends Jooby
 			productService = registry.require(ProductService.class);
 			colorService = registry.require(ColorService.class);
 			sauceService = registry.require(SauceService.class);
+			config = registry.require(Config.class);
 		});
 
 		get("/design", req -> Results.html("shop/design"));
@@ -195,6 +197,8 @@ public class ShopApp extends Jooby
 		get("/checkout/payment", req -> Results.html("shop/checkout")
 				.put("step", "payment")
 				.put("cart", cartService.getFetchedCart(req))
+				.put("shopId", config.getInt("yandex.shopId"))
+				.put("scid", config.getInt("yandex.scid"))
 				.put("templateName", "shop/payment")
 				.put("breadcrumbs", PAYMENT_BREADCRUMB));
 
