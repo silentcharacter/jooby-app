@@ -35,8 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Optional;
-import java.util.TimeZone;
+import java.util.*;
 
 
 public class App extends Jooby {
@@ -81,8 +80,6 @@ public class App extends Jooby {
 
         use(new Assets());
 
-        get("/todo", req -> Results.html("angular").put("profile", AuthenticationService.getUserProfile(req)));
-
         use(new ShopApp());
 
         onStart(registry -> {
@@ -96,11 +93,12 @@ public class App extends Jooby {
 
         //auth routes
         get("/userProfile", (req) -> authenticationService.getProfilePageData(req));
-        get("/login", ((request, response) -> response.redirect("/todo#/login")));
+        get("/login", req -> Results.html("login"));
         post("/register", (req, res) -> authenticationService.handleRegistration(req, res));
+        Set<String> retainSecureUrls = new HashSet<>(Arrays.asList("admin", "todo"));
         get("**", (req, rsp, chain) -> {
             Optional<String> profileId = req.session().get(Auth.ID).toOptional();
-            if (!profileId.isPresent() && req.path().contains("admin")) {
+            if (!profileId.isPresent() && retainSecureUrls.stream().anyMatch(path -> req.path().contains(path))) {
                 req.session().set("redirectUrl", req.path());
             }
             chain.next(req, rsp);
@@ -111,12 +109,15 @@ public class App extends Jooby {
             if (err.statusCode() == 403) {
                 rsp.send(Results.html("shop/shop").put("templateName", "shop/error"));
             }
+            //todo?
             err.printStackTrace();
             rsp.send(Results.html("shop/shop").put("templateName", "shop/error"));
         });
 
         use(new Auth()
                         .form("/admin/**", MyUsernamePasswordAuthenticator.class)
+                        .form("/todo/**", MyUsernamePasswordAuthenticator.class)
+                        .form("/_log/**", MyUsernamePasswordAuthenticator.class)
                         .form("/api/**", MyUsernamePasswordAuthenticator.class)
                         .authorizer("admin", "/admin/**", (ctx, profiles) -> authenticationService.isAuthorized(ctx, profiles))
                         .client("/google/**", conf -> new Google2Client(conf.getString("google.key"), conf.getString("google.secret")))
@@ -130,6 +131,8 @@ public class App extends Jooby {
         get("/google", (req, rsp) -> authenticationService.handleSocLogin(req, rsp));
         get("/vk", (req, rsp) -> authenticationService.handleSocLogin(req, rsp));
 
+        get("/todo", req -> Results.html("angular").put("profile", AuthenticationService.getUserProfile(req)));
+
         //secure routes
         get("/admin/**", req -> {
             if (req.path().length() > 7) {
@@ -138,9 +141,7 @@ public class App extends Jooby {
             return Results.html("admin");
         });
 
-        get("/_log", (req, rsp) -> {
-            rsp.type("text/plain").send(new File(System.getProperty("user.dir") + "/jooby-app.log"));
-        });
+        get("/_log", (req, rsp) -> rsp.type("text/plain").send(new File(System.getProperty("user.dir") + "/jooby-app.log")));
 
         use(new Orders());
         //secure rest resources
