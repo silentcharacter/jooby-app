@@ -12,9 +12,10 @@
     <p>User name: <input type="text" id="user" value="ilya.igolnikov"></p>
     <p>Start date: <input type="text" id="datepicker1" class="datepicker">
     End date: <input type="text" id="datepicker2" class="datepicker"></p>
-    <p>Harvest Meetings task id: <input type="text" id="meetingsId" value="5880229">
-    Harvest Hybris Development task id: <input type="text" id="hybrisTaskId" value="3222850">
-    Jira meetings task key: <input type="text" id="jiraMeetings" value="TDSC-644"></p>
+    <p>Harvest project id: <input type="text" id="projectId" value="14153213">
+    Harvest Meetings task id: <input type="text" id="meetingsId" value="5880229">
+    <p>Harvest Hybris Development task id: <input type="text" id="hybrisTaskId" value="3222850">
+    Jira meetings task key: <input type="text" id="jiraMeetings" value="TDSC-2090"></p>
     <h1>1. Send POST request to jira and paste response into text area</h1>
     url: https://zaelab.atlassian.net/rest/api/latest/search<br/>
     method: post<br/>
@@ -55,7 +56,7 @@
         return new Date(
                 this.getFullYear(),
                 this.getMonth(),
-                this.getDate() - 6 + this.getDay()
+                this.getDate() - this.getDay()
         );
     };
     var now = new Date();
