@@ -87,6 +87,10 @@ public class ShopApp extends Jooby
 				.put("sauces", sauceService.getAll())
 				.put("cart", cartService.getFetchedCart(req)));
 
+		get("/contacts", req -> Results.html("shop/shop")
+				.put("templateName", "shop/contactsPage")
+				.put("cart", cartService.getFetchedCart(req)));
+
 		get("/cart", req -> Results.json(cartService.getFetchedCart(req)));
 
 		post("/cart", req ->
