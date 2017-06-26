@@ -167,20 +167,20 @@
                         </div>
 
                         <div class="form-group row inline-inputs">
-                            <label class="col-sm-4 col-xs-4 col-form-label">Дом/под./кв.:</label>
-                            <div class="col-sm-2 col-xs-2 {{form.streetNumber.$error.required? 'has-error' : '' }}" style="padding-right: 2px">
+                            <label class="col-sm-4 col-xs-4 col-form-label">Дом/лит./корп./под./кв.:</label>
+                            <div class="col-sm-2 col-xs-2 {{form.streetNumber.$error.required? 'has-error' : '' }}" style="padding-right: 2px" title="Номер дома">
                                 <input class="form-control" type="number" ng-model="order.streetNumber" ng-change="onAddressChange()" name="streetNumber" required>
                             </div>
-                            <div class="col-sm-1 col-xs-1" style="padding-right: 2px;padding-left: 2px;">
+                            <div class="col-sm-1 col-xs-1" style="padding-right: 2px;padding-left: 2px;" title="Литера">
                                 <input class="form-control" type="text" ng-model="order.litera" ng-change="onAddressChange()" style="padding:0; padding-left:2px">
                             </div>
-                            <div class="col-sm-2 col-xs-2" style="padding-right: 2px;padding-left: 2px;">
+                            <div class="col-sm-2 col-xs-2" style="padding-right: 2px;padding-left: 2px;" title="Корпус">
                                 <input class="form-control" type="number" ng-model="order.korpus" ng-change="onAddressChange()">
                             </div>
-                            <div class="col-sm-1 col-xs-1" style="padding-right: 2px; padding-left: 2px; ">
+                            <div class="col-sm-1 col-xs-1" style="padding-right: 2px; padding-left: 2px; " title="Подъезд">
                                 <input class="form-control" type="number" ng-model="order.entrance" style="padding:0; padding-left:2px">
                             </div>
-                            <div class="col-sm-2 col-xs-2 {{form.flat.$error.required? 'has-error' : '' }}" style="padding-left: 2px">
+                            <div class="col-sm-2 col-xs-2 {{form.flat.$error.required? 'has-error' : '' }}" style="padding-left: 2px" title="Квартира/Офис">
                                 <input class="form-control" type="number" ng-model="order.flat" name="flat" required>
                             </div>
                         </div>
@@ -335,12 +335,12 @@
                         <div class="form-group row phone {{form.phone.$error.required? 'has-error' : '' }}">
                             <label class="col-sm-4 col-xs-4 col-form-label" ng-bind-html="getCustomerLabel()"></label>
                             <div class="col-sm-4 col-xs-4" style="padding-right: 2px">
-                                <input class="form-control" type="search" ng-model="order.phone" name="phone" required
+                                <input class="form-control" type="search" ng-model="order.phone" name="phone" required placeholder="+7(900)000-00-00"
                                        bs-options="customer as customer for customer in findCustomers($viewValue)" bs-typeahead
                                        bs-on-select="onCustomerSelect">
                             </div>
                             <div class="col-sm-4 col-xs-4" style="padding-left: 2px">
-                                <input class="form-control" type="search" ng-model="order.name" name="name" required>
+                                <input class="form-control" type="search" ng-model="order.name" name="name" required  placeholder="Имя">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -381,20 +381,20 @@
                         </div>
 
                         <div class="form-group row inline-inputs">
-                            <label class="col-sm-4 col-xs-4 col-form-label">Дом/под./кв.:</label>
-                            <div class="col-sm-2 col-xs-2 {{form.streetNumber.$error.required? 'has-error' : '' }}" style="padding-right: 2px">
-                                <input class="form-control"type="number" ng-model="order.streetNumber" ng-change="onAddressChange()" name="streetNumber" required>
+                            <label class="col-sm-4 col-xs-4 col-form-label">Дом/лит./корп./под./кв.:</label>
+                            <div class="col-sm-2 col-xs-2 {{form.streetNumber.$error.required? 'has-error' : '' }}" style="padding-right: 2px" title="Номер дома">
+                                <input class="form-control" type="number" ng-model="order.streetNumber" ng-change="onAddressChange()" name="streetNumber" required>
                             </div>
-                            <div class="col-sm-1 col-xs-1" style="padding-right: 2px;padding-left: 2px;">
-                                <input class="form-control"type="text" ng-model="order.litera" ng-change="onAddressChange()" style="padding:0; padding-left:2px">
+                            <div class="col-sm-1 col-xs-1" style="padding-right: 2px;padding-left: 2px;" title="Литера">
+                                <input class="form-control" type="text" ng-model="order.litera" ng-change="onAddressChange()" style="padding:0; padding-left:2px">
                             </div>
-                            <div class="col-sm-2 col-xs-2" style="padding-right: 2px;padding-left: 2px;">
-                                <input class="form-control"type="number" ng-model="order.korpus" ng-change="onAddressChange()">
+                            <div class="col-sm-2 col-xs-2" style="padding-right: 2px;padding-left: 2px;" title="Корпус">
+                                <input class="form-control" type="number" ng-model="order.korpus" ng-change="onAddressChange()">
                             </div>
-                            <div class="col-sm-1 col-xs-1" style="padding-right: 2px; padding-left: 2px; ">
+                            <div class="col-sm-1 col-xs-1" style="padding-right: 2px; padding-left: 2px; " title="Подъезд">
                                 <input class="form-control" type="number" ng-model="order.entrance" style="padding:0; padding-left:2px">
                             </div>
-                            <div class="col-sm-2 col-xs-2 {{form.flat.$error.required? 'has-error' : '' }}" style="padding-left: 2px">
+                            <div class="col-sm-2 col-xs-2 {{form.flat.$error.required? 'has-error' : '' }}" style="padding-left: 2px" title="Квартира/Офис">
                                 <input class="form-control" type="number" ng-model="order.flat" name="flat" required>
                             </div>
                         </div>
