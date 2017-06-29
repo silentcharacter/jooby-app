@@ -133,12 +133,14 @@ public class ShopApp extends Jooby
 				String[] decoded = new String(Base64.getDecoder().decode(cookie)).split(",");
 				if (decoded.length == 2 && BCrypt.checkpw(decoded[0], decoded[1])) {
 					Order previousOrder = orderService.getBy("orderNumber", decoded[0]);
-					cart.put("phone", previousOrder.phone.replace("+7", ""));
-					cart.put("name", previousOrder.name);
-					cart.put("streetName", previousOrder.streetName);
-					cart.put("originalStreetNumber", previousOrder.originalStreetNumber);
-					cart.put("entrance", previousOrder.entrance);
-					cart.put("flat", previousOrder.flat);
+					if (previousOrder != null) {
+						cart.put("phone", previousOrder.phone.replace("+7", ""));
+						cart.put("name", previousOrder.name);
+						cart.put("streetName", previousOrder.streetName);
+						cart.put("originalStreetNumber", previousOrder.originalStreetNumber);
+						cart.put("entrance", previousOrder.entrance);
+						cart.put("flat", previousOrder.flat);
+					}
 				}
 			}
 			return Results.html("shop/checkout")
