@@ -3,6 +3,7 @@ package com.mycompany;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
+import com.mycompany.service.AuthenticationService;
 import com.mycompany.service.SmsService;
 import com.mycompany.service.shop.*;
 import com.typesafe.config.Config;
@@ -78,6 +79,7 @@ public class ShopApp extends Jooby
 				.put("products", productService.getAll("{active: true}"))
 				.put("colors", colorService.getAll())
 				.put("sauces", sauceService.getAll())
+				.put("profile", AuthenticationService.getUserProfile(req))
 				.put("cart", cartService.getFetchedCart(req)));
 
 		get("/product/:productId", req -> Results.html("shop/shop")
@@ -150,6 +152,10 @@ public class ShopApp extends Jooby
 					.put("templateName", "shop/contacts")
 					.put("breadcrumbs", CONTACT_BREADCRUMB);
 		});
+
+//		2017-06-29 14:01:14,437 DEBUG [netty task-4-11] o.j.s.HttpHandler [HttpHandlerImpl.java:389] execution of: POST/checkout resulted in exception
+//		org.jooby.Err$Missing: Bad Request(400): Required parameter 'entrance' is not present
+//		at com.mycompany.ShopApp.lambda$new$11(ShopApp.java:156)
 
 		post("/checkout", req ->
 		{

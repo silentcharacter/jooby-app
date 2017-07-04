@@ -77,6 +77,14 @@
             <li>
                 <a href="/contacts">Контакты</a>
             </li>
+            {{#if profile}}
+                <li>
+                    <a href="/admin">Администрирование</a>
+                </li>
+                <li>
+                    <a href="/logout">Выйти</a>
+                </li>
+            {{/if}}
             <!--<li class="customer-navlink large&#45;&#45;hide"><a href="/account/login" id="customer_login_link">Sign in</a></li>-->
             <!--<li class="customer-navlink large&#45;&#45;hide"><a href="/account/register" id="customer_register_link">Create an Account</a></li>-->
         </ul>
