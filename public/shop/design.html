@@ -19,150 +19,149 @@
     <link rel="canonical" href="https://foodsun.ru/">
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
 
-    <style>
-        .header {
-            margin: 20px 120px 20px 120px;
-            height: 140px;
-            vertical-align: middle;
-        }
-        .banner-wrapper {
-            text-align: center;
-        }
-        .banner {
-          width: 136px;
-          height: 138px;
-          object-fit: contain;
-          vertical-align: middle;
-        }
-        .icon-basket {
-          width: 46px;
-          height: 44px;
-          object-fit: contain;
-          vertical-align: middle;
-        }
-        .basket-wrapper {
-          vertical-align: middle;
-          height: 100%;
-          padding: 50px 5px 0 0;
-          text-align: right;
-        }
-        .line {
-          height: 2px;
-          border: solid 1px #f2f2f2;
-        }
-        .sum-wrapper {
-            padding-top: 50px;
-            padding-left: 0;
-        }
-        .phone-wrapper {
-            padding-top: 50px;
-        }
-        .yellow {
-            background-color: #ffd400;
-            padding: 3px;
-        }
-        .site-nav {
-            margin-bottom: 0;
-            margin-left: 120px;
-        }
-        .site-nav > li {
-            position: relative;
-            display: inline-block;
-        }
-        .site-nav a {
-            display: block;
-            text-decoration: none;
-            padding: 15px;
-        }
-        .site-nav a:link {
-            color: black;
-        }
-        .site-nav a:visited {
-            color: black;
-        }
-        .facebook {
-          width: 27px;
-          height: 27px;
-          object-fit: contain;
-        }
-    </style>
+    <!--favicon-->
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/image/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/image/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/image/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/image/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/image/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/image/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/image/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/image/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/image/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/image/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/image/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/image/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/image/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/image/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/normalize.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
+
 </head>
 
-<header>
-
-    <div class="row header">
-        <div class="col-sm-1 basket-wrapper">
-            <div>
-                <img src="/assets/image/icon-basket.svg"  class="icon-basket">
-            </div>
+<header class="flex-space-between">
+    <div class="flex-space-between">
+        <div class="flex-vertical">
+            <img src="/assets/image/icon-basket.svg"  class="icon-basket">
         </div>
-        <div class="col-sm-3 sum-wrapper">
-            <div class="">
-                <span>Корзина</span><br/>
-                <span>0&nbsp;&#8381;</span>
-            </div>
-        </div>
-        <div class="col-sm-4 banner-wrapper">
-            <a href="/">
-                <img src="/assets/image/banner.jpg" srcset="/assets/image/banner@2x.jpg 2x, /assets/image/banner@3x.jpg 3x" class="banner">
-            </a>
-        </div>
-        <div class="col-sm-2"></div>
-        <div class="col-sm-2 phone-wrapper">
-            <span class="yellow">(4852) 33-23−01</span><br/>
-            <span class="yellow">С 09:00 до 22:00</span><br/>
+        <div class="sum-wrapper flex-vertical">
+            <span class="small-font">Корзина</span>
+            <span class="large-font">0&nbsp;&#8381;</span>
         </div>
     </div>
-    <div class="line"></div>
+    <a href="/">
+        <img src="/assets/image/banner.jpg" srcset="/assets/image/banner@2x.jpg 2x, /assets/image/banner@3x.jpg 3x">
+    </a>
+    <div class="flex-vertical">
+        <div>
+            <span class="yellow large-font">(4852) 33-23−01</span><br/>
+            <span class="yellow small-font">С 09:00 до 22:00</span><br/>
+        </div>
+    </div>
 </header>
 
 <nav class="nav-bar" role="navigation">
-    <div class="wrapper">
-        <ul class="site-nav" id="accessibleNav">
-            <li>
-                <a href="#">Лапша</a>
-            </li>
-            <li>
-                <a href="#">Пельмени</a>
-            </li>
-            <li>
-                <a href="#">Вегетарианские</a>
-            </li>
-            <li>
-                <a href="#">Доставка</a>
-            </li>
-            <li>
-                <a href="#">Блог</a>
-            </li>
-            <li>
-                <a href="#">Производство</a>
-            </li>
-            <li>
-                <a href="#">Контакты</a>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="/assets/image/facebook.svg" class="facebook">
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="/assets/image/instagram.svg" class="facebook">
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="/assets/image/vk.svg" class="facebook">
-                </a>
-            </li>
-        </ul>
-    </div>
+    <div class="line"></div>
+    <ul class="site-nav flex-space-between" id="accessibleNav">
+        <li>
+            <a href="#">Пельмени</a>
+        </li>
+        <li>
+            <a href="#">Лапша</a>
+        </li>
+        <li>
+            <a href="#">Вегетарианские продукты</a>
+        </li>
+        <li>
+            <a href="#">Доставка</a>
+        </li>
+        <li>
+            <a href="#">Блог</a>
+        </li>
+        <li>
+            <a href="#">Производство</a>
+        </li>
+        <li>
+            <a href="#">Контакты</a>
+        </li>
+        <li>
+            <a href="#">
+                <img src="/assets/image/facebook.svg" class="facebook">
+            </a>
+            <a href="#">
+                <img src="/assets/image/instagram.svg" class="facebook">
+            </a>
+            <a href="#">
+                <img src="/assets/image/vk.svg" class="facebook">
+            </a>
+        </li>
+    </ul>
     <div class="line"></div>
 </nav>
+
+<div class="main">
+    <div class="banner">
+        <img src="/assets/image/banner-wide.jpg">
+    </div>
+    <div class="yellow-line"></div>
+
+    <div class="content">
+        <div class="main-content flex-wrap">
+            <div class="title large-font">Популярные товары</div>
+            <div class="product">
+                <img src="/assets/image/pelmen.jpg">
+                <a href="#">Пельмени с индейкой</a>
+                <article class="small-font">Краткое описание товара</article>
+                <div class="price-group ">
+                    <span class="price">360 &#8381; за 500 г.</span>
+                    <a href="#" class="btn-buy">Купить</a>
+                </div>
+            </div>
+            <div class="product">
+                <img src="/assets/image/pelmen.jpg">
+                <a href="#">Пельмени с индейкой</a>
+                <article class="small-font">Краткое описание товара</article>
+                <div class="price-group ">
+                    <span class="price">360 &#8381; за 500 г.</span>
+                    <a href="#" class="btn-buy">Купить</a>
+                </div>
+            </div>
+            <div class="product">
+                <img src="/assets/image/pelmen.jpg">
+                <a href="#">Пельмени с индейкой</a>
+                <article class="small-font">Краткое описание товара</article>
+                <div class="price-group ">
+                    <span class="price">360 &#8381; за 500 г.</span>
+                    <a href="#" class="btn-buy">Купить</a>
+                </div>
+            </div>
+        </div>
+        <div class="side-bar">
+            <div class="title large-font">Доставка</div>
+            <div class="flex small-font">
+                <img src="/assets/image/delivery.svg">
+                <article class="delivery">
+                    Есть два вида доставки: бесплатная раз в неделю и платная в любой день
+                </article>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer"></div>
+</footer>
+
 
 </html>
 

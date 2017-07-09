@@ -17,3 +17,5 @@ hs_err_pid*
 
 jooby-app.log
 /log/*
+
+logFile*.log.zip
