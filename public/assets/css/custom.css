@@ -1,8 +1,10 @@
 body * {
     font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    box-sizing: border-box;
 }
-header {
-    margin: 20px 10% 20px 10%;
+.common-margin {
+    margin: 20px 8% 20px 8%;
 }
 .icon-basket {
   width: 46px;
@@ -38,7 +40,8 @@ header {
 }
 
 .site-nav {
-    margin: 5px 10% 5px 10%;
+    margin-top: 5px;
+    margin-bottom: 5px;
     padding-left: 0;
     list-style: none;
 }
@@ -78,16 +81,12 @@ header {
     transform: skewY(-5deg);
     z-index: -1;
 }
-.banner {
-    margin: 20px 10% 20px 10%;
-}
 .banner img {
     width: 100%;
     border-radius: 20px;
 }
 .content {
     display: flex;
-    margin: 20px 10% 20px 10%;
 }
 .flex-wrap {
     display: flex;
@@ -99,23 +98,48 @@ header {
 .side-bar {
     flex: 1 1 0px;
 }
-.side-bar img{
-    width: 15%;
-    margin-right: 5%;
+.delivery article {
+    padding-top: 4px;
+    padding-left: 24px;
+    width: 55%;
+    font-style: italic;
+}
+.side-bar > article {
+    width: 80%;
+    margin-top: 15px;
+}
+.delivery img {
+    width: 60px;
     margin-top: -5px;
 }
-.delivery {
-    padding-top: 10px;
-    padding-left: 10px;
-    width: 55%;
+.recipe img {
+    right: 0;
+    position: absolute;
+    width: 27%;
+    height: 380px;
 }
+.recipe a {
+    position: relative;
+    top: 350px;
+    margin-left: 20%;
+    margin-right: -20%;
+}
+.recipe article {
+    position: relative;
+    top: 370px;
+    margin-left: 20%;
+    margin-right: -20%;
+    width: 70%;
+}
+
 .title {
     width: 100%;
     margin-bottom: 20px;
 }
 .product {
-    flex: 1 1 200px;
-    margin-right: 20px;
+    flex: 0 1 31%;
+    margin-right: 2%;
+    margin-bottom: 20px;
 }
 .product article{
     margin-top: 5px;
@@ -146,17 +170,28 @@ header {
     line-height: 1.5em;
 }
 .btn-buy:hover {
-    background: #f2f2f2;
-    background-image: -webkit-linear-gradient(top, #f2f2f2, #cccccc);
-    background-image: -moz-linear-gradient(top, #f2f2f2, #cccccc);
-    background-image: -ms-linear-gradient(top, #f2f2f2, #cccccc);
-    background-image: -o-linear-gradient(top, #f2f2f2, #cccccc);
-    background-image: linear-gradient(to bottom, #f2f2f2, #cccccc);
+    background: #ffd400;
+    background-image: -webkit-linear-gradient(top, white, #ffd400);
+    background-image: -moz-linear-gradient(top, white, #ffd400);
+    background-image: -ms-linear-gradient(top, white, #ffd400);
+    background-image: -o-linear-gradient(top, white, #ffd400);
+    background-image: linear-gradient(to bottom, white, #ffd400);
     text-decoration: none;
 }
 
+.reviews {
+    background-color: #f3f3f3;
+}
+.reviews article {
+    width: 30%;
+}
+.reviews p {
+    font-weight: 600;
+}
+
 .footer {
-    margin: 50px 10% 0 10%;
+    margin-top: 50px; 10% 0 10%;
+    margin-bottom: 0;
     border: solid 40px #ffd400;
     border-radius: 5px 5px 0 0;
 }
