@@ -207,7 +207,7 @@ body * {
 
 
 #left-header-filler, #right-header-filler {
-    width: 15%;
+    width: 35%;
 }
 #right-header-filler {
     display: flex;
@@ -217,7 +217,7 @@ body * {
 }
 
 #right-header-filler a{
-    margin-left: 20px;
+    margin-left: 2%;
 }
 #message {
     text-align: center;
@@ -228,4 +228,19 @@ body * {
 }
 .yellow-line {
     top: 400px;
+}
+#logo {
+    text-align: center;
+    width: 30%;
+}
+#logo a{
+    width: 30%;
+}
+
+@media (max-width: 768px) {
+    .large-font {
+        font-size: 100%;
+    }
+}
+header * {
 }
