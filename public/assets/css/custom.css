@@ -237,7 +237,7 @@ body * {
     width: 30%;
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
     .large-font {
         font-size: 90%;
     }
@@ -246,16 +246,27 @@ body * {
     }
     .yellow-line {
         top: 350px;
+        border: solid 20px #ffd400;
     }
 }
 @media (max-width: 324px) {
     .large-font {
         font-size: 70%;
     }
-    .smal-font {
+    .small-font {
         font-size: 40%;
     }
 }
+@media (max-width: 220px) {
+    .yellow-line {
+        top: 400px;
+        border: solid 20px #ffd400;
+    }
+}
 .footer {
+    margin-top: auto;
     margin-bottom: 0;
+}
+.yellow a{
+    text-decoration: none;
 }
