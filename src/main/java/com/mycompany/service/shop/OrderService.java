@@ -101,7 +101,6 @@ public class OrderService extends AbstractService<Order>
 			order.orderDate = new Date();
 			order.status = OrderStatus.NEW;
 			parseStreetNumber(order);
-//			linkToCustomer(order);
 			//needed to solve ng-admin bug not showing embedded linked entities
 			order.sauces = sauceService.getAll().stream().map(sauce -> sauce.id).collect(Collectors.toList());
 			insert(order);
@@ -135,7 +134,6 @@ public class OrderService extends AbstractService<Order>
 		order.orderNumber = generateNewOrderNumber();
 		order.orderDate = new Date();
 		order.status = OrderStatus.IN_DELIVERY;
-//		linkToCustomer(order);
 		//needed to solve ng-admin bug not showing embedded linked entities
 		order.sauces = sauceService.getAll().stream().map(sauce -> sauce.id).collect(Collectors.toList());
 		insert(order);
@@ -269,9 +267,14 @@ public class OrderService extends AbstractService<Order>
 	{
 		updateOriginalStreetNumber(order);
 		cartService.calculateCart(order);
-//		order.phone = Utils.formatPhone(order.phone);
 		linkToCustomer(order);
 		updateCoordinates(order);
+	}
+
+	@Override
+	public void onRemove(String id)
+	{
+		throw new IllegalArgumentException("Not allowed to remove orders");
 	}
 
 	private void updateOriginalStreetNumber(Order order)

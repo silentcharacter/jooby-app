@@ -447,7 +447,7 @@
                         refreshDelay: 200,
                         searchQuery: function(search) { return { q: search }; }
                     })
-        ]);
+        ]).batchActions([]);
         orders.creationView().title('Создание заказа').fields([
             nga.field('orderNumber').isDetailLink(true).label("Номер"),
             nga.field('orderDate', 'datetime').label("Дата"),
@@ -517,7 +517,7 @@
                         nga.field('totalPrice').label('Цена'),
                     ]),
         ]);
-        orders.editionView().fields(orders.creationView().fields()).title('Редактирование заказа');
+        orders.editionView().fields(orders.creationView().fields()).title('Редактирование заказа').actions(['list']);
         admin.addEntity(orders);
 
         admin.menu(nga.menu()

@@ -101,7 +101,10 @@ public abstract class AbstractService<T extends Entity> {
 
     public void onSave(T object) {}
 
+    public void onRemove(String id) {}
+
     public String remove(String id) {
+        onRemove(id);
         getCollection().remove(new ObjectId(id));
         return id;
     }
