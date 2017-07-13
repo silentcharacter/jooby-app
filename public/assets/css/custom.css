@@ -202,3 +202,29 @@ body * {
     border: solid 40px #ffd400;
     border-radius: 5px 5px 0 0;
 }
+
+
+
+
+#left-header-filler, #right-header-filler {
+    width: 15%;
+}
+#right-header-filler {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#right-header-filler a{
+    margin-left: 20px;
+}
+#message {
+    text-align: center;
+}
+#message h1{
+
+}
+.yellow-line {
+    top: 400px;
+}

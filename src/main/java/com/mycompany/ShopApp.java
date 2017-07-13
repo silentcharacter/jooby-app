@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bson.types.Binary;
 import org.jooby.*;
 import org.mindrot.jbcrypt.BCrypt;
+import org.pac4j.core.profile.CommonProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,13 +75,19 @@ public class ShopApp extends Jooby
 
 		get("/design", req -> Results.html("shop/design"));
 
-		get("/", req -> Results.html("shop/shop")
-				.put("templateName", "shop/main")
-				.put("products", productService.getAll("{active: true}"))
-				.put("colors", colorService.getAll())
-				.put("sauces", sauceService.getAll())
-				.put("profile", AuthenticationService.getUserProfile(req))
-				.put("cart", cartService.getFetchedCart(req)));
+		get("/", req -> {
+			CommonProfile profile = AuthenticationService.getUserProfile(req);
+			if (profile == null) {
+				return Results.html("shop/mockUp");
+			}
+			return Results.html("shop/shop")
+					.put("templateName", "shop/main")
+					.put("products", productService.getAll("{active: true}"))
+					.put("colors", colorService.getAll())
+					.put("sauces", sauceService.getAll())
+					.put("profile", profile)
+					.put("cart", cartService.getFetchedCart(req));
+		});
 
 		get("/product/:productId", req -> Results.html("shop/shop")
 				.put("templateName", "shop/product")
