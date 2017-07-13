@@ -197,7 +197,7 @@ body * {
 }
 
 .footer {
-    margin: 50px 8% 0 8%;
+    margin: 0 8% 0 8%;
     border: solid 40px #ffd400;
     border-radius: 5px 5px 0 0;
 }
@@ -244,7 +244,7 @@ body * {
         margin: 20px 4% 20px 4%;
     }
     .footer {
-        margin: 50px 4% 0 4%;
+        margin: 0 4% 0 4%;
     }
     .yellow-line {
         top: 350px;
