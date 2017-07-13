@@ -36,6 +36,15 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,400,400italic,500,500italic,700,700italic,900,900italic&subset=latin,latin-ext,cyrillic,cyrillic-ext,greek-ext,greek,vietnamese" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/normalize.css">
     <link rel="stylesheet" href="/assets/css/custom.css">
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var yourImg = document.getElementById('logoImg');
+            if(yourImg && yourImg.style) {
+                yourImg.style.width = '50%';
+            }
+        });
+    </script>
 </head>
 <body>
 
@@ -47,7 +56,7 @@
         </div>
     </div>
     <a href="/" id="logo">
-        <img src="/assets/image/banner.jpg" >
+        <img src="/assets/image/banner.jpg" id="logoImg" srcset="/assets/image/banner@2x.jpg 2x, /assets/image/banner@3x.jpg 3x">
     </a>
     <div class="flex" id="right-header-filler">
         <a href="#">
@@ -63,7 +72,7 @@
 
 <div class="main">
 
-    <div id="message">
+    <div id="message" class="common-margin">
         <h1>Сайт в разработке</h1>
         <h3>Мы активно работаем над сайтом, а пока будем рады пообщаться с Вами в
             <a href="https://vk.com/foodsun">Контакте</a> и <a href="#">Facebook</a></h3>
