@@ -197,8 +197,7 @@ body * {
 }
 
 .footer {
-    margin-top: 50px; 10% 0 10%;
-    margin-bottom: 0;
+    margin: 50px 8% 0 8%;
     border: solid 40px #ffd400;
     border-radius: 5px 5px 0 0;
 }
@@ -233,8 +232,8 @@ body * {
     text-align: center;
     width: 30%;
 }
-#logo a{
-    width: 30%;
+#logo img {
+    width: 50%;
 }
 
 @media screen and (max-width: 768px) {
@@ -243,6 +242,9 @@ body * {
     }
     .common-margin {
         margin: 20px 4% 20px 4%;
+    }
+    .footer {
+        margin: 50px 4% 0 4%;
     }
     .yellow-line {
         top: 350px;
@@ -256,6 +258,9 @@ body * {
     .small-font {
         font-size: 40%;
     }
+    #logo img {
+        width: 70%;
+    }
 }
 @media (max-width: 220px) {
     .yellow-line {
@@ -263,10 +268,20 @@ body * {
         border: solid 20px #ffd400;
     }
 }
-.footer {
-    margin-top: auto;
-    margin-bottom: 0;
-}
+
 .yellow a{
     text-decoration: none;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+.main {
+  flex: 1;
 }
