@@ -208,6 +208,21 @@
         paymentTypes.editionView().fields(paymentTypes.creationView().fields()).title('Редактирование Способа оплаты');
         admin.addEntity(paymentTypes);
 
+        var menus = nga.entity('menus');
+        menus.listView().title('Меню').fields([
+            nga.field('name').isDetailLink(true).label("Название"),
+            nga.field('url').label("URL"),
+            nga.field('index').label("Порядок"),
+        ]).filters([
+        ]);
+        menus.creationView().title('Создание Меню').fields([
+            nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
+            nga.field('url').validation({ required: true}).label("URL"),
+            nga.field('index').label("Порядок"),
+        ]);
+        menus.editionView().fields(menus.creationView().fields()).title('Редактирование Меню');
+        admin.addEntity(menus);
+
         var categories = nga.entity('categories');
         categories.listView().title('Категории').fields([
             nga.field('name').isDetailLink(true).label("Название"),
@@ -216,6 +231,7 @@
         ]);
         categories.creationView().title('Создание Категории').fields([
             nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
+            nga.field('cmsId').label("ID"),
             nga.field('products', 'referenced_list')
                     .label('Содержимое')
                     .targetEntity(nga.entity('products'))
@@ -538,6 +554,9 @@
                     <!--.addChild(nga.menu(sauces).icon('<span class="glyphicon glyphicon-cutlery"></span>').title('Соусы'))-->
                     .addChild(nga.menu(districts).icon('<span class="glyphicon glyphicon-map-marker"></span>').title('Районы'))
                     .addChild(nga.menu(units).icon('<span class="glyphicon glyphicon-inbox"></span>').title('Ед. изм.'))
+                )
+                .addChild(nga.menu().title('CMS')
+                    .addChild(nga.menu(menus).icon('<span class="glyphicon glyphicon-ruble"></span>').title('Меню'))
                 )
                 .addChild(nga.menu(customers).icon('<span class="glyphicon glyphicon-king"></span>').title('Покупатели'))
                 .addChild(nga.menu().title('Отчеты').icon('<span class="glyphicon glyphicon-signal"></span>').link('/stats').active(function(path) {

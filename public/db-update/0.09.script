@@ -1,0 +1,19 @@
+db.menus.insertMany([
+        {name:'Пельмени', url: '#pelmeni', index: 0},
+        {name:'Котлеты', url: '#kotlety', index: 1},
+        {name:'Соусы', url: '#sauces', index: 2}
+    ]
+);
+
+db.categories.update(
+    {name:'Пельмени'},
+    { $set: { cmsId: 'pelmeni'} }
+);
+db.categories.update(
+    {name:'Котлеты'},
+    { $set: { cmsId: 'kotlety'} }
+);
+db.categories.update(
+    {name:'Соусы'},
+    { $set: { cmsId: 'sauces'} }
+);

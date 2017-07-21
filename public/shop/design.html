@@ -58,7 +58,7 @@
             <span class="large-font">0&nbsp;&#8381;</span>
         </div>
     </div>
-    <a href="/" class="logo">
+    <a href="/design" class="logo">
         <img src="/assets/image/logo.svg">
     </a>
     <div class="flex-vertical">
@@ -69,18 +69,39 @@
     </div>
 </header>
 
-<nav class="nav-bar" role="navigation">
+<nav role="navigation">
     <div class="line"></div>
     <ul class="site-nav flex-space-between common-margin" id="accessibleNav">
+        {{#each menus}}
+            <li>
+                <a href="{{url}}">{{name}}</a>
+            </li>
+        {{/each}}
         <li>
-            <a href="#">Пельмени</a>
+            <a href="#">
+                <img src="/assets/image/facebook.svg" class="facebook">
+            </a>
+            <a href="#">
+                <img src="/assets/image/instagram.svg" class="facebook">
+            </a>
+            <a href="https://vk.com/foodsun">
+                <img src="/assets/image/vk.svg" class="facebook">
+            </a>
         </li>
+    </ul>
+    <div class="line"></div>
+</nav>
+
+<nav class="fixed-nav-bar" role="navigation" style="display: none">
+    <ul class="site-nav flex-space-between common-margin" >
         <li>
-            <a href="#">Лапша</a>
+            <a href="#">СОЛНЕЧНАЯ КУХНЯ</a>
         </li>
+        {{#each menus}}
         <li>
-            <a href="#">Вегетарианские продукты</a>
+            <a href="{{url}}">{{name}}</a>
         </li>
+        {{/each}}
         <li>
             <a href="#">Доставка</a>
         </li>
@@ -105,238 +126,43 @@
             </a>
         </li>
     </ul>
-    <div class="line"></div>
 </nav>
 
-<div class="main">
-    <div class="banner common-margin">
-        <img src="/assets/image/banner-wide.jpg">
-    </div>
-    <div class="yellow-line"></div>
-
-    <div class="content common-margin">
-        <div class="main-content flex-wrap">
-            <div class="title large-font">Популярные товары</div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-
-            <div class="title large-font"></div>
-            <div class="title large-font">Новинки</div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-        </div>
-        <div class="side-bar">
-            <div class="title large-font">Доставка</div>
-            <div class="flex delivery">
-                <img src="/assets/image/delivery.svg" >
-                <article>
-                    Есть два вида доставки: бесплатная раз в неделю и платная в любой день
-                </article>
-            </div>
-            <article >
-                Момент недетерминировано влияет на составляющие гироскопического момента больше, чем резонансный подвес. Динамическое уравнение Эйлера позволяет пренебречь колебаниями корпуса, хотя этого в любом случае требует экваториальный момент.
-            </article>
-            <div class="recipe">
-                <img src="/assets/image/recipe.jpg" srcset="/assets/image/recipe2x.jpg 2x, /assets/image/recipe3x.jpg 3x">
-                <a href="#" class="large-font">Лучшие</a><br/>
-                <a href="#" class="large-font">итальянские рецепты</a>
-                <article>
-                    Пренебречь колебаниями корпуса, хотя этого в любом случае требует экваториальный момент.
-                </article>
-            </div>
-        </div>
-    </div>
-
-    <div class="reviews">
-        <div class="common-margin flex-space-between">
-            <article class="">
-                <img src="/assets/image/alena.png"/><br/>
-                «Инвестиция подсознательно индуцирует бренд. Нишевый проект синхронизирует анализ зарубежного опыта. Правда, специалисты отмечают, что медиа индуцирует связанный пак-шот.»
-                <br/>
-                <p>
-                    Анна Коршунова
-                </p>
-                <a href="#">vk.com/rotfuchs_44</a>
-            </article>
-            <article >
-                <img src="/assets/image/alena.png"/><br/>
-                «Инвестиция подсознательно индуцирует бренд. Нишевый проект синхронизирует анализ зарубежного опыта. Правда, специалисты отмечают, что медиа индуцирует связанный пак-шот.»
-                <br/>
-                <p>
-                    Анна Коршунова
-                </p>
-                <a href="#">vk.com/rotfuchs_44</a>
-
-            </article>
-            <article >
-                <img src="/assets/image/alena.png"/><br/>
-                «Инвестиция подсознательно индуцирует бренд. Нишевый проект синхронизирует анализ зарубежного опыта. Правда, специалисты отмечают, что медиа индуцирует связанный пак-шот.»
-                <br/>
-                <p>
-                    Анна Коршунова
-                </p>
-                <a href="#">vk.com/rotfuchs_44</a>
-
-            </article>
-        </div>
-        <!--<div class="btn-wrapper">-->
-            <!--<a href="#" class="btn">Я тоже хочу сказать</a>-->
-        <!--</div>-->
-    </div>
-
-    <div class="dao-wrapper">
-        <div class="dao flex common-margin">
-            <div class="img-wrapper">
-                <img src="/assets/image/stas.png">
-            </div>
-            <article>
-                <a href="#">Как мы решили делать пельмени</a><br/>
-                <p class="">
-                    Общество потребления концентрирует коллективный выставочный стенд. VIP-мероприятие однообразно поддерживает рыночный целевой сегмент рынка. Метод изучения рынка, безусловно, ускоряет имидж. Привлечение аудитории не критично.
-                </p>
-
-            </article>
-        </div>
-        <div class="yellow-line-2"></div>
-    </div>
-
-
-    <div class="category content common-margin">
-        <div class="main-content flex-wrap">
-            <div class="title large-font">Вегетарианские товары</div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-
-            <div class="title large-font"></div>
-            <div class="title large-font">Вегетарианские товары</div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-</div>
+{{> (lookup . 'templateName') }}
 
 <footer>
-    <div class="footer common-margin"></div>
+    <div class="footer common-margin flex-space-between">
+        <div>
+            <p>Доставка</p>
+            <p>Блог</p>
+            <p>Производство</p>
+            <p>Контакты</p>
+        </div>
+        <div>
+            <p><b>(4852) 33-23−01</b></p>
+            <p>С 09:00 до 22:00</p>
+        </div>
+        <div>
+            <a href="/design">
+                <img src="/assets/image/logo.svg">
+            </a>
+        </div>
+        <div>
+            <b>Мы в соцсетях</b><br/><br/>
+            <a href="#">
+                <img src="/assets/image/facebook.svg" class="facebook">
+            </a>
+            <a href="#">
+                <img src="/assets/image/instagram.svg" class="facebook">
+            </a>
+            <a href="https://vk.com/foodsun">
+                <img src="/assets/image/vk.svg" class="facebook">
+            </a>
+        </div>
+        <div>
+            <b>© 2017 "Солнечная Кухня"</b>
+        </div>
+    </div>
 </footer>
 
 

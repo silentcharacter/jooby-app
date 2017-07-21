@@ -1,0 +1,8 @@
+db.menus.insertMany([
+        {name:'Доставка', url: '/design/delivery', index: 3},
+        {name:'Блог', url: '/design/blog', index:4},
+        {name:'Производство', url: '/design/development', index: 5},
+        {name:'Контакты', url: '/design/contacts', index: 6}
+    ]
+);
+

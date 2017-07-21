@@ -45,6 +45,8 @@ public class ShopApp extends Jooby
 	private static ProductService productService;
 	private static ColorService colorService;
 	private static SauceService sauceService;
+	private static MenuService menuService;
+	private static CategoryService categoryService;
 	private static Config config;
 	private static ObjectMapper mapper = new ObjectMapper();
 
@@ -61,6 +63,7 @@ public class ShopApp extends Jooby
 		use(new Categories());
 		use(new Tags());
 		use(new Units());
+		use(new Menus());
 
 		onStart(registry -> {
 			cartService = registry.require(CartService.class);
@@ -71,9 +74,34 @@ public class ShopApp extends Jooby
 			colorService = registry.require(ColorService.class);
 			sauceService = registry.require(SauceService.class);
 			config = registry.require(Config.class);
+			menuService = registry.require(MenuService.class);
+			categoryService = registry.require(CategoryService.class);
 		});
 
-		get("/design", req -> Results.html("shop/design"));
+		get("/design", req -> Results.html("shop/design")
+				.put("templateName", "shop/main_new")
+				.put("menus", menuService.getAll())
+				.put("categories", categoryService.getAll()));
+
+		get("/design/delivery", req -> Results.html("shop/design")
+				.put("templateName", "shop/empty")
+				.put("menus", menuService.getAll())
+				.put("categories", categoryService.getAll()));
+
+		get("/design/blog", req -> Results.html("shop/design")
+				.put("templateName", "shop/empty")
+				.put("menus", menuService.getAll())
+				.put("categories", categoryService.getAll()));
+
+		get("/design/development", req -> Results.html("shop/design")
+				.put("templateName", "shop/empty")
+				.put("menus", menuService.getAll())
+				.put("categories", categoryService.getAll()));
+
+		get("/design/contacts", req -> Results.html("shop/design")
+				.put("templateName", "shop/empty")
+				.put("menus", menuService.getAll())
+				.put("categories", categoryService.getAll()));
 
 		get("/", req -> {
 			CommonProfile profile = AuthenticationService.getUserProfile(req);
