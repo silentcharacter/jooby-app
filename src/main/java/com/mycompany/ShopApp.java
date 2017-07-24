@@ -2,6 +2,7 @@ package com.mycompany;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.controller.shop.*;
+import com.mycompany.domain.MapWrapper;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.AuthenticationService;
 import com.mycompany.service.SmsService;
@@ -78,7 +79,12 @@ public class ShopApp extends Jooby
 			categoryService = registry.require(CategoryService.class);
 		});
 
+		List<Map<String, Object>> test = new ArrayList<>();
+		test.add(new HashMap<String, Object>() {{put("324", Arrays.asList("1", "2", "3"));}});
+		test.add(new HashMap<String, Object>() {{put("324", Arrays.asList("4", "5", "6"));}});
+
 		get("/design", req -> Results.html("shop/design")
+				.put("test", test)
 				.put("templateName", "shop/main_new")
 				.put("menus", menuService.getAll())
 				.put("categories", categoryService.getAll()));
@@ -350,7 +356,11 @@ public class ShopApp extends Jooby
 		});
 
 		get("/image/product/:productId", (req, rsp) -> {
-			rsp.type("image/jpeg").send(productService.getProductImage(req.param("productId").value()).getData());
+			Binary image = productService.getProductImage(req.param("productId").value());
+			if (image != null) {
+				rsp.type("image/jpeg").send(image.getData());
+			}
+			rsp.send(Results.ok());
 		});
 
 		get("/voice", req -> Results.html("/shop/voice"));
