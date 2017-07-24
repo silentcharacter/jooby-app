@@ -2,7 +2,6 @@ package com.mycompany;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.controller.shop.*;
-import com.mycompany.domain.MapWrapper;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.AuthenticationService;
 import com.mycompany.service.SmsService;
