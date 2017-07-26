@@ -111,7 +111,7 @@ public class ShopApp extends Jooby
 		get("/", req -> {
 			CommonProfile profile = AuthenticationService.getUserProfile(req);
 			if (profile == null) {
-				return Results.html("shop/mockUp");
+				return Results.html("shop/mockUp").put("analyticsKey", config.getString("google.analytics.key"));
 			}
 			return Results.html("shop/shop")
 					.put("templateName", "shop/main")
@@ -119,6 +119,7 @@ public class ShopApp extends Jooby
 					.put("colors", colorService.getAll())
 					.put("sauces", sauceService.getAll())
 					.put("profile", profile)
+					.put("analyticsKey", config.getString("google.analytics.key"))
 					.put("cart", cartService.getFetchedCart(req));
 		});
 
