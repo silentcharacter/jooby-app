@@ -28,6 +28,9 @@ article, p {
 .small-font {
     font-size: 70%;
 }
+.middle-font {
+    font-size: 90%;
+}
 .large-font {
     font-size: 130%;
 }
@@ -101,7 +104,6 @@ article, p {
     font-weight: 500;
     letter-spacing: 0.8px;
     width: 20px;
-    height: 100%;
     margin-left: 10px;
 }
 
@@ -109,12 +111,15 @@ article, p {
   width: 27px;
   height: 27px;
 }
+nav .facebook {
+  height: 100%;
+}
 
 .yellow-line {
     position: absolute;
     left: 0;
     right: 0;
-    top: 400px;
+    top: 405px;
     border: solid 40px #ffd400;
     -o-transform: skewY(-10deg);
     -ms-transform: skewY(-10deg);
@@ -178,9 +183,13 @@ article, p {
     flex: 0 1 31%;
     margin-right: 2%;
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 .category .product {
-    flex: 0 1 23.5%;
+    flex: 0 1 23%;
+    margin-top: 10px;
 }
 .category .product:last-of-type {
     margin-right: 0;
@@ -188,12 +197,25 @@ article, p {
 .product article{
     margin-top: 5px;
 }
+.product article p {
+    margin: 0;
+    margin-bottom: 10px;
+}
+.product .name {
+    margin-top: 10px;
+}
 .product img {
     width: 100%;
     border-radius: 20px;
 }
+.product a {
+    color: #006baa;
+}
+.product .price-group a {
+    color: black;
+}
 .price-group {
-    margin-top: 20px;
+    margin-top: auto;
     display: flex;
 }
 .price {
@@ -216,12 +238,8 @@ article, p {
 }
 .btn-buy:hover {
     background: #ffd400;
-    background-image: -webkit-linear-gradient(top, white, #ffd400);
-    background-image: -moz-linear-gradient(top, white, #ffd400);
-    background-image: -ms-linear-gradient(top, white, #ffd400);
-    background-image: -o-linear-gradient(top, white, #ffd400);
-    background-image: linear-gradient(to bottom, white, #ffd400);
     text-decoration: none;
+    font-weight: 400;
 }
 
 .reviews {
@@ -325,14 +343,19 @@ article, p {
     margin-top: 30px;
 }
 
-.footer {
-    margin: 40px 8% 0 8%;
-    border: solid 20px #ffd400;
+footer {
+    margin: 40px 0 0 0;
+    padding: 0 8% 0 8%;
+    border: solid 2px #ffd400;
     border-radius: 5px 5px 0 0;
-    padding-left: 4%;
+    background-color: #ffd400;
+}
+
+.footer {
+    padding: 2% 0 2% 0;
 }
 footer div {
-    background-color: #ffd400;
+
 }
 .footer div {
     flex: 1;

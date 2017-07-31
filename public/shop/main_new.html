@@ -1,69 +1,41 @@
 <div class="main">
     <div class="banner common-margin">
-        <img src="/assets/image/banner-wide.jpg">
+        <img src="/assets/image/banner_web.jpg">
     </div>
     <div class="yellow-line"></div>
 
     <div class="content common-margin">
         <div class="main-content flex-wrap">
             <div class="title large-font">Популярные товары</div>
+            {{#each popular}}
             <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
+                <a href="/product/{{id}}">
+                    <img src="/image/product/{{id}}" alt="{{name}}">
+                </a>
+                <a class="name" href="/product/{{id}}">{{name}}</a>
+                <article class="middle-font description">{{description}}</article>
                 <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
+                    <span class="price">{{price}} &#8381; за 500 г.</span>
                     <a href="#" class="btn-buy">Купить</a>
                 </div>
             </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
+            {{/each}}
 
             <div class="title large-font"></div>
             <div class="title large-font">Новинки</div>
+            {{#each new}}
             <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
+                <a href="/product/{{id}}">
+                    <img src="/image/product/{{id}}" alt="{{name}}">
+                </a>
+                <a class="name" href="/product/{{id}}">{{name}}</a>
+                <article class="middle-font description">{{description}}</article>
                 <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
+                    <span class="price">{{price}} &#8381; за 500 г.</span>
                     <a href="#" class="btn-buy">Купить</a>
                 </div>
             </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
-            <div class="product">
-                <img src="/assets/image/pelmen.jpg">
-                <a href="#">Пельмени с индейкой</a>
-                <article class="small-font">Краткое описание товара</article>
-                <div class="price-group ">
-                    <span class="price">360 &#8381; за 500 г.</span>
-                    <a href="#" class="btn-buy">Купить</a>
-                </div>
-            </div>
+            {{/each}}
         </div>
         <div class="side-bar">
             <div class="title large-font"><a href="/design/delivery">Доставка</a></div>
@@ -139,8 +111,8 @@
                 <img src="/assets/image/stas.png">
             </div>
             <article>
-                <a href="#">Как мы решили делать пельмени</a><br/>
-                <p class="">
+                <a href="/design/blog">Как мы решили делать пельмени</a><br/>
+                <p>
                     Общество потребления концентрирует коллективный выставочный стенд. VIP-мероприятие однообразно поддерживает рыночный целевой сегмент рынка. Метод изучения рынка, безусловно, ускоряет имидж. Привлечение аудитории не критично.
                 </p>
 
@@ -151,49 +123,24 @@
 
 
     {{#each categories}}
-    <li>
-        <div class="category content common-margin">
-            <div class="main-content flex-wrap">
-                <div id="{{cmsId}}" class="title large-font">{{name}}</div>
-                <div class="product">
-                    <img src="/assets/image/pelmen.jpg">
-                    <a href="#">Пельмени с индейкой</a>
-                    <article class="small-font">Краткое описание товара</article>
-                    <div class="price-group ">
-                        <span class="price">360 &#8381; за 500 г.</span>
-                        <a href="#" class="btn-buy">Купить</a>
-                    </div>
-                </div>
-                <div class="product">
-                    <img src="/assets/image/pelmen.jpg">
-                    <a href="#">Пельмени с индейкой</a>
-                    <article class="small-font">Краткое описание товара</article>
-                    <div class="price-group ">
-                        <span class="price">360 &#8381; за 500 г.</span>
-                        <a href="#" class="btn-buy">Купить</a>
-                    </div>
-                </div>
-                <div class="product">
-                    <img src="/assets/image/pelmen.jpg">
-                    <a href="#">Пельмени с индейкой</a>
-                    <article class="small-font">Краткое описание товара</article>
-                    <div class="price-group ">
-                        <span class="price">360 &#8381; за 500 г.</span>
-                        <a href="#" class="btn-buy">Купить</a>
-                    </div>
-                </div>
-                <div class="product">
-                    <img src="/assets/image/pelmen.jpg">
-                    <a href="#">Пельмени с индейкой</a>
-                    <article class="small-font">Краткое описание товара</article>
-                    <div class="price-group ">
-                        <span class="price">360 &#8381; за 500 г.</span>
-                        <a href="#" class="btn-buy">Купить</a>
-                    </div>
+    <div class="category content common-margin">
+        <div class="main-content flex-wrap">
+            <div id="{{left.cmsId}}" class="title large-font">{{left.name}}</div>
+            {{#each right}}
+            <div class="product">
+                <a href="/product/{{id}}">
+                    <img src="/image/product/{{id}}" alt="{{name}}">
+                </a>
+                <a class="name" href="/product/{{id}}">{{name}}</a>
+                <article class="middle-font description">{{description}}</article>
+                <div class="price-group ">
+                    <span class="price">{{price}} &#8381; за 500 г.</span>
+                    <a href="#" class="btn-buy">Купить</a>
                 </div>
             </div>
+            {{/each}}
         </div>
-    </li>
+    </div>
     {{/each}}
 
 </div>

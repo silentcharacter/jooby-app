@@ -6,8 +6,19 @@ import com.mycompany.service.AbstractService;
 
 public class TagService extends AbstractService<Tag> {
 
-    public TagService() {
+	private Object popular;
+
+	public TagService() {
         super(Tag.class);
     }
 
+	public Tag getPopular()
+	{
+		return getBy("name", "Популярный");
+	}
+
+	public Tag getNew()
+	{
+		return getBy("name", "Новинки");
+	}
 }

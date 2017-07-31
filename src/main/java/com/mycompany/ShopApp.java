@@ -8,6 +8,8 @@ import com.mycompany.service.SmsService;
 import com.mycompany.service.shop.*;
 import com.typesafe.config.Config;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bson.types.Binary;
 import org.jooby.*;
 import org.mindrot.jbcrypt.BCrypt;
@@ -47,6 +49,7 @@ public class ShopApp extends Jooby
 	private static SauceService sauceService;
 	private static MenuService menuService;
 	private static CategoryService categoryService;
+	private static TagService tagService;
 	private static Config config;
 	private static ObjectMapper mapper = new ObjectMapper();
 
@@ -76,17 +79,17 @@ public class ShopApp extends Jooby
 			config = registry.require(Config.class);
 			menuService = registry.require(MenuService.class);
 			categoryService = registry.require(CategoryService.class);
+			tagService = registry.require(TagService.class);
 		});
 
-		List<Map<String, Object>> test = new ArrayList<>();
-		test.add(new HashMap<String, Object>() {{put("324", Arrays.asList("1", "2", "3"));}});
-		test.add(new HashMap<String, Object>() {{put("324", Arrays.asList("4", "5", "6"));}});
+
 
 		get("/design", req -> Results.html("shop/design")
-				.put("test", test)
 				.put("templateName", "shop/main_new")
 				.put("menus", menuService.getAll())
-				.put("categories", categoryService.getAll()));
+				.put("popular", productService.getAll("{tags:'" + tagService.getPopular().id + "'}"))
+				.put("new", productService.getAll("{tags:'" + tagService.getNew().id + "'}"))
+				.put("categories", categoryService.getAllWithProducts()));
 
 		get("/design/delivery", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")

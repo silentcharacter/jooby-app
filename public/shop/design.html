@@ -46,7 +46,11 @@
     <link rel="stylesheet" href="/assets/css/normalize.css">
     <link rel="stylesheet" href="/assets/css/custom.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/assets/scripts/shop.js" type="text/javascript"></script>
+
 </head>
+<body>
 
 <header class="flex-space-between common-margin">
     <div class="flex-space-between">
@@ -73,9 +77,9 @@
     <div class="line"></div>
     <ul class="site-nav flex-space-between common-margin" id="accessibleNav">
         {{#each menus}}
-            <li>
-                <a href="{{url}}">{{name}}</a>
-            </li>
+        <li>
+            <a href="{{url}}">{{name}}</a>
+        </li>
         {{/each}}
         <li>
             <a href="https://www.facebook.com/foodsun.ru">
@@ -131,7 +135,7 @@
 {{> (lookup . 'templateName') }}
 
 <footer>
-    <div class="footer common-margin flex-space-between">
+    <div class="footer flex-space-between">
         <div>
             <p><a href="/design/delivery">Доставка</a></p>
             <p><a href="/design/blog">Блог</a></p>
@@ -165,6 +169,6 @@
     </div>
 </footer>
 
-
+</body>
 </html>
 
