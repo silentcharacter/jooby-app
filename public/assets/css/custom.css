@@ -428,6 +428,9 @@ footer img {
         top: 300px;
         border: solid 20px #ffd400;
     }
+    #footerImg {
+        width: 30%;
+    }
 }
 @media (max-width: 324px) {
     .large-font {
