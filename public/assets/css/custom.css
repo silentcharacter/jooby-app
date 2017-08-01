@@ -410,6 +410,9 @@ footer img {
 #logo img {
     width: 50%;
 }
+#footerImg {
+    width: 10%;
+}
 
 @media screen and (max-width: 768px) {
     .large-font {
@@ -422,7 +425,7 @@ footer img {
         margin: 0 4% 0 4%;
     }
     .yellow-line {
-        top: 350px;
+        top: 300px;
         border: solid 20px #ffd400;
     }
 }
@@ -435,6 +438,12 @@ footer img {
     }
     #logo img {
         width: 70%;
+    }
+    #footerImg {
+        width: 30%;
+    }
+    footer b {
+        font-size: 60%;
     }
 }
 @media (max-width: 220px) {
