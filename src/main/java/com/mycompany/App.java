@@ -14,6 +14,7 @@ import com.mycompany.controller.shop.Orders;
 import com.mycompany.hbs.EqualHelper;
 import com.mycompany.hbs.FormatDateHelper;
 import com.mycompany.hbs.IncHelper;
+import com.mycompany.hbs.MapHelper;
 import com.mycompany.service.AuthenticationService;
 import com.mycompany.service.MigrationService;
 import org.jooby.Jooby;
@@ -51,6 +52,7 @@ public class App extends Jooby {
             hbs.registerHelper("equal", new EqualHelper());
             hbs.registerHelper("formatDate", new FormatDateHelper());
             hbs.registerHelper("inc", new IncHelper());
+            hbs.registerHelper("map", new MapHelper());
         }));
         use(new Jackson().doWith(mapper -> mapper.setTimeZone(TimeZone.getTimeZone("UTC"))));
 

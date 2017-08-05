@@ -8,8 +8,6 @@ import com.mycompany.service.SmsService;
 import com.mycompany.service.shop.*;
 import com.typesafe.config.Config;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bson.types.Binary;
 import org.jooby.*;
 import org.mindrot.jbcrypt.BCrypt;
@@ -17,7 +15,6 @@ import org.pac4j.core.profile.CommonProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -50,6 +47,7 @@ public class ShopApp extends Jooby
 	private static MenuService menuService;
 	private static CategoryService categoryService;
 	private static TagService tagService;
+	private static UnitService unitService;
 	private static Config config;
 	private static ObjectMapper mapper = new ObjectMapper();
 
@@ -80,6 +78,7 @@ public class ShopApp extends Jooby
 			menuService = registry.require(MenuService.class);
 			categoryService = registry.require(CategoryService.class);
 			tagService = registry.require(TagService.class);
+			unitService = registry.require(UnitService.class);
 		});
 
 
@@ -89,6 +88,9 @@ public class ShopApp extends Jooby
 				.put("menus", menuService.getAll())
 				.put("popular", productService.getAll("{tags:'" + tagService.getPopular().id + "'}"))
 				.put("new", productService.getAll("{tags:'" + tagService.getNew().id + "'}"))
+				.put("units", unitService.getLabelsMap())
+				.put("fishDumplings", productService.getBy("name", "Пельмени с рыбой"))
+				.put("humus", productService.getBy("name", "Хумус"))
 				.put("categories", categoryService.getAllWithProducts()));
 
 		get("/design/delivery", req -> Results.html("shop/design")

@@ -208,7 +208,7 @@ nav .facebook {
     width: 100%;
     border-radius: 20px;
 }
-.product a {
+a {
     color: #006baa;
 }
 .product .price-group a {
@@ -221,9 +221,10 @@ nav .facebook {
 .price {
     background-color: black;
     color: white;
-    padding: 10px 2% 10px 10%;
+    padding: 10px 2% 10px 2%;
     width: 55%;
     border-radius: 10px 0 0 10px;
+    text-align: center;
 }
 .btn-buy {
     -webkit-border-radius: 10;
@@ -246,7 +247,7 @@ nav .facebook {
     background-color: #f3f3f3;
 }
 .reviews article {
-    width: 27%;
+    width: 30%;
     padding: 30px 30px 30px 30px;
 }
 .reviews img {

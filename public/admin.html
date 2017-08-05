@@ -316,6 +316,7 @@
         products.creationView().title('Создание продукта').fields([
             nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
             nga.field('description', 'wysiwyg').validation({ required: true}).label("Описание"),
+            nga.field('shortDescription').validation({ required: true}).label("Короткое описание"),
             nga.field('price', 'number').label("Цена"),
             nga.field('unitId', 'reference').label("Ед. изм.")
                     .targetEntity(units)

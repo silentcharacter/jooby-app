@@ -14,6 +14,7 @@ public class Product extends Entity {
 
     public String name;
     public String description;
+    public String shortDescription;
     public Integer price;
     public Binary image;
     public String categoryId;

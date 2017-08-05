@@ -1,0 +1,24 @@
+db.products.find().snapshot().forEach(
+    function (elem) {
+        db.products.update(
+            {
+                _id: elem._id
+            },
+            {
+                $set: {
+                    shortDescription : test(elem)
+                }
+            }
+        );
+        function test(el) {
+            var pos1 = elem.description.indexOf('.') != -1 ? elem.description.indexOf('.') : elem.description.length
+            var pos2 = elem.description.indexOf('!') != -1 ? elem.description.indexOf('!') : elem.description.length
+            var short = el.description.substring(0, Math.min(pos1, pos2));
+            if (0 === short.length)
+                short = el.description;
+            return short +  '.</p>';
+        }
+    }
+);
+
+
