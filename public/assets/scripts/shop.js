@@ -2,7 +2,53 @@ $(document).ready(function () {
     $(".description" ).each(function( index ) {
         $(this).html($(this).text());
     });
+
+    //scroll
+    $('li a[href^="#"]').click(function() {
+        var el = $(this).attr('href');
+        $('body').animate(
+            {scrollTop: $(el).offset().top},
+            {duration: 1500, easing: "swing"}
+        );
+        return false;
+    });
+
+    //backtotop
+    $('.backtotop').click(function(){
+       $('html, body').animate({scrollTop:0}, 'slow');
+    });
+    var scrollDiv=$('a.idTop');
+    $(window).scroll(function() {
+        if($(window).scrollTop() == "0") {
+            $(scrollDiv).fadeOut("slow");
+        } else {
+            $(scrollDiv).fadeIn("slow");
+        }
+    });
+    $(scrollDiv).hide();
+
+    //popup
+    $('.cd-popup-trigger').on('click', function(event){
+        event.preventDefault();
+        $('.cd-popup').addClass('is-visible');
+    });
+
+    //close popup
+    $('.cd-popup').on('click', function(event){
+        if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup') ) {
+            event.preventDefault();
+            $(this).removeClass('is-visible');
+        }
+    });
+    //close popup when clicking the esc keyboard button
+    $(document).keyup(function(event){
+        if(event.which=='27'){
+            $('.cd-popup').removeClass('is-visible');
+        }
+    });
+
 });
+
 
 function updateCart() {
     $.ajax({

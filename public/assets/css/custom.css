@@ -161,7 +161,7 @@ nav .facebook {
 }
 .recipe img {
     width: 120%;
-    margin: -40px 0 -80px 18%;
+    margin: 0 0 -10px 18%;
     position: relative;
     z-index: -1;
 }
@@ -351,7 +351,10 @@ footer {
     border-radius: 5px 5px 0 0;
     background-color: #ffd400;
 }
-
+.footer a {
+    color: black;
+    font-weight: 400;
+}
 .footer {
     padding: 2% 0 2% 0;
 }
@@ -473,3 +476,27 @@ body {
 .main {
   flex: 1;
 }
+
+
+a.idTop {
+ position: fixed;
+ z-index: 9999;
+ bottom: 0%;
+ right: 0%;
+ background: url('/assets/image/gotop.svg') no-repeat;
+ height: 64px;
+ width: 64px;
+ opacity: .6;
+ color: transparent;
+ padding: 10px;
+ margin: 5px 15px 15px 5px;
+}
+a.idTop:hover {
+ opacity: 1;
+}
+
+
+
+
+
+

@@ -1,3 +1,19 @@
+<a href="#0" class="cd-popup-trigger">View Pop-up</a>
+
+<div class="cd-popup" role="alert">
+    <div class="cd-popup-container">
+        <p class="large-font">Добавить в корзину</p>
+        <p class="large-font">Выберите добавки</p>
+        <br/>
+        <ul class="cd-buttons small-font">
+            <li><button>Добавить и продолжить покупки</button ></li>
+            <li><button><span>Оформить заказ</span></button ></li>
+        </ul>
+        <br/>
+        <a href="#0" class="cd-popup-close img-replace">Close</a>
+    </div> <!-- cd-popup-container -->
+</div> <!-- cd-popup -->
+
 <div class="main">
     <div class="banner common-margin">
         <img src="/assets/image/banner_web.jpg">
@@ -16,7 +32,7 @@
                 <article class="middle-font description">{{shortDescription}}</article>
                 <div class="price-group ">
                     <span class="price">{{price}} &#8381; за {{map units unitId}}</span>
-                    <a href="#" class="btn-buy">Купить</a>
+                    <a href="#" class="btn-buy cd-popup-trigger">Купить</a>
                 </div>
             </div>
             {{/each}}
@@ -49,7 +65,7 @@
                 Момент недетерминировано влияет на составляющие гироскопического момента больше, чем резонансный подвес. Динамическое уравнение Эйлера позволяет пренебречь колебаниями корпуса, хотя этого в любом случае требует экваториальный момент.
             </article>
             <div class="recipe">
-                <img src="/assets/image/recipe.jpg" srcset="/assets/image/recipe2x.jpg 2x, /assets/image/recipe3x.jpg 3x">
+                <img src="/assets/image/pesto.jpg" srcset="/assets/image/pesto@2x.jpg 2x, /assets/image/pesto@3x.jpg 3x">
                 <a href="/design/blog" class="large-font">Лучшие</a><br/>
                 <a href="/design/blog" class="large-font">итальянские рецепты</a>
                 <article>
@@ -62,7 +78,7 @@
     <div class="reviews">
         <div class="common-margin flex-space-between">
             <article class="">
-                <img src="/assets/image/alena.png"/>
+                <img src="/assets/image/Group5.jpg" srcset="/assets/image/Group5@2x.jpg 2x, /assets/image/Group5@3x.jpg 3x"/>
                 <p>
                     <span>«</span>
                     Заказывал котлеты и <a href="/product/{{fishDumplings.id}}">пельмени с рыбой</a>, привезли быстро, жена была в восторге!
@@ -74,7 +90,7 @@
                 <a href="https://vk.com/evgeniy_golovin" target="_blank">https://vk.com/evgeniy_golovin</a>
             </article>
             <article >
-                <img src="/assets/image/alena.png"/>
+                <img src="/assets/image/Group6.jpg" srcset="/assets/image/Group6@2x.jpg 2x, /assets/image/Group6@3x.jpg 3x"/>
                 <p>
                     <span>«</span>
                     Часто заказываю <a href="/product/{{humus.id}}">хумус</a>, очень нравится мне и моим друзьям. В последнее время очень полюбила вареники с  фермерским творогом, люблю начинать с них день!
@@ -87,7 +103,7 @@
 
             </article>
             <article >
-                <img src="/assets/image/alena.png"/>
+                <img src="/assets/image/Group7.jpg" srcset="/assets/image/Group7@2x.jpg 2x, /assets/image/Group7@3x.jpg 3x"/>
                 <p>
                     <span>«</span>
                     Заказала котлеты из индейки и пельмени с курицей, все очень понравилось.
@@ -144,5 +160,8 @@
     {{/each}}
 
 </div>
+
+<div><a href="#" class="idTop backtotop"></a></div>
+
 
 
