@@ -128,6 +128,20 @@ nav .facebook {
     transform: skewY(-5deg);
     z-index: -1;
 }
+
+.banner {
+    cursor: pointer;
+    position: relative;
+}
+
+.banner .tagline {
+    position: absolute;
+    top: 35%;
+    left: 20%;
+    font-size: 250%;
+    color: white;
+    font-weight: 400;
+}
 .banner img {
     width: 100%;
     border-radius: 20px;

@@ -3,6 +3,16 @@ $(document).ready(function () {
         $(this).html($(this).text());
     });
 
+    //banner click
+    $('.banner img').click(function() {
+        var el = $('.popular');
+        $('body').animate(
+            {scrollTop: $(el).offset().top},
+            {duration: 1000, easing: "swing"}
+        );
+        return false;
+    });
+
     //scroll
     $('li a[href^="#"]').click(function() {
         var el = $(this).attr('href');
