@@ -150,14 +150,38 @@
 
 <div class="cd-popup" role="alert">
     <div class="cd-popup-container">
-        <p class="large-font">Добавить в корзину</p>
-        <p class="large-font">Выберите добавки</p>
-        <br/>
-        <ul class="cd-buttons small-font">
-            <li><button>Добавить и продолжить покупки</button ></li>
-            <li><button><span>Оформить заказ</span></button ></li>
-        </ul>
-        <br/>
-        <a href="#0" class="cd-popup-close img-replace">Close</a>
+        <form method="get" action="#">
+
+            <p class="large-font">Добавить в корзину</p>
+            <div class="spinner-wrapper">
+                <div class="spinner">
+                    <div class="btn">–</div>
+                    <div class="quantity">500 г</div>
+                    <div class="btn">+</div>
+                </div>
+                <div class="popup-price">200 <span class="small-font">&#8381;</span></div>
+                <div class="tag">
+                    <div class="circle"></div>
+                </div>
+            </div>
+
+            <p class="large-font">Выберите добавки</p>
+            <div class="checkbox-content">
+                <div class="box">
+                    <input type="checkbox" id="c1" name="cb">
+                    <label for="c1">&nbsp;Сырный соус за 99 ₽</label>
+                    <input type="checkbox" id="c2" name="cb">
+                    <label for="c2">&nbsp;Томатный соус за 40 ₽</label>
+                </div>
+            </div>
+            <ul class="cd-buttons">
+                <li><button>Добавить и продолжить покупки</button ></li>
+                <li><button><span>Оформить заказ</span></button ></li>
+            </ul>
+            <br/>
+        </form>
+        <a href="#0" class="cd-popup-close">
+            <img src="/assets/image/close.svg">
+        </a>
     </div> <!-- cd-popup-container -->
 </div> <!-- cd-popup -->
