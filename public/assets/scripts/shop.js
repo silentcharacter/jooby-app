@@ -40,7 +40,7 @@ $(document).ready(function () {
     //popup
     $('.cd-popup-trigger').on('click', function(event){
         event.preventDefault();
-        $('.cd-popup').addClass('is-visible');
+        $('.cd-popup.add-to-cart').addClass('is-visible');
     });
 
     //close popup
@@ -55,6 +55,20 @@ $(document).ready(function () {
         if(event.which=='27'){
             $('.cd-popup').removeClass('is-visible');
         }
+    });
+
+    $('.spinner .btn').on('click', function(event){
+        var productId = $(this).parent().attr('id');
+        var quantitySpan = $('#' + productId + ' .quantity .number');
+        var res = Number(quantitySpan.text()) + ($(this).hasClass('btn-plus')? 1 : -1);
+        if (res === 0)
+            res = 1;
+        quantitySpan.text(res);
+    });
+
+    $('.add-to-cart .place-btn').on('click', function(event) {
+        $('.cd-popup.add-to-cart').removeClass('is-visible');
+        $('.cd-popup.cart').addClass('is-visible');
     });
 
 });

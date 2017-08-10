@@ -148,16 +148,18 @@
 
 <div><a href="#" class="idTop backtotop"></a></div>
 
-<div class="cd-popup" role="alert">
+<div class="cd-popup add-to-cart" role="alert">
     <div class="cd-popup-container">
         <form method="get" action="#">
 
             <p class="large-font">Добавить в корзину</p>
             <div class="spinner-wrapper">
-                <div class="spinner">
-                    <div class="btn">–</div>
-                    <div class="quantity">500 г</div>
-                    <div class="btn">+</div>
+                <div class="spinner" id="345">
+                    <div class="btn btn-minus noselect">–</div>
+                    <div class="quantity noselect">
+                        <span class="number">1</span> <span class="unit">кг</span>
+                    </div>
+                    <div class="btn btn-plus noselect">+</div>
                 </div>
                 <div class="popup-price">200 <span class="small-font">&#8381;</span></div>
                 <div class="tag">
@@ -175,9 +177,74 @@
                 </div>
             </div>
             <ul class="cd-buttons">
-                <li><button>Добавить и продолжить покупки</button ></li>
-                <li><button><span>Оформить заказ</span></button ></li>
+                <li><button type="button">Добавить и продолжить покупки</button></li>
+                <li><button type="button" class="place-btn">Оформить заказ</button></li>
             </ul>
+            <br/>
+        </form>
+        <a href="#0" class="cd-popup-close">
+            <img src="/assets/image/close.svg">
+        </a>
+    </div> <!-- cd-popup-container -->
+</div> <!-- cd-popup -->
+
+<div class="cd-popup cart" role="alert">
+    <div class="cd-popup-container">
+        <form method="get" action="#">
+
+            <p class="large-font">Корзина</p>
+            <div class="spinner-wrapper">
+                <div class="cart-product">
+                    <img src="/image/product/596ba95ddbb9f3193ee0706d" alt="Пельмени с рыбой">
+                    <div class="">
+                        <a href="#">Пельмени с индейкой</a>
+                        <div class="small-font">Описание товара</div>
+                    </div>
+                </div>
+                <div class="spinner" id="123">
+                    <div class="btn btn-minus noselect">–</div>
+                    <div class="quantity noselect">
+                        <span class="number">1</span> <span class="unit">кг</span>
+                    </div>
+                    <div class="btn btn-plus noselect">+</div>
+                </div>
+                <div class="popup-price">200 <span class="small-font">&#8381;</span></div>
+                <div class="tag">
+                    <div class="circle"></div>
+                </div>
+                <img src="/assets/image/delete.svg">
+            </div>
+            <div class="spinner-wrapper">
+                <div class="cart-product">
+                    <img src="/image/product/596ba95ddbb9f3193ee0706d" alt="Пельмени с рыбой">
+                    <div class="">
+                        <a href="#">Пельмени с индейкой</a>
+                        <div class="small-font">Описание товара</div>
+                    </div>
+                </div>
+
+                <div class="spinner" id="234">
+                    <div class="btn btn-minus noselect">–</div>
+                    <div class="quantity noselect">
+                        <span class="number">1</span> <span class="unit">кг</span>
+                    </div>
+                    <div class="btn btn-plus noselect">+</div>
+                </div>
+                <div class="popup-price">200 <span class="small-font">&#8381;</span></div>
+                <div class="tag">
+                    <div class="circle"></div>
+                </div>
+                <img src="/assets/image/delete.svg">
+
+            </div>
+
+            <div class="total">
+                <div></div>
+                <div class="cd-buttons">
+                    <button type="button" class="place-btn">Оформить заказ</button>
+                    <span>Итого</span>
+                </div>
+            </div>
             <br/>
         </form>
         <a href="#0" class="cd-popup-close">

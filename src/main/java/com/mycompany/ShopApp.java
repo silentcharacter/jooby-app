@@ -1,6 +1,7 @@
 package com.mycompany;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mycompany.constant.Constants;
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.AuthenticationService;
@@ -22,7 +23,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static com.mycompany.constant.ShopAppConstants.*;
+import static com.mycompany.constant.Constants.*;
 
 
 public class ShopApp extends Jooby
@@ -83,7 +84,7 @@ public class ShopApp extends Jooby
 
 
 
-		get("/design", req -> Results.html("shop/design")
+		get(Constants.SHOP_PATH, req -> Results.html("shop/design")
 				.put("templateName", "shop/main_new")
 				.put("menus", menuService.getAll())
 				.put("popular", productService.getAll("{tags:'" + tagService.getPopular().id + "'}"))
@@ -93,22 +94,22 @@ public class ShopApp extends Jooby
 				.put("humus", productService.getBy("name", "Хумус"))
 				.put("categories", categoryService.getAllWithProducts()));
 
-		get("/design/delivery", req -> Results.html("shop/design")
+		get(Constants.SHOP_PATH + "/delivery", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
 				.put("categories", categoryService.getAll()));
 
-		get("/design/blog", req -> Results.html("shop/design")
+		get(Constants.SHOP_PATH + "/blog", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
 				.put("categories", categoryService.getAll()));
 
-		get("/design/development", req -> Results.html("shop/design")
+		get(Constants.SHOP_PATH + "/development", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
 				.put("categories", categoryService.getAll()));
 
-		get("/design/contacts", req -> Results.html("shop/design")
+		get(Constants.SHOP_PATH + "/contacts", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
 				.put("categories", categoryService.getAll()));
