@@ -17,7 +17,10 @@
                 <article class="middle-font description">{{shortDescription}}</article>
                 <div class="price-group ">
                     <span class="price">{{price}} &#8381; за {{map units unitId}}</span>
-                    <a href="#" class="btn-buy cd-popup-trigger">Купить</a>
+                    <a href="#" class="btn-buy cd-popup-trigger" data-product-id="{{id}}" data-price="{{price}}"
+                       data-unit="{{map units unitId}}" data-product-name="{{name}}">
+                        Купить
+                    </a>
                 </div>
             </div>
             {{/each}}
@@ -32,8 +35,13 @@
                 <a class="name" href="/product/{{id}}">{{name}}</a>
                 <article class="middle-font description">{{shortDescription}}</article>
                 <div class="price-group ">
-                    <span class="price">{{price}} &#8381; за {{map units unitId}}</span>
-                    <a href="#" class="btn-buy cd-popup-trigger">Купить</a>
+                    <span class="price">
+                        {{price}} &#8381; за {{map units unitId}}
+                    </span>
+                    <a href="#" class="btn-buy cd-popup-trigger" data-product-id="{{id}}" data-price="{{price}}"
+                       data-unit="{{map units unitId}}" data-product-name="{{name}}">
+                        Купить
+                    </a>
                 </div>
             </div>
             {{/each}}
@@ -47,7 +55,7 @@
                 </article>
             </div>
             <article >
-                Момент недетерминировано влияет на составляющие гироскопического момента больше, чем резонансный подвес. Динамическое уравнение Эйлера позволяет пренебречь колебаниями корпуса, хотя этого в любом случае требует экваториальный момент.
+                Завершая оформление заказа вы можете выбрать один из способ доставки. Мы либо бесплатно привезем вам заказ в день доставки по вашему району, либо за небольшую плату в удобное для вас время.
             </article>
             <div class="recipe">
                 <img src="/assets/image/pesto.jpg" srcset="/assets/image/pesto@2x.jpg 2x, /assets/image/pesto@3x.jpg 3x">
@@ -136,7 +144,10 @@
                 <article class="middle-font description">{{shortDescription}}</article>
                 <div class="price-group ">
                     <span class="price">{{price}} &#8381; за {{map units unitId}}</span>
-                    <a href="#" class="btn-buy cd-popup-trigger">Купить</a>
+                    <a href="#" class="btn-buy cd-popup-trigger" data-product-id="{{id}}" data-price="{{price}}"
+                       data-unit="{{map units unitId}}" data-product-name="{{name}}">
+                        Купить
+                    </a>
                 </div>
             </div>
             {{/each}}
@@ -146,109 +157,9 @@
 
 </div>
 
-<div><a href="#" class="idTop backtotop"></a></div>
+<div><a href="#" class="backtotop"></a></div>
 
-<div class="cd-popup add-to-cart" role="alert">
-    <div class="cd-popup-container">
-        <form method="get" action="#">
-
-            <p class="large-font">Добавить в корзину</p>
-            <div class="spinner-wrapper">
-                <div class="spinner" id="345">
-                    <div class="btn btn-minus noselect">–</div>
-                    <div class="quantity noselect">
-                        <span class="number">1</span> <span class="unit">кг</span>
-                    </div>
-                    <div class="btn btn-plus noselect">+</div>
-                </div>
-                <div class="popup-price">200 <span class="small-font">&#8381;</span></div>
-                <div class="tag">
-                    <div class="circle"></div>
-                </div>
-            </div>
-
-            <p class="large-font">Выберите добавки</p>
-            <div class="checkbox-content">
-                <div class="box">
-                    <input type="checkbox" id="c1" name="cb">
-                    <label for="c1">&nbsp;Сырный соус за 99 ₽</label>
-                    <input type="checkbox" id="c2" name="cb">
-                    <label for="c2">&nbsp;Томатный соус за 40 ₽</label>
-                </div>
-            </div>
-            <ul class="cd-buttons">
-                <li><button type="button">Добавить и продолжить покупки</button></li>
-                <li><button type="button" class="place-btn">Оформить заказ</button></li>
-            </ul>
-            <br/>
-        </form>
-        <a href="#0" class="cd-popup-close">
-            <img src="/assets/image/close.svg">
-        </a>
-    </div> <!-- cd-popup-container -->
-</div> <!-- cd-popup -->
+{{> shop/addToCartPopup}}
 
 <div class="cd-popup cart" role="alert">
-    <div class="cd-popup-container">
-        <form method="get" action="#">
-
-            <p class="large-font">Корзина</p>
-            <div class="spinner-wrapper">
-                <div class="cart-product">
-                    <img src="/image/product/596ba95ddbb9f3193ee0706d" alt="Пельмени с рыбой">
-                    <div class="">
-                        <a href="#">Пельмени с индейкой</a>
-                        <div class="small-font">Описание товара</div>
-                    </div>
-                </div>
-                <div class="spinner" id="123">
-                    <div class="btn btn-minus noselect">–</div>
-                    <div class="quantity noselect">
-                        <span class="number">1</span> <span class="unit">кг</span>
-                    </div>
-                    <div class="btn btn-plus noselect">+</div>
-                </div>
-                <div class="popup-price">200 <span class="small-font">&#8381;</span></div>
-                <div class="tag">
-                    <div class="circle"></div>
-                </div>
-                <img src="/assets/image/delete.svg">
-            </div>
-            <div class="spinner-wrapper">
-                <div class="cart-product">
-                    <img src="/image/product/596ba95ddbb9f3193ee0706d" alt="Пельмени с рыбой">
-                    <div class="">
-                        <a href="#">Пельмени с индейкой</a>
-                        <div class="small-font">Описание товара</div>
-                    </div>
-                </div>
-
-                <div class="spinner" id="234">
-                    <div class="btn btn-minus noselect">–</div>
-                    <div class="quantity noselect">
-                        <span class="number">1</span> <span class="unit">кг</span>
-                    </div>
-                    <div class="btn btn-plus noselect">+</div>
-                </div>
-                <div class="popup-price">200 <span class="small-font">&#8381;</span></div>
-                <div class="tag">
-                    <div class="circle"></div>
-                </div>
-                <img src="/assets/image/delete.svg">
-
-            </div>
-
-            <div class="total">
-                <div></div>
-                <div class="cd-buttons">
-                    <button type="button" class="place-btn">Оформить заказ</button>
-                    <span>Итого</span>
-                </div>
-            </div>
-            <br/>
-        </form>
-        <a href="#0" class="cd-popup-close">
-            <img src="/assets/image/close.svg">
-        </a>
-    </div> <!-- cd-popup-container -->
-</div> <!-- cd-popup -->
+</div>

@@ -21,6 +21,7 @@ public class Product extends Entity {
     public String unitId;
     public List<String> tags;
     public boolean active;
+    public boolean additional;
 
     @Override
     public String getFullText() {

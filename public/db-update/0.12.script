@@ -1,0 +1,24 @@
+db.units.insertMany([
+        {name:'Штука', label: 'шт', coefficient: 1}
+    ]
+);
+db.products.insertMany([
+        {name:'Сырный соус', price: 99, additional: true, active: true, unitId: },
+        {name:'Томатный соус', price: 40, additional: true, active: true, unitId: }
+    ]
+);
+
+db.products.find({name:'Сырный соус'}).forEach(function (product) {
+    var unit = db.units.findOne({ name:'Штука' });
+    if (unit != null) {
+        product.unitId = unit._id;
+        db.products.save(product);
+    }
+});
+db.products.find({name:'Томатный соус'}).forEach(function (product) {
+    var unit = db.units.findOne({ name:'Штука' });
+    if (unit != null) {
+        product.unitId = unit._id;
+        db.products.save(product);
+    }
+});

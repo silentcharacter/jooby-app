@@ -92,7 +92,10 @@ public class ShopApp extends Jooby
 				.put("units", unitService.getLabelsMap())
 				.put("fishDumplings", productService.getBy("name", "Пельмени с рыбой"))
 				.put("humus", productService.getBy("name", "Хумус"))
-				.put("categories", categoryService.getAllWithProducts()));
+				.put("additional", productService.getAdditionalProducts())
+				.put("categories", categoryService.getAllWithProducts())
+				.put("analyticsKey", config.getString("google.analytics.key"))
+				.put("cart", cartService.getFetchedCart(req)));
 
 		get(Constants.SHOP_PATH + "/delivery", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
@@ -146,15 +149,15 @@ public class ShopApp extends Jooby
 		{
 			Product product = productService.getById(req.param("productId").value());
 			Color color = req.param("colorId").isSet() ? colorService.getById(req.param("colorId").value()) : null;
-			List<Sauce> sauceList = new ArrayList<>();
-			if (req.param("sauces[]").isSet())
+			List<Product> additions = new ArrayList<>();
+			if (req.param("additions[]").isSet())
 			{
-				sauceList.addAll(
-						req.param("sauces[]").toList().stream().map(sauceService::getById)
+				additions.addAll(
+						req.param("additions[]").toList().stream().map(productService::getById)
 								.collect(Collectors.toList())
 				);
 			}
-			return cartService.addToCart(req, product, req.param("quantity").intValue(), color, sauceList);
+			return cartService.addToCart(req, product, req.param("quantity").intValue(), color, additions);
 		});
 
 		put("/cart", req ->

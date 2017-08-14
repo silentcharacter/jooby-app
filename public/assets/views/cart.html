@@ -1,81 +1,48 @@
 <script id="cartContentTemplate" type="text/x-handlebars-template">
-<div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title" id="myModalLabel">Корзина</h4>
-</div>
-<div class="modal-body">
-    {{#each entries}}
-    <div class="cart-row">
-        <div class="grid" style="padding-left: 30px">
-            <div class="grid-item large--seven-twelfths">
-                <div class="grid">
-                    <div class="grid-item one-third large--one-quarter">
-                        <a href="#" class="cart-image">
-                            <img src="/assets/image/pelmen.jpg" alt="{{product.name}}">
-                        </a>
-                    </div>
-                    <div class="grid-item two-thirds large--three-quarters">
-                        <a href="#">
-                            {{product.name}}
-                        </a>
-                        <br>
-                        <small>{{color.name}}</small>
-                        {{#each sauces}}
-                            <br/><small>{{name}}</small>
-                        {{/each}}
-                    </div>
-                </div>
-            </div>
+        <div class="cd-popup-container">
+            <form method="get" action="#">
 
-            <div class="grid-item large--five-twelfths medium--two-thirds push--medium--one-third">
-                <div class="grid">
-                    <div class="grid-item one-half medium-down--one-third text-right">
-                        <div class="ajaxifyCart--qty">
-                            <input type="text" readonly value="{{quantity}} кг" min="0">
-                            <span onclick="modifyCart({{entryNo}},{{math quantity '+' 1}})" class="ajaxifyCart--qty-adjuster ajaxifyCart--add">+</span>
-                            <span onclick="modifyCart({{entryNo}},{{math quantity '-' 1}})" class="ajaxifyCart--qty-adjuster ajaxifyCart--minus">-</span>
+                <p class="large-font">Корзина</p>
+                {{#each entries}}
+                <div class="cart-row flex" data-product-id="{{product.id}}" data-entry-no="{{entryNo}}">
+                    <div class="cart-product">
+                        <img src="/image/product/{{product.id}}" alt="{{product.name}}">
+                        <div>
+                            <a href="/product/{{product.id}}">{{product.name}}</a>
+                            <div class="small-font description">{{product.shortDescription}}</div>
                         </div>
                     </div>
-                    <div class="grid-item one-third medium-down--one-third text-right">
-                        <span class="h2" style="margin-top: 0px;">
-                            <small>{{totalPrice}}<sup>00</sup></small>
-                        </span>
+                    <div class="spinner">
+                        <div class="btn btn-minus noselect">–</div>
+                        <div class="quantity noselect">
+                            <span class="number">{{quantity}}</span> <span class="unit">{{product.unit.label}}</span>
+                        </div>
+                        <div class="btn btn-plus noselect">+</div>
                     </div>
-                    <div class="grid-item one-sixth medium-down--one-third text-right">
-                        <a href="#" onclick="modifyCart({{entryNo}},0); return false;" class="icon-fallback-text btn-secondary remove ">
-                            <span class="icon icon-x" aria-hidden="true"></span>
-                            <span class="fallback-text">Удалить</span>
-                        </a>
+                    <div class="popup-price">{{totalPrice}}<span class="small-font"> &#8381;</span></div>
+                    <div class="tag">
+                        <div class="circle"></div>
                     </div>
+                    <img class="delete" src="/assets/image/delete.svg" onclick="removeFromCart({{entryNo}})">
                 </div>
-            </div>
-        </div>
-    </div>
-    {{/each}}
+                {{/each}}
 
-    <div class="cart-row">
-        <div class="grid">
-            <div class="grid-item text-right ">
-                <div class="cart-subtotal">
-                    Итого
-                    <span class="h1 cart-subtotal--price">
-                            <small>{{totalPrice}}<sup>00</sup></small>
-                        </span>
+                <div class="total flex">
+                    <div></div>
+                    <div class="cd-buttons">
+                        <div class="flex-space-between">
+                            <button type="button" class="place-btn">Оформить заказ</button>
+                            <div class="flex-vertical">
+                                <span class="small-font">Итого</span>
+                                <span class="large-font">{{totalPrice}}&nbsp;&#8381;</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button type="button" data-dismiss="modal" class="btn btn-info medium-down--hide">
-                    <span>Продолжить покупки</span>
-                </button>
-                <button type="button" data-dismiss="modal" class="btn btn-info large--hide">
-                    <span class="icon ">< Назад</span>
-                </button>
-                <button type="button" class="btn" onclick="document.location = '/checkout';">
-                    <span class="icon icon-cart">Оформить заказ</span>
-                </button>
-                <!--<a href="#" class="btn header-cart-btn cart-toggle" onclick="onCartBtnClick()">-->
-                    <!--<span class="icon icon-cart"></span>Оформить заказ-->
-                <!--</a>-->
-            </div>
-        </div>
-    </div>
-</div>
+            </form>
+            <a href="#0" class="cd-popup-close">
+                <img src="/assets/image/close.svg">
+            </a>
+        </div> <!-- cd-popup-container -->
+
 </script>

@@ -1,0 +1,44 @@
+<div class="cd-popup add-to-cart" role="alert">
+    <div class="cd-popup-container">
+        <form method="get" action="#">
+            <input type="hidden" name="productId">
+            <p class="large-font">Добавить в корзину</p>
+            <div class="product-name"></div>
+            <div class="flex popup-row" data-product-id="" data-price="">
+                <div class="spinner">
+                    <div class="btn btn-minus noselect">–</div>
+                    <div class="quantity noselect">
+                        <span class="number">1</span> <span class="unit"></span>
+                    </div>
+                    <div class="btn btn-plus noselect">+</div>
+                </div>
+                <div class="popup-price noselect">
+                    <span class="price-value"></span>
+                    <span class="small-font"> &#8381;</span>
+                </div>
+                <div class="tag">
+                    <div class="circle"></div>
+                </div>
+            </div>
+
+            <p class="large-font">Выберите добавки</p>
+            <div class="checkbox-content">
+                <div class="box">
+                    {{# each additional}}
+                        <input type="checkbox" id="{{id}}" name="additions" value="{{id}}">
+                        <label for="{{id}}">&nbsp;{{name}} за {{price}} &#8381;</label>
+                    {{/each}}
+                </div>
+            </div>
+            <ul class="cd-buttons">
+                <li><button type="button" class="add-continue">Добавить и продолжить покупки</button></li>
+                <li><button type="button" class="place-btn">Оформить заказ</button></li>
+            </ul>
+            <br/>
+        </form>
+        <a href="#0" class="cd-popup-close">
+            <img src="/assets/image/close.svg">
+        </a>
+    </div> <!-- cd-popup-container -->
+</div> <!-- cd-popup -->
+

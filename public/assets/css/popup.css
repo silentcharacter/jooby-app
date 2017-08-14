@@ -53,6 +53,11 @@ xnugget info
 xpopup
 
 -------------------------------- */
+.cart-popup-trigger {
+    cursor: hand;
+    cursor: pointer;
+}
+
 .cd-popup {
   position: fixed;
   left: 0;
@@ -77,9 +82,7 @@ xpopup
 
 .cd-popup-container {
   position: relative;
-  width: 90%;
-  max-width: 50%;
-  margin: 4em auto;
+  width: 50%;
   background-color: #ffffff;
   border: solid 15px #ffd400;
   border-radius: 20px;
@@ -98,6 +101,10 @@ xpopup
   -webkit-transition-duration: 0.3s;
   -moz-transition-duration: 0.3s;
   transition-duration: 0.3s;
+}
+
+.cd-popup.cart .cd-popup-container {
+    width: 70%;
 }
 
 .cd-popup-container .cd-buttons li {
@@ -194,10 +201,6 @@ xpopup
 
 .cd-popup-container .large-font {
     font-size: 180%;
-}
-
-.spinner-wrapper {
-    display: flex;
 }
 
 .spinner .quantity {
@@ -299,9 +302,22 @@ input[type="checkbox"]:checked + label:after {
     margin: auto;
 }
 
-.cart .spinner-wrapper {
-    margin-bottom: 30px;
+.cart .cart-row {
+    padding: 15px 15px 15px 15px;
 }
+.cart .cart-row:hover {
+    background-color: rgba(242, 242, 242, .4);
+}
+.cart .cart-row .delete {
+    cursor: hand;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity .75s ease-out
+}
+.cart .cart-row:hover .delete {
+    opacity: 1;
+}
+
 .cart img {
     height: 50px;
     border-radius: 10px;
@@ -310,15 +326,34 @@ input[type="checkbox"]:checked + label:after {
 .cart-product div {
     text-align: left;
 }
+.cart-product .description p {
+    margin-top: 0;
+    padding-right: 10px;
+}
 .cart-product {
-    width: 40%;
+    width: 50%;
     display: flex;
     margin-left: 7%;
 }
 .total {
-    display: flex;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 .total div:first-of-type {
-    width: 40%;
+    width: 50%;
     margin-left: 7%;
+}
+
+.place-btn {
+    min-width: 250px;
+}
+.total .cd-buttons>div {
+    margin-left: 0;
+}
+
+.add-to-cart .product-name {
+    margin-bottom: 20px;
+    margin-top: -10px;
+    font-size: 130%;
+    font-weight: 400;
 }

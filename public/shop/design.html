@@ -48,26 +48,30 @@
     <link rel="stylesheet" href="/assets/css/popup.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/assets/js/handlebars.min.js" type="text/javascript"></script>
     <script src="/assets/scripts/shop.js" type="text/javascript"></script>
 
 </head>
 <body>
 
-<header class="flex-space-between common-margin">
-    <div class="flex-space-between">
+<header class="flex common-margin">
+    <div class="flex cart-popup-trigger">
         <div class="flex-vertical">
             <img src="/assets/image/icon-basket.svg" class="icon-basket">
         </div>
         <div class="sum-wrapper flex-vertical">
             <span class="small-font">Корзина</span>
-            <span class="large-font">0&nbsp;&#8381;</span>
+            <span>
+                <span class="large-font cart-total">{{cart.totalPrice}}</span>
+                <span class="large-font">&#8381;</span>
+            </span>
         </div>
     </div>
     <a href="/design" class="logo">
         <img src="/assets/image/logo.svg">
     </a>
     <div class="flex-vertical">
-        <div>
+        <div class="contacts">
             <span class="yellow large-font">(4852) 33−23−01</span><br/>
             <span class="yellow small-font">С 09:00 до 22:00</span><br/>
         </div>

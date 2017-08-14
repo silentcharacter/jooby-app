@@ -99,10 +99,11 @@ public class CartService
 		saveSessionCart(req, getNewCart());
 	}
 
-	public Cart addToCart(Request req, Product product, Integer quantity, Color color, List<Sauce> sauces)
+	public Cart addToCart(Request req, Product product, Integer quantity, Color color, List<Product> additions)
 	{
 		Cart cart = getSessionCart(req);
-		cart.addEntry(product, quantity, color, sauces);
+		cart.addEntry(product, quantity, color, null);
+		additions.forEach(addition -> cart.addEntry(addition, 1, null, null));
 		saveSessionCart(req, cart);
 		return cart;
 	}

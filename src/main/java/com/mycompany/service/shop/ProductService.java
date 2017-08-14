@@ -50,6 +50,10 @@ public class ProductService extends AbstractService<Product> {
         return map;
     }
 
+    public List<Product> getAdditionalProducts() {
+        return getAll("{additional: true}");
+    }
+
 //    @Override
 //    public Product getById(String id)
 //    {

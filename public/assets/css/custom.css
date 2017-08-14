@@ -34,8 +34,17 @@ article, p {
 .large-font {
     font-size: 130%;
 }
+header>div {
+    width: 33%;
+}
+header>div:last-of-type {
+    width: 35%;
+}
+.contacts {
+    margin-left: auto;
+}
 .sum-wrapper {
-    padding-left: 15%;
+    padding-left: 3%;
 }
 .logo {
     text-align: center;
@@ -492,7 +501,7 @@ body {
 }
 
 
-a.idTop {
+a.backtotop {
  position: fixed;
  z-index: 9999;
  bottom: 0%;
@@ -505,7 +514,7 @@ a.idTop {
  padding: 10px;
  margin: 5px 15px 15px 5px;
 }
-a.idTop:hover {
+a.backtotop:hover {
  opacity: 1;
 }
 
