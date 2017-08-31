@@ -3,8 +3,8 @@ db.units.insertMany([
     ]
 );
 db.products.insertMany([
-        {name:'Сырный соус', price: 99, additional: true, active: true, unitId: },
-        {name:'Томатный соус', price: 40, additional: true, active: true, unitId: }
+        {name:'Сырный соус', price: 99, additional: true, active: true},
+        {name:'Томатный соус', price: 40, additional: true, active: true }
     ]
 );
 

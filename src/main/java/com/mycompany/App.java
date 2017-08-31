@@ -57,7 +57,7 @@ public class App extends Jooby {
         use(new Jackson().doWith(mapper -> mapper.setTimeZone(TimeZone.getTimeZone("UTC"))));
 
         use(new Metrics()
-              .request()
+//              .request()
               .threadDump()
               .ping()
 //              .healthCheck("db", new DatabaseHealthCheck())
