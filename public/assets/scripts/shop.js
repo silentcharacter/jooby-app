@@ -87,6 +87,17 @@ SHOP = {
                     $(".cd-popup.cart .description" ).each(function( index ) {
                         $(this).html($(this).text());
                     });
+
+                    var container = $('.cart .cd-popup-container');
+                    var offset = ($(window).height() - container.height()) / 2;
+                    container.css('margin-top', offset + 'px');
+                    container.css('margin-bottom', offset + 'px');
+                    if (($(window).height() - container.height()) / $(window).height() < 0.12) {
+                        container.css('margin-top', '4%');
+                        container.css('margin-bottom', '4%');
+                        container.css('height', '85%');
+                        $('.cart-entries').css('max-height', (container.height() - 200) + 'px');
+                    }
                     $('.cd-popup.cart').addClass('is-visible');
                     $('.cart .spinner .btn').on('click', SHOP.modifyCart);
                 }
@@ -117,15 +128,9 @@ SHOP = {
             url: '/cart',
             data: {entryNo: entryNo, quantity: quantity},
             success: function (result) {
-                var source = $("#cartContentTemplate").html();
-                var template = Handlebars.compile(source);
-                $('.cd-popup.cart').html(template(result));
-                $(".cd-popup.cart .description" ).each(function( index ) {
-                    $(this).html($(this).text());
-                });
-                $('.cd-popup.cart').addClass('is-visible');
-                $('.cart .spinner .btn').on('click', SHOP.modifyCart);
-                $(".cart-total").text(result.totalPrice);
+                //todo: optimize double call
+                SHOP.updateCartTotal();
+                SHOP.showCart();
             },
             error: function (xhr, str) {
                 console.log('Возникла ошибка: ' + xhr.responseCode);

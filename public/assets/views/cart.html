@@ -3,29 +3,31 @@
             <form method="get" action="#">
 
                 <p class="large-font">Корзина</p>
+                <div class="cart-entries">
                 {{#each entries}}
-                <div class="cart-row flex" data-product-id="{{product.id}}" data-entry-no="{{entryNo}}">
-                    <div class="cart-product">
-                        <img src="/image/product/{{product.id}}" alt="{{product.name}}">
-                        <div>
-                            <a href="/product/{{product.id}}">{{product.name}}</a>
-                            <div class="small-font description">{{product.shortDescription}}</div>
+                    <div class="cart-row flex" data-product-id="{{product.id}}" data-entry-no="{{entryNo}}">
+                        <div class="cart-product">
+                            <img src="/image/product/{{product.id}}" alt="{{product.name}}">
+                            <div>
+                                <a href="/product/{{product.id}}">{{product.name}}</a>
+                                <div class="small-font description">{{product.shortDescription}}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="spinner">
-                        <div class="btn btn-minus noselect">–</div>
-                        <div class="quantity noselect">
-                            <span class="number">{{quantity}}</span> <span class="unit">{{product.unit.label}}</span>
+                        <div class="spinner">
+                            <div class="btn btn-minus noselect">–</div>
+                            <div class="quantity noselect">
+                                <span class="number">{{quantity}}</span> <span class="unit">{{product.unit.label}}</span>
+                            </div>
+                            <div class="btn btn-plus noselect">+</div>
                         </div>
-                        <div class="btn btn-plus noselect">+</div>
+                        <div class="popup-price">{{totalPrice}}<span class="small-font"> &#8381;</span></div>
+                        <div class="tag">
+                            <div class="circle"></div>
+                        </div>
+                        <img class="delete" src="/assets/image/delete.svg" onclick="removeFromCart({{entryNo}})">
                     </div>
-                    <div class="popup-price">{{totalPrice}}<span class="small-font"> &#8381;</span></div>
-                    <div class="tag">
-                        <div class="circle"></div>
-                    </div>
-                    <img class="delete" src="/assets/image/delete.svg" onclick="removeFromCart({{entryNo}})">
-                </div>
                 {{/each}}
+                </div>
 
                 <div class="total flex">
                     <div></div>
