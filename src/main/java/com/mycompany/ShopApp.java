@@ -203,10 +203,6 @@ public class ShopApp extends Jooby
 					.put("breadcrumbs", CONTACT_BREADCRUMB);
 		});
 
-//		2017-06-29 14:01:14,437 DEBUG [netty task-4-11] o.j.s.HttpHandler [HttpHandlerImpl.java:389] execution of: POST/checkout resulted in exception
-//		org.jooby.Err$Missing: Bad Request(400): Required parameter 'entrance' is not present
-//		at com.mycompany.ShopApp.lambda$new$11(ShopApp.java:156)
-
 		post("/checkout", req ->
 		{
 			Cart cartForm = req.params(Cart.class);
@@ -253,21 +249,7 @@ public class ShopApp extends Jooby
 			} else {
 				cartService.setDeliveryOptions(req, req.param("delivery").value(), null, null);
 			}
-			return Results.redirect("/checkout/payment");
-		});
-
-		get("/checkout/payment", req -> Results.html("shop/checkout")
-				.put("step", "payment")
-				.put("cart", cartService.getFetchedCart(req))
-				.put("shopId", config.getInt("yandex.shopId"))
-				.put("scid", config.getInt("yandex.scid"))
-				.put("templateName", "shop/payment")
-				.put("breadcrumbs", PAYMENT_BREADCRUMB));
-
-		post("/checkout/payment", req ->
-		{
-			cartService.setPaymentType(req, req.param("payment").value());
-			OrderService orderService = req.require(OrderService.class);
+//			return Results.redirect("/checkout/payment");
 			Order order = orderService.placeOrder(req);
 			if (order == null) {
 				throw new RuntimeException("Order not placed");
@@ -277,6 +259,27 @@ public class ShopApp extends Jooby
 			smsService.sendOrderConfirmationSms(order, false);
 			return Results.redirect("/thankyou?order=" + order.orderNumber);
 		});
+
+//		get("/checkout/payment", req -> Results.html("shop/checkout")
+//				.put("step", "payment")
+//				.put("cart", cartService.getFetchedCart(req))
+//				.put("shopId", config.getInt("yandex.shopId"))
+//				.put("scid", config.getInt("yandex.scid"))
+//				.put("templateName", "shop/payment")
+//				.put("breadcrumbs", PAYMENT_BREADCRUMB));
+//
+//		post("/checkout/payment", req ->
+//		{
+//			cartService.setPaymentType(req, req.param("payment").value());
+//			Order order = orderService.placeOrder(req);
+//			if (order == null) {
+//				throw new RuntimeException("Order not placed");
+//			}
+//			cartService.emptyCart(req);
+//			sendEvent(order);
+//			smsService.sendOrderConfirmationSms(order, false);
+//			return Results.redirect("/thankyou?order=" + order.orderNumber);
+//		});
 
 		get("/thankyou", (req, rsp, chain) -> {
 			String orderNumber = req.param("order").value();

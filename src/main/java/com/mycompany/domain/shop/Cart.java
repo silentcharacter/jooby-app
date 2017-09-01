@@ -1,10 +1,13 @@
 package com.mycompany.domain.shop;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mycompany.domain.Entity;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
-
 
 public class Cart extends Entity
 {
@@ -15,7 +18,7 @@ public class Cart extends Entity
     public String originalStreetNumber;
     public String litera;
     public Integer korpus;
-    public Integer entrance;
+    public int entrance;
     public Integer flat;
     public String deliveryId;
     public Integer deliveryPrice;
@@ -26,6 +29,16 @@ public class Cart extends Entity
     public Integer totalPrice = 0;
     public Integer totalCount = 0;
     public List<OrderEntry> entries = new ArrayList<>();
+
+    public void setEntrance(String v) {
+        if (StringUtils.isNotEmpty(v)) {
+            entrance = Integer.valueOf(v);
+        }
+    }
+
+    public Integer getEntrance() {
+        return entrance != 0 ? entrance : null;
+    }
 
     @Override
     public String getFullText()

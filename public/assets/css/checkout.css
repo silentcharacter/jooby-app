@@ -1,10 +1,9 @@
-@font-face {
-    font-family: Lorek; /* Имя шрифта */
-    src: url("/assets/fonts/10270.otf"); /* Путь к файлу со шрифтом */
+body * {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    box-sizing: border-box;
 }
-* {
-    font-family: Lorek, serif;
-}
+
 
 html, body {
     margin: 0;
@@ -1074,7 +1073,7 @@ th {
 
 .btn {
     display: inline-block;
-    border-radius: 4px;
+    border-radius: 10px;
     font-weight: 500;
     padding: 1.4em 1.7em;
     box-sizing: border-box;
@@ -1082,12 +1081,12 @@ th {
     cursor: pointer;
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
     position: relative;
-    background: #1990C6;
+    background: black;
     color: white
 }
 
 .btn:hover {
-    background: #136f99;
+    background: rgb(92, 92, 92);
     color: white
 }
 
@@ -1141,13 +1140,13 @@ th {
 
 .js .main .btn--disabled {
     cursor: default;
-    background: #cccccc;
+    background: #ffd400;
     box-shadow: none
 }
 
 .js .sidebar .btn--disabled {
     cursor: default;
-    background: #c8c8c8;
+    background: #ffd400;
     box-shadow: none
 }
 
@@ -1231,20 +1230,12 @@ th {
     transform: translateX(-5px)
 }
 
-@media (min-width: 750px) {
-    .step__footer__continue-btn {
-        float: right
-    }
-}
 
 @media (min-width: 750px) {
     .anyflexbox .step__footer {
         display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-flex-direction: row-reverse;
-        -ms-flex-direction: row-reverse;
-        flex-direction: row-reverse;
         -webkit-align-items: center;
         -ms-flex-align: center;
         align-items: center
@@ -2519,7 +2510,7 @@ th {
 }
 
 .order-summary__emphasis {
-    font-weight: 500;
+    font-weight: 300;
     color: #4b4b4b
 }
 
@@ -2568,8 +2559,8 @@ th {
 }
 
 .payment-due__price {
-    font-size: 1.71429em;
-    font-weight: 500;
+    font-size: 150%;
+    font-weight: 400;
     letter-spacing: -0.04em;
     color: #4b4b4b;
     line-height: 1em
@@ -2821,7 +2812,7 @@ th {
 .input-checkbox, .input-radio {
     width: 18px;
     height: 18px;
-    box-shadow: 0 0 0 0 #1990C6 inset;
+    box-shadow: 0 0 0 0 black inset;
     transition: all 0.2s ease-in-out;
     position: relative;
     cursor: pointer;
@@ -2897,12 +2888,12 @@ th {
 }
 
 .input-checkbox:focus, .input-radio:focus {
-    border: 2px solid #1990C6
+    border: 2px solid black
 }
 
 .input-checkbox:checked, .input-radio:checked {
     border: none;
-    box-shadow: 0 0 0 10px #1990C6 inset
+    box-shadow: 0 0 0 10px black inset
 }
 
 .input-checkbox:checked:after, .input-radio:checked:after {
@@ -3283,24 +3274,12 @@ th {
 
 .product-thumbnail {
     width: 4.6em;
-    height: 4.6em;
-    border-radius: 8px;
+    height: 3em;
     background: #fff;
     position: relative
 }
 
-.product-thumbnail::after {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    border-radius: 8px;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1) inset;
-    z-index: 2
-}
+
 
 .product-thumbnail__wrapper {
     width: 100%;
@@ -3319,7 +3298,8 @@ th {
     bottom: 0;
     max-width: 100%;
     max-height: 100%;
-    margin: auto
+    margin: auto;
+    border-radius: 10px;
 }
 
 .product-thumbnail__quantity {
@@ -5230,4 +5210,12 @@ input::-moz-focus-inner {
     padding-left: 10px;
     padding-right: 10px;
     display: table-cell;
+}
+.order-summary__section--discount .btn--disabled {
+    color: black;
+}
+.order-summary-logo {
+    text-align: center;
+    font-size: 130%;
+    margin-bottom: 20px;
 }
