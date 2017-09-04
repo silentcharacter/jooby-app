@@ -214,6 +214,7 @@ public class ShopApp extends Jooby
 						.put("templateName", "shop/contacts")
 						.put("breadcrumbs", CONTACT_BREADCRUMB)
 						.put("step", "contact")
+						.put("menus", menuService.getAll())
 						.put("cartForm", cartForm)
 						.put("errorMessage", validationResult.message)
 						.put("errorField", validationResult.fieldName)
