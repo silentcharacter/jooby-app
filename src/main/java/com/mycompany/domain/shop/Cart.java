@@ -35,6 +35,16 @@ public class Cart extends Entity
             entrance = Integer.valueOf(v);
         }
     }
+    public void setFlat(String v) {
+        if (StringUtils.isNotEmpty(v)) {
+            flat = Integer.valueOf(v);
+        }
+    }
+    public void setStreetNumber(String v) {
+        if (StringUtils.isNotEmpty(v)) {
+            streetNumber = Integer.valueOf(v);
+        }
+    }
 
     public Integer getEntrance() {
         return entrance != 0 ? entrance : null;
