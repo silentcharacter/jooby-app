@@ -47,7 +47,7 @@ SHOP = {
             }
         });
 
-        $('.add-to-cart .spinner .btn').on('click', function(event) {
+        $('.add-to-cart-js .spinner .btn').on('click', function(event) {
             var row = $(this).parent().parent();
             var productId = row.attr('id');
             var quantitySpan = $('#' + productId + ' .quantity .number');
@@ -63,6 +63,8 @@ SHOP = {
             var cb = $('input#' + $(this).attr('for') + '[type="checkbox"]');
             cb.attr('checked', !cb.attr('checked'));
         });
+
+        $(".product-detail-description input[type='checkbox']").prop("checked", false );
     },
 
     showCart: function() {
@@ -220,7 +222,7 @@ function addAndContinue() {
 function addToCart(openCart) {
     $('.cd-popup.add-to-cart').removeClass('is-visible');
 
-    var msg = $('.add-to-cart form').serializeArray();
+    var msg = $('.add-to-cart-js form').serializeArray();
     var obj = {additions: []};
     for(var i in msg) {
         var fieldName = msg[i].name;
@@ -230,7 +232,7 @@ function addToCart(openCart) {
             obj[fieldName] = msg[i].value;
         }
     }
-    obj.quantity = Number($('.add-to-cart .number').text());
+    obj.quantity = Number($('.add-to-cart-js .number').text());
     if (isNaN(obj.quantity)) {
         return;
     }

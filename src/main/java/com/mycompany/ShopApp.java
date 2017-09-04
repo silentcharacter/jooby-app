@@ -132,12 +132,16 @@ public class ShopApp extends Jooby
 					.put("cart", cartService.getFetchedCart(req));
 		});
 
-		get("/product/:productId", req -> Results.html("shop/shop")
-				.put("templateName", "shop/product")
-				.put("product", productService.getById(req.param("productId").value()))
-				.put("colors", colorService.getAll())
-				.put("sauces", sauceService.getAll())
-				.put("cart", cartService.getFetchedCart(req)));
+		get("/product/:productId", req -> {
+			Product product = productService.getById(req.param("productId").value());
+			return Results.html("shop/design")
+					.put("templateName", "shop/product")
+					.put("product", product)
+					.put("additional", productService.getAdditionalProducts())
+					.put("unit", unitService.getById(product.unitId))
+					.put("menus", menuService.getAll())
+					.put("cart", cartService.getFetchedCart(req));
+		});
 
 		get("/contacts", req -> Results.html("shop/shop")
 				.put("templateName", "shop/contactsPage")

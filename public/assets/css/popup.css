@@ -205,7 +205,7 @@ xpopup
     margin-left: auto;
 }
 
-.cd-popup .tag {
+.tag {
     width: 0;
     height: 0;
     border-style: solid;
@@ -214,7 +214,7 @@ xpopup
     margin-right: auto;
     position: relative;
 }
-.cd-popup .circle {
+.circle {
 	border-radius: 50%;
 	width: 9px;
 	height: 9px;
@@ -224,7 +224,7 @@ xpopup
     top: -4.5px;
 }
 
-.cd-popup .popup-price {
+.popup-price {
     height: 50px;
     width: 80px;
     background-color: #f3f3f3;
@@ -237,10 +237,6 @@ xpopup
 
 input[type="checkbox"] {
   display: none;
-}
-.cd-popup label {
-  cursor: pointer;
-  margin-left: 15px;
 }
 input[type="checkbox"] + label:before {
   border: 1px solid #333;
@@ -262,9 +258,12 @@ input[type="checkbox"]:checked + label:before {
 input[type="checkbox"]:checked + label:after {
   font-weight: bold;
 }
-
+.checkbox-content label {
+  cursor: pointer;
+}
 .cd-popup .checkbox-content label {
     margin-right: 20px;
+    margin-left: 15px;
 }
 .cd-popup .checkbox-content label:last-of-type {
     margin-right: 0;

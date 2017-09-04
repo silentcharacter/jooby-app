@@ -39,6 +39,9 @@ article, p {
 .large-font {
     font-size: 130%;
 }
+.large-large-font {
+    font-size: 160%;
+}
 header>div {
     width: 33%;
 }
@@ -417,6 +420,25 @@ footer img {
    width: 40%;
 }
 
+.product-detail .title {
+    margin-top: 10px;
+}
+
+.product-detail-image img {
+    border-radius: 20px;
+}
+.product-detail-description {
+    margin-left: 20px;
+}
+.product-detail-description .checkbox-content {
+    margin-top: 20px;
+}
+.product-detail-description .checkbox-content .padding {
+    margin-top: 10px;
+}
+.product-detail-description .cd-buttons {
+    margin-top: 30px;
+}
 
 
 #left-header-filler, #right-header-filler {

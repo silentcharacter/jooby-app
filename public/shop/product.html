@@ -1,58 +1,50 @@
-<main class="wrapper main-content" role="main">
+<div class="main product-detail">
+    <div class="content common-margin flex-wrap">
+        <div class="title large-large-font">{{product.name}}</div>
 
-    <h2><a href="/">Каталог</a>&nbsp;/&nbsp;{{product.name}}</h2>
-
-    <div class="grid-item large--one-half medium--one-half small--one-whole on-sale">
-        <div class="product-grid-image" style="height: 160px;">
+        <div class="product-detail-image">
             <img src="/image/product/{{product.id}}" alt="{{product.name}}">
         </div>
-    </div>
+        <div class="product-detail-description">
 
-    <div class="grid-item large--one-half medium--one-half small--one-whole on-sale" style=" text-align: right">
-        <div class="description">{{product.description}}</div>
-        <div class="product-item--price">
-            <span class="h1 medium--left">
-                <small>{{product.price}}<sup>00</sup></small>
-            </span>
-            <span class="sale-tag medium--right has-reviews">
-                Акция
-            </span>
-        </div>
-        <span class="spr-badge" id="spr_badge_330383699" data-rating="4.2631578947368425">
-                    <span class="spr-starrating spr-badge-starrating">
-                        <i class="spr-icon spr-icon-star" style=""></i>
-                        <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star" style=""></i>
-                        <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star-half-alt" style=""></i>
-                    </span>
-                    <span class="spr-badge-caption">19 отзывов</span>
-                </span>
-        <br/>
+            <div class="description">{{product.description}}</div>
 
+            <div class="add-to-cart-js">
+                <form method="get" action="#">
+                    <input type="hidden" name="productId" value="{{product.id}}">
+                    <div class="flex popup-row" id="{{product.id}}" data-price="{{product.price}}">
+                        <div class="spinner">
+                            <div class="btn btn-minus noselect">–</div>
+                            <div class="quantity noselect">
+                                <span class="number">1</span> <span class="unit">{{unit.label}}</span>
+                            </div>
+                            <div class="btn btn-plus noselect">+</div>
+                        </div>
+                        <div class="popup-price noselect">
+                            <span class="price-value">{{product.price}}</span>
+                            <span class="small-font"> &#8381;</span>
+                        </div>
+                        <div class="tag">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
 
-        <form id="addToCartForm" method="post" action="#" >
-            <hr>
-            <p>Дополнительные опции:</p>
-            {{#each sauces}}
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="sauces" value="{{id}}">
-                    {{name}} ({{price}} руб.)
-                </label>
+                    <div class="checkbox-content">
+                        <div class="box">
+                            {{# each additional}}
+                            <input type="checkbox" id="{{id}}" name="additions" value="{{id}}">
+                            <label for="{{id}}">&nbsp;{{name}} за {{price}} &#8381;</label>
+                            <div class="padding"></div>
+                            {{/each}}
+                        </div>
+                    </div>
+                    <div class="cd-buttons">
+                        <button type="button" onClick="addAndPlace()" class="place-btn">Купить</button>
+                    </div>
+                </form>
             </div>
-            {{/each}}
-        </form>
-        <input type="hidden" name="productId">
-        <div class="row">
-            <div class="ajaxifyCart--qty" style="margin-right: 10px; display: inline-block;">
-                <input id="quantity" type="text" value="1 кг" name="quantity">
-                <span onclick="changeInputValue('quantity', 1)" class="ajaxifyCart--qty-adjuster ajaxifyCart--add">+</span>
-                <span onclick="changeInputValue('quantity', -1)" class="ajaxifyCart--qty-adjuster ajaxifyCart--minus">-</span>
-            </div>
-            <a class="btn bt-add-product" href="#" role="button" data-toggle="modal" onclick="onAddToCartBtnClick('{{product.id}}')">
-                <span class="icon icon-cart">Купить</span>
-            </a>
         </div>
     </div>
-</main>
+</div>
 
 

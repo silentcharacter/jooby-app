@@ -79,7 +79,7 @@ public class Cart extends Entity
         if (!entry.isPresent() || !colorId.equals(Optional.ofNullable(entry.get().colorId).orElse(""))) {
             entries.add(new OrderEntry(product, quantity, color, sauces, entries.size()));
         } else {
-            entry.get().quantity++;
+            entry.get().quantity += quantity;
         }
         calculate();
     }
