@@ -4,7 +4,7 @@ SHOP = {
         $('.banner img').click(function() {
             var el = $('.popular');
             $('body').animate(
-                {scrollTop: $(el).offset().top - 20},
+                {scrollTop: $(el).offset().top - 50},
                 {duration: 1000, easing: "swing"}
             );
             return false;
@@ -144,12 +144,26 @@ SHOP = {
         });
     },
 
+    bindFixedMenu: function() {
+        $(window).scroll(function(){
+            var top = $(this).scrollTop();
+            var elem = $('.fixed-nav-bar');
+            var header = $('header');
+            var nav = $('.main-navigation');
+            if (top < header.height() + nav.height()) {
+                elem.css('display', 'none');
+            } else {
+                elem.css('display', 'block');
+            }
+        });
+    },
+
     bindScrolls: function() {
         //scroll
         $('li a[href^="#"]').click(function() {
             var el = $(this).attr('href');
             $('body').animate(
-                {scrollTop: ($(el).offset().top - 20)},
+                {scrollTop: ($(el).offset().top - 50)},
                 {duration: 1500, easing: "swing"}
             );
             return false;
@@ -176,7 +190,7 @@ $(document).ready(function () {
     SHOP.formatDescriptions();
     SHOP.bindPopupEvents();
     SHOP.bindScrolls();
-
+    SHOP.bindFixedMenu();
 });
 
 

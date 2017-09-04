@@ -29,7 +29,7 @@
     </div>
 </header>
 
-<nav role="navigation">
+<nav role="navigation" class="main-navigation">
     <div class="line"></div>
     <ul class="site-nav flex-space-between common-margin" id="accessibleNav">
         {{#each menus}}
@@ -52,41 +52,7 @@
     <div class="line"></div>
 </nav>
 
-<nav class="fixed-nav-bar" role="navigation" style="display: none">
-    <ul class="site-nav flex-space-between common-margin" >
-        <li>
-            <a href="#">СОЛНЕЧНАЯ КУХНЯ</a>
-        </li>
-        {{#each menus}}
-        <li>
-            <a href="{{url}}">{{name}}</a>
-        </li>
-        {{/each}}
-        <li>
-            <a href="#">Доставка</a>
-        </li>
-        <li>
-            <a href="#">Блог</a>
-        </li>
-        <li>
-            <a href="#">Производство</a>
-        </li>
-        <li>
-            <a href="#">Контакты</a>
-        </li>
-        <li>
-            <a href="https://www.facebook.com/foodsun.ru">
-                <img src="/assets/image/facebook.svg" class="facebook">
-            </a>
-            <a href="#">
-                <img src="/assets/image/instagram.svg" class="facebook">
-            </a>
-            <a href="https://vk.com/foodsun">
-                <img src="/assets/image/vk.svg" class="facebook">
-            </a>
-        </li>
-    </ul>
-</nav>
+{{> shop/fixedMenu }}
 
 {{> (lookup . 'templateName') }}
 

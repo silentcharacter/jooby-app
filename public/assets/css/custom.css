@@ -13,6 +13,11 @@ article, p {
   width: 46px;
   height: 44px;
 }
+.icon-basket-small {
+  width: 19px;
+  height: 18px;
+  margin-left: 30px;
+}
 .flex-vertical {
     display: flex;
     flex-direction: column;
@@ -68,7 +73,6 @@ header>div:last-of-type {
 }
 .site-nav > li {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -90,20 +94,25 @@ header>div:last-of-type {
     box-shadow: 0 10px 8px 0 rgba(0, 0, 0, 0.11);
     margin-top: 0;
     margin-bottom: 0;
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    display: none;
 }
 .fixed-nav-bar .site-nav{
     margin-top: 0;
     margin-bottom: 0;
 }
-.fixed-nav-bar li:first-of-type {
+.menu-logo {
     text-align: center;
     background-color: #ffd400;
-    padding: 10px 20px 10px 20px;
+    padding: 8px 10px 8px 10px;
+    font-size: 10px;
 }
 .fixed-nav-bar li a {
     font-size: 12px;
 }
-.fixed-nav-bar li:first-of-type a {
+.menu-logo a {
     font-size: 10px;
     font-weight: 500;
     letter-spacing: 0.8px;

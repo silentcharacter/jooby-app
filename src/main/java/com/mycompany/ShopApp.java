@@ -197,6 +197,7 @@ public class ShopApp extends Jooby
 			}
 			return Results.html("shop/checkout")
 					.put("cart", cart)
+					.put("menus", menuService.getAll())
 					.put("cartForm", cart)
 					.put("step", "contact")
 					.put("templateName", "shop/contacts")
@@ -232,6 +233,7 @@ public class ShopApp extends Jooby
 			}
 			View view = Results.html("shop/checkout")
 					.put("step", "delivery")
+					.put("menus", menuService.getAll())
 					.put("cart", cartService.getFetchedCart(req))
 					.put("templateName", "shop/delivery")
 					.put("breadcrumbs", DELIVERY_BREADCRUMB);
@@ -290,6 +292,7 @@ public class ShopApp extends Jooby
 			rsp.send(Results.html("shop/checkout")
 				.put("cart", orderService.getFetchedOrderByNumber(orderNumber))
 				.put("step", "thankyou")
+				.put("menus", menuService.getAll())
 				.put("orderNumber", orderNumber)
 				.put("templateName", "shop/thankyou"));
 		});

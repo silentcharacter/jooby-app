@@ -57,6 +57,8 @@
 
 <body>
 
+{{> shop/fixedMenu }}
+
 <div class="banner" data-header>
     <div class="wrap">
         <h1 class="logo__text">Оформить заказ</h1>
@@ -94,9 +96,6 @@
 <div class="content" data-content>
     <div class="wrap">
         <div class="sidebar" role="complementary">
-            <div class="sidebar__header">
-                <h1 class="logo__text">Оформить заказ</h1>
-            </div>
             <div class="sidebar__content">
                 <div class="order-summary order-summary--is-collapsed" data-order-summary>
                     <div class="order-summary-logo">
@@ -154,8 +153,6 @@
 
                         <div class="order-summary__section order-summary__section--discount" data-reduction-form="update">
                             <form class="edit_checkout" action="#" accept-charset="UTF-8" method="post" enctype="application/x-www-form-urlencoded">
-                                <!--<input type="hidden" name="authenticity_token" value="56Ocw3Cak1rzbnRvajhsJQx3zftk+1XyCxgw/c4Njqd73PG88cHf5Sqpsw1Wc1VyfUpc6T7BzWIrrQeTR9IgUg=="/>-->
-                                <!--<input type="hidden" name="step" value="contact_information"/>-->
                                 <input type="hidden" name="errorField" value="{{errorField}}"/>
 
                                 <div class="fieldset">
@@ -225,10 +222,9 @@
         </div>
         <div class="main" role="main">
             <div class="main__header">
-
+                <br/>
                 <h1 class="logo__text">Оформить заказ</h1>
                 <br/>
-
                 <ul class="breadcrumb">
                     {{#each breadcrumbs}}
                         <li class="breadcrumb__item {{#if current}}breadcrumb__item--current{{/if}}">
