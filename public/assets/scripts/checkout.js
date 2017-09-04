@@ -14,7 +14,15 @@ $(document).ready(function () {
         });
     });
 
-    $("[name='phone']").mask("0000000000");
+    $("[name='phone']").mask("+7 (000) 000-00-00", {
+         translation: {
+           'r': {
+             pattern: /[\/]/,
+           },
+         }
+    });
+
+    $("[name='entrance']").mask("0000");
 
     $("#streetName").typeahead({
         source: function (query, process) {

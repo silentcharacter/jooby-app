@@ -39,8 +39,19 @@
     <link rel="stylesheet" href="/assets/css/normalize.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,400,400italic,500,500italic,700,700italic,900,900italic&subset=latin,latin-ext,cyrillic,cyrillic-ext,greek-ext,greek,vietnamese" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=PT+Serif:400,500i&amp;subset=cyrillic,cyrillic-ext" rel="stylesheet">
-    {{& checkout_styles}}
-    {{& checkout_scripts}}
+    <!--{{& checkout_styles}}-->
+    <!--{{& checkout_scripts}}-->
+
+    <link rel="stylesheet" href="/assets/css/checkout.css">
+    <link rel="stylesheet" href="/assets/css/nice-select.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+    <script src="/assets/scripts/shop.js" type="text/javascript"></script>
+    <script src="/assets/scripts/checkout.js" type="text/javascript"></script>
+    <script src="/assets/scripts/checkout_deprecated.js" type="text/javascript"></script>
 
 </head>
 
@@ -88,14 +99,11 @@
             </div>
             <div class="sidebar__content">
                 <div class="order-summary order-summary--is-collapsed" data-order-summary>
-                    <h2 class="visually-hidden">Состав заказа</h2>
-
                     <div class="order-summary-logo">
                         <img src="/assets/image/order.svg">
                         <div>
                             Ваш заказ
                         </div>
-
                     </div>
                     <div class="order-summary__sections">
 
@@ -219,6 +227,7 @@
             <div class="main__header">
 
                 <h1 class="logo__text">Оформить заказ</h1>
+                <br/>
 
                 <ul class="breadcrumb">
                     {{#each breadcrumbs}}
