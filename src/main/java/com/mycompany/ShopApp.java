@@ -83,10 +83,10 @@ public class ShopApp extends Jooby
 		});
 
 
-
-		get(Constants.SHOP_PATH, req -> Results.html("shop/design")
+		get(SHOP_PATH, req -> Results.html("shop/design")
 				.put("templateName", "shop/main_new")
 				.put("menus", menuService.getAll())
+				.put("root", SHOP_PATH)
 				.put("popular", productService.getAll("{tags:'" + tagService.getPopular().id + "'}"))
 				.put("new", productService.getAll("{tags:'" + tagService.getNew().id + "'}"))
 				.put("units", unitService.getLabelsMap())
@@ -97,27 +97,31 @@ public class ShopApp extends Jooby
 				.put("analyticsKey", config.getString("google.analytics.key"))
 				.put("cart", cartService.getFetchedCart(req)));
 
-		get(Constants.SHOP_PATH + "/delivery", req -> Results.html("shop/design")
+		get(SHOP_PATH + "/delivery", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
+				.put("root", SHOP_PATH)
 				.put("cart", cartService.getFetchedCart(req))
 				.put("categories", categoryService.getAll()));
 
-		get(Constants.SHOP_PATH + "/blog", req -> Results.html("shop/design")
+		get(SHOP_PATH + "/blog", req -> Results.html("shop/design")
 				.put("cart", cartService.getFetchedCart(req))
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
+				.put("root", SHOP_PATH)
 				.put("categories", categoryService.getAll()));
 
-		get(Constants.SHOP_PATH + "/development", req -> Results.html("shop/design")
+		get(SHOP_PATH + "/development", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
+				.put("root", SHOP_PATH)
 				.put("cart", cartService.getFetchedCart(req))
 				.put("categories", categoryService.getAll()));
 
-		get(Constants.SHOP_PATH + "/contacts", req -> Results.html("shop/design")
+		get(SHOP_PATH + "/contacts", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
+				.put("root", SHOP_PATH)
 				.put("cart", cartService.getFetchedCart(req))
 				.put("categories", categoryService.getAll()));
 
@@ -126,14 +130,7 @@ public class ShopApp extends Jooby
 			if (profile == null) {
 				return Results.html("shop/mockUp").put("analyticsKey", config.getString("google.analytics.key"));
 			}
-			return Results.html("shop/shop")
-					.put("templateName", "shop/main")
-					.put("products", productService.getAll("{active: true}"))
-					.put("colors", colorService.getAll())
-					.put("sauces", sauceService.getAll())
-					.put("profile", profile)
-					.put("analyticsKey", config.getString("google.analytics.key"))
-					.put("cart", cartService.getFetchedCart(req));
+			return Results.redirect(SHOP_PATH);
 		});
 
 		get("/product/:productId", req -> {
@@ -144,12 +141,9 @@ public class ShopApp extends Jooby
 					.put("additional", productService.getAdditionalProducts())
 					.put("unit", unitService.getById(product.unitId))
 					.put("menus", menuService.getAll())
+					.put("root", SHOP_PATH)
 					.put("cart", cartService.getFetchedCart(req));
 		});
-
-		get("/contacts", req -> Results.html("shop/shop")
-				.put("templateName", "shop/contactsPage")
-				.put("cart", cartService.getFetchedCart(req)));
 
 		get("/cart", req -> Results.json(cartService.getFetchedCart(req)));
 
@@ -206,6 +200,8 @@ public class ShopApp extends Jooby
 			return Results.html("shop/checkout")
 					.put("cart", cart)
 					.put("menus", menuService.getAll())
+					.put("menus", menuService.getAll())
+					.put("root", SHOP_PATH)
 					.put("cartForm", cart)
 					.put("step", "contact")
 					.put("templateName", "shop/contacts")
@@ -223,6 +219,8 @@ public class ShopApp extends Jooby
 						.put("breadcrumbs", CONTACT_BREADCRUMB)
 						.put("step", "contact")
 						.put("menus", menuService.getAll())
+						.put("menus", menuService.getAll())
+						.put("root", SHOP_PATH)
 						.put("cartForm", cartForm)
 						.put("errorMessage", validationResult.message)
 						.put("errorField", validationResult.fieldName)
@@ -243,6 +241,8 @@ public class ShopApp extends Jooby
 			View view = Results.html("shop/checkout")
 					.put("step", "delivery")
 					.put("menus", menuService.getAll())
+					.put("menus", menuService.getAll())
+					.put("root", SHOP_PATH)
 					.put("cart", cartService.getFetchedCart(req))
 					.put("templateName", "shop/delivery")
 					.put("breadcrumbs", DELIVERY_BREADCRUMB);
