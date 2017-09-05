@@ -100,9 +100,11 @@ public class ShopApp extends Jooby
 		get(Constants.SHOP_PATH + "/delivery", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
+				.put("cart", cartService.getFetchedCart(req))
 				.put("categories", categoryService.getAll()));
 
 		get(Constants.SHOP_PATH + "/blog", req -> Results.html("shop/design")
+				.put("cart", cartService.getFetchedCart(req))
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
 				.put("categories", categoryService.getAll()));
@@ -110,11 +112,13 @@ public class ShopApp extends Jooby
 		get(Constants.SHOP_PATH + "/development", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
+				.put("cart", cartService.getFetchedCart(req))
 				.put("categories", categoryService.getAll()));
 
 		get(Constants.SHOP_PATH + "/contacts", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
+				.put("cart", cartService.getFetchedCart(req))
 				.put("categories", categoryService.getAll()));
 
 		get("/", req -> {

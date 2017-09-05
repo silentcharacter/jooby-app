@@ -132,9 +132,12 @@
 
 
     {{#each categories}}
+    <div id="{{left.cmsId}}" class="category-anchor">
+    </div>
     <div class="category content common-margin">
         <div class="main-content flex-wrap">
-            <div id="{{left.cmsId}}" class="title large-font">{{left.name}}</div>
+
+            <div class="title large-font">{{left.name}}</div>
             {{#each right}}
             <div class="product">
                 <a href="/product/{{id}}">

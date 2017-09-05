@@ -376,7 +376,11 @@ a {
     z-index: -1;
 }
 .category {
-    margin-top: 30px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.category-anchor {
+    height: 35px;
 }
 
 footer {

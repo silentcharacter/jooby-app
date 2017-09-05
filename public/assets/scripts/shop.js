@@ -162,10 +162,10 @@ SHOP = {
 
     bindScrolls: function() {
         //scroll
-        $('li a[href^="#"]').click(function() {
-            var el = $(this).attr('href');
+        $('li a[href*="#"]').click(function(e) {
+            var el = '#' + $(this).attr('href').split('#')[1];;
             $('body').animate(
-                {scrollTop: ($(el).offset().top - 50)},
+                {scrollTop: ($(el).offset().top - 20)},
                 {duration: 1500, easing: "swing"}
             );
             return false;
