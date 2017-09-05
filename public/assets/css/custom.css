@@ -481,6 +481,12 @@ footer img {
     width: 10%;
 }
 
+@media screen and (max-width: 1200px) {
+    .yellow-line {
+        top: 350px;
+    }
+}
+
 @media screen and (max-width: 768px) {
     .large-font {
         font-size: 90%;
