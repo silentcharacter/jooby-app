@@ -352,14 +352,14 @@ a {
 }
 .dao article {
     margin-left: 5%;
-    margin-right: 5%;
 }
 
 .dao p {
     font-family: 'PT Serif', serif;
     font-style: italic;
     width: 90%;
-    font-size: 26px;
+    font-size: 160%;
+    margin-right: 0;
 }
 .yellow-line-2 {
     width: 100%;
@@ -485,11 +485,32 @@ footer img {
     .yellow-line {
         top: 350px;
     }
+    .dao p {
+        font-size: 120%;
+    }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1025px) {
+    .price {
+        font-size: 80%;
+    }
+    .large-font {
+        font-size: 110%;
+    }
+    .btn-buy {
+        padding: 5px 10px 5px 10px;
+    }
+    .yellow-line {
+        top: 300px;
+    }
+}
+
+@media screen and (max-width: 900px) {
     .large-font {
         font-size: 90%;
+    }
+    .title.large-font {
+        font-size: 110%;
     }
     .common-margin {
         margin: 20px 4% 20px 4%;
@@ -498,13 +519,41 @@ footer img {
         margin: 0 4% 0 4%;
     }
     .yellow-line {
-        top: 300px;
         border: solid 20px #ffd400;
     }
     #footerImg {
         width: 30%;
     }
 }
+
+.basket-responsive,.menu-btn-responsive,.fixed-nav-bar {
+    display: none;
+}
+
+@media screen and (max-width: 850px) {
+    .basket,.contacts,.main-navigation {
+        display: none;
+    }
+    .basket-responsive {
+        display: block;
+    }
+    .menu-btn-responsive {
+        display: flex;
+        font-size: 200%;
+    }
+    .basket-responsive img {
+        float: right;
+    }
+    header.common-margin {
+        box-shadow: 0 10px 8px 0 rgba(0, 0, 0, 0.11);
+        margin: 0;
+        padding: 4%;
+    }
+    .common-margin {
+        margin: 20px 0 20px 0;
+    }
+}
+
 @media (max-width: 324px) {
     .large-font {
         font-size: 70%;

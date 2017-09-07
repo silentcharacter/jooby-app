@@ -148,6 +148,10 @@ SHOP = {
 
     bindFixedMenu: function() {
         $(window).scroll(function(){
+            if ($(window).width() < 850) {
+                elem.css('display', 'none');
+                return;
+            }
             var top = $(this).scrollTop();
             var elem = $('.fixed-nav-bar');
             var header = $('header');
