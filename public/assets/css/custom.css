@@ -665,6 +665,15 @@ footer img {
     .dao .img-wrapper {
         width: 100%;
     }
+    .dao img {
+        margin-left: 0;
+    }
+    .footer .site-map {
+        display: none;
+    }
+    .reviewer-link {
+        display: none;
+    }
 }
 
 @media (max-width: 324px) {
