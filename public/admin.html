@@ -219,6 +219,7 @@
             nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
             nga.field('url').validation({ required: true}).label("URL"),
             nga.field('index').label("Порядок"),
+            nga.field('mobile').label("Отображать на мобильной"),
         ]);
         menus.editionView().fields(menus.creationView().fields()).title('Редактирование Меню');
         admin.addEntity(menus);

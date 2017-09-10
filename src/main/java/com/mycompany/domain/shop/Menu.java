@@ -13,6 +13,7 @@ public class Menu extends Entity {
     public Integer index;
     public String name;
     public String url;
+    public boolean mobile;
 
     @Override
     public String getFullTextInner() {

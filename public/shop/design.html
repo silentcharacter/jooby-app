@@ -19,9 +19,7 @@
         </div>
     </div>
     <div class="menu-btn-responsive flex-vertical">
-        <span>
-        ☰
-        </span>
+        <img src="/assets/image/menu-btn.svg" onclick="myFunction()">
     </div>
     <a href="{{root}}" class="logo">
         <img src="/assets/image/logo.svg">
@@ -36,6 +34,20 @@
         </div>
     </div>
 </header>
+
+<!-- START MENU -->
+
+<ul class="topnav-responsive">
+    {{#each menus}}
+        {{#if mobile}}
+            <li class="menu-row">
+                <a href="{{url}}">{{name}}</a>
+                <img src="/assets/image/arrow.svg">
+            </li>
+            <div class="separator"></div>
+        {{/if}}
+    {{/each}}
+</ul>
 
 <nav role="navigation" class="main-navigation">
     <div class="line"></div>
@@ -61,6 +73,8 @@
 </nav>
 
 {{> shop/fixedMenu }}
+
+<!-- END MENU -->
 
 {{> (lookup . 'templateName') }}
 

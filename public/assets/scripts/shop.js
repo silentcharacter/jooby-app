@@ -1,4 +1,7 @@
 SHOP = {
+
+    MOBILE_MAX_RESOLUTION: 850,
+
     bindBannerClick: function() {
         //banner click
         $('.banner img').click(function() {
@@ -148,15 +151,15 @@ SHOP = {
 
     bindFixedMenu: function() {
         $(window).scroll(function(){
-            if ($(window).width() < 850) {
+            var elem = $('.fixed-nav-bar');
+            if ($(window).width() <= SHOP.MOBILE_MAX_RESOLUTION) {
                 elem.css('display', 'none');
                 return;
             }
             var top = $(this).scrollTop();
-            var elem = $('.fixed-nav-bar');
             var header = $('header');
             var nav = $('.main-navigation');
-            if (top < header.height() + nav.height()) {
+            if (top < header.outerHeight() + nav.height()) {
                 elem.css('display', 'none');
             } else {
                 elem.css('display', 'block');
@@ -166,12 +169,19 @@ SHOP = {
 
     bindScrolls: function() {
         //scroll
+        var additionalShift = 0;
+        if ($(window).width() <= SHOP.MOBILE_MAX_RESOLUTION) {
+            additionalShift = $('header').outerHeight() - 20 - 35;
+        }
         $('li a[href*="#"]').click(function(e) {
-            var el = '#' + $(this).attr('href').split('#')[1];;
+            var el = '#' + $(this).attr('href').split('#')[1];
             $('body').animate(
-                {scrollTop: ($(el).offset().top - 20)},
+                {scrollTop: ($(el).offset().top - 20 - additionalShift)},
                 {duration: 1500, easing: "swing"}
             );
+            var menu = $('.topnav-responsive');
+            if (menu.hasClass('expanded'))
+                menu.removeClass('expanded');
             return false;
         });
 
@@ -188,6 +198,12 @@ SHOP = {
             }
         });
         $(scrollDiv).hide();
+    },
+
+    adjustMainMarginMobile: function() {
+        if ($(window).width() <= SHOP.MOBILE_MAX_RESOLUTION) {
+            $('.main').css('margin-top', $('header').outerHeight());
+        }
     }
 }
 
@@ -197,6 +213,7 @@ $(document).ready(function () {
     SHOP.bindPopupEvents();
     SHOP.bindScrolls();
     SHOP.bindFixedMenu();
+    SHOP.adjustMainMarginMobile();
 });
 
 
@@ -270,7 +287,15 @@ function changeInputValue(id, delta) {
 }
 
 
+function myFunction() {
+    var menu = $('.topnav-responsive');
+    menu.css('top', $('header').outerHeight());
 
+    if (menu.hasClass('expanded'))
+        menu.removeClass('expanded');
+    else
+        menu.addClass('expanded');
+}
 
 
 function onDeliveryClick(active, nonactive) {

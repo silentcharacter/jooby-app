@@ -1,20 +1,23 @@
 <div class="main">
     <div class="banner common-margin">
         <img src="/assets/image/banner_web.jpg">
-        <div class="tagline">Красивый слоган</div>
     </div>
     <div class="yellow-line"></div>
 
     <div class="content common-margin">
         <div class="main-content flex-wrap">
-            <div class="title large-font popular">Популярные товары</div>
+            <div class="title large-font popular">Популярные товары
+                <div class="underline"></div>
+            </div>
             {{#each popular}}
             <div class="product">
                 <a href="/product/{{id}}">
                     <img src="/image/product/{{id}}" alt="{{name}}">
                 </a>
-                <a class="name" href="/product/{{id}}">{{name}}</a>
-                <article class="middle-font description">{{shortDescription}}</article>
+                <div class="product-info">
+                    <a class="name" href="/product/{{id}}">{{name}}</a>
+                    <article class="middle-font description">{{shortDescription}}</article>
+                </div>
                 <div class="price-group ">
                     <span class="price">{{price}} &#8381; за {{map units unitId}}</span>
                     <a href="#" class="btn-buy cd-popup-trigger" data-product-id="{{id}}" data-price="{{price}}"
@@ -26,14 +29,18 @@
             {{/each}}
 
             <div class="title large-font"></div>
-            <div class="title large-font">Новинки</div>
+            <div class="title large-font">Новинки
+                <div class="underline"></div>
+            </div>
             {{#each new}}
             <div class="product">
                 <a href="/product/{{id}}">
                     <img src="/image/product/{{id}}" alt="{{name}}">
                 </a>
-                <a class="name" href="/product/{{id}}">{{name}}</a>
-                <article class="middle-font description">{{shortDescription}}</article>
+                <div class="product-info">
+                    <a class="name" href="/product/{{id}}">{{name}}</a>
+                    <article class="middle-font description">{{shortDescription}}</article>
+                </div>
                 <div class="price-group ">
                     <span class="price">
                         {{price}} &#8381; за {{map units unitId}}
@@ -69,6 +76,7 @@
     </div>
 
     <div class="reviews">
+        <div class="reviews-title">Отзывы</div>
         <div class="common-margin flex-space-between">
             <article class="">
                 <img src="/assets/image/Group5.jpg" srcset="/assets/image/Group5@2x.jpg 2x, /assets/image/Group5@3x.jpg 3x"/>
@@ -137,14 +145,18 @@
     <div class="category content common-margin">
         <div class="main-content flex-wrap">
 
-            <div class="title large-font">{{left.name}}</div>
+            <div class="title large-font">{{left.name}}
+                <div class="underline"></div>
+            </div>
             {{#each right}}
             <div class="product">
                 <a href="/product/{{id}}">
                     <img src="/image/product/{{id}}" alt="{{name}}">
                 </a>
-                <a class="name" href="/product/{{id}}">{{name}}</a>
-                <article class="middle-font description">{{shortDescription}}</article>
+                <div class="product-info">
+                    <a class="name" href="/product/{{id}}">{{name}}</a>
+                    <article class="middle-font description">{{shortDescription}}</article>
+                </div>
                 <div class="price-group ">
                     <span class="price">{{price}} &#8381; за {{map units unitId}}</span>
                     <a href="#" class="btn-buy cd-popup-trigger" data-product-id="{{id}}" data-price="{{price}}"
@@ -153,6 +165,7 @@
                     </a>
                 </div>
             </div>
+
             {{/each}}
         </div>
     </div>

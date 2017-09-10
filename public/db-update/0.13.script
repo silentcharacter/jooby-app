@@ -1,0 +1,13 @@
+db.menus.update(
+    {
+        name: {$in: ['Пельмени','Котлеты','Соусы','Контакты'] }
+    },
+    {
+        $set: {
+            mobile : true
+        }
+    },
+    {
+        multi: true
+    }
+);
