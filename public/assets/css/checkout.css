@@ -5307,3 +5307,9 @@ nav .facebook {
 .cart-popup-trigger .span {
     font-size: 130%;
 }
+
+@media (max-width: 1000px) {
+    .order-summary-logo {
+        display: none;
+    }
+}
