@@ -357,3 +357,40 @@ input[type="checkbox"]:checked + label:after {
         opacity: 1;
     }
 }
+@media screen and (max-width: 850px) {
+    .cd-popup-container {
+        width: 100%;
+        min-width: 0;
+    }
+    .cd-popup-container .cd-popup-close {
+        right: -10px;
+        top: -10px;
+        transform: scale(0.5);
+    }
+    .cd-popup-close img {
+        filter: invert(50%);
+    }
+    .cd-popup .checkbox-content label {
+        display: block;
+        margin-top: 10px;
+    }
+    .box {
+        text-align: left;
+    }
+    .add-to-cart .cd-buttons button {
+        width: 100%;
+    }
+    .add-to-cart .cd-buttons {
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    .cd-popup-container .cd-buttons li {
+        display: block;
+        margin-bottom: 10px;
+        float: none;
+        width: 100%;
+    }
+    .cd-popup.cart .cd-popup-container {
+        width: 100%;
+    }
+}

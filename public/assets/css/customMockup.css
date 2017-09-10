@@ -352,14 +352,14 @@ a {
 }
 .dao article {
     margin-left: 5%;
+    margin-right: 5%;
 }
 
 .dao p {
     font-family: 'PT Serif', serif;
     font-style: italic;
     width: 90%;
-    font-size: 160%;
-    margin-right: 0;
+    font-size: 26px;
 }
 .yellow-line-2 {
     width: 100%;
@@ -481,42 +481,15 @@ footer img {
     width: 10%;
 }
 
-
-
-.basket-responsive,.menu-btn-responsive,.fixed-nav-bar,.topnav-responsive,.reviews-title,.yellow-line-2.responsive,.sign.responsive,.footer.responsive {
-    display: none;
-}
-
 @media screen and (max-width: 1200px) {
     .yellow-line {
         top: 350px;
     }
-    .dao p {
-        font-size: 120%;
-    }
 }
 
-@media screen and (max-width: 1025px) {
-    .price {
-        font-size: 80%;
-    }
-    .large-font {
-        font-size: 110%;
-    }
-    .btn-buy {
-        padding: 5px 10px 5px 10px;
-    }
-    .yellow-line {
-        top: 300px;
-    }
-}
-
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 768px) {
     .large-font {
         font-size: 90%;
-    }
-    .title.large-font {
-        font-size: 110%;
     }
     .common-margin {
         margin: 20px 4% 20px 4%;
@@ -525,222 +498,34 @@ footer img {
         margin: 0 4% 0 4%;
     }
     .yellow-line {
+        top: 300px;
         border: solid 20px #ffd400;
     }
     #footerImg {
         width: 30%;
     }
-    .recipe {
-        position: relative;
-        left: 10%;
-    }
-    .recipe img {
-        margin: 0;
-        width: 100%;
-    }
-    .recipe article {
-        margin-right: 0;
-        margin-left: 0;
-    }
-    .recipe a {
-        margin-left: 0;
-    }
 }
-
-@media screen and (max-width: 850px) {
-    .basket,.contacts,.main-navigation,.side-bar,.yellow-line {
-        display: none;
-    }
-    .basket-responsive {
-        display: block;
-    }
-    .menu-btn-responsive {
-        display: flex;
-        font-size: 200%;
-        align-items: start;
-        cursor: pointer;
-    }
-    .basket-responsive img {
-        float: right;
-    }
-    .common-margin {
-        margin: 20px 10px 20px 10px;
-    }
-    header.common-margin {
-        box-shadow: 0 10px 8px 0 rgba(0, 0, 0, 0.11);
-        margin: 0;
-        padding: 4%;
-        z-index: 999;
-        width: 100%;
-        position: fixed;
-        background: white;
-        margin: 0;
-    }
-    .banner.common-margin {
-        margin: 20px 0 20px 0;
-    }
-    .banner img {
-        border-radius: 0px 0px 0px 0px;
-    }
-    .topnav-responsive.expanded {
-        display: block;
-    }
-    .topnav-responsive {
-        overflow: hidden;
-        background-color: #f3f3f3;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        position: fixed;
-        top: 145px;
-        width: 100%;
-        z-index: 1;
-    }
-    .topnav-responsive img {
-        float: right;
-    }
-    .topnav-responsive a {
-        float: left;
-        display: block;
-        text-align: left;
-        color: #006baa;
-        text-decoration: none;
-        font-size: 17px;
-    }
-    .topnav-responsive .menu-row {
-        margin: 14px 16px;
-        clear: both;
-        padding-bottom: 15px;
-    }
-
-    .separator {
-        border: solid 1px #e5e5e5;
-    }
-    .main {
-        margin-top: 150px;
-    }
+@media (max-width: 324px) {
     .large-font {
-        font-size: 24px;
+        font-size: 70%;
     }
-    .title.large-font {
-        font-size: 24px;
+    .small-font {
+        font-size: 40%;
     }
-    .title .underline {
-      width: 100%;
-      border: solid 1px #e5e5e5;
+    #logo img {
+        width: 70%;
     }
-    .product .product-info {
-        width: 45%;
-        margin-left: 10px;
-        font-size: 14px;
+    #footerImg {
+        width: 30%;
     }
-    .product a {
-        width: 50%;
-    }
-    .product {
-        flex: 0 1 100%;
-        flex-direction: row;
-        flex-wrap: wrap;
-        margin-bottom: 30px;
-    }
-    .category .product {
-        flex: 0 1 100%;
-        margin-top: 10px;
-    }
-    .middle-font {
-        font-size: 14px;
-    }
-    .price-group a {
-        text-align: center;
-    }
-    .price-group {
-        width: 100%;
-        font-size: 18px;
-    }
-    .price {
-        font-size: 18px;
-        width: 50%;
-    }
-    .reviews {
-        padding-bottom: 50px;
-    }
-    .sign {
-        display: none;
-    }
-    .sign.responsive {
-        display: block;
-    }
-    .reviews .sign a {
-        font-weight: 400;
-    }
-    .reviews article p {
-        margin-left: 5%;
-    }
-    .reviews article {
-        width: 100%;
-        padding-top: 0;
-    }
-    .reviews article:not(:first-of-type) {
-        display: none;
-    }
-    .reviews .reviews-title {
-        display: block;
-        font-size: 24px;
-        padding: 20px 10px 0 10px;
-    }
-    .dao-wrapper {
-        margin-top: -60px;
-        z-index: 2;
-    }
-    .dao-wrapper .yellow-line-2 {
-        display: none;
-    }
-    .dao {
-        flex-direction: row;
-        flex-wrap: wrap;
-        background-color: #f3f3f3;
-        margin: 20px 0 20px 0;
-    }
-    .dao .img-wrapper {
-        width: 100%;
-    }
-    .dao article {
-        padding-top: 10px;
-    }
-    .dao article p {
-        width: 100%;
-    }
-    .dao img {
-        margin-left: 0;
-    }
-    .reviewer-link {
-        display: none;
-    }
-    .yellow-line-2.responsive {
-        display: block;
-        margin-top: -50px;
-        position: static;
-        z-index: 1;
-    }
-    .footer {
-        display: none;
-    }
-    .footer.responsive {
-        display: flex;
-    }
-    footer {
-        margin: 0;
-        padding: 0 10px 0 10px;
-    }
-    .copyright {
-        font-size: 10px;
+    footer b {
+        font-size: 60%;
     }
 }
-
-
-@media (max-width: 240px) {
-    .product .product-info  {
-        width: 40%;
+@media (max-width: 220px) {
+    .yellow-line {
+        top: 400px;
+        border: solid 20px #ffd400;
     }
 }
 

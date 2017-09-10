@@ -85,8 +85,11 @@
                     Заказывал котлеты и <a href="/product/{{fishDumplings.id}}">пельмени с рыбой</a>, привезли быстро, жена была в восторге!
                     <span>»</span>
                 </p>
-                <p class="sign">
+                <p class="sign responsive">
                     <a href="https://vk.com/evgeniy_golovin">Евгений Головин</a>
+                </p>
+                <p class="sign">
+                    Евгений Головин
                 </p>
                 <a class="reviewer-link" href="https://vk.com/evgeniy_golovin" target="_blank">https://vk.com/evgeniy_golovin</a>
             </article>
@@ -122,6 +125,8 @@
         <!--</div>-->
     </div>
 
+    <div class="yellow-line-2 responsive"></div>
+
     <div class="dao-wrapper">
         <div class="dao flex common-margin">
             <div class="img-wrapper">
@@ -138,14 +143,10 @@
         <div class="yellow-line-2"></div>
     </div>
 
-
     {{#each categories}}
-    <div id="{{left.cmsId}}" class="category-anchor">
-    </div>
     <div class="category content common-margin">
         <div class="main-content flex-wrap">
-
-            <div class="title large-font">{{left.name}}
+            <div id="{{left.cmsId}}" class="title large-font">{{left.name}}
                 <div class="underline"></div>
             </div>
             {{#each right}}
@@ -165,7 +166,6 @@
                     </a>
                 </div>
             </div>
-
             {{/each}}
         </div>
     </div>
