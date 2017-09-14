@@ -174,6 +174,8 @@ SHOP = {
         } else {
             additionalShift = $('.fixed-nav-bar').outerHeight() + 5;
         }
+        console.log(additionalShift)
+        console.log(el.offset().top)
         $('body').animate(
             {scrollTop: (el.offset().top - additionalShift)},
             {duration: 1500, easing: "swing"}
@@ -230,6 +232,9 @@ SHOP = {
                 $('.main').css('margin-top', '0');
             }
         });
+        if (window.location.hash && $(window.location.hash).length > 0) {
+            SHOP.scrollToElement($(window.location.hash));
+        }
     }
 }
 
@@ -240,9 +245,6 @@ $(document).ready(function () {
     SHOP.bindScrolls();
     SHOP.bindFixedMenu();
     SHOP.adjustMainMarginMobile();
-    if (window.location.hash && $(window.location.hash).length > 0) {
-        SHOP.scrollToElement($(window.location.hash));
-    }
 });
 
 
