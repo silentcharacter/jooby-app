@@ -361,6 +361,7 @@ input[type="checkbox"]:checked + label:after {
     .cd-popup-container {
         width: 100%;
         min-width: 0;
+        border: solid 5px #ffd400;
     }
     .cd-popup-container .cd-popup-close {
         right: -10px;

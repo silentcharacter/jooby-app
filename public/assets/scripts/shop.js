@@ -232,9 +232,9 @@ SHOP = {
                 $('.main').css('margin-top', '0');
             }
         });
-        if (window.location.hash && $(window.location.hash).length > 0) {
-            SHOP.scrollToElement($(window.location.hash));
-        }
+//        if (window.location.hash && $(window.location.hash).length > 0) {
+//            SHOP.scrollToElement($(window.location.hash));
+//        }
     }
 }
 
@@ -244,9 +244,14 @@ $(document).ready(function () {
     SHOP.bindPopupEvents();
     SHOP.bindScrolls();
     SHOP.bindFixedMenu();
-    SHOP.adjustMainMarginMobile();
 });
 
+$(window).on("load", function () {
+    SHOP.adjustMainMarginMobile();
+    if (window.location.hash && $(window.location.hash).length > 0) {
+        SHOP.scrollToElement($(window.location.hash));
+    }
+});
 
 function removeFromCart(entryNo) {
     $.ajax({
