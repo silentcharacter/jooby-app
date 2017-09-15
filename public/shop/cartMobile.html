@@ -1,0 +1,52 @@
+{{#if cart.entries.isEmpty}}
+    <script type="text/javascript">
+        window.location = '{{root}}';
+    </script>
+{{/if}}
+
+<div class="main mobile-cart">
+    <div class="content common-margin flex-wrap">
+        <form method="get" action="#">
+            <p class="large-font title">Корзина</p>
+            <div class="cart-entries">
+                {{#each cart.entries}}
+                <div class="cart-row flex-wrap" data-product-id="{{product.id}}" data-entry-no="{{entryNo}}">
+                    <div class="cart-product">
+                        <a href="/product/{{product.id}}">
+                            <img src="/image/product/{{product.id}}" alt="{{product.name}}">
+                        </a>
+                        <div>
+                            <a href="/product/{{product.id}}">{{product.name}}</a>
+                            <div class="small-font description">{{product.shortDescription}}</div>
+                        </div>
+                    </div>
+
+                    <div class="price-group">
+                        <div class="spinner">
+                            <div class="btn btn-minus noselect">–</div>
+                            <div class="quantity noselect">
+                                <span class="number">{{quantity}}</span> <span class="unit">{{product.unit.label}}</span>
+                            </div>
+                            <div class="btn btn-plus noselect">+</div>
+                        </div>
+                        <div class="popup-price">{{totalPrice}}<span class="small-font"> &#8381;</span></div>
+                        <div class="tag">
+                            <div class="circle"></div>
+                        </div>
+                        <img class="delete" src="/assets/image/delete.svg" onclick="removeFromCart({{entryNo}})">
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+
+            <div class="cd-buttons">
+                <button type="button" class="place-btn" onclick="window.location='/checkout'">Оформить заказ</button>
+                <div class="large-font">
+                    Итого:&nbsp;{{cart.totalPrice}}&nbsp;&#8381;
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

@@ -5,6 +5,8 @@
 
 <body>
 
+<input type="hidden" id="rootPath" value="{{root}}">
+
 <header class="flex common-margin">
     <div class="flex cart-popup-trigger basket">
         <div class="flex-vertical">
@@ -29,8 +31,11 @@
             <span class="yellow large-font">(4852) 33−23−01</span><br/>
             <span class="yellow small-font">С 09:00 до 22:00</span><br/>
         </div>
-        <div class="basket-responsive cart-popup-trigger">
+        <div class="basket-responsive cart-popup-trigger {{#if cart.entries.isEmpty}} disabled {{/if}}">
             <img src="/assets/image/basket-responsive.svg" class="icon-basket">
+            {{#unless  cart.entries.isEmpty}}
+                <span class="large-font cart-total">{{cart.totalPrice}}&#8381;</span>
+            {{/unless}}
         </div>
     </div>
 </header>

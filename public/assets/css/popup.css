@@ -395,3 +395,31 @@ input[type="checkbox"]:checked + label:after {
         width: 100%;
     }
 }
+
+@media (max-width: 330px) {
+    .spinner {
+        width: 130px;
+        height: 40px
+    }
+    .spinner .btn {
+        width: 40px;
+        line-height: 40px;
+    }
+    .spinner .quantity {
+        width: 50px;
+        line-height: 40px;
+    }
+    .popup-price {
+        height: 40px;
+        width: 60px;
+        min-width: 60px;
+        line-height: 40px;
+    }
+    .tag {
+        border-width: 20px 0 20px 20px;
+    }
+    .mobile-cart .delete {
+        width: 40px;
+        height: 40px;
+    }
+}

@@ -33,6 +33,9 @@ SHOP = {
 
         $('.cart-popup-trigger').on('click', function(event) {
             event.preventDefault();
+            if ($(this).hasClass('disabled')) {
+                return;
+            }
             SHOP.showCart();
         });
 
@@ -71,8 +74,13 @@ SHOP = {
     },
 
     showCart: function() {
-        if ($('#cartContentTemplateDiv').length === 0)
+        if ($(window).width() <= SHOP.MOBILE_MAX_RESOLUTION) {
+            window.location = $('#rootPath').val() + '/m-cart';
+            return;
+        }
+        if ($('#cartContentTemplateDiv').length === 0) {
             $('body').append("<div id='cartContentTemplateDiv'/>");
+        }
         $("#cartContentTemplateDiv").load("/assets/views/cart.html", function (response, status, xhr) {
             if (status == "error") {
                 console.log("Error loading cart template" + xhr.status + " " + xhr.statusText);
@@ -82,7 +90,6 @@ SHOP = {
                 type: 'GET',
                 url: '/cart',
                 success: function (result) {
-                    console.log(result)
                     if (result.totalCount === 0) {
                         return;
                     }
@@ -116,12 +123,18 @@ SHOP = {
             url: '/cart',
             success: function (result) {
                 $(".cart-total").text(result.totalPrice);
+                if (result.totalPrice > 0)
+                    $(".basket-responsive").removeClass('disabled');
+                else
+                    $(".basket-responsive").addClass('disabled');
             }
         });
     },
 
     modifyCart: function(event) {
         var row = $(this).parent().parent();
+        if (!row.hasClass('cart-row'))
+            row = row.parent();
         var productId = row.attr('data-product-id');
         var entryNo = row.attr('data-entry-no');
         var quantitySpan = $('div[data-product-id="' + productId + '"] .quantity .number');
@@ -232,9 +245,6 @@ SHOP = {
                 $('.main').css('margin-top', '0');
             }
         });
-//        if (window.location.hash && $(window.location.hash).length > 0) {
-//            SHOP.scrollToElement($(window.location.hash));
-//        }
     }
 }
 
@@ -244,6 +254,7 @@ $(document).ready(function () {
     SHOP.bindPopupEvents();
     SHOP.bindScrolls();
     SHOP.bindFixedMenu();
+    $('.mobile-cart .spinner .btn').on('click', SHOP.modifyCart);
 });
 
 $(window).on("load", function () {

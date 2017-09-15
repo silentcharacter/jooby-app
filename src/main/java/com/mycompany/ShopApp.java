@@ -125,6 +125,13 @@ public class ShopApp extends Jooby
 				.put("cart", cartService.getFetchedCart(req))
 				.put("categories", categoryService.getAll()));
 
+		get(SHOP_PATH + "/m-cart", req -> Results.html("shop/design")
+				.put("templateName", "shop/cartMobile")
+				.put("menus", menuService.getAll())
+				.put("root", SHOP_PATH)
+				.put("cart", cartService.getFetchedCart(req))
+				.put("categories", categoryService.getAll()));
+
 		get("/", req -> {
 			CommonProfile profile = AuthenticationService.getUserProfile(req);
 			if (profile == null) {
