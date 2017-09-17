@@ -17,32 +17,27 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public class CartService
-{
-	private ProductService productService;
-	private ColorService colorService;
-	private SauceService sauceService;
-	private DeliveryTypeService deliveryTypeService;
-	private PaymentTypeService paymentTypeService;
-
+public class CartService {
 	@Inject
-	public CartService(ProductService productService, ColorService colorService, SauceService sauceService,
-			DeliveryTypeService deliveryTypeService, PaymentTypeService paymentTypeService)
-	{
-		this.productService = productService;
-		this.colorService = colorService;
-		this.sauceService = sauceService;
-		this.deliveryTypeService = deliveryTypeService;
-		this.paymentTypeService = paymentTypeService;
-	}
+	private ProductService productService;
+	@Inject
+	private ColorService colorService;
+	@Inject
+	private SauceService sauceService;
+	@Inject
+	private DeliveryTypeService deliveryTypeService;
+	@Inject
+	private PaymentTypeService paymentTypeService;
+	@Inject
+	private OrderService orderService;
+	@Inject
+	private CategoryPromotionService categoryPromotionService;
 
-	public Cart getSessionCart(Request req)
-	{
+	public Cart getSessionCart(Request req) {
 		Optional<String> cartJson = req.session().get("cart").toOptional();
 		ObjectMapper mapper = new ObjectMapper();
 		Cart cart;
-		try
-		{
+		try {
 			if (cartJson.isPresent()) {
 				cart = mapper.readValue(cartJson.get(), Cart.class);
 			} else {
@@ -58,19 +53,21 @@ public class CartService
 		return cart;
 	}
 
-	public Map<String, Object> getFetchedCart(Request req)
-	{
-		return req.require(OrderService.class).getOrderMap(getSessionCart(req));
+	public Map<String, Object> getFetchedCart(Request req) {
+		Map<String, Object> cart = orderService.getOrderMap(getSessionCart(req));
+		CategoryPromotion applied = categoryPromotionService.findApplied(cart);
+		if (applied != null) {
+			cart.put("promo", applied);
+		}
+		return cart;
 	}
 
-	private String getDumpCartJson() throws IOException
-	{
+	private String getDumpCartJson() throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(System.getProperty("user.dir") + "/public/shop/cart.json"));
 		return new String(encoded, "utf-8");
 	}
 
-	public Cart getNewCart()
-	{
+	public Cart getNewCart() {
 		Cart cart = new Cart();
 		DeliveryType deliveryType = deliveryTypeService.getBy("name", DeliveryType.FREE);
 		cart.deliveryId = deliveryType.id;
@@ -79,8 +76,7 @@ public class CartService
 		return cart;
 	}
 
-	private void saveSessionCart(Request req, Cart cart)
-	{
+	private void saveSessionCart(Request req, Cart cart) {
 		String cartJsonString = "";
 		try
 		{

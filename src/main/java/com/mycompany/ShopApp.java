@@ -43,6 +43,8 @@ public class ShopApp extends Jooby
 	private static GoogleMapsService googleMapsService;
 	private static SmsService smsService;
 	private static ProductService productService;
+	private static MediaService mediaService;
+	private static CategoryPromotionService categoryPromotionService;
 	private static ColorService colorService;
 	private static SauceService sauceService;
 	private static MenuService menuService;
@@ -66,6 +68,8 @@ public class ShopApp extends Jooby
 		use(new Tags());
 		use(new Units());
 		use(new Menus());
+		use(new Medias());
+		use(new CategoryPromotions());
 
 		onStart(registry -> {
 			cartService = registry.require(CartService.class);
@@ -73,6 +77,8 @@ public class ShopApp extends Jooby
 			googleMapsService = registry.require(GoogleMapsService.class);
 			smsService = registry.require(SmsService.class);
 			productService = registry.require(ProductService.class);
+			mediaService = registry.require(MediaService.class);
+			categoryPromotionService = registry.require(CategoryPromotionService.class);
 			colorService = registry.require(ColorService.class);
 			sauceService = registry.require(SauceService.class);
 			config = registry.require(Config.class);
@@ -87,6 +93,7 @@ public class ShopApp extends Jooby
 				.put("templateName", "shop/main_new")
 				.put("menus", menuService.getAll())
 				.put("root", SHOP_PATH)
+				.put("categoryPromotion", categoryPromotionService.getBy("active", true))
 				.put("popular", productService.getAll("{tags:'" + tagService.getPopular().id + "'}"))
 				.put("new", productService.getAll("{tags:'" + tagService.getNew().id + "'}"))
 				.put("units", unitService.getLabelsMap())
@@ -154,8 +161,7 @@ public class ShopApp extends Jooby
 
 		get("/cart", req -> Results.json(cartService.getFetchedCart(req)));
 
-		post("/cart", req ->
-		{
+		post("/cart", req -> {
 			Product product = productService.getById(req.param("productId").value());
 			Color color = req.param("colorId").isSet() ? colorService.getById(req.param("colorId").value()) : null;
 			List<Product> additions = new ArrayList<>();
@@ -169,8 +175,7 @@ public class ShopApp extends Jooby
 			return cartService.addToCart(req, product, req.param("quantity").intValue(), color, additions);
 		});
 
-		put("/cart", req ->
-		{
+		put("/cart", req -> {
 			cartService.updateCartRow(req, req.param("entryNo").intValue(), req.param("quantity").intValue());
 			return cartService.getFetchedCart(req);
 		});
@@ -372,7 +377,7 @@ public class ShopApp extends Jooby
 			sse.keepAlive(15, TimeUnit.SECONDS);
 		});
 
-		post("/shop/image/:productId", req -> {
+		post("/image/:productId", req -> {
 			try (Upload upload = req.file("file")) {
 				FileInputStream inputStream = new FileInputStream(upload.file());
 				byte b[] = new byte[inputStream.available()];
@@ -388,6 +393,28 @@ public class ShopApp extends Jooby
 
 		get("/image/product/:productId", (req, rsp) -> {
 			Binary image = productService.getProductImage(req.param("productId").value());
+			if (image != null) {
+				rsp.type("image/jpeg").send(image.getData());
+			}
+			rsp.send(Results.ok());
+		});
+
+		post("/media/:mediaId", req -> {
+			try (Upload upload = req.file("file")) {
+				FileInputStream inputStream = new FileInputStream(upload.file());
+				byte b[] = new byte[inputStream.available()];
+				inputStream.read(b);
+				Media media = mediaService.getById(req.param("mediaId").value());
+				media.image = new Binary(b);
+				mediaService.update(media);
+			} catch (IOException e) {
+				logger.error("Error uploading image", e);
+			}
+			return Results.ok();
+		});
+
+		get("/media/image/:mediaCode", (req, rsp) -> {
+			Binary image = mediaService.getImage(req.param("mediaCode").value());
 			if (image != null) {
 				rsp.type("image/jpeg").send(image.getData());
 			}

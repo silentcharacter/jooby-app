@@ -39,6 +39,12 @@
                 {{/each}}
             </div>
 
+            {{#if cart.promo}}
+                <div class="promo">
+                    {{cart.promo.message}}
+                </div>
+            {{/if}}
+
             <div class="cd-buttons">
                 <button type="button" class="place-btn" onclick="window.location='/checkout'">Оформить заказ</button>
                 <div class="large-font">

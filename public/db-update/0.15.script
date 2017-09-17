@@ -1,0 +1,19 @@
+db.categoryPromotions.insertMany([
+        {
+            "name" : "акция на котлеты",
+            "message" : "Вы получили скидку на котлеты 10%",
+            "active" : true,
+            "categoryId" : "5946ef38dbb9f338eb13909b",
+            "categoryCmsId" : "kotlety",
+            "discountPercent" : 10,
+        }
+    ]
+);
+
+db.categoryPromotions.find({name:'акция на котлеты'}).forEach(function (obj) {
+    var category = db.categories.findOne({ name:'Котлеты' });
+    if (category != null) {
+        obj.categoryId = category._id;
+        db.categoryPromotions.save(obj);
+    }
+});

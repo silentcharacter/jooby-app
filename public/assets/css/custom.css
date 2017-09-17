@@ -229,6 +229,12 @@ nav .facebook {
 .category .product:last-of-type {
     margin-right: 0;
 }
+.category .title img {
+    width: 3%;
+    height: 100%;
+    vertical-align: middle;
+}
+
 .product article{
     margin-top: 5px;
 }

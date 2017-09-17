@@ -87,6 +87,10 @@ public abstract class AbstractService<T extends Entity> {
         return getCollection().findOne(String.format("{%s: '%s'}", field, value)).as(typeParameterClass);
     }
 
+    public T getBy(String field, Boolean value) {
+        return getCollection().findOne(String.format("{%s: %s}", field, value)).as(typeParameterClass);
+    }
+
     public T insert(T obj) {
         onSave(obj);
         getCollection().insert(obj);

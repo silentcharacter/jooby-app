@@ -4,6 +4,7 @@ r.file=n[i],r.url=r.url+t.$parent.entry.values.id,
 e.upload(r).progress(function(e){t.files[e.config.file.name]={name:e.config.file.name,progress:Math.min(100,parseInt(100*e.loaded/e.total))}})
 .success(function(e,n,r,i){
 var d = new Date(); $('#prodImg').attr('src', '/image/product/' + t.$parent.entry.values.id + '?'+d.getTime());
+$('#mediaImg').attr('src', '/media/image/' + t.$parent.entry.values.id + '?'+d.getTime());
 if(t.files[i.file.name]={name:t.apifilename?e[t.apifilename]:i.file.name,progress:0},t.apifilename){var a=Object.keys(t.files).map(function(e){return t.files[e].name});t.value=a.join(",")}else t.value=Object.keys(t.files).join(",")}).error(function(e,n,r,i){delete t.files[i.file.name],t.value=Object.keys(t.files).join(",")})}},
 
 

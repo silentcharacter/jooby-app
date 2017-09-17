@@ -107,15 +107,17 @@ public class MigrationService
 					logger.info(line);
 				}
 				in.close();
+
+				log = new ScriptLog();
+				log.version = scriptName;
+				log.date = new Date();
+				scriptlogs.insert(log);
 			}
 			catch (Exception e)
 			{
 				logger.error("Error running update scripts", e);
 			}
-			log = new ScriptLog();
-			log.version = scriptName;
-			log.date = new Date();
-			scriptlogs.insert(log);
+
 		}
 	}
 }

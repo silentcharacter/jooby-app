@@ -1,6 +1,6 @@
 <div class="main">
     <div class="banner common-margin">
-        <img src="/assets/image/banner_web.jpg">
+        <img src="/media/image/banner" data-promo="{{categoryPromotion.categoryCmsId}}">
     </div>
     <div class="yellow-line"></div>
 
@@ -147,6 +147,9 @@
     <div class="category content common-margin">
         <div class="main-content flex-wrap">
             <div id="{{left.cmsId}}" class="title large-font">{{left.name}}
+                {{#equal categoryPromotion.categoryCmsId left.cmsId}}
+                    <span><img src="/assets/image/percentage-tarrifs.svg"></span>
+                {{/equal}}
                 <div class="underline"></div>
             </div>
             {{#each right}}

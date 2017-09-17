@@ -341,11 +341,23 @@ input[type="checkbox"]:checked + label:after {
     margin: 0;
 }
 
+.promo {
+    color: red;
+}
+.cd-popup-container .promo {
+    text-align: left;
+    margin-left: 7%;
+    padding-left: 15px;
+}
+
 @media screen and (max-width: 1200px) {
     .cd-popup-container .large-font {
         font-size: 130%;
     }
     .cart-product {
+        margin-left: 4%;
+    }
+    .cd-popup-container .promo {
         margin-left: 4%;
     }
     .total>div:first-of-type {
