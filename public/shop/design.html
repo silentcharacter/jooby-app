@@ -33,9 +33,7 @@
         </div>
         <div class="basket-responsive cart-popup-trigger {{#if cart.entries.isEmpty}} disabled {{/if}}">
             <img src="/assets/image/basket-responsive.svg" class="icon-basket">
-            {{#unless  cart.entries.isEmpty}}
-                <span class="large-font cart-total">{{cart.totalPrice}}&#8381;</span>
-            {{/unless}}
+            <span class="large-font cart-total" {{#if cart.entries.isEmpty}}style="display:none"{{/if}}>{{cart.totalPrice}}&#8381;</span>
         </div>
     </div>
 </header>

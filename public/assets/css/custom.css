@@ -708,6 +708,9 @@ footer img {
         flex: 0 1 100%;
         margin-top: 10px;
     }
+    .category .title img {
+        width: 10%;
+    }
     .middle-font {
         font-size: 14px;
     }
