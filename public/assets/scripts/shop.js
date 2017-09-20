@@ -203,7 +203,7 @@ SHOP = {
     },
 
     bindScrolls: function() {
-        $('a[href*="#"]').click(function(e) {
+        $('a[href*="#"]:not(.backtotop)').click(function(e) {
             var el = $('#' + $(this).attr('href').split('#')[1]);
             SHOP.scrollToElement(el);
             return false;
