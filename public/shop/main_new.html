@@ -11,11 +11,11 @@
             </div>
             {{#each popular}}
             <div class="product">
-                <a href="/product/{{id}}">
+                <a href="/product/{{code}}">
                     <img src="/image/product/{{id}}" alt="{{name}}">
                 </a>
                 <div class="product-info">
-                    <a class="name" href="/product/{{id}}">{{name}}</a>
+                    <a class="name" href="/product/{{code}}">{{name}}</a>
                     <article class="middle-font description">{{shortDescription}}</article>
                 </div>
                 <div class="price-group ">
@@ -34,11 +34,11 @@
             </div>
             {{#each new}}
             <div class="product">
-                <a href="/product/{{id}}">
+                <a href="/product/{{code}}">
                     <img src="/image/product/{{id}}" alt="{{name}}">
                 </a>
                 <div class="product-info">
-                    <a class="name" href="/product/{{id}}">{{name}}</a>
+                    <a class="name" href="/product/{{code}}">{{name}}</a>
                     <article class="middle-font description">{{shortDescription}}</article>
                 </div>
                 <div class="price-group ">
@@ -78,47 +78,64 @@
     <div class="reviews">
         <div class="reviews-title">Отзывы</div>
         <div class="common-margin flex-space-between">
-            <article class="">
-                <img src="/assets/image/Group5.jpg" srcset="/assets/image/Group5@2x.jpg 2x, /assets/image/Group5@3x.jpg 3x"/>
-                <p>
-                    <span>«</span>
-                    Заказывал котлеты и <a href="/product/{{fishDumplings.id}}">пельмени с рыбой</a>, привезли быстро, жена была в восторге!
-                    <span>»</span>
-                </p>
-                <p class="sign responsive">
-                    <a href="https://vk.com/evgeniy_golovin">Евгений Головин</a>
-                </p>
-                <p class="sign">
-                    Евгений Головин
-                </p>
-                <a class="reviewer-link" href="https://vk.com/evgeniy_golovin" target="_blank">https://vk.com/evgeniy_golovin</a>
-            </article>
-            <article >
-                <img src="/assets/image/Group6.jpg" srcset="/assets/image/Group6@2x.jpg 2x, /assets/image/Group6@3x.jpg 3x"/>
-                <p>
-                    <span>«</span>
-                    Часто заказываю <a href="/product/{{humus.id}}">хумус</a>, очень нравится мне и моим друзьям. В последнее время очень полюбила вареники с  фермерским творогом, люблю начинать с них день!
-                    <span>»</span>
-                </p>
-                <p class="sign">
-                    Анна Княжевская
-                </p>
-                <a href="https://vk.com/id3229572" target="_blank">https://vk.com/id3229572</a>
+            {{#each reviews}}
+                <article>
+                    <img src="/review/image/{{id}}"/>
+                    <div class="review-wrapper">
+                        <span>«</span>
+                        <div>{{text}}</div>
+                        <span>»</span>
+                    </div>
+                    <p class="sign responsive">
+                        <a href="{{link}}">{{name}}</a>
+                    </p>
+                    <p class="sign">
+                        {{name}}
+                    </p>
+                    <a class="reviewer-link" href="{{link}}" target="_blank">{{link}}</a>
+                </article>
+            {{/each}}
+            <!--<article>-->
+                <!--<img src="/assets/image/Group5.jpg" srcset="/assets/image/Group5@2x.jpg 2x, /assets/image/Group5@3x.jpg 3x"/>-->
+                <!--<p>-->
+                    <!--<span>«</span>-->
+                    <!--Заказывал котлеты и <a href="/product/pelmeni-s-ryboi">пельмени с рыбой</a>, привезли быстро, жена была в восторге!-->
+                    <!--<span>»</span>-->
+                <!--</p>-->
+                <!--<p class="sign responsive">-->
+                    <!--<a href="https://vk.com/evgeniy_golovin">Евгений Головин</a>-->
+                <!--</p>-->
+                <!--<p class="sign">-->
+                    <!--Евгений Головин-->
+                <!--</p>-->
+                <!--<a class="reviewer-link" href="https://vk.com/evgeniy_golovin" target="_blank">https://vk.com/evgeniy_golovin</a>-->
+            <!--</article>-->
+            <!--<article >-->
+                <!--<img src="/assets/image/Group6.jpg" srcset="/assets/image/Group6@2x.jpg 2x, /assets/image/Group6@3x.jpg 3x"/>-->
+                <!--<p>-->
+                    <!--<span>«</span>-->
+                    <!--Часто заказываю <a href="/product/humus">хумус</a>, очень нравится мне и моим друзьям. В последнее время очень полюбила вареники с  фермерским творогом, люблю начинать с них день!-->
+                    <!--<span>»</span>-->
+                <!--</p>-->
+                <!--<p class="sign">-->
+                    <!--Анна Княжевская-->
+                <!--</p>-->
+                <!--<a href="https://vk.com/id3229572" target="_blank">https://vk.com/id3229572</a>-->
 
-            </article>
-            <article >
-                <img src="/assets/image/Group7.jpg" srcset="/assets/image/Group7@2x.jpg 2x, /assets/image/Group7@3x.jpg 3x"/>
-                <p>
-                    <span>«</span>
-                    Заказала котлеты из индейки и пельмени с курицей, все очень понравилось.
-                    <span>»</span>
-                </p>
-                <p class="sign">
-                    Аня Жуковская
-                </p>
-                <a href="https://vk.com/ann_beetle" target="_blank">https://vk.com/ann_beetle</a>
+            <!--</article>-->
+            <!--<article >-->
+                <!--<img src="/assets/image/Group7.jpg" srcset="/assets/image/Group7@2x.jpg 2x, /assets/image/Group7@3x.jpg 3x"/>-->
+                <!--<p>-->
+                    <!--<span>«</span>-->
+                    <!--Заказала котлеты из индейки и пельмени с курицей, все очень понравилось.-->
+                    <!--<span>»</span>-->
+                <!--</p>-->
+                <!--<p class="sign">-->
+                    <!--Аня Жуковская-->
+                <!--</p>-->
+                <!--<a href="https://vk.com/ann_beetle" target="_blank">https://vk.com/ann_beetle</a>-->
 
-            </article>
+            <!--</article>-->
         </div>
         <!--<div class="btn-wrapper">-->
             <!--<a href="#" class="btn">Я тоже хочу сказать</a>-->
@@ -154,11 +171,11 @@
             </div>
             {{#each right}}
             <div class="product">
-                <a href="/product/{{id}}">
+                <a href="/product/{{code}}">
                     <img src="/image/product/{{id}}" alt="{{name}}">
                 </a>
                 <div class="product-info">
-                    <a class="name" href="/product/{{id}}">{{name}}</a>
+                    <a class="name" href="/product/{{code}}">{{name}}</a>
                     <article class="middle-font description">{{shortDescription}}</article>
                 </div>
                 <div class="price-group ">

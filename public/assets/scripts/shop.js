@@ -163,6 +163,9 @@ SHOP = {
         $(".description" ).each(function( index ) {
             $(this).html($(this).text());
         });
+        $(".review-wrapper div" ).each(function( index ) {
+            $(this).html($(this).text());
+        });
     },
 
     bindFixedMenu: function() {
@@ -200,7 +203,7 @@ SHOP = {
     },
 
     bindScrolls: function() {
-        $('.menu-row a[href*="#"]').click(function(e) {
+        $('a[href*="#"]').click(function(e) {
             var el = $('#' + $(this).attr('href').split('#')[1]);
             SHOP.scrollToElement(el);
             return false;

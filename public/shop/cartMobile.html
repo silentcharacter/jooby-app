@@ -12,11 +12,11 @@
                 {{#each cart.entries}}
                 <div class="cart-row flex-wrap" data-product-id="{{product.id}}" data-entry-no="{{entryNo}}">
                     <div class="cart-product">
-                        <a href="/product/{{product.id}}">
+                        <a href="/product/{{product.code}}">
                             <img src="/image/product/{{product.id}}" alt="{{product.name}}">
                         </a>
                         <div>
-                            <a href="/product/{{product.id}}">{{product.name}}</a>
+                            <a href="/product/{{product.code}}">{{product.name}}</a>
                             <div class="small-font description">{{product.shortDescription}}</div>
                         </div>
                     </div>

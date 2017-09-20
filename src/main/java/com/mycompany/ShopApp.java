@@ -5,6 +5,7 @@ import com.mycompany.constant.Constants;
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.AuthenticationService;
+import com.mycompany.service.ReviewService;
 import com.mycompany.service.SmsService;
 import com.mycompany.service.shop.*;
 import com.typesafe.config.Config;
@@ -43,6 +44,7 @@ public class ShopApp extends Jooby
 	private static GoogleMapsService googleMapsService;
 	private static SmsService smsService;
 	private static ProductService productService;
+	private static ReviewService reviewService;
 	private static MediaService mediaService;
 	private static CategoryPromotionService categoryPromotionService;
 	private static ColorService colorService;
@@ -70,6 +72,7 @@ public class ShopApp extends Jooby
 		use(new Menus());
 		use(new Medias());
 		use(new CategoryPromotions());
+		use(new Reviews());
 
 		onStart(registry -> {
 			cartService = registry.require(CartService.class);
@@ -86,6 +89,7 @@ public class ShopApp extends Jooby
 			categoryService = registry.require(CategoryService.class);
 			tagService = registry.require(TagService.class);
 			unitService = registry.require(UnitService.class);
+			reviewService = registry.require(ReviewService.class);
 		});
 
 
@@ -97,8 +101,7 @@ public class ShopApp extends Jooby
 				.put("popular", productService.getAll("{tags:'" + tagService.getPopular().id + "'}"))
 				.put("new", productService.getAll("{tags:'" + tagService.getNew().id + "'}"))
 				.put("units", unitService.getLabelsMap())
-				.put("fishDumplings", productService.getBy("name", "Пельмени с рыбой"))
-				.put("humus", productService.getBy("name", "Хумус"))
+				.put("reviews", reviewService.getAll("{productId: null}"))
 				.put("additional", productService.getAdditionalProducts())
 				.put("categories", categoryService.getAllWithProducts())
 				.put("analyticsKey", config.getString("google.analytics.key"))
@@ -147,8 +150,8 @@ public class ShopApp extends Jooby
 			return Results.redirect(SHOP_PATH);
 		});
 
-		get("/product/:productId", req -> {
-			Product product = productService.getById(req.param("productId").value());
+		get("/product/:productCode", req -> {
+			Product product = productService.getBy("code", req.param("productCode").value());
 			return Results.html("shop/design")
 					.put("templateName", "shop/product")
 					.put("product", product)
@@ -393,6 +396,28 @@ public class ShopApp extends Jooby
 
 		get("/image/product/:productId", (req, rsp) -> {
 			Binary image = productService.getProductImage(req.param("productId").value());
+			if (image != null) {
+				rsp.type("image/jpeg").send(image.getData());
+			}
+			rsp.send(Results.ok());
+		});
+
+		post("/review/image/:reviewId", req -> {
+			try (Upload upload = req.file("file")) {
+				FileInputStream inputStream = new FileInputStream(upload.file());
+				byte b[] = new byte[inputStream.available()];
+				inputStream.read(b);
+				Review review = reviewService.getById(req.param("reviewId").value());
+				review.image = new Binary(b);
+				reviewService.update(review);
+			} catch (IOException e) {
+				logger.error("Error uploading image", e);
+			}
+			return Results.ok();
+		});
+
+		get("/review/image/:reviewId", (req, rsp) -> {
+			Binary image = reviewService.getReviewImage(req.param("reviewId").value());
 			if (image != null) {
 				rsp.type("image/jpeg").send(image.getData());
 			}

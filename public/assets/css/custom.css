@@ -301,18 +301,21 @@ a {
     font-weight: 600;
     margin-bottom: 0;
 }
-.reviews p {
+.reviews .review-wrapper {
     position: relative;
 }
-.reviews p span {
+.reviews .review-wrapper span {
     font-size: 30px;
 }
-.reviews p span:first-of-type {
+.reviews .review-wrapper span:first-of-type {
     position: absolute;
     left: -20px;
     top: -2px;
 }
-.reviews p span:last-of-type  {
+.review-wrapper div {
+    display: inline;
+}
+.reviews .review-wrapper span:last-of-type  {
     line-height: 30%;
     position: relative;
     top: 3px;
@@ -733,6 +736,7 @@ footer img {
     }
     .sign.responsive {
         display: block;
+        margin-left: 0;
     }
     .reviews .sign a {
         font-weight: 400;

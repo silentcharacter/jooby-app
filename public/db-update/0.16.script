@@ -1,0 +1,9 @@
+db.products.createIndex( { "code": 1 }, { unique: true } );
+
+var i = 1;
+db.products.find({}).forEach(function (obj) {
+    var s = i++ + "";
+    while (s.length < 3) s = "0" + s;
+    obj.code = s;
+    db.products.save(obj);
+});

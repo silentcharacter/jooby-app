@@ -300,6 +300,7 @@
 
         var products = nga.entity('products');
         products.listView().title('Продукты').fields([
+            nga.field('code').isDetailLink(true).label("Код"),
             nga.field('name').isDetailLink(true).label("Название"),
             nga.field('price', 'number').label("Цена"),
             nga.field('unitId', 'reference').isDetailLink(true)
@@ -337,6 +338,7 @@
             nga.field('active', 'boolean').label("Активность").pinned(true).attributes({ placeholder: 'Все' }),
         ]);
         products.creationView().title('Создание продукта').fields([
+            nga.field('code').validation({ required: true, maxlength: 10 }).label("Код"),
             nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
             nga.field('description', 'wysiwyg').validation({ required: true}).label("Описание"),
             nga.field('shortDescription').validation({ required: true}).label("Короткое описание"),
@@ -364,6 +366,35 @@
             nga.field('image', 'file').label('Обновить').uploadInformation({'url': '/image/'})
         ).title('Редактирование продукта');
         admin.addEntity(products);
+
+        var reviews = nga.entity('reviews');
+        reviews.listView().title('Отзывы').fields([
+            nga.field('name').isDetailLink(true).label("Имя"),
+            nga.field('link').label("Ссылка"),
+            nga.field('productId', 'reference').isDetailLink(true)
+                    .label('Товар')
+                    .targetEntity(products)
+                    .targetField(nga.field('name'))
+                    .singleApiCall(ids => ({'id': ids })),
+            nga.field('approved', 'boolean').label("Обработан"),
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Поиск' }),
+        ]);
+        reviews.creationView().title('Создание Отзыва').fields([
+            nga.field('name').label("Имя"),
+            nga.field('link').label("Ссылка"),
+            nga.field('text', 'wysiwyg').label("Текст"),
+            nga.field('approved', 'boolean').label("Обработан"),
+            nga.field('productId', 'reference').label("Товар")
+                    .targetEntity(products)
+                    .targetField(nga.field('name'))
+                    .singleApiCall(ids => ({'id': ids }))
+        ]);
+        reviews.editionView().fields(reviews.creationView().fields(),
+            nga.field('preview', 'template').label('Картинка').template((entry) => `<img id="reviewImg" src="/review/image/${entry.values.id}" />`),
+            nga.field('image', 'file').label('Обновить').uploadInformation({'url': '/review/image/'})
+        ).title('Редактирование Отзыва');
+        admin.addEntity(reviews);
 
         var medias = nga.entity('medias');
         medias.listView().title('Медиа').fields([
@@ -602,6 +633,7 @@
                 )
                 .addChild(nga.menu().title('Маркетинг').icon('<span class="glyphicon glyphicon-cog"></span>')
                     .addChild(nga.menu(customers).icon('<span class="glyphicon glyphicon-king"></span>').title('Покупатели'))
+                    .addChild(nga.menu(reviews).icon('<span class="glyphicon glyphicon-thumbs-up"></span>').title('Отзывы'))
                     .addChild(nga.menu(categoryPromotions).icon('<span class="glyphicon glyphicon-asterisk"></span>').title('Акции по категориям'))
                 )
                 .addChild(nga.menu().title('Отчеты').icon('<span class="glyphicon glyphicon-signal"></span>').link('/stats').active(function(path) {
