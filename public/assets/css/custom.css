@@ -142,10 +142,10 @@ nav .facebook {
     right: 0;
     top: 405px;
     border: solid 40px #ffd400;
-    -o-transform: skewY(-10deg);
-    -ms-transform: skewY(-10deg);
-    -moz-transform: skewY(-10deg);
-    -webkit-transform: skewY(-10deg);
+    -o-transform: skewY(-5deg);
+    -ms-transform: skewY(-5deg);
+    -moz-transform: skewY(-5deg);
+    -webkit-transform: skewY(-5deg);
     transform: skewY(-5deg);
     z-index: -1;
 }
@@ -543,6 +543,107 @@ footer img {
     text-align: center;
 }
 
+.cms-page .content  {
+    flex-wrap: wrap;
+}
+.cms-page .side-bar {
+    position: relative;
+    min-height: 400px;
+    min-width: 250px;
+}
+.cms-page .side-bar.odd{
+    margin-right: 60px;
+}
+.cms-page .title {
+    margin: 30px 8% 30px 8%;
+    width: 80%;
+}
+.cms-page .cms-content {
+    margin-right: 40px;
+    display: none;
+}
+.cms-page b {
+    font-weight: 500;
+}
+.yellow-circle-1 {
+	border-radius: 50%;
+	width: 67px;
+	height: 67px;
+	background-color: #ffd400;
+	position: absolute;
+	top: 20px;
+	right: 0px;
+}
+.yellow-circle-2 {
+	border-radius: 50%;
+	width: 132px;
+	height: 132px;
+	background-color: #ffd400;
+	position: absolute;
+	top: 110px;
+    right: 70px;
+}
+.yellow-circle-3 {
+	border-radius: 50%;
+	width: 67px;
+	height: 67px;
+	background-color: #ffd400;
+	position: absolute;
+	top: 300px;
+    right: 70px;
+}
+.yellow-circle-4 {
+	border-radius: 50%;
+	width: 132px;
+    height: 132px;
+	background-color: #ffd400;
+	position: absolute;
+	top: 80px;
+	left: 0px;
+}
+.yellow-circle-5 {
+	border-radius: 50%;
+	width: 67px;
+    height: 67px;
+	background-color: #ffd400;
+	position: absolute;
+	top: 170px;
+    left: 180px;
+}
+.yellow-circle-6 {
+	border-radius: 50%;
+	width: 67px;
+	height: 67px;
+	background-color: #ffd400;
+	position: absolute;
+	top: 330px;
+    left: 120px;
+}
+.yellow-line-cms-wrapper {
+    position: relative;
+    width: 100%;
+    margin: 50px 0 150px 0;
+}
+.yellow-line-cms {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0px;
+    border: solid 40px #ffd400;
+    -o-transform: rotate(-5deg);
+    -ms-transform: rotate(-5deg);
+    -moz-transform: rotate(-5deg);
+    -webkit-transform: rotate(-5deg);
+    transform: rotate(-5deg);
+    z-index: -1;
+}
+.odd .yellow-line-cms {
+     -o-transform: rotate(5deg);
+    -ms-transform: rotate(5deg);
+    -moz-transform: rotate(5deg);
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg);
+}
 
 .basket-responsive,.menu-btn-responsive,.fixed-nav-bar,.topnav-responsive,.reviews-title,.yellow-line-2.responsive,.sign.responsive,.footer.responsive {
     display: none;

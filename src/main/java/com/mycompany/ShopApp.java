@@ -53,6 +53,7 @@ public class ShopApp extends Jooby
 	private static CategoryService categoryService;
 	private static TagService tagService;
 	private static UnitService unitService;
+	private static CmsPageService cmsPageService;
 	private static Config config;
 	private static ObjectMapper mapper = new ObjectMapper();
 
@@ -73,6 +74,7 @@ public class ShopApp extends Jooby
 		use(new Medias());
 		use(new CategoryPromotions());
 		use(new Reviews());
+		use(new CmsPages());
 
 		onStart(registry -> {
 			cartService = registry.require(CartService.class);
@@ -84,6 +86,7 @@ public class ShopApp extends Jooby
 			categoryPromotionService = registry.require(CategoryPromotionService.class);
 			colorService = registry.require(ColorService.class);
 			sauceService = registry.require(SauceService.class);
+			cmsPageService = registry.require(CmsPageService.class);
 			config = registry.require(Config.class);
 			menuService = registry.require(MenuService.class);
 			categoryService = registry.require(CategoryService.class);
@@ -92,11 +95,10 @@ public class ShopApp extends Jooby
 			reviewService = registry.require(ReviewService.class);
 		});
 
-
 		get(SHOP_PATH, req -> Results.html("shop/design")
 				.put("templateName", "shop/main_new")
 				.put("menus", menuService.getAll())
-				.put("root", SHOP_PATH)
+				.put("rootPath", SHOP_PATH)
 				.put("categoryPromotion", categoryPromotionService.getBy("active", true))
 				.put("popular", productService.getAll("{tags:'" + tagService.getPopular().id + "'}"))
 				.put("new", productService.getAll("{tags:'" + tagService.getNew().id + "'}"))
@@ -107,38 +109,17 @@ public class ShopApp extends Jooby
 				.put("analyticsKey", config.getString("google.analytics.key"))
 				.put("cart", cartService.getFetchedCart(req)));
 
-		get(SHOP_PATH + "/delivery", req -> Results.html("shop/design")
+		get(SHOP_PATH + "/cms/:pageUrl", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
-				.put("root", SHOP_PATH)
-				.put("cart", cartService.getFetchedCart(req))
-				.put("categories", categoryService.getAll()));
-
-		get(SHOP_PATH + "/blog", req -> Results.html("shop/design")
-				.put("cart", cartService.getFetchedCart(req))
-				.put("templateName", "shop/empty")
-				.put("menus", menuService.getAll())
-				.put("root", SHOP_PATH)
-				.put("categories", categoryService.getAll()));
-
-		get(SHOP_PATH + "/development", req -> Results.html("shop/design")
-				.put("templateName", "shop/empty")
-				.put("menus", menuService.getAll())
-				.put("root", SHOP_PATH)
-				.put("cart", cartService.getFetchedCart(req))
-				.put("categories", categoryService.getAll()));
-
-		get(SHOP_PATH + "/contacts", req -> Results.html("shop/design")
-				.put("templateName", "shop/empty")
-				.put("menus", menuService.getAll())
-				.put("root", SHOP_PATH)
-				.put("cart", cartService.getFetchedCart(req))
-				.put("categories", categoryService.getAll()));
+				.put("cmsPage", cmsPageService.getBy("url", "/"  + req.param("pageUrl").value()))
+				.put("rootPath", SHOP_PATH)
+				.put("cart", cartService.getFetchedCart(req)));
 
 		get(SHOP_PATH + "/m-cart", req -> Results.html("shop/design")
 				.put("templateName", "shop/cartMobile")
 				.put("menus", menuService.getAll())
-				.put("root", SHOP_PATH)
+				.put("rootPath", SHOP_PATH)
 				.put("cart", cartService.getFetchedCart(req))
 				.put("categories", categoryService.getAll()));
 
@@ -158,7 +139,7 @@ public class ShopApp extends Jooby
 					.put("additional", productService.getAdditionalProducts())
 					.put("unit", unitService.getById(product.unitId))
 					.put("menus", menuService.getAll())
-					.put("root", SHOP_PATH)
+					.put("rootPath", SHOP_PATH)
 					.put("cart", cartService.getFetchedCart(req));
 		});
 
@@ -216,7 +197,7 @@ public class ShopApp extends Jooby
 					.put("cart", cart)
 					.put("menus", menuService.getAll())
 					.put("menus", menuService.getAll())
-					.put("root", SHOP_PATH)
+					.put("rootPath", SHOP_PATH)
 					.put("cartForm", cart)
 					.put("step", "contact")
 					.put("templateName", "shop/contacts")
@@ -235,7 +216,7 @@ public class ShopApp extends Jooby
 						.put("step", "contact")
 						.put("menus", menuService.getAll())
 						.put("menus", menuService.getAll())
-						.put("root", SHOP_PATH)
+						.put("rootPath", SHOP_PATH)
 						.put("cartForm", cartForm)
 						.put("errorMessage", validationResult.message)
 						.put("errorField", validationResult.fieldName)
@@ -257,7 +238,7 @@ public class ShopApp extends Jooby
 					.put("step", "delivery")
 					.put("menus", menuService.getAll())
 					.put("menus", menuService.getAll())
-					.put("root", SHOP_PATH)
+					.put("rootPath", SHOP_PATH)
 					.put("cart", cartService.getFetchedCart(req))
 					.put("templateName", "shop/delivery")
 					.put("breadcrumbs", DELIVERY_BREADCRUMB);

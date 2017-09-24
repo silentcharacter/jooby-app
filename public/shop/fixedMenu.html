@@ -2,7 +2,7 @@
     <ul class="site-nav flex-space-between common-margin" >
         <li>
             <div class="menu-logo">
-                <a href="{{root}}">СОЛНЕЧНАЯ КУХНЯ</a>
+                <a href="{{rootPath}}">СОЛНЕЧНАЯ КУХНЯ</a>
             </div>
             <div class="cart-popup-trigger flex">
                 <img src="/assets/image/icon-basket.svg" class="icon-basket-small">
@@ -11,7 +11,7 @@
         </li>
         {{#each menus}}
         <li class="menu-row">
-            <a href="{{url}}">{{name}}</a>
+            <a href="{{rootPath}}{{url}}">{{name}}</a>
         </li>
         {{/each}}
         <li>

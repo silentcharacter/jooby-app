@@ -5,7 +5,7 @@
 
 <body>
 
-<input type="hidden" id="rootPath" value="{{root}}">
+<input type="hidden" id="rootPath" value="{{rootPath}}">
 
 <header class="flex common-margin">
     <div class="flex cart-popup-trigger basket">
@@ -23,7 +23,7 @@
     <div class="menu-btn-responsive flex-vertical">
         <img src="/assets/image/menu-btn.svg" onclick="myFunction()">
     </div>
-    <a href="{{root}}" class="logo">
+    <a href="{{rootPath}}" class="logo">
         <img src="/assets/image/logo.svg">
     </a>
     <div class="flex-vertical">
@@ -44,7 +44,7 @@
     {{#each menus}}
         {{#if mobile}}
             <li class="menu-row">
-                <a href="{{url}}">{{name}}</a>
+                <a href="{{rootPath}}{{url}}">{{name}}</a>
                 <img src="/assets/image/arrow.svg">
             </li>
             <div class="separator"></div>
@@ -57,7 +57,7 @@
     <ul class="site-nav flex-space-between common-margin" id="accessibleNav">
         {{#each menus}}
         <li class="menu-row">
-            <a href="{{url}}">{{name}}</a>
+            <a href="{{rootPath}}{{url}}">{{name}}</a>
         </li>
         {{/each}}
         <li>

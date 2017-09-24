@@ -224,6 +224,50 @@
         menus.editionView().fields(menus.creationView().fields()).title('Редактирование Меню');
         admin.addEntity(menus);
 
+        var cmsposts = nga.entity('cmsposts');
+        cmsposts.listView().title('Статьи').fields([
+            nga.field('code').isDetailLink(true).label("Код"),
+            nga.field('title').label("Заголовок"),
+            nga.field('url').label("URL"),
+            nga.field('active', 'boolean').label("Активность"),
+        ]).filters([
+        ]);
+        cmsposts.creationView().title('Создание Статьи').fields([
+            nga.field('code').validation({ required: true, maxlength: 512 }).label("Код"),
+            nga.field('title').validation({ required: true, maxlength: 512 }).label("Заголовок"),
+            nga.field('url').validation({ required: true}).label("URL"),
+            nga.field('active', 'boolean').label("Активность"),
+            nga.field('content', 'wysiwyg').label("Контент"),
+        ]);
+        cmsposts.editionView().fields(cmsposts.creationView().fields()).title('Редактирование Статьи');
+        admin.addEntity(cmsposts);
+
+        var cmspages = nga.entity('cmspages');
+        cmspages.listView().title('Страницы CMS').fields([
+            nga.field('code').isDetailLink(true).label("Код"),
+            nga.field('title').label("Заголовок"),
+            nga.field('url').label("URL"),
+            nga.field('active', 'boolean').label("Активность"),
+        ]).filters([
+        ]);
+        cmspages.creationView().title('Создание Страницы CMS').fields([
+            nga.field('code').validation({ required: true, maxlength: 512 }).label("Код"),
+            nga.field('title').validation({ required: true, maxlength: 512 }).label("Заголовок"),
+            nga.field('url').validation({ required: true}).label("URL"),
+            nga.field('active', 'boolean').label("Активность"),
+            nga.field('pageContent', 'wysiwyg').label("Контент"),
+            nga.field('posts', 'embedded_list').label('Статьи')
+                    .targetFields([
+                        nga.field('code').validation({ required: true, maxlength: 512 }).label("Код"),
+                        nga.field('title').validation({ required: true, maxlength: 512 }).label("Заголовок"),
+                        nga.field('url').label("URL"),
+                        nga.field('active', 'boolean').label("Активность"),
+                        nga.field('content', 'wysiwyg').label("Контент"),
+                    ])
+        ]);
+        cmspages.editionView().fields(cmspages.creationView().fields()).title('Редактирование Страницы CMS');
+        admin.addEntity(cmspages);
+
         var categories = nga.entity('categories');
         categories.listView().title('Категории').fields([
             nga.field('name').isDetailLink(true).label("Название"),
@@ -630,6 +674,7 @@
                 .addChild(nga.menu().title('CMS')
                     .addChild(nga.menu(menus).icon('<span class="glyphicon glyphicon-menu-hamburger"></span>').title('Меню'))
                     .addChild(nga.menu(medias).icon('<span class="glyphicon glyphicon-picture"></span>').title('Медиа'))
+                    .addChild(nga.menu(cmspages).icon('<span class="glyphicon glyphicon-list-alt"></span>').title('Страницы CMS'))
                 )
                 .addChild(nga.menu().title('Маркетинг').icon('<span class="glyphicon glyphicon-cog"></span>')
                     .addChild(nga.menu(customers).icon('<span class="glyphicon glyphicon-king"></span>').title('Покупатели'))

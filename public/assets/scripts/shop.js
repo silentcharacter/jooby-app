@@ -166,6 +166,10 @@ SHOP = {
         $(".review-wrapper div" ).each(function( index ) {
             $(this).html($(this).text());
         });
+        $(".cms-content" ).each(function( index ) {
+            $(this).html($(this).text());
+            $(this).css('display', 'block');
+        });
     },
 
     bindFixedMenu: function() {

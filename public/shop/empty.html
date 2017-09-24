@@ -1,1 +1,65 @@
-<div class="main"></div>
+<div class="main cms-page">
+
+    <div class="common-margin content title large-font">
+        {{cmsPage.title}}
+    </div>
+
+
+    {{#if cmsPage.pageContent}}
+    <div class="content common-margin">
+
+        <div class="main-content large-font">
+            <div class="cms-content small-font">
+                {{cmsPage.pageContent}}
+            </div>
+        </div>
+        <div class="side-bar">
+            <div class="yellow-circle-1"></div>
+            <div class="yellow-circle-2"></div>
+            <div class="yellow-circle-3"></div>
+        </div>
+    </div>
+    {{/if}}
+
+    {{#each cmsPage.posts}}
+    <div class="content common-margin">
+        {{#if odd}}
+            {{#unless  first}}
+                <div class="yellow-line-cms-wrapper odd">
+                    <div class="yellow-line-cms"></div>
+                </div>
+            {{/unless }}
+            <div class="main-content large-font">
+                <h4 id="{{code}}">{{title}}</h4>
+                <div class="cms-content small-font">
+                    {{content}}
+                </div>
+            </div>
+            <div class="side-bar">
+                <div class="yellow-circle-1"></div>
+                <div class="yellow-circle-2"></div>
+                <div class="yellow-circle-3"></div>
+            </div>
+        {{else}}
+            {{#unless  first}}
+                <div class="yellow-line-cms-wrapper">
+                    <div class="yellow-line-cms"></div>
+                </div>
+            {{/unless }}
+            <div class="side-bar odd">
+                <div class="yellow-circle-4"></div>
+                <div class="yellow-circle-5"></div>
+                <div class="yellow-circle-6"></div>
+            </div>
+            <div class="main-content large-font">
+                <h4 id="{{code}}">{{title}}</h4>
+                <div class="cms-content small-font">
+                    {{content}}
+                </div>
+        </div>
+        {{/if}}
+    </div>
+    {{/each}}
+
+
+</div>
