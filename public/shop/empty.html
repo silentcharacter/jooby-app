@@ -8,8 +8,8 @@
     {{#if cmsPage.pageContent}}
     <div class="content common-margin">
 
-        <div class="main-content large-font">
-            <div class="cms-content small-font">
+        <div class="main-content">
+            <div class="cms-content">
                 {{cmsPage.pageContent}}
             </div>
         </div>
@@ -22,7 +22,7 @@
     {{/if}}
 
     {{#each cmsPage.posts}}
-    <div class="content common-margin">
+    <div class="content common-margin post">
         {{#if odd}}
             {{#unless  first}}
                 <div class="yellow-line-cms-wrapper odd">
@@ -30,8 +30,8 @@
                 </div>
             {{/unless }}
             <div class="main-content large-font">
-                <h4 id="{{code}}">{{title}}</h4>
-                <div class="cms-content small-font">
+                <h3 id="{{code}}">{{title}}</h3>
+                <div class="cms-content ">
                     {{content}}
                 </div>
             </div>

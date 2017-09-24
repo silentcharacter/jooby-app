@@ -565,6 +565,9 @@ footer img {
 .cms-page b {
     font-weight: 500;
 }
+.post h3 {
+    text-decoration: underline;
+}
 .yellow-circle-1 {
 	border-radius: 50%;
 	width: 67px;
@@ -621,8 +624,8 @@ footer img {
 }
 .yellow-line-cms-wrapper {
     position: relative;
-    width: 100%;
-    margin: 50px 0 150px 0;
+    width: 120%;
+    margin: 50px -4% 150px -6%;
 }
 .yellow-line-cms {
     position: absolute;
@@ -706,6 +709,12 @@ footer img {
     }
     .recipe a {
         margin-left: 0;
+    }
+    .cms-page .title {
+        margin: 30px 4% 30px 4%;
+    }
+    .yellow-line-cms-wrapper {
+        margin: 50px -2% 150px -3%;
     }
 }
 
