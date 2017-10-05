@@ -197,7 +197,7 @@ SHOP = {
         } else {
             additionalShift = $('.fixed-nav-bar').outerHeight() + 5;
         }
-        $('body').animate(
+        $('body,html').animate(
             {scrollTop: (el.offset().top - additionalShift)},
             {duration: 1500, easing: "swing"}
         );
