@@ -95,6 +95,23 @@ public class ShopApp extends Jooby
 			reviewService = registry.require(ReviewService.class);
 		});
 
+		err((req, rsp, err) -> {
+			// do what ever you want here
+			if (err.statusCode() == 403) {
+				rsp.send(Results.html("shop/design")
+						.put("templateName", "shop/error")
+						.put("menus", menuService.getAll())
+						.put("rootPath", SHOP_PATH)
+						.put("cart", cartService.getFetchedCart(req)));
+			}
+			logger.error("Error", err);
+			rsp.send(Results.html("shop/design")
+					.put("templateName", "shop/error")
+					.put("menus", menuService.getAll())
+					.put("rootPath", SHOP_PATH)
+					.put("cart", cartService.getFetchedCart(req)));
+		});
+
 		get(SHOP_PATH, req -> Results.html("shop/design")
 				.put("templateName", "shop/main_new")
 				.put("menus", menuService.getAll())
@@ -265,6 +282,14 @@ public class ShopApp extends Jooby
 			sendEvent(order);
 			smsService.sendOrderConfirmationSms(order, false);
 			return Results.redirect("/thankyou?order=" + order.orderNumber);
+		});
+
+		get("/testsms", req -> {
+			Order order = new Order();
+			order.orderNumber = "000001";
+			order.phone = "+79066390408";
+			smsService.sendOrderConfirmationSms(order, false);
+			return "ok";
 		});
 
 //		get("/checkout/payment", req -> Results.html("shop/checkout")

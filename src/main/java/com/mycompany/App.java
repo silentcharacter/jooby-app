@@ -106,16 +106,6 @@ public class App extends Jooby {
             chain.next(req, rsp);
         });
 
-        err((req, rsp, err) -> {
-            // do what ever you want here
-            if (err.statusCode() == 403) {
-                rsp.send(Results.html("shop/shop").put("templateName", "shop/error"));
-            }
-            //todo?
-            err.printStackTrace();
-            rsp.send(Results.html("shop/shop").put("templateName", "shop/error"));
-        });
-
         use(new Auth()
                         .form("/admin/**", MyUsernamePasswordAuthenticator.class)
                         .form("/todo/**", MyUsernamePasswordAuthenticator.class)

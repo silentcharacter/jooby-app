@@ -53,7 +53,8 @@ public class SmsService
 			text = String.format(globalConfig.smsTemplateAdmin, order.orderNumber, dateFormat.format(order.deliveryDate), deliveryTime);
 		}
 		String phone = Utils.formatPhone(order.phone).replace("+7", "8");
-		String url = String.format("https://gate.smsaero.ru/send/?user=%s&password=%s&text=%s&digital=0&answer=json&from=SUN+FOOD&to=%s",
+		String url = String.format("%s/send/?user=%s&password=%s&text=%s&digital=0&type=7&answer=json&from=SUN+FOOD&to=%s",
+				config.getString("smsaero.endpoint"),
 				URLEncoder.encode(config.getString("smsaero.user"), "utf-8"), config.getString("smsaero.password"),
 				URLEncoder.encode(text, "utf-8"), phone);
 		HttpClient client = HttpClientBuilder.create().build();
