@@ -66,10 +66,9 @@
             </article>
             <div class="recipe">
                 <img src="/assets/image/pesto.jpg" srcset="/assets/image/pesto@2x.jpg 2x, /assets/image/pesto@3x.jpg 3x">
-                <a href="{{rootPath}}/cms/blog" class="large-font">Лучшие</a><br/>
-                <a href="{{rootPath}}/cms/blog" class="large-font">итальянские рецепты</a>
+                <a href="{{rootPath}}/cms/blog" class="large-font">Лучшие рецепты</a>
                 <article>
-                    Пренебречь колебаниями корпуса, хотя этого в любом случае требует экваториальный момент.
+                    Из наших продуктов вы приготовите много полезных и вкусных блюд! Просто следуйте нашим инструкциям.
                 </article>
             </div>
         </div>
@@ -77,7 +76,7 @@
 
     <div class="reviews">
         <div class="reviews-title">Отзывы</div>
-        <div class="common-margin flex-space-between">
+        <div class="common-margin flex-space-between reviews-slider">
             {{#each reviews}}
                 <article>
                     <img src="/review/image/{{id}}"/>
@@ -95,47 +94,6 @@
                     <a class="reviewer-link" href="{{link}}" target="_blank">{{link}}</a>
                 </article>
             {{/each}}
-            <!--<article>-->
-                <!--<img src="/assets/image/Group5.jpg" srcset="/assets/image/Group5@2x.jpg 2x, /assets/image/Group5@3x.jpg 3x"/>-->
-                <!--<p>-->
-                    <!--<span>«</span>-->
-                    <!--Заказывал котлеты и <a href="/product/pelmeni-s-ryboi">пельмени с рыбой</a>, привезли быстро, жена была в восторге!-->
-                    <!--<span>»</span>-->
-                <!--</p>-->
-                <!--<p class="sign responsive">-->
-                    <!--<a href="https://vk.com/evgeniy_golovin">Евгений Головин</a>-->
-                <!--</p>-->
-                <!--<p class="sign">-->
-                    <!--Евгений Головин-->
-                <!--</p>-->
-                <!--<a class="reviewer-link" href="https://vk.com/evgeniy_golovin" target="_blank">https://vk.com/evgeniy_golovin</a>-->
-            <!--</article>-->
-            <!--<article >-->
-                <!--<img src="/assets/image/Group6.jpg" srcset="/assets/image/Group6@2x.jpg 2x, /assets/image/Group6@3x.jpg 3x"/>-->
-                <!--<p>-->
-                    <!--<span>«</span>-->
-                    <!--Часто заказываю <a href="/product/humus">хумус</a>, очень нравится мне и моим друзьям. В последнее время очень полюбила вареники с  фермерским творогом, люблю начинать с них день!-->
-                    <!--<span>»</span>-->
-                <!--</p>-->
-                <!--<p class="sign">-->
-                    <!--Анна Княжевская-->
-                <!--</p>-->
-                <!--<a href="https://vk.com/id3229572" target="_blank">https://vk.com/id3229572</a>-->
-
-            <!--</article>-->
-            <!--<article >-->
-                <!--<img src="/assets/image/Group7.jpg" srcset="/assets/image/Group7@2x.jpg 2x, /assets/image/Group7@3x.jpg 3x"/>-->
-                <!--<p>-->
-                    <!--<span>«</span>-->
-                    <!--Заказала котлеты из индейки и пельмени с курицей, все очень понравилось.-->
-                    <!--<span>»</span>-->
-                <!--</p>-->
-                <!--<p class="sign">-->
-                    <!--Аня Жуковская-->
-                <!--</p>-->
-                <!--<a href="https://vk.com/ann_beetle" target="_blank">https://vk.com/ann_beetle</a>-->
-
-            <!--</article>-->
         </div>
         <!--<div class="btn-wrapper">-->
             <!--<a href="#" class="btn">Я тоже хочу сказать</a>-->
@@ -150,9 +108,9 @@
                 <img src="/assets/image/mission.jpg" srcset="/assets/image/mission@2x.jpg 2x, /assets/image/mission@3x.jpg 3x">
             </div>
             <article>
-                <a href="{{rootPath}}/cms/blog">Как мы решили делать пельмени</a><br/>
+                <a href="{{rootPath}}/cms/blog">Как мы решили делать пельмени</a> – Почему мы решили готовить сами<br/>
                 <p>
-                    Общество потребления концентрирует коллективный выставочный стенд. VIP-мероприятие однообразно поддерживает рыночный целевой сегмент рынка. Метод изучения рынка, безусловно, ускоряет имидж. Привлечение аудитории не критично.
+                    Мы любим и хорошо умеем готовить и рады поделится с вами радостью знакомства со вкусной и полезной едой! Мы очень тщательно выбираем каждый компонент для наших продуктов. Поскольку мы готовим для себя и друзей – качество и свежесть это наши приоритеты!
                 </p>
 
             </article>
@@ -160,7 +118,9 @@
         <div class="yellow-line-2"></div>
     </div>
 
+    {{#each menus}}
     {{#each categories}}
+    {{#equal ../this.categoryId this.left.id}}
     <div class="category content common-margin">
         <div class="main-content flex-wrap">
             <div id="{{left.cmsId}}" class="title large-font">{{left.name}}
@@ -189,6 +149,8 @@
             {{/each}}
         </div>
     </div>
+    {{/equal}}
+    {{/each}}
     {{/each}}
 
 </div>

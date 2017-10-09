@@ -208,22 +208,6 @@
         paymentTypes.editionView().fields(paymentTypes.creationView().fields()).title('Редактирование Способа оплаты');
         admin.addEntity(paymentTypes);
 
-        var menus = nga.entity('menus');
-        menus.listView().title('Меню').fields([
-            nga.field('name').isDetailLink(true).label("Название"),
-            nga.field('url').label("URL"),
-            nga.field('index').label("Порядок"),
-        ]).filters([
-        ]);
-        menus.creationView().title('Создание Меню').fields([
-            nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
-            nga.field('url').validation({ required: true}).label("URL"),
-            nga.field('index').label("Порядок"),
-            nga.field('mobile').label("Отображать на мобильной"),
-        ]);
-        menus.editionView().fields(menus.creationView().fields()).title('Редактирование Меню');
-        admin.addEntity(menus);
-
         var cmsposts = nga.entity('cmsposts');
         cmsposts.listView().title('Статьи').fields([
             nga.field('code').isDetailLink(true).label("Код"),
@@ -291,6 +275,30 @@
         ]);
         categories.editionView().fields(categories.creationView().fields()).title('Редактирование Категории');
         admin.addEntity(categories);
+
+        var menus = nga.entity('menus');
+        menus.listView().title('Меню').fields([
+            nga.field('name').isDetailLink(true).label("Название"),
+            nga.field('url').label("URL"),
+            nga.field('index').label("Порядок"),
+        ]).filters([
+        ]);
+        menus.creationView().title('Создание Меню').fields([
+            nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
+            nga.field('categoryId', 'reference').label("Категория")
+                    .targetEntity(categories)
+                    .targetField(nga.field('name'))
+                    .singleApiCall(ids => ({'id': ids })),
+            nga.field('cmsPageId', 'reference').label("Страница контента")
+                    .targetEntity(cmspages)
+                    .targetField(nga.field('title'))
+                    .singleApiCall(ids => ({'id': ids })),
+            nga.field('index').label("Порядок"),
+            nga.field('mobile').label("Отображать на мобильной"),
+        ]);
+        menus.editionView().fields(menus.creationView().fields()).title('Редактирование Меню');
+        admin.addEntity(menus);
+
 
         var categoryPromotions =  nga.entity('categoryPromotions');
         categoryPromotions.listView().title('Акции на товарные категории').fields([

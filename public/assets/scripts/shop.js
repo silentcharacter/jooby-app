@@ -253,6 +253,28 @@ SHOP = {
                 $('.main').css('margin-top', '0');
             }
         });
+    },
+
+    bindSliders: function() {
+        $('.reviews-slider').slick({
+           dots: true,
+           infinite: true,
+           speed: 300,
+           slidesToShow: 3,
+           slidesToScroll: 3,
+           responsive: [
+             {
+               breakpoint: SHOP.MOBILE_MAX_RESOLUTION,
+               settings: {
+                 slidesToShow: 1,
+                 slidesToScroll: 1
+               }
+             }
+             // You can unslick at a given breakpoint now by adding:
+             // settings: "unslick"
+             // instead of a settings object
+           ]
+        });
     }
 }
 
@@ -263,6 +285,7 @@ $(document).ready(function () {
     SHOP.bindScrolls();
     SHOP.bindFixedMenu();
     $('.mobile-cart .spinner .btn').on('click', SHOP.modifyCart);
+    SHOP.bindSliders();
 });
 
 $(window).on("load", function () {

@@ -13,6 +13,8 @@ public class Menu extends Entity {
     public Integer index;
     public String name;
     public String url;
+    public String cmsPageId;
+    public String categoryId;
     public boolean mobile;
 
     @Override

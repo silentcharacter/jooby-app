@@ -293,7 +293,7 @@ a {
 }
 .reviews img {
     width: 40%;
-    border-radius: 60px;
+    border-radius: 300px;
     margin-left: 27%;
     margin-bottom: 0;
 }
@@ -361,6 +361,7 @@ a {
 }
 .dao article {
     margin-left: 5%;
+    margin-right: 5%;
 }
 
 .dao p {
@@ -841,6 +842,9 @@ footer img {
     .reviews {
         padding-bottom: 50px;
     }
+    .reviews img {
+        margin-bottom: 20px;
+    }
     .sign {
         display: none;
     }
@@ -857,14 +861,16 @@ footer img {
     .reviews article {
         width: 100%;
         padding-top: 0;
-    }
-    .reviews article:not(:first-of-type) {
-        display: none;
+        padding-bottom: 10px;
     }
     .reviews .reviews-title {
         display: block;
         font-size: 24px;
         padding: 20px 10px 0 10px;
+    }
+    .reviews-slider {
+        margin-left: 7%;
+        margin-right: 7%;
     }
     .dao-wrapper {
         margin-top: -60px;

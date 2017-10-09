@@ -1,0 +1,13 @@
+db.menus.find({}).forEach(function (obj) {
+    var category = db.categories.findOne({ name:obj.name });
+    if (category != null) {
+        obj.categoryId = category._id;
+        db.menus.save(obj);
+    } else {
+        var cmspage = db.cmspages.findOne({ title:obj.name });
+        if (cmspage != null) {
+            obj.cmsPageId = cmspage._id;
+            db.menus.save(obj);
+        }
+    }
+});
