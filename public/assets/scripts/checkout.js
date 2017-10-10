@@ -50,3 +50,16 @@ $(document).ready(function () {
     $("#" + $("[name='errorField']").val()).addClass("has-error");
 
 });
+
+function onDeliveryClick(active, nonactive) {
+    $('#' + active).addClass('active');
+    $('#' + nonactive).removeClass('active');
+    $('[name="delivery"]').val(active);
+    if (active === 'freeDelivery') {
+        $('[name="deliveryDate"]').attr('disabled', '').val('NULL');
+        $('[name="deliveryTime"]').attr('disabled', '').val('NULL');
+    } else {
+        $('[name="deliveryDate"]').removeAttr('disabled');
+        $('[name="deliveryTime"]').removeAttr('disabled');
+    }
+}

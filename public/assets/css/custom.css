@@ -313,7 +313,7 @@ a {
     top: -2px;
 }
 .review-wrapper div {
-    display: inline;
+    display: none;
 }
 .reviews .review-wrapper span:last-of-type  {
     line-height: 30%;
@@ -457,6 +457,9 @@ footer img {
 }
 .product-detail-description .cd-buttons {
     margin-top: 30px;
+}
+.description {
+    display: none;
 }
 
 

@@ -58,24 +58,6 @@ public class ShopApp extends Jooby
 	private static ObjectMapper mapper = new ObjectMapper();
 
 	{
-//		use(new Orders());
-		use(new PaymentTypes());
-		use(new DeliveryTypes());
-		use(new Products());
-		use(new Colors());
-		use(new Sauces());
-		use(new GlobalConfigs());
-		use(new Customers());
-		use(new Districts());
-		use(new Categories());
-		use(new Tags());
-		use(new Units());
-		use(new Menus());
-		use(new Medias());
-		use(new CategoryPromotions());
-		use(new Reviews());
-		use(new CmsPages());
-
 		onStart(registry -> {
 			cartService = registry.require(CartService.class);
 			orderService = registry.require(OrderService.class);
@@ -104,7 +86,6 @@ public class ShopApp extends Jooby
 						.put("rootPath", SHOP_PATH)
 						.put("cart", cartService.getFetchedCart(req)));
 			}
-			logger.error("Error", err);
 			rsp.send(Results.html("shop/design")
 					.put("templateName", "shop/error")
 					.put("menus", menuService.getAll())
@@ -320,6 +301,7 @@ public class ShopApp extends Jooby
 			String encoded = Base64.getEncoder().encodeToString(String.format("%s,%s", orderNumber, hash).getBytes());
 			rsp.cookie("foodsun", encoded);
 			rsp.send(Results.html("shop/checkout")
+				.put("rootPath", SHOP_PATH)
 				.put("cart", orderService.getFetchedOrderByNumber(orderNumber))
 				.put("step", "thankyou")
 				.put("menus", menuService.getAll())

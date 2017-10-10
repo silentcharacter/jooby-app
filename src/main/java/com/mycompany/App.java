@@ -10,7 +10,7 @@ import com.mycompany.controller.News;
 import com.mycompany.controller.Roles;
 import com.mycompany.controller.Todos;
 import com.mycompany.controller.Users;
-import com.mycompany.controller.shop.Orders;
+import com.mycompany.controller.shop.*;
 import com.mycompany.hbs.EqualHelper;
 import com.mycompany.hbs.FormatDateHelper;
 import com.mycompany.hbs.IncHelper;
@@ -57,7 +57,7 @@ public class App extends Jooby {
         use(new Jackson().doWith(mapper -> mapper.setTimeZone(TimeZone.getTimeZone("UTC"))));
 
         use(new Metrics()
-//              .request()
+              .request()
               .threadDump()
               .ping()
 //              .healthCheck("db", new DatabaseHealthCheck())
@@ -135,10 +135,27 @@ public class App extends Jooby {
 
         get("/_log", (req, rsp) -> rsp.type("text/plain").send(new File(System.getProperty("user.dir") + "/jooby-app.log")));
 
-        use(new Orders());
-        //secure rest resources
         use(new Users());
         use(new Roles());
+
+        use(new Orders());
+        use(new PaymentTypes());
+        use(new DeliveryTypes());
+        use(new Products());
+        use(new Colors());
+        use(new Sauces());
+        use(new GlobalConfigs());
+        use(new Customers());
+        use(new Districts());
+        use(new Categories());
+        use(new Tags());
+        use(new Units());
+        use(new Menus());
+        use(new Medias());
+        use(new CategoryPromotions());
+        use(new Reviews());
+        use(new CmsPages());
+
 
     }
 

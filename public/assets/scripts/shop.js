@@ -162,9 +162,11 @@ SHOP = {
     formatDescriptions: function() {
         $(".description" ).each(function( index ) {
             $(this).html($(this).text());
+            $(this).css('display', 'block');
         });
         $(".review-wrapper div" ).each(function( index ) {
             $(this).html($(this).text());
+            $(this).css('display', 'inline');
         });
         $(".cms-content" ).each(function( index ) {
             $(this).html($(this).text());
@@ -270,9 +272,6 @@ SHOP = {
                  slidesToScroll: 1
                }
              }
-             // You can unslick at a given breakpoint now by adding:
-             // settings: "unslick"
-             // instead of a settings object
            ]
         });
     }
@@ -365,7 +364,7 @@ function changeInputValue(id, delta) {
 }
 
 
-function myFunction() {
+function menuClick() {
     var menu = $('.topnav-responsive');
     menu.css('top', $('header').outerHeight());
 
@@ -376,17 +375,6 @@ function myFunction() {
 }
 
 
-function onDeliveryClick(active, nonactive) {
-    $('#' + active).addClass('active');
-    $('#' + nonactive).removeClass('active');
-    $('[name="delivery"]').val(active);
-    if (active === 'freeDelivery') {
-        $('[name="deliveryDate"]').attr('disabled', '').val('NULL');
-        $('[name="deliveryTime"]').attr('disabled', '').val('NULL');
-    } else {
-        $('[name="deliveryDate"]').removeAttr('disabled');
-        $('[name="deliveryTime"]').removeAttr('disabled');
-    }
-}
+
 
 
