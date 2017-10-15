@@ -78,10 +78,6 @@
   <logger name="org.jooby.RequestLogger" level="info">
     <appender-ref ref="ACCESS" />
   </logger>
-  <!--<logger name="org.jooby.RequestLogger" level="error">-->
-    <!--<appender-ref ref="STDOUT" />-->
-    <!--<appender-ref ref="FILE" />-->
-  <!--</logger>-->
 
 
 

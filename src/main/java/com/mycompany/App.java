@@ -5,18 +5,26 @@ import com.codahale.metrics.jvm.FileDescriptorRatioGauge;
 import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
 import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
 import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.Mongo;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.mycompany.auth.MyUsernamePasswordAuthenticator;
-import com.mycompany.controller.News;
-import com.mycompany.controller.Roles;
-import com.mycompany.controller.Todos;
-import com.mycompany.controller.Users;
+import com.mycompany.controller.*;
 import com.mycompany.controller.shop.*;
+import com.mycompany.domain.Session;
 import com.mycompany.hbs.EqualHelper;
 import com.mycompany.hbs.FormatDateHelper;
 import com.mycompany.hbs.IncHelper;
 import com.mycompany.hbs.MapHelper;
 import com.mycompany.service.AuthenticationService;
 import com.mycompany.service.MigrationService;
+import com.mycompany.service.SearchResult;
+import com.mycompany.service.SessionsService;
+import org.bson.Document;
 import org.jooby.Jooby;
 import org.jooby.RequestLogger;
 import org.jooby.Results;
@@ -28,6 +36,8 @@ import org.jooby.mongodb.Jongoby;
 import org.jooby.mongodb.MongoSessionStore;
 import org.jooby.mongodb.Mongodb;
 import org.jooby.pac4j.Auth;
+import org.jooby.pac4j.AuthStore;
+import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.oauth.client.FacebookClient;
 import org.pac4j.oauth.client.Google2Client;
 import org.pac4j.oauth.client.TwitterClient;
@@ -42,8 +52,6 @@ import java.util.*;
 public class App extends Jooby {
 
     final static Logger logger = LoggerFactory.getLogger(App.class);
-
-    private static AuthenticationService authenticationService;
 
     {
         use(new Mongodb());
@@ -60,7 +68,6 @@ public class App extends Jooby {
               .request()
               .threadDump()
               .ping()
-//              .healthCheck("db", new DatabaseHealthCheck())
               .metric("memory", new MemoryUsageGaugeSet())
               .metric("threads", new ThreadStatesGaugeSet())
               .metric("gc", new GarbageCollectorMetricSet())
@@ -84,19 +91,16 @@ public class App extends Jooby {
 
         use(new ShopApp());
 
-        onStart(registry -> {
-            authenticationService = registry.require(AuthenticationService.class);
-            MigrationService.runUpdateScripts(registry);
-        });
+        onStart(MigrationService::runUpdateScripts);
 
         //public rest resources
         use(new Todos());
         use(new News());
 
         //auth routes
-        get("/userProfile", (req) -> authenticationService.getProfilePageData(req));
+        get("/userProfile", (req) -> require(AuthenticationService.class).getProfilePageData(req));
         get("/login", req -> Results.html("login"));
-        post("/register", (req, res) -> authenticationService.handleRegistration(req, res));
+        post("/register", (req, res) -> require(AuthenticationService.class).handleRegistration(req, res));
         Set<String> retainSecureUrls = new HashSet<>(Arrays.asList("admin", "todo"));
         get("**", (req, rsp, chain) -> {
             Optional<String> profileId = req.session().get(Auth.ID).toOptional();
@@ -111,17 +115,17 @@ public class App extends Jooby {
                         .form("/todo/**", MyUsernamePasswordAuthenticator.class)
                         .form("/_log/**", MyUsernamePasswordAuthenticator.class)
                         .form("/api/**", MyUsernamePasswordAuthenticator.class)
-                        .authorizer("admin", "/admin/**", (ctx, profiles) -> authenticationService.isAuthorized(ctx, profiles))
+                        .authorizer("admin", "/admin/**", (ctx, profiles) -> require(AuthenticationService.class).isAuthorized(ctx, profiles))
                         .client("/google/**", conf -> new Google2Client(conf.getString("google.key"), conf.getString("google.secret")))
                         .client("/vk/**", conf -> new VkClient(conf.getString("vk.key"), conf.getString("vk.secret")))
                         .client("/facebook/**", conf -> new FacebookClient(conf.getString("facebook.key"), conf.getString("facebook.secret")))
                         .client("/twitter/**", conf -> new TwitterClient(conf.getString("twitter.key"), conf.getString("twitter.secret")))
         );
 
-        get("/facebook", (req, rsp) -> authenticationService.handleSocLogin(req, rsp));
-        get("/twitter", (req, rsp) -> authenticationService.handleSocLogin(req, rsp));
-        get("/google", (req, rsp) -> authenticationService.handleSocLogin(req, rsp));
-        get("/vk", (req, rsp) -> authenticationService.handleSocLogin(req, rsp));
+        get("/facebook", (req, rsp) -> require(AuthenticationService.class).handleSocLogin(req, rsp));
+        get("/twitter", (req, rsp) -> require(AuthenticationService.class).handleSocLogin(req, rsp));
+        get("/google", (req, rsp) -> require(AuthenticationService.class).handleSocLogin(req, rsp));
+        get("/vk", (req, rsp) -> require(AuthenticationService.class).handleSocLogin(req, rsp));
 
         get("/todo", req -> Results.html("angular").put("profile", AuthenticationService.getUserProfile(req)));
 
@@ -134,6 +138,18 @@ public class App extends Jooby {
         });
 
         get("/_log", (req, rsp) -> rsp.type("text/plain").send(new File(System.getProperty("user.dir") + "/jooby-app.log")));
+
+        get("/api/sessions", (req, rsp) -> {
+            Integer page = 1;
+            Integer perPage = 10000;
+            if (req.param("_page").isSet()) {
+                page = req.param("_page").intValue();
+                perPage = req.param("_perPage").intValue();
+            }
+            SearchResult<Session> searchResult = require(SessionsService.class).getActiveSessions(page, perPage);
+            rsp.header("X-Total-Count", searchResult.count);
+            rsp.send(searchResult.result);
+        });
 
         use(new Users());
         use(new Roles());
@@ -155,8 +171,6 @@ public class App extends Jooby {
         use(new CategoryPromotions());
         use(new Reviews());
         use(new CmsPages());
-
-
     }
 
     public static void main(final String[] args) throws Exception {

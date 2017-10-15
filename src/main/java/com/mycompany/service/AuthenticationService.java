@@ -58,7 +58,7 @@ public class AuthenticationService {
             req.session().unset("redirectUrl");
         }
         rsp.redirect("/");
-    };
+    }
 
     public void handleRegistration(Request req, Response rsp) throws Throwable {
         User user = req.body().to(User.class);
@@ -75,7 +75,7 @@ public class AuthenticationService {
         user.roles = Collections.singletonList(roleService.getBy("name", "Пользователь").id);
         userService.insert(user);
         rsp.redirect("/todo/#/registrationSuccess");
-    };
+    }
 
     public boolean isAuthorized(WebContext ctx, List<CommonProfile> profiles) throws HttpAction {
         for (Object profile : profiles) {
@@ -92,7 +92,7 @@ public class AuthenticationService {
             }
         }
         return false;
-    };
+    }
 
     private User getCurrentUser(Request req, CommonProfile profile) {
         if (profile == null) {

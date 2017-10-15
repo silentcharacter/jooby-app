@@ -148,7 +148,7 @@ public class AbstractResource<T extends Entity> extends Jooby {
         return value;
     }
 
-    protected String extractSort(Request req) {
+    public static String extractSort(Request req) {
         String sort = "{_id: -1}";
         if (req.param("_sortField").isSet()) {
             sort = "{%s : %d %s}";

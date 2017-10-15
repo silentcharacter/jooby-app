@@ -52,6 +52,20 @@
         role.editionView().fields(role.creationView().fields()).title('Редактирование роли');
         admin.addEntity(role);
 
+        var sessions = nga.entity('sessions');
+        sessions.listView().title('Сессии').perPage(10).fields([
+            nga.field('id').label("id"),
+            nga.field('email').label("email"),
+            nga.field('name').label("name"),
+            nga.field('roles').label("roles"),
+            nga.field('_accessedAt', 'date').label("_accessedAt"),
+            nga.field('_createdAt', 'date').label("_createdAt"),
+            nga.field('_savedAt', 'date').label("_savedAt"),
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Искать по названию' })
+        ]);
+        admin.addEntity(sessions);
+
         // create a user entity
         var user = nga.entity('users').label('Пользователи');
         // set the fields of the user entity list view
@@ -697,14 +711,15 @@
                 .addChild(nga.menu().title('Администрирование').icon('<span class="glyphicon glyphicon-cog"></span>')
                     .addChild(nga.menu(globalConfigs).icon('<span class="glyphicon glyphicon-wrench"></span>').title('Настройки'))
                     .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>').title('Сотрудники'))
-                    .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-hand-right"></span>').title('Роли'))
+                    .addChild(nga.menu(role).icon('<span class="glyphicon glyphicon-briefcase"></span>').title('Роли'))
+                    .addChild(nga.menu(sessions).icon('<span class="glyphicon glyphicon-lamp"></span>').title('Сессии'))
                 )
                 .addChild(nga.menu().link('/exit').icon('<span class="glyphicon glyphicon-log-out"></span>').title('Выход'))
         );
 
         admin.dashboard(nga.dashboard().template($('#dashboardTemplate').html())
             .addCollection(nga.collection(globalConfigs).name('globalConfigs').title('Настройки').fields(globalConfigs.listView().fields()))
-            .addCollection(nga.collection(orders).name('orders').title('Заказы').perPage(10) .fields(orders.listView().fields()))
+            .addCollection(nga.collection(orders).name('orders').title('Заказы').perPage(10).fields(orders.listView().fields()))
         );
 
         // attach the admin application to the DOM and run it
