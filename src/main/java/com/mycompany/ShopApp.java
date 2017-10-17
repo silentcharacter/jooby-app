@@ -1,7 +1,6 @@
 package com.mycompany;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mycompany.constant.Constants;
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.AuthenticationService;
@@ -324,10 +323,10 @@ public class ShopApp extends Jooby
 
 		post("/order/delivery", req -> {
 			Map<String, Object> order = req.body().to(Map.class);
-			return orderService.sendToDelivery(order);
+			return orderService.updateOrder(order, req);
 		});
 
-		delete("/order/:id", req -> orderService.cancelOrder(req.param("id").value()));
+		delete("/order/:id", req -> orderService.cancelOrder(req.param("id").value(), req));
 
 		post("/order/place", req-> {
 			Order order = orderService.createOrder(req.body().to(Map.class));
@@ -450,7 +449,7 @@ public class ShopApp extends Jooby
 
 	private void populateDatesAndTimes(View view, Request req)
 	{
-		GlobalConfig config = req.require(GlobalConfigService.class).getAll().get(0);
+		GlobalConfig config = require(GlobalConfigService.class).getConfig();
 
 		List<String> tomorrowDateTimes = new ArrayList<>();
 		Map<String, String> dates = new TreeMap<>();

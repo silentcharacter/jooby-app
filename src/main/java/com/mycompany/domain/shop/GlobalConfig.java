@@ -12,6 +12,7 @@ public class GlobalConfig extends Entity
 	public String smsTemplate;
 	public Boolean sendSms;
 	public String smsTemplateAdmin;
+	public Boolean testMode;
 
 	@Override
 	public String getFullText()

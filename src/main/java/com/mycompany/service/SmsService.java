@@ -39,7 +39,7 @@ public class SmsService
 
 	public boolean sendOrderConfirmationSms(Order order, boolean createdByAdmin) throws UnsupportedEncodingException
 	{
-		GlobalConfig globalConfig = globalConfigService.getAll().get(0);
+		GlobalConfig globalConfig = globalConfigService.getConfig();
 
 		if (!BooleanUtils.isTrue(globalConfig.sendSms)) {
 			return false;

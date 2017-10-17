@@ -10,4 +10,8 @@ public class GlobalConfigService extends AbstractService<GlobalConfig>
 	{
 		super(GlobalConfig.class);
 	}
+
+	public GlobalConfig getConfig() {
+		return getAll().get(0);
+	}
 }

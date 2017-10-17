@@ -25,6 +25,8 @@ public class Order extends Cart
 
 	public Channel channel;
 
+	public Boolean testOrder;
+
 	//needed to solve ng-admin bug not showing embedded linked entities
 	public List<String> sauces = new ArrayList<>();
 

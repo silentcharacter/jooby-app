@@ -155,6 +155,7 @@ public class App extends Jooby {
         use(new Roles());
 
         use(new Orders());
+        use(new Audits());
         use(new PaymentTypes());
         use(new DeliveryTypes());
         use(new Products());

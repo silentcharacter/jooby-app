@@ -3,8 +3,10 @@ package com.mycompany.controller.shop;
 
 import com.mycompany.controller.AbstractResource;
 import com.mycompany.domain.shop.Order;
+import com.mycompany.service.AuditService;
 import com.mycompany.service.SearchResult;
 import com.mycompany.service.shop.OrderService;
+import org.apache.commons.lang3.StringUtils;
 import org.jooby.Request;
 import org.jooby.Response;
 
@@ -14,6 +16,12 @@ import java.util.stream.StreamSupport;
 
 
 public class Orders extends AbstractResource<Order> {
+
+    private AuditService auditService;
+
+    {
+        onStart(registry -> auditService = registry.require(AuditService.class));
+    }
 
     public Orders() {
         super(Order.class, OrderService.class);
@@ -36,5 +44,14 @@ public class Orders extends AbstractResource<Order> {
 
     private OrderService getOrderService() {
         return (OrderService) service;
+    }
+
+    @Override
+    protected Order update(Request req) throws Exception {
+        Order order = req.body().to(Order.class);
+        if (StringUtils.isNotEmpty(order.id)) {
+            auditService.logEvent(req, getOrderService().getById(order.id));
+        }
+        return service.update(order);
     }
 }
