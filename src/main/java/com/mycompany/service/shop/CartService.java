@@ -142,6 +142,7 @@ public class CartService {
         cart.originalStreetNumber = cartForm.originalStreetNumber;
         cart.entrance = cartForm.entrance;
         cart.flat = cartForm.flat;
+        cart.customerComment = cartForm.customerComment;
         saveSessionCart(req, cart);
     }
 

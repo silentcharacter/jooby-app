@@ -430,7 +430,7 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
                 $state.go('arm', {orderNo: data.orderNumber}, {notify: false})
             }
             $alert({title: 'Заказ ' + data.orderNumber + ' сохранен', content: '',
-                placement: 'top-right', type: 'info', show: true, container:'body', animation:"am-fade-and-slide-top", duration: 4, show: true});
+                placement: 'bottom-left', type: 'info', show: true, container:'body', animation:"am-fade-and-slide-top", duration: 4, show: true});
             // console.log(order.delivery);
         }).error(function (data, status) {
             console.log('Error ' + data);

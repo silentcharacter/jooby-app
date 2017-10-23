@@ -24,6 +24,7 @@ public class Cart extends Entity
     public Integer deliveryPrice;
     public Date deliveryDate;
     public String deliveryTime;
+    public String customerComment;
     public String paymentTypeId;
     public Integer subTotalPrice = 0;
     public Integer totalPrice = 0;

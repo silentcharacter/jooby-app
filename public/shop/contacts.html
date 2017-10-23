@@ -49,13 +49,19 @@
                     <div class="field--third field field--optional field--show-floating-label">
                         <label class="field__label" for="entrance">Подъезд</label>
                         <div class="field__input-wrapper">
-                            <input placeholder="Подъезд" class="field__input" type="text" name="entrance" id="entrance" value="{{cartForm.entrance}}"/>
+                            <input placeholder="Подъезд" class="field__input" type="number" name="entrance" id="entrance" value="{{cartForm.entrance}}"/>
                         </div>
                     </div>
                     <div class="field--third field field--optional field--show-floating-label">
                         <label class="field__label" for="flat">Квартира/офис</label>
                         <div class="field__input-wrapper">
-                            <input placeholder="Квартира/офис" class="field__input" type="text" name="flat" id="flat" value="{{cartForm.flat}}"/>
+                            <input placeholder="Квартира/офис" class="field__input" type="number" name="flat" id="flat" value="{{cartForm.flat}}"/>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="field__label" for="customerComment">Комментарий</label>
+                        <div class="field__input-wrapper">
+                            <input placeholder="Комментарий" class="field__input" type="text" name="customerComment" id="customerComment" value="{{cartForm.customerComment}}"/>
                         </div>
                     </div>
                 </div>
