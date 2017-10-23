@@ -79,6 +79,9 @@ header>div:last-of-type {
     justify-content: center;
     align-items: center;
 }
+.site-nav > li .facebook{
+    top: 5px;
+}
 .site-nav > li:last-of-type {
     display: block;
 }
@@ -101,6 +104,7 @@ header>div:last-of-type {
     z-index: 999;
     width: 100%;
     display: none;
+    top: 0;
 }
 .fixed-nav-bar .site-nav{
     margin-top: 0;
@@ -570,7 +574,7 @@ footer img {
     font-weight: 500;
 }
 .post h3 {
-    text-decoration: underline;
+    font-weight: 400;
 }
 .yellow-circle-1 {
 	border-radius: 50%;
