@@ -110,6 +110,8 @@ public class App extends Jooby {
             chain.next(req, rsp);
         });
 
+        head("/", request -> Results.ok());
+
         use(new Auth()
                         .form("/admin/**", MyUsernamePasswordAuthenticator.class)
                         .form("/todo/**", MyUsernamePasswordAuthenticator.class)
