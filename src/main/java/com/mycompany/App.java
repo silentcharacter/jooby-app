@@ -139,7 +139,8 @@ public class App extends Jooby {
             return Results.html("admin");
         });
 
-        get("/_log", (req, rsp) -> rsp.type("text/plain").send(new File(System.getProperty("user.dir") + "/jooby-app.log")));
+        get("/_log", (req, rsp) -> rsp.type("text/plain").send(new File(System.getProperty("user.dir") + "/app.log")));
+        get("/_access", (req, rsp) -> rsp.type("text/plain").send(new File(System.getProperty("user.dir") + "/access.log")));
 
         get("/api/sessions", (req, rsp) -> {
             Integer page = 1;

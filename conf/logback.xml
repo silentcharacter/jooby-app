@@ -2,7 +2,7 @@
 <configuration scan="true" scanPeriod="15 seconds" debug="false">
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>jooby-app.log</file>
+    <file>app.log</file>
     <filter class="com.mycompany.logback.LoggerFilter">
       <logger>org.jooby.RequestLogger</logger>
     </filter>
@@ -10,7 +10,7 @@
       <!-- daily rollover
       Once any of the below condition met, it will change the file name as below and compressed it. -->
 
-      <fileNamePattern>logFile.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+      <fileNamePattern>app.log.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
 
       <!-- keep 5 days' worth of history -->
       <maxHistory>5</maxHistory>
