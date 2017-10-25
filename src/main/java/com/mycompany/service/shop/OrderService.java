@@ -152,8 +152,9 @@ public class OrderService extends AbstractService<Order> {
             customer.totalOrdered = order.totalPrice;
             customer = customerService.insert(customer);
         } else {
-            Optional<Address> address = customer.addresses.stream().filter(a -> a.streetName.equals(order.streetName)
-                    && a.streetNumber.equals(order.streetNumber) && a.flat.equals(order.flat)).findFirst();
+            Optional<Address> address = customer.addresses.stream().filter(a -> a.streetName != null &&
+                    a.streetName.equals(order.streetName) && a.streetNumber != null &&
+                    a.streetNumber.equals(order.streetNumber) && a.flat != null && a.flat.equals(order.flat)).findFirst();
             if (!address.isPresent()) {
                 customer.addresses.add(new Address(order.streetName, order.streetNumber, order.litera, order.korpus, order.entrance, order.flat));
             }
