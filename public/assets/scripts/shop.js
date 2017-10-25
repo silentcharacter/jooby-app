@@ -109,6 +109,10 @@ SHOP = {
                         container.css('height', '85%');
                         $('.cart-entries').css('max-height', (container.height() - 200) + 'px');
                     }
+                    $(".cd-popup.cart .description" ).each(function( index ) {
+                        $(this).html($(this).text());
+                        $(this).css('display', 'block');
+                    });
                     $('.cd-popup.cart').addClass('is-visible');
                     $('.cart .spinner .btn').on('click', SHOP.modifyCart);
                 }
