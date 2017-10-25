@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Optional;
 
 
 public class GoogleMapsService
@@ -27,7 +28,7 @@ public class GoogleMapsService
 	private DistrictService districtService;
 
 	public Geometry getCoordinates(String streetName, Integer streetNumber, String litera, Integer korpus) {
-		StringBuilder streetNumberSb = new StringBuilder(streetNumber.toString());
+		StringBuilder streetNumberSb = new StringBuilder(Optional.ofNullable(streetNumber).orElse(0).toString());
 		if (litera != null) {
 			streetNumberSb.append(litera);
 		}
