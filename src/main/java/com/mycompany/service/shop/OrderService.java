@@ -115,7 +115,11 @@ public class OrderService extends AbstractService<Order> {
             order.korpus = Integer.valueOf(parts[1].replaceAll("[^\\d.]", ""));
         }
         parts = parts[0].split("/");
-        order.streetNumber = Integer.valueOf(parts[0].replaceAll("[^\\d.]", ""));
+        try {
+            order.streetNumber = Integer.valueOf(parts[0].replaceAll("[^\\d.]", ""));
+        } catch (Exception e) {
+            logger.error("Parsing street number", e);
+        }
         order.litera = parts[0].replaceAll("[\\d.]", "");
     }
 
