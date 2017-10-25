@@ -111,9 +111,9 @@ angular.module('myApp.controllers').controller('ARMCtrl', ['$scope', '$http', '$
             }).error(function (data, status) {
                 console.log('Error ' + data)
             });
-            if (order.streetName) {
-                $scope.onAddressChange();
-            }
+        }
+        if (order.streetName) {
+            $scope.onAddressChange();
         }
         if (order.deliveryDate) {
             order.deliveryDate = new Date(order.deliveryDate);
