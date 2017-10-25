@@ -40,12 +40,12 @@ public class GoogleMapsService
 	public Geometry getCoordinates(String streetName, String streetNumber) {
 		StringBuilder url = new StringBuilder("http://maps.google.com/maps/api/geocode/json?address=Россия+Ярославль+");
 		url.append(streetName.trim().replaceAll("\\s", "+")).append("+");
-		url.append(streetNumber);
+		url.append(streetNumber.trim().replaceAll("\\s", "+"));
 		Geometry res;
-		HttpClient client = HttpClientBuilder.create().build();
-		HttpGet request = new HttpGet(url.toString());
 		try
 		{
+			HttpClient client = HttpClientBuilder.create().build();
+			HttpGet request = new HttpGet(url.toString());
 			HttpResponse response = client.execute(request);
 			HttpEntity entity = response.getEntity();
 			String strResponse = EntityUtils.toString(entity);
