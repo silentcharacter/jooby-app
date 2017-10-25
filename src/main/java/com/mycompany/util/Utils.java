@@ -35,6 +35,10 @@ public class Utils
 		}
 	}
 
+	public static String formatEntrance(int entrance) {
+		return entrance == 0? "" : String.valueOf(entrance);
+	}
+
 	public static String formatPhone(String phone) {
 		phone = phone.replaceAll("[^\\d+]", "");
 		if (phone.startsWith("8") && phone.length() == 11) {

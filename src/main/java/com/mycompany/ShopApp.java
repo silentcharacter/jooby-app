@@ -7,6 +7,7 @@ import com.mycompany.service.AuthenticationService;
 import com.mycompany.service.ReviewService;
 import com.mycompany.service.SmsService;
 import com.mycompany.service.shop.*;
+import com.mycompany.util.Utils;
 import com.typesafe.config.Config;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.Binary;
@@ -185,7 +186,7 @@ public class ShopApp extends Jooby
 						cart.put("name", previousOrder.name);
 						cart.put("streetName", previousOrder.streetName);
 						cart.put("originalStreetNumber", previousOrder.originalStreetNumber);
-						cart.put("entrance", previousOrder.entrance);
+						cart.put("entrance", Utils.formatEntrance(previousOrder.entrance));
 						cart.put("flat", previousOrder.flat);
 					}
 				}
