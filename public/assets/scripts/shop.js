@@ -142,8 +142,10 @@ SHOP = {
         var entryNo = row.attr('data-entry-no');
         var quantitySpan = $('div[data-product-id="' + productId + '"] .quantity .number');
         var quantity = Number(quantitySpan.text()) + ($(this).hasClass('btn-plus')? 1 : -1);
-        if (quantity === 0)
-            quantity = 1;
+        if (quantity === 0) {
+            removeFromCart(entryNo);
+            return;
+        }
         $.ajax({
             type: 'PUT',
             url: '/cart',
