@@ -384,6 +384,7 @@ public class ShopApp extends Jooby
 
 		get("/image/product/:productId", (req, rsp) -> {
 			Binary image = productService.getProductImage(req.param("productId").value());
+			rsp.header("Cache-Control", "max-age=36000, must-revalidate");
 			if (image != null) {
 				rsp.type("image/jpeg").send(image.getData());
 			}
@@ -406,6 +407,7 @@ public class ShopApp extends Jooby
 
 		get("/review/image/:reviewId", (req, rsp) -> {
 			Binary image = reviewService.getReviewImage(req.param("reviewId").value());
+			rsp.header("Cache-Control", "max-age=36000, must-revalidate");
 			if (image != null) {
 				rsp.type("image/jpeg").send(image.getData());
 			}
@@ -428,6 +430,7 @@ public class ShopApp extends Jooby
 
 		get("/media/image/:mediaCode", (req, rsp) -> {
 			Binary image = mediaService.getImage(req.param("mediaCode").value());
+			rsp.header("Cache-Control", "max-age=36000, must-revalidate");
 			if (image != null) {
 				rsp.type("image/jpeg").send(image.getData());
 			}
