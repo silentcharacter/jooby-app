@@ -84,6 +84,7 @@ public class App extends Jooby {
         assets("/assets/**");
         assets("/favicon.ico", "/assets/favicon.ico");
         assets("/manifest.json", "/assets/js/manifest.json");
+        assets("/robots.txt", "/assets/robots.txt");
         //send pulse
         assets("/sp-push-manifest.json", "/assets/js/sp-push-manifest.json");
         assets("/sp-push-worker.js", "/assets/js/sp-push-worker.js");

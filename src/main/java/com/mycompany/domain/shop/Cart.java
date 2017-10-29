@@ -18,7 +18,7 @@ public class Cart extends Entity
     public String originalStreetNumber;
     public String litera;
     public Integer korpus;
-    public int entrance;
+    public Integer entrance;
     public Integer flat;
     public String deliveryId;
     public Integer deliveryPrice;
@@ -48,7 +48,7 @@ public class Cart extends Entity
     }
 
     public Integer getEntrance() {
-        return entrance != 0 ? entrance : null;
+        return entrance != null && entrance != 0 ? entrance : null;
     }
 
     @Override
