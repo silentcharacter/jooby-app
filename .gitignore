@@ -15,7 +15,7 @@ hs_err_pid*
 
 /target
 
-app.log
+app.log*
 access.log
 /log/*
 

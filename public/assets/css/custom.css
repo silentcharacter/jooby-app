@@ -135,6 +135,11 @@ header>div:last-of-type {
   width: 27px;
   height: 27px;
 }
+a:active, a:focus {
+  outline: 0;
+  border: none;
+  -moz-outline-style: none
+}
 nav .facebook {
   height: 100%;
 }
