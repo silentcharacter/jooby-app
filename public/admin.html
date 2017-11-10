@@ -34,6 +34,9 @@
     window.CANCELED = 'Отменен';
 </script>
 <script type="text/javascript">
+
+    var d = new Date();
+
     var myApp = angular.module('myApp', ['ng-admin', 'googlechart', 'myApp.controllers',
         'mgcrea.ngStrap', 'uiGmapgoogle-maps', 'bw.paging']);
     myApp.config(['NgAdminConfigurationProvider', function(nga) {
@@ -449,7 +452,7 @@
                 }),
         ]);
         products.editionView().fields(products.creationView().fields(),
-            nga.field('preview', 'template').label('Картинка').template((entry) => `<img id ="prodImg" src="/image/product/${entry.values.id}" />`),
+            nga.field('preview', 'template').label('Картинка').template((entry) => `<img id ="prodImg" src="/image/product/${entry.values.id}?`+ d.getTime() +`" />`),
             nga.field('image', 'file').label('Обновить').uploadInformation({'url': '/image/'})
         ).title('Редактирование продукта');
         admin.addEntity(products);
@@ -478,7 +481,7 @@
                     .singleApiCall(ids => ({'id': ids }))
         ]);
         reviews.editionView().fields(reviews.creationView().fields(),
-            nga.field('preview', 'template').label('Картинка').template((entry) => `<img id="reviewImg" src="/review/image/${entry.values.id}" />`),
+            nga.field('preview', 'template').label('Картинка').template((entry) => `<img id="reviewImg" src="/review/image/${entry.values.id}?`+ d.getTime() +`" />`),
             nga.field('image', 'file').label('Обновить').uploadInformation({'url': '/review/image/'})
         ).title('Редактирование Отзыва');
         admin.addEntity(reviews);
@@ -495,7 +498,7 @@
             nga.field('description').label("Описание"),
         ]);
         medias.editionView().fields(medias.creationView().fields(),
-            nga.field('preview', 'template').label('Картинка').template((entry) => `<img id="mediaImg" src="/media/image/${entry.values.code}" />`),
+            nga.field('preview', 'template').label('Картинка').template((entry) => `<img id="mediaImg" src="/media/image/${entry.values.code}?`+ d.getTime() +`" />`),
             nga.field('image', 'file').label('Обновить').uploadInformation({'url': '/media/'})
         ).title('Редактирование медиа');
         admin.addEntity(medias);

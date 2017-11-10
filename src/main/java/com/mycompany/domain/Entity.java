@@ -7,11 +7,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.jongo.marshall.jackson.oid.MongoId;
 import org.jongo.marshall.jackson.oid.MongoObjectId;
 
+import java.util.Date;
+
 public abstract class Entity {
 
     @MongoId
     @MongoObjectId
     public String id;
+
+    public Date created;
+    public Date modified;
 
     @JsonProperty("fullText")
     public String getFullText() {

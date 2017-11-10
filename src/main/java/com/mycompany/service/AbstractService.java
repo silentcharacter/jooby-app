@@ -13,6 +13,7 @@ import org.jongo.bson.Bson;
 import org.jongo.bson.BsonDocument;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -92,12 +93,15 @@ public abstract class AbstractService<T extends Entity> {
     }
 
     public T insert(T obj) {
+        obj.created = new Date();
+        obj.modified = new Date();
         onSave(obj);
         getCollection().insert(obj);
         return obj;
     }
 
     public T update(T obj) {
+        obj.modified = new Date();
         onSave(obj);
         getCollection().save(obj);
         return obj;
