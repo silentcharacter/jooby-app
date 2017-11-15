@@ -1,0 +1,5 @@
+db.menus.update(
+    {},
+    { $set: { active: true} },
+    { multi: true}
+);

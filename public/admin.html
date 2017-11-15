@@ -331,6 +331,7 @@
                     .targetEntity(cmspages)
                     .targetField(nga.field('title'))
                     .singleApiCall(ids => ({'id': ids })),
+            nga.field('active', 'boolean').label("Активность"),
             nga.field('index').label("Порядок"),
             nga.field('mobile').label("Отображать на мобильной"),
         ]);

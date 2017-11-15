@@ -22,7 +22,7 @@ public class MenuService extends AbstractService<Menu>
 	}
 
 	public List<Menu> getAll() {
-		return getAll(0, Integer.MAX_VALUE, "{index: 1}", "{}", Collections.emptyList());
+		return getAll(0, Integer.MAX_VALUE, "{index: 1}", "{active: true}", Collections.emptyList());
 	}
 
 	@Override

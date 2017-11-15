@@ -16,6 +16,7 @@ public class Menu extends Entity {
     public String cmsPageId;
     public String categoryId;
     public boolean mobile;
+    public boolean active;
 
     @Override
     public String getFullTextInner() {
