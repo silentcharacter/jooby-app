@@ -21,6 +21,8 @@
                 </div>
             </div>
 
+
+            {{#if additional}}
             <p class="large-font">Выберите добавки</p>
             <div class="checkbox-content">
                 <div class="box">
@@ -30,6 +32,7 @@
                     {{/each}}
                 </div>
             </div>
+            {{/if}}
             <ul class="cd-buttons">
                 <li><button type="button" onClick="addAndContinue()">Добавить и продолжить покупки</button></li>
                 <li><button type="button" onClick="addAndPlace()" class="place-btn">Оформить заказ</button></li>
