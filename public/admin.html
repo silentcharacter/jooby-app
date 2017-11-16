@@ -439,6 +439,7 @@
                     .targetField(nga.field('name'))
                     .singleApiCall(ids => ({'id': ids })),
             nga.field('active', 'boolean').label("Активность"),
+            nga.field('additional', 'boolean').label("Вспомогательный"),
             nga.field('categoryId', 'reference').label("Категория")
                     .targetEntity(categories)
                     .targetField(nga.field('name'))
