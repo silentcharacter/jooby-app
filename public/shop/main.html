@@ -1,56 +1,165 @@
-<main class="wrapper main-content" role="main">
-    <div class="flexslider" id="heroSlider">
-        <ul class="slides">
-            <li>
-                <a href="#" class="slide-link">
-                    <img src="/assets/image/banner2.jpg" alt="" />
-                </a>
-            </li>
-            <li>
-                <a href="#" class="slide-link">
-                    <img src="/assets/image/banner1.jpg" alt="" />
-                </a>
-            </li>
-            <li>
-                <a href="#" class="slide-link">
-                    <img src="/assets/image/banner3.jpg" alt="" />
-                </a>
-            </li>
-        </ul>
+<div class="main">
+    <div class="banner common-margin">
+        <img src="/media/image/banner" data-promo="{{categoryPromotion.categoryCmsId}}">
     </div>
-    <div class="row">
-        {{#each products}}
+    <div class="yellow-line"></div>
 
-        <div class="grid-item large--one-third medium--one-half small--one-whole on-sale">
-            <div class="product-grid-image" style="height: 160px;">
-                <a href="/product/{{id}}">
+    <div class="content common-margin">
+        <div class="main-content flex-wrap">
+            <div class="title large-font popular">Популярные товары
+                <div class="underline"></div>
+            </div>
+            {{#each popular}}
+            <div class="product">
+                <a href="/product/{{code}}">
                     <img src="/image/product/{{id}}" alt="{{name}}">
                 </a>
+                <div class="product-info">
+                    <a class="name" href="/product/{{code}}">{{name}}</a>
+                    <article class="middle-font description">{{shortDescription}}</article>
+                </div>
+                <div class="price-group ">
+                    <span class="price">{{price}} &#8381; за {{map units unitId}}</span>
+                    <a href="#" class="btn-buy cd-popup-trigger" data-product-id="{{id}}" data-price="{{price}}"
+                       data-unit-label="{{map units unitId 'label'}}" data-unit-coefficient="{{map units unitId 'coefficient'}}"
+                       data-product-name="{{name}}">
+                        Купить
+                    </a>
+                </div>
             </div>
-            <h4><a href="/product/{{id}}">{{name}}</a></h4>
-            <div class="description">{{description}}</div>
-            <div class="product-item--price">
-                <span class="h1 medium--left">
-                    <small>{{price}}<sup>00</sup></small>
-                </span>
-                <span class="sale-tag medium--right has-reviews">
-                    Акция
-                </span>
+            {{/each}}
+
+            <div class="title large-font"></div>
+            <div class="title large-font">Новинки
+                <div class="underline"></div>
             </div>
-            <span class="spr-badge" id="spr_badge_330383699" data-rating="4.2631578947368425">
-                        <span class="spr-starrating spr-badge-starrating">
-                            <i class="spr-icon spr-icon-star" style=""></i>
-                            <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star" style=""></i>
-                            <i class="spr-icon spr-icon-star" style=""></i><i class="spr-icon spr-icon-star-half-alt" style=""></i>
-                        </span>
-                        <span class="spr-badge-caption">19 отзывов</span>
+            {{#each new}}
+            <div class="product">
+                <a href="/product/{{code}}">
+                    <img src="/image/product/{{id}}" alt="{{name}}">
+                </a>
+                <div class="product-info">
+                    <a class="name" href="/product/{{code}}">{{name}}</a>
+                    <article class="middle-font description">{{shortDescription}}</article>
+                </div>
+                <div class="price-group ">
+                    <span class="price">
+                        {{price}} &#8381; за {{map units unitId}}
                     </span>
-            <br/>
-            <a class="btn bt-add-product" href="#" role="button" data-toggle="modal" onclick="onAddToCartBtnClick('{{id}}')">
-                <span class="icon icon-cart">Купить</span>
-            </a>
+                    <a href="#" class="btn-buy cd-popup-trigger" data-product-id="{{id}}" data-price="{{price}}"
+                       data-unit-label="{{map units unitId 'label'}}" data-unit-coefficient="{{map units unitId 'coefficient'}}"
+                       data-product-name="{{name}}">
+                        Купить
+                    </a>
+                </div>
+            </div>
+            {{/each}}
         </div>
-        {{/each}}
-    </div><!--/row-->
-</main>
+        <div class="side-bar">
+            <div class="title large-font"><a href="{{rootPath}}/cms/delivery">Доставка</a></div>
+            <div class="flex delivery">
+                <img src="/assets/image/delivery.svg" >
+                <article>
+                    Есть два вида доставки: бесплатная раз в неделю и платная в любой день
+                </article>
+            </div>
+            <article >
+                Завершая оформление заказа вы можете выбрать один из способ доставки. Мы либо бесплатно привезем вам заказ в день доставки по вашему району, либо за небольшую плату в удобное для вас время.
+            </article>
+            <div class="recipe">
+                <img src="/assets/image/pesto.jpg" srcset="/assets/image/pesto@2x.jpg 2x, /assets/image/pesto@3x.jpg 3x">
+                <a href="{{rootPath}}/cms/blog" class="large-font">Лучшие рецепты</a>
+                <article>
+                    Из наших продуктов вы приготовите много полезных и вкусных блюд! Просто следуйте нашим инструкциям.
+                </article>
+            </div>
+        </div>
+    </div>
+
+    <div class="reviews">
+        <div class="reviews-title">Отзывы</div>
+        <div class="common-margin flex-space-between reviews-slider">
+            {{#each reviews}}
+                <article>
+                    <img src="/review/image/{{id}}"/>
+                    <div class="review-wrapper">
+                        <span>«</span>
+                        <div>{{text}}</div>
+                        <span>»</span>
+                    </div>
+                    <p class="sign responsive">
+                        <a href="{{link}}">{{name}}</a>
+                    </p>
+                    <p class="sign">
+                        {{name}}
+                    </p>
+                    <a class="reviewer-link" href="{{link}}" target="_blank">{{link}}</a>
+                </article>
+            {{/each}}
+        </div>
+        <!--<div class="btn-wrapper">-->
+            <!--<a href="#" class="btn">Я тоже хочу сказать</a>-->
+        <!--</div>-->
+    </div>
+
+    <div class="yellow-line-2 responsive"></div>
+
+    <div class="dao-wrapper">
+        <div class="dao flex common-margin">
+            <div class="img-wrapper">
+                <img src="/assets/image/why.jpg">
+            </div>
+            <article>
+                <a href="{{rootPath}}/cms/blog">Почему мы решили готовить сами</a><br/>
+                <p>
+                    Мы любим и хорошо умеем готовить и рады поделится с вами радостью знакомства со вкусной и полезной едой! Мы очень тщательно выбираем каждый компонент для наших продуктов. Поскольку мы готовим для себя и друзей – качество и свежесть это наши приоритеты!
+                </p>
+
+            </article>
+        </div>
+        <div class="yellow-line-2"></div>
+    </div>
+
+    {{#each menus}}
+    {{#each categories}}
+    {{#equal ../this.categoryId this.left.id}}
+    <div class="category content common-margin">
+        <div class="main-content flex-wrap">
+            <div id="{{left.cmsId}}" class="title large-font">{{left.name}}
+                {{#equal categoryPromotion.categoryCmsId left.cmsId}}
+                    <span><img src="/assets/image/percentage-tarrifs.svg"></span>
+                {{/equal}}
+                <div class="underline"></div>
+            </div>
+            {{#each right}}
+            <div class="product">
+                <a href="/product/{{code}}">
+                    <img src="/image/product/{{id}}" alt="{{name}}">
+                </a>
+                <div class="product-info">
+                    <a class="name" href="/product/{{code}}">{{name}}</a>
+                    <article class="middle-font description">{{shortDescription}}</article>
+                </div>
+                <div class="price-group ">
+                    <span class="price">{{price}} &#8381; за {{map units unitId}}</span>
+                    <a href="#" class="btn-buy cd-popup-trigger" data-product-id="{{id}}" data-price="{{price}}"
+                       data-unit-label="{{map units unitId 'label'}}" data-unit-coefficient="{{map units unitId 'coefficient'}}"
+                       data-product-name="{{name}}">
+                        Купить
+                    </a>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    {{/equal}}
+    {{/each}}
+    {{/each}}
+
+</div>
+
+<div><a href="#" class="backtotop"></a></div>
+
+{{> shop/addToCartPopup}}
+
 

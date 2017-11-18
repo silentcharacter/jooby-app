@@ -233,7 +233,7 @@
                                     </table>
                                 </td>
                                 <td>
-                                    {{entry.quantity}} {{entry.product.unit.label}}
+                                    {{entry.quantityBase}} {{entry.product.unit.label}}
                                 </td>
                                 <td class="text-right">
                                     {{entry.totalPrice}} руб.
@@ -328,7 +328,7 @@
                                 </td>
                                 <td>
                                     <input ng-model="entry.quantity" ng-change="quantityChanged(entry)" style="text-align: right; width:40px">
-                                    <span class="hidden-xss">{{entry.product.unit.label}}</span>
+                                    <span class="hidden-xss">{{entry.product.unit.coefficient}} {{entry.product.unit.label}}</span>
                                 </td>
                                 <td class="text-right">
                                     {{entry.totalPrice}}

@@ -94,7 +94,7 @@ public class ShopApp extends Jooby
 		});
 
 		get(SHOP_PATH, req -> Results.html("shop/design")
-				.put("templateName", "shop/main_new")
+				.put("templateName", "shop/main")
 				.put("menus", menuService.getAll())
 				.put("rootPath", SHOP_PATH)
 				.put("categoryPromotion", categoryPromotionService.getBy("active", true))

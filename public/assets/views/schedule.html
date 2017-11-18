@@ -52,7 +52,7 @@
                                     </td>
                                     <td class="hidden-xs">
                                         <div ng-repeat="entry in order.entries">
-                                        {{$index + 1}}. {{entry.product.name}} {{entry.quantity}} кг.
+                                        {{$index + 1}}. {{entry.product.name}} {{entry.quantityBase}} {{entry.product.unit.label}}
                                         </div>
                                     </td>
                                     <td class="text-right">

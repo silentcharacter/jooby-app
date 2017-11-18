@@ -20,13 +20,15 @@ SHOP = {
             $(".add-to-cart input[type='checkbox']").prop("checked", false );
             var id = $(event.target).attr('data-product-id');
             $(".add-to-cart input[name='productId']").val(id);
+            $(".add-to-cart input[name='quantity']").val(1);
             $(".add-to-cart .popup-row").attr('id', id);
             $(".add-to-cart .product-name").text($(event.target).attr('data-product-name'));
-            $(".add-to-cart .number").text("1");
-            $(".add-to-cart .unit").text($(event.target).attr('data-unit'));
+            $(".add-to-cart .number").text($(event.target).attr('data-unit-coefficient'));
+            $(".add-to-cart .unit").text($(event.target).attr('data-unit-label'));
             var price = $(event.target).attr('data-price');
             $(".add-to-cart .price-value").text(price);
             $(".add-to-cart .popup-row").attr('data-price', price);
+            $(".add-to-cart .popup-row").attr('data-coefficient', $(event.target).attr('data-unit-coefficient'));
             $('.cd-popup.add-to-cart').addClass('is-visible');
         });
 
@@ -55,11 +57,14 @@ SHOP = {
         $('.add-to-cart-js .spinner .btn').on('click', function(event) {
             var row = $(this).parent().parent();
             var productId = row.attr('id');
+            var coefficient = Number(row.attr('data-coefficient'));
             var quantitySpan = $('#' + productId + ' .quantity .number');
-            var res = Number(quantitySpan.text()) + ($(this).hasClass('btn-plus')? 1 : -1);
+            var quantity = $(".add-to-cart input[name='quantity']").val();
+            var res = Number(quantity) + ($(this).hasClass('btn-plus')? 1 : -1);
             if (res === 0)
                 res = 1;
-            quantitySpan.text(res);
+            quantitySpan.text(res * coefficient);
+            $(".add-to-cart input[name='quantity']").val(res);
             var price = row.attr('data-price');
             $('#' + productId + ' .price-value').text(price * res);
         });
@@ -144,8 +149,9 @@ SHOP = {
             row = row.parent();
         var productId = row.attr('data-product-id');
         var entryNo = row.attr('data-entry-no');
+        var coefficient = Number(row.attr('data-unit-coefficient'));
         var quantitySpan = $('div[data-product-id="' + productId + '"] .quantity .number');
-        var quantity = Number(quantitySpan.text()) + ($(this).hasClass('btn-plus')? 1 : -1);
+        var quantity = Number(quantitySpan.text()) + ($(this).hasClass('btn-plus')? coefficient : -coefficient);
         if (quantity === 0) {
             removeFromCart(entryNo);
             return;
@@ -153,7 +159,7 @@ SHOP = {
         $.ajax({
             type: 'PUT',
             url: '/cart',
-            data: {entryNo: entryNo, quantity: quantity},
+            data: {entryNo: entryNo, quantity: (quantity / coefficient)},
             success: function (result) {
                 //todo: optimize double call
                 SHOP.updateCartTotal();
@@ -336,7 +342,6 @@ function addToCart(openCart) {
             obj[fieldName] = msg[i].value;
         }
     }
-    obj.quantity = Number($('.add-to-cart-js .number').text());
     if (isNaN(obj.quantity)) {
         return;
     }

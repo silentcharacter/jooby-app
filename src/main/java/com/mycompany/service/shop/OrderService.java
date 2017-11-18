@@ -213,7 +213,13 @@ public class OrderService extends AbstractService<Order> {
                 product.image = null;
                 Map<String, Object> productMap = mapper.convertValue(product, Map.class);
                 if (StringUtils.isNotEmpty(product.unitId)) {
-                    productMap.put("unit", unitService.getById(product.unitId));
+                    Unit unit = unitService.getById(product.unitId);
+                    productMap.put("unit", unit);
+                    try {
+                        entry.put("quantityBase", Integer.valueOf(entry.get("quantity").toString()) * unit.coefficient);
+                    } catch (Exception e) {
+                        logger.error("Conversion", e);
+                    }
                 }
                 entry.put("product", productMap);
                 if (entry.get("colorId") != null) {

@@ -24,7 +24,7 @@ angular.module('myApp.controllers').controller('ScheduleCtrl', ['$scope', '$http
         var d = new Date(startDate);
         d.setDate(d.getDate() + 1);
         var endDate = formatDate(d);
-        var filter = {deliveryDate_$gte: startDate, deliveryDate_$lt: endDate};
+        var filter = {deliveryDate_$gte: startDate, deliveryDate_$lt: endDate, status: window.IN_DELIVERY};
         var filterUrl = encodeURIComponent(JSON.stringify(filter));
         var sort = '&_sortField=orderNumber&_sortDir=ASC';
         $scope.loading = true;

@@ -13,6 +13,11 @@ public class Unit extends Entity {
     public Integer coefficient;
 
     @Override
+    public String toString() {
+        return coefficient > 1? String.format("%d %s", coefficient, label): label;
+    }
+
+    @Override
     public String getFullTextInner() {
         return StringUtils.defaultString(name);
     }

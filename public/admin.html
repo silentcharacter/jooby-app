@@ -638,7 +638,7 @@
                     .targetField(nga.field('description'))
                     .singleApiCall(ids => ({'id': ids })),
             nga.field('deliveryTime', 'choice').attributes({ placeholder: 'Выберите значение' }).label("Интервал").choices(window.times),
-            nga.field('status', 'choice').label("Статус").choices(orderStatuses),
+            nga.field('status', 'choice').label("Статус").choices(orderStatuses).editable(false),
             nga.field('name').label("Имя покупателя"),
             nga.field('phone').label("Телефон"),
             nga.field('customerId', 'reference').label("Покупатель")

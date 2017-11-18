@@ -178,7 +178,7 @@ xpopup
 }
 
 .spinner .quantity {
-    width: 60px;
+    width: 80px;
     text-align: center;
     vertical-align: middle;
     line-height: 50px;
@@ -418,7 +418,7 @@ input[type="checkbox"]:checked + label:after {
         line-height: 40px;
     }
     .spinner .quantity {
-        width: 50px;
+        width: 80px;
         line-height: 40px;
     }
     .popup-price {

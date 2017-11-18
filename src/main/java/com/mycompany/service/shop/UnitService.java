@@ -13,7 +13,8 @@ public class UnitService extends AbstractService<Unit> {
         super(Unit.class);
     }
 
-    public Map<String, String> getLabelsMap() {
-        return getAll().stream().collect(Collectors.toMap(u -> u.id, u -> u.label));
+    public Map<String, Unit> getLabelsMap() {
+        return getAll().stream().collect(Collectors.toMap(
+                u -> u.id, u -> u));
     }
 }
