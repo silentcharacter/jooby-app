@@ -10,7 +10,8 @@
             <p class="large-font title">Корзина</p>
             <div class="cart-entries">
                 {{#each cart.entries}}
-                <div class="cart-row flex-wrap" data-product-id="{{product.id}}" data-entry-no="{{entryNo}}">
+                <div class="cart-row flex-wrap" data-product-id="{{product.id}}" data-entry-no="{{entryNo}}"
+                                                data-unit-coefficient="{{product.unit.coefficient}}">
                     <div class="cart-product">
                         <a href="/product/{{product.code}}">
                             <img src="/image/product/{{product.id}}" alt="{{product.name}}">
@@ -25,7 +26,7 @@
                         <div class="spinner">
                             <div class="btn btn-minus noselect">–</div>
                             <div class="quantity noselect">
-                                <span class="number">{{quantity}}</span> <span class="unit">{{product.unit.label}}</span>
+                                <span class="number">{{quantityBase}}</span> <span class="unit">{{product.unit.label}}</span>
                             </div>
                             <div class="btn btn-plus noselect">+</div>
                         </div>
