@@ -339,28 +339,6 @@
         admin.addEntity(menus);
 
 
-        var categoryPromotions =  nga.entity('categoryPromotions');
-        categoryPromotions.listView().title('Акции на товарные категории').fields([
-            nga.field('name').isDetailLink(true).label("Название"),
-            nga.field('discountPercent').label("Скидка %"),
-            nga.field('active', 'boolean').label("Активность"),
-        ]).filters([
-            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Поиск...' })
-        ]);
-        categoryPromotions.creationView().title('Создание Акции').fields([
-            nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
-            nga.field('message').validation({ required: true, maxlength: 512 }).label("Сообщение"),
-            nga.field('discountPercent', 'number').validation({ required: true}).label("Скидка %"),
-            nga.field('categoryId', 'reference').label("Категория").validation({ required: true})
-                    .targetEntity(categories)
-                    .targetField(nga.field('name'))
-                    .singleApiCall(ids => ({'id': ids })),
-            nga.field('active', 'boolean').label("Активность"),
-        ]);
-        categoryPromotions.editionView().fields(categoryPromotions.creationView().fields()).title('Редактирование Акции');
-        admin.addEntity(categoryPromotions);
-
-
         var tags = nga.entity('tags');
         tags.listView().title('Теги').fields([
             nga.field('name').isDetailLink(true).label("Название"),
@@ -458,6 +436,32 @@
             nga.field('image', 'file').label('Обновить').uploadInformation({'url': '/image/'})
         ).title('Редактирование продукта');
         admin.addEntity(products);
+
+        var categoryPromotions =  nga.entity('categoryPromotions');
+        categoryPromotions.listView().title('Акции').fields([
+            nga.field('name').isDetailLink(true).label("Название"),
+            nga.field('discountPercent').label("Скидка %"),
+            nga.field('active', 'boolean').label("Активность"),
+        ]).filters([
+            nga.field('q').label('').pinned(true).attributes({ placeholder: 'Поиск...' })
+        ]);
+        categoryPromotions.creationView().title('Создание Акции').fields([
+            nga.field('name').validation({ required: true, maxlength: 512 }).label("Название"),
+            nga.field('message').validation({ required: true, maxlength: 512 }).label("Сообщение"),
+            nga.field('discountPercent', 'number').validation({ required: true}).label("Скидка %"),
+            nga.field('categoryId', 'reference').label("Категория")
+                    .targetEntity(categories)
+                    .targetField(nga.field('name'))
+                    .singleApiCall(ids => ({'id': ids })),
+            nga.field('productId', 'reference').label("Товар")
+                    .targetEntity(products)
+                    .targetField(nga.field('name'))
+                    .singleApiCall(ids => ({'id': ids })),
+            nga.field('active', 'boolean').label("Активность"),
+        ]);
+        categoryPromotions.editionView().fields(categoryPromotions.creationView().fields()).title('Редактирование Акции');
+        admin.addEntity(categoryPromotions);
+
 
         var reviews = nga.entity('reviews');
         reviews.listView().title('Отзывы').fields([
@@ -729,7 +733,7 @@
                 .addChild(nga.menu().title('Маркетинг').icon('<span class="glyphicon glyphicon-cog"></span>')
                     .addChild(nga.menu(customers).icon('<span class="glyphicon glyphicon-king"></span>').title('Покупатели'))
                     .addChild(nga.menu(reviews).icon('<span class="glyphicon glyphicon-thumbs-up"></span>').title('Отзывы'))
-                    .addChild(nga.menu(categoryPromotions).icon('<span class="glyphicon glyphicon-asterisk"></span>').title('Акции по категориям'))
+                    .addChild(nga.menu(categoryPromotions).icon('<span class="glyphicon glyphicon-asterisk"></span>').title('Акции'))
                 )
                 .addChild(nga.menu().title('Отчеты').icon('<span class="glyphicon glyphicon-signal"></span>').link('/stats').active(function(path) {
                     return path.indexOf('/stats') === 0;

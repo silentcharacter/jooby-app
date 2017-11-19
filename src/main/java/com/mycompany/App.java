@@ -164,7 +164,7 @@ public class App extends Jooby {
         use(new Units());
         use(new Menus());
         use(new Medias());
-        use(new CategoryPromotions());
+        use(new promotions());
         use(new Reviews());
         use(new CmsPages());
     }

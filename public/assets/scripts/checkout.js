@@ -14,13 +14,29 @@ $(document).ready(function () {
         });
     });
 
-    $("[name='phone']").mask("+7 (000) 000-00-00", {
-         translation: {
-           'r': {
-             pattern: /[\/]/,
-           },
-         }
-    });
+    var validation = function(cep) {
+        var masks = ['+7 (000) 000-00-00', '8 (000) 000-00-00'];
+        var mask = masks[0];
+        if (cep.startsWith('+7 (8')) {
+            mask = masks[1];
+            $("[name='phone']").val(cep.substring(4).replace(/\D/g,''));
+        }
+        if (cep.startsWith('8 (')) {
+            mask = masks[1];
+        }
+        return mask;
+    };
+
+    var options =  {
+        onChange: function(cep){
+            $("[name='phone']").mask(validation(cep), options);
+        },
+        onKeyPress: function(cep, e, field, options) {
+            $("[name='phone']").mask(validation(cep), options);
+        }
+    };
+
+    $("[name='phone']").mask("+7 (000) 000-00-000", options);
 
     $("[name='entrance']").mask("0000");
 

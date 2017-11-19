@@ -35,7 +35,7 @@ public class CartService {
     @Inject
     private OrderService orderService;
     @Inject
-    private CategoryPromotionService categoryPromotionService;
+    private PromotionService promotionService;
     private ObjectMapper mapper = new ObjectMapper();
 
     public Cart getSessionCart(Request req) {
@@ -59,7 +59,7 @@ public class CartService {
 
     public Map<String, Object> getFetchedCart(Request req) {
         Map<String, Object> cart = orderService.getOrderMap(getSessionCart(req));
-        CategoryPromotion applied = categoryPromotionService.findApplied(cart);
+        Promotion applied = promotionService.findApplied(cart);
         if (applied != null) {
             cart.put("promo", applied);
         }

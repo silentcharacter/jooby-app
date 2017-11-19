@@ -11,6 +11,9 @@ public class OrderValidator
 		if (StringUtils.isEmpty(order.phone)) {
 			return new ValidationResult("phone", "Заполните поле 'Телефон'");
 		}
+		if (order.phone.replaceAll("[^\\d.]", "").length() != 11) {
+			return new ValidationResult("phone", "Неверный номер телефона");
+		}
 		if (StringUtils.isEmpty(order.name)) {
 			return new ValidationResult("name", "Заполните поле 'Имя'");
 		}

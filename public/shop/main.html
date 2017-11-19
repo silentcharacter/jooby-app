@@ -1,6 +1,12 @@
 <div class="main">
     <div class="banner common-margin">
-        <img src="/media/image/banner" data-promo="{{categoryPromotion.categoryCmsId}}">
+        {{#if categoryPromotion.productId}}
+            <a href="/product/{{categoryPromotion.productId}}">
+                <img src="/media/image/banner">
+            </a>
+        {{else}}
+            <img src="/media/image/banner" data-promo="{{categoryPromotion.categoryCmsId}}">
+        {{/if}}
     </div>
     <div class="yellow-line"></div>
 

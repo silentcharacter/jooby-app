@@ -140,9 +140,12 @@
                                     {{/each}}
                                     </tbody>
                                 </table>
-
+                                {{#if cart.promo}}
+                                <div class="promo">
+                                    {{cart.promo.message}}
+                                </div>
+                                {{/if}}
                                 <div class="order-summary__scroll-indicator">
-                                    Scroll for more items
                                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="12" viewBox="0 0 10 12">
                                         <path d="M9.817 7.624l-4.375 4.2c-.245.235-.64.235-.884 0l-4.375-4.2c-.244-.234-.244-.614 0-.848.245-.235.64-.235.884 0L4.375 9.95V.6c0-.332.28-.6.625-.6s.625.268.625.6v9.35l3.308-3.174c.122-.117.282-.176.442-.176.16 0 .32.06.442.176.244.234.244.614 0 .848"/>
                                     </svg>
@@ -150,10 +153,10 @@
                             </div>
                         </div>
 
-
+                        <input type="hidden" name="errorField" value="{{errorField}}"/>
                         <!--<div class="order-summary__section order-summary__section&#45;&#45;discount" data-reduction-form="update">-->
                             <!--<form class="edit_checkout" action="#" accept-charset="UTF-8" method="post" enctype="application/x-www-form-urlencoded">-->
-                                <!--<input type="hidden" name="errorField" value="{{errorField}}"/>-->
+
 
                                 <!--<div class="fieldset">-->
                                     <!--<div class="field ">-->

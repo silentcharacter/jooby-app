@@ -5312,3 +5312,14 @@ nav .facebook {
         display: none;
     }
 }
+
+.promo {
+    color: red;
+}
+
+@media (max-width: 749px) {
+    .promo {
+        padding-top: 10px;
+    }
+
+}

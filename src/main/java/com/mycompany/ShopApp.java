@@ -46,7 +46,7 @@ public class ShopApp extends Jooby
 	private static ProductService productService;
 	private static ReviewService reviewService;
 	private static MediaService mediaService;
-	private static CategoryPromotionService categoryPromotionService;
+	private static PromotionService promotionService;
 	private static ColorService colorService;
 	private static SauceService sauceService;
 	private static MenuService menuService;
@@ -65,7 +65,7 @@ public class ShopApp extends Jooby
 			smsService = registry.require(SmsService.class);
 			productService = registry.require(ProductService.class);
 			mediaService = registry.require(MediaService.class);
-			categoryPromotionService = registry.require(CategoryPromotionService.class);
+			promotionService = registry.require(PromotionService.class);
 			colorService = registry.require(ColorService.class);
 			sauceService = registry.require(SauceService.class);
 			cmsPageService = registry.require(CmsPageService.class);
@@ -97,7 +97,7 @@ public class ShopApp extends Jooby
 				.put("templateName", "shop/main")
 				.put("menus", menuService.getAll())
 				.put("rootPath", SHOP_PATH)
-				.put("categoryPromotion", categoryPromotionService.getBy("active", true))
+				.put("categoryPromotion", promotionService.getBy("active", true))
 				.put("popular", productService.getAll("{tags:'" + tagService.getPopular().id + "', active: true}"))
 				.put("new", productService.getAll("{tags:'" + tagService.getNew().id + "', active: true}"))
 				.put("units", unitService.getLabelsMap())
@@ -131,6 +131,9 @@ public class ShopApp extends Jooby
 
 		get("/product/:productCode", req -> {
 			Product product = productService.getBy("code", req.param("productCode").value());
+			if (product == null) {
+				product = productService.getById(req.param("productCode").value());
+			}
 			return Results.html("shop/design")
 					.put("templateName", "shop/product")
 					.put("product", product)
@@ -186,7 +189,8 @@ public class ShopApp extends Jooby
 						cart.put("name", previousOrder.name);
 						cart.put("streetName", previousOrder.streetName);
 						cart.put("originalStreetNumber", previousOrder.originalStreetNumber);
-						cart.put("entrance", Utils.formatEntrance(previousOrder.entrance));
+						if (previousOrder.entrance != null)
+							cart.put("entrance", Utils.formatEntrance(previousOrder.entrance));
 						cart.put("flat", previousOrder.flat);
 					}
 				}

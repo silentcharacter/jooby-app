@@ -12,11 +12,12 @@
             <div class="add-to-cart-js">
                 <form method="get" action="#">
                     <input type="hidden" name="productId" value="{{product.id}}">
-                    <div class="flex popup-row" id="{{product.id}}" data-price="{{product.price}}">
+                    <input type="hidden" name="quantity" value="1">
+                    <div class="flex popup-row" id="{{product.id}}" data-price="{{product.price}}" data-coefficient="{{unit.coefficient}}">
                         <div class="spinner">
                             <div class="btn btn-minus noselect">–</div>
                             <div class="quantity noselect">
-                                <span class="number">1</span> <span class="unit">{{unit.label}}</span>
+                                <span class="number">{{unit.coefficient}}</span> <span class="unit">{{unit.label}}</span>
                             </div>
                             <div class="btn btn-plus noselect">+</div>
                         </div>

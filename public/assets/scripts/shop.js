@@ -6,7 +6,7 @@ SHOP = {
         //banner click
         $('.banner img').click(function() {
             var promoCategoryId = $(this).attr('data-promo');
-            if (!promoCategoryId) return false;
+            if (!promoCategoryId) return true;
             var el = $('#' + promoCategoryId);
             SHOP.scrollToElement(el);
             return false;
@@ -58,13 +58,13 @@ SHOP = {
             var row = $(this).parent().parent();
             var productId = row.attr('id');
             var coefficient = Number(row.attr('data-coefficient'));
-            var quantitySpan = $('#' + productId + ' .quantity .number');
-            var quantity = $(".add-to-cart input[name='quantity']").val();
+            var quantity = $(".add-to-cart-js input[name='quantity']").val();
             var res = Number(quantity) + ($(this).hasClass('btn-plus')? 1 : -1);
             if (res === 0)
                 res = 1;
+            var quantitySpan = $('#' + productId + ' .quantity .number');
             quantitySpan.text(res * coefficient);
-            $(".add-to-cart input[name='quantity']").val(res);
+            $(".add-to-cart-js input[name='quantity']").val(res);
             var price = row.attr('data-price');
             $('#' + productId + ' .price-value').text(price * res);
         });

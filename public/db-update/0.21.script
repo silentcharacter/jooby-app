@@ -1,0 +1,30 @@
+db.categoryPromotions.insertMany([
+        {
+            "name" : "акция на хумус",
+            "message" : "Вы получите питу в подарок!",
+            "active" : true,
+            "discountPercent" : 0,
+        },
+        {
+            "name" : "акция на хумус с паприкой",
+            "message" : "Вы получите питу в подарок!",
+            "active" : true,
+            "discountPercent" : 0,
+        }
+    ]
+);
+
+db.categoryPromotions.find({name:'акция на хумус'}).forEach(function (obj) {
+    var product = db.products.findOne({ name:'Хумус' });
+    if (product != null) {
+        obj.productId = product._id;
+        db.categoryPromotions.save(obj);
+    }
+});
+db.categoryPromotions.find({name:'акция на хумус с паприкой'}).forEach(function (obj) {
+    var product = db.products.findOne({ name:'Хумус с паприкой' });
+    if (product != null) {
+        obj.productId = product._id;
+        db.categoryPromotions.save(obj);
+    }
+});

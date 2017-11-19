@@ -230,6 +230,10 @@ nav .facebook {
     flex-direction: column;
     justify-content: flex-start;
 }
+.product .product-info {
+    margin-bottom: 5px;
+}
+
 .category .product {
     flex: 0 1 23%;
     margin-top: 10px;

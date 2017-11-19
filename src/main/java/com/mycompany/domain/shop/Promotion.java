@@ -8,13 +8,14 @@ import org.apache.commons.lang3.StringUtils;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Deployment(table = "categoryPromotions")
-public class CategoryPromotion extends Entity {
+public class Promotion extends Entity {
 
     public String name;
     public String message;
     public boolean active;
     public String categoryId;
     public String categoryCmsId;
+    public String productId;
     public int discountPercent;
 
     @Override
