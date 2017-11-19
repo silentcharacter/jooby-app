@@ -56,6 +56,7 @@ public class ShopApp extends Jooby
 	private static UnitService unitService;
 	private static CmsPageService cmsPageService;
 	private static EmailService emailService;
+	private static DeliveryTypeService deliveryTypeService;
 	private static Config config;
 	private static ObjectMapper mapper = new ObjectMapper();
 
@@ -78,6 +79,7 @@ public class ShopApp extends Jooby
 			unitService = registry.require(UnitService.class);
 			reviewService = registry.require(ReviewService.class);
 			emailService = registry.require(EmailService.class);
+			deliveryTypeService = registry.require(DeliveryTypeService.class);
 		});
 
 		err((req, rsp, err) -> {
@@ -245,6 +247,7 @@ public class ShopApp extends Jooby
 					.put("step", "delivery")
 					.put("menus", menuService.getAll())
 					.put("menus", menuService.getAll())
+					.put("payableDelivery", deliveryTypeService.getBy("name", DeliveryType.PAYABLE))
 					.put("rootPath", SHOP_PATH)
 					.put("cart", cartService.getFetchedCart(req))
 					.put("templateName", "shop/delivery")
