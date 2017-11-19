@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.controller.shop.*;
 import com.mycompany.domain.shop.*;
 import com.mycompany.service.AuthenticationService;
+import com.mycompany.service.EmailService;
 import com.mycompany.service.ReviewService;
 import com.mycompany.service.SmsService;
 import com.mycompany.service.shop.*;
@@ -54,6 +55,7 @@ public class ShopApp extends Jooby
 	private static TagService tagService;
 	private static UnitService unitService;
 	private static CmsPageService cmsPageService;
+	private static EmailService emailService;
 	private static Config config;
 	private static ObjectMapper mapper = new ObjectMapper();
 
@@ -75,6 +77,7 @@ public class ShopApp extends Jooby
 			tagService = registry.require(TagService.class);
 			unitService = registry.require(UnitService.class);
 			reviewService = registry.require(ReviewService.class);
+			emailService = registry.require(EmailService.class);
 		});
 
 		err((req, rsp, err) -> {
@@ -266,6 +269,7 @@ public class ShopApp extends Jooby
 			cartService.emptyCart(req);
 			sendEvent(order);
 			smsService.sendOrderConfirmationSms(order, false);
+			emailService.sendOrderPlacedEmail(order);
 			return Results.redirect("/thankyou?order=" + order.orderNumber);
 		});
 

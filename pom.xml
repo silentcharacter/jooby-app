@@ -142,6 +142,13 @@
       <version>4.5.2</version>
     </dependency>
 
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>1.4</version>
+    </dependency>
+
+
     <!--<dependency>-->
       <!--<groupId>org.apache.commons</groupId>-->
       <!--<artifactId>commons-io</artifactId>-->
