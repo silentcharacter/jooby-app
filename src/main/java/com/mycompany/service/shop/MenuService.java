@@ -29,6 +29,6 @@ public class MenuService extends AbstractService<Menu>
 	public void onSave(Menu object)
 	{
 		object.url = StringUtils.isNoneEmpty(object.categoryId)?
-				("#" + categoryService.getById(object.categoryId).cmsId) : ("/cms" + cmsPageService.getById(object.cmsPageId).url);
+				("#" + categoryService.getById(object.categoryId).cmsId) : ("cms" + cmsPageService.getById(object.cmsPageId).url);
 	}
 }
