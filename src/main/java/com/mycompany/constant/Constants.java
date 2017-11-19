@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Constants
 {
-	public static final String SHOP_PATH = "/";
+	public static final String SHOP_PATH = "";
 
 	public static final List<Breadcrumb> CONTACT_BREADCRUMB = Arrays.asList(
 			new Breadcrumb(false, "/", "Каталог"),

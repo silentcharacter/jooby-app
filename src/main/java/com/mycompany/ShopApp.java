@@ -96,7 +96,7 @@ public class ShopApp extends Jooby
 					.put("cart", cartService.getFetchedCart(req)));
 		});
 
-		get(SHOP_PATH, req -> Results.html("shop/design")
+		get("/" + SHOP_PATH, req -> Results.html("shop/design")
 				.put("templateName", "shop/main")
 				.put("menus", menuService.getAll())
 				.put("rootPath", SHOP_PATH)
@@ -110,14 +110,14 @@ public class ShopApp extends Jooby
 				.put("analyticsKey", config.getString("google.analytics.key"))
 				.put("cart", cartService.getFetchedCart(req)));
 
-		get(SHOP_PATH + "cms/:pageUrl", req -> Results.html("shop/design")
+		get(SHOP_PATH + "/cms/:pageUrl", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
 				.put("cmsPage", cmsPageService.getBy("url", "/"  + req.param("pageUrl").value()))
 				.put("rootPath", SHOP_PATH)
 				.put("cart", cartService.getFetchedCart(req)));
 
-		get(SHOP_PATH + "m-cart", req -> Results.html("shop/design")
+		get(SHOP_PATH + "/m-cart", req -> Results.html("shop/design")
 				.put("templateName", "shop/cartMobile")
 				.put("menus", menuService.getAll())
 				.put("rootPath", SHOP_PATH)
