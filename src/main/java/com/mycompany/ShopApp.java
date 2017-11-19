@@ -124,13 +124,13 @@ public class ShopApp extends Jooby
 				.put("cart", cartService.getFetchedCart(req))
 				.put("categories", categoryService.getAll()));
 
-		get("/", req -> {
-			CommonProfile profile = AuthenticationService.getUserProfile(req);
-			if (profile == null) {
-				return Results.html("shop/mockUp").put("analyticsKey", config.getString("google.analytics.key"));
-			}
-			return Results.redirect(SHOP_PATH);
-		});
+//		get("/", req -> {
+//			CommonProfile profile = AuthenticationService.getUserProfile(req);
+//			if (profile == null) {
+//				return Results.html("shop/mockUp").put("analyticsKey", config.getString("google.analytics.key"));
+//			}
+//			return Results.redirect(SHOP_PATH);
+//		});
 
 		get("/product/:productCode", req -> {
 			Product product = productService.getBy("code", req.param("productCode").value());
