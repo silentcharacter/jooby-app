@@ -101,8 +101,10 @@ public class ShopApp extends Jooby
 				.put("menus", menuService.getAll())
 				.put("rootPath", SHOP_PATH)
 				.put("categoryPromotion", promotionService.getBy("active", true))
-				.put("popular", productService.getAll("{tags:'" + tagService.getPopular().id + "', active: true}"))
-				.put("new", productService.getAll("{tags:'" + tagService.getNew().id + "', active: true}"))
+				.put("popular", productService.aggregate(
+						"{tags:'" + tagService.getPopular().id + "', active: true}", 3))
+				.put("new", productService.aggregate(
+						"{tags:'" + tagService.getNew().id + "', active: true}", 3))
 				.put("units", unitService.getLabelsMap())
 				.put("reviews", reviewService.getAll("{productId: null}"))
 				.put("additional", productService.getAdditionalProducts())

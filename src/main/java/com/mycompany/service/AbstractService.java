@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import com.mycompany.annotation.Deployment;
 import com.mycompany.domain.Entity;
 import org.bson.types.ObjectId;
+import org.jongo.Aggregate;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
@@ -57,6 +58,12 @@ public abstract class AbstractService<T extends Entity> {
                 .sort(sort).limit(perPage).skip(page * perPage)
                 .as(typeParameterClass);
         return Lists.newArrayList(cursor.iterator());
+    }
+
+    public List<T> aggregate(String query, Integer n) {
+        Aggregate.ResultsIterator<T> res = getCollection().aggregate("{$match:" + query + "}")
+                .and("{$sample: {size: " + n +"}}").as(typeParameterClass);
+        return Lists.newArrayList(res.iterator());
     }
 
     public SearchResult<T> getList(List<String> queryConditions, List<Object> filterValues, String sort, boolean onlyCount,
