@@ -79,7 +79,7 @@ SHOP = {
 
     showCart: function() {
         if ($(window).width() <= SHOP.MOBILE_MAX_RESOLUTION) {
-            window.location = $('#rootPath').val() + '/m-cart';
+            window.location = $('#rootPath').val() + 'm-cart';
             return;
         }
         if ($('#cartContentTemplateDiv').length === 0) {
