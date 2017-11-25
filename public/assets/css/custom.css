@@ -651,13 +651,21 @@ footer img {
     top: 50px;
 	background-color: #ffd400;
 }
+.circle-wrapper {
+    width: 100%;
+    height: 200px;
+    margin: 0 0 -10px 18%;
+    overflow: hidden;
+    position: absolute;
+}
+
 .half-circle-2 {
     border-radius: 50%;
     width: 240px;
 	height: 240px;
 	position: absolute;
-    right: -250px;
-    top: 0px;
+    right: -200px;
+    top: -20px;
 	background-color: #ffd400;
 }
 .yellow-line-cms-wrapper {
@@ -704,9 +712,6 @@ footer img {
     .half-circle-1 {
         left: -27%;
     }
-    .half-circle-2 {
-        right: -110%;
-    }
 }
 
 @media screen and (max-width: 1025px) {
@@ -721,9 +726,6 @@ footer img {
     }
     .yellow-line {
         top: 300px;
-    }
-    .half-circle-2 {
-        right: -120%;
     }
 }
 
@@ -1075,13 +1077,77 @@ img#menu-bg{
     z-index: 2;
 }
 
-.menu-row:hover, .sum-wrapper:hover, .cart-popup-trigger:not(.basket):hover {
+.menu-row:hover, .sum-wrapper:hover, .cart-popup-trigger:not(.basket):hover, .facebook:hover {
     transform: scale(1.1);
 }
 .menu-row:hover a{
     font-weight: 400;
 }
-
 .sum-wrapper:hover .small-font {
     font-weight: 400;
+}
+.spinner .btn:hover {
+    font-weight: 400;
+}
+
+//basket animation
+@-webkit-keyframes swing {
+  15% {
+    -webkit-transform: rotate(15deg);
+    transform: rotate(15deg);
+  }
+  30% {
+    -webkit-transform: rotate(-15deg);
+    transform: rotate(-15deg);
+  }
+  40% {
+    -webkit-transform: rotate(10deg);
+    transform: rotate(10deg);
+  }
+  50% {
+    -webkit-transform: rotate(-10deg);
+    transform: rotate(-10deg);
+  }
+  65% {
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes swing {
+  15% {
+    -webkit-transform: rotate(15deg);
+    transform: rotate(15deg);
+  }
+  30% {
+    -webkit-transform: rotate(-15deg);
+    transform: rotate(-15deg);
+  }
+  40% {
+    -webkit-transform: rotate(10deg);
+    transform: rotate(10deg);
+  }
+  50% {
+    -webkit-transform: rotate(-10deg);
+    transform: rotate(-10deg);
+  }
+  65% {
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+}
+
+.icon-basket:hover {
+  -webkit-animation: swing 0.6s ease;
+  animation: swing 0.6s ease;
+   -webkit-animation-iteration-count: 1;
+   animation-iteration-count: 1;
 }
