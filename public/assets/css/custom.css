@@ -1039,7 +1039,7 @@ img#menu-bg{
     z-index: 2;
 }
 
-.menu-row:hover, .sum-wrapper:hover, .cart-popup-trigger:hover {
+.menu-row:hover, .sum-wrapper:hover, .cart-popup-trigger:not(.basket):hover {
     transform: scale(1.1);
 }
 .menu-row:hover a{
