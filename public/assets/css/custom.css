@@ -216,6 +216,7 @@ nav .facebook {
     margin-top: 10px;
     margin-left: 20%;
     margin-right: -20%;
+    position: relative;
 }
 
 .title {
@@ -638,6 +639,27 @@ footer img {
 	top: 330px;
     left: 120px;
 }
+.new {
+    position: relative;
+}
+.half-circle-1 {
+    border-radius: 50%;
+    width: 132px;
+	height: 132px;
+	position: absolute;
+    left: -22%;
+    top: 50px;
+	background-color: #ffd400;
+}
+.half-circle-2 {
+    border-radius: 50%;
+    width: 240px;
+	height: 240px;
+	position: absolute;
+    right: -250px;
+    top: 0px;
+	background-color: #ffd400;
+}
 .yellow-line-cms-wrapper {
     position: relative;
     width: 120%;
@@ -668,12 +690,22 @@ footer img {
     display: none;
 }
 
+@media screen and (max-width: 1300px) {
+
+}
+
 @media screen and (max-width: 1200px) {
     .yellow-line {
         top: 350px;
     }
     .dao p {
         font-size: 120%;
+    }
+    .half-circle-1 {
+        left: -27%;
+    }
+    .half-circle-2 {
+        right: -110%;
     }
 }
 
@@ -690,6 +722,9 @@ footer img {
     .yellow-line {
         top: 300px;
     }
+    .half-circle-2 {
+        right: -120%;
+    }
 }
 
 @media screen and (max-width: 900px) {
@@ -702,6 +737,7 @@ footer img {
     .common-margin {
         margin: 20px 4% 20px 4%;
     }
+
     .footer {
         margin: 0 4% 0 4%;
     }
