@@ -664,7 +664,7 @@ footer img {
     transform: rotate(5deg);
 }
 
-.basket-responsive,.menu-btn-responsive,.fixed-nav-bar,.topnav-responsive,.reviews-title,.yellow-line-2.responsive,.sign.responsive,.footer.responsive {
+.basket-responsive,.menu-btn-responsive,.fixed-nav-bar,.topnav-responsive,.reviews-title,.yellow-line-2.responsive,.sign.responsive,.footer.responsive,.mobile {
     display: none;
 }
 
@@ -771,6 +771,12 @@ footer img {
     }
     .banner img {
         border-radius: 0px 0px 0px 0px;
+    }
+    .mobile {
+        display: block;
+    }
+    .desktop {
+        display: none;
     }
     .topnav-responsive.expanded {
         display: block;
