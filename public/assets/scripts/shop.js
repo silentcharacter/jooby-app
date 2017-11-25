@@ -78,6 +78,8 @@ SHOP = {
     },
 
     showCart: function() {
+        $('.loading-indicator').show();
+
         if ($(window).width() <= SHOP.MOBILE_MAX_RESOLUTION) {
             window.location = $('#rootPath').val() + '/m-cart';
             return;
@@ -121,6 +123,8 @@ SHOP = {
                     $('.cd-popup.cart').addClass('is-visible');
                     $('.cart .spinner .btn').on('click', SHOP.modifyCart);
                 }
+            }).always(function () {
+                $('.loading-indicator').hide();
             });
         });
     },
@@ -156,6 +160,7 @@ SHOP = {
             removeFromCart(entryNo);
             return;
         }
+        $('.loading-indicator').show();
         $.ajax({
             type: 'PUT',
             url: '/cart',
@@ -168,6 +173,8 @@ SHOP = {
             error: function (xhr, str) {
                 console.log('Возникла ошибка: ' + xhr.responseCode);
             }
+        }).always(function() {
+
         });
     },
 
@@ -221,7 +228,7 @@ SHOP = {
     },
 
     bindScrolls: function() {
-        $('a[href*="#"]:not(.backtotop)').click(function(e) {
+        $('a[href*="#"]:not(.backtotop):not(.cd-popup-trigger)').click(function(e) {
             var el = $('#' + $(this).attr('href').split('#')[1]);
             SHOP.scrollToElement(el);
             return false;
@@ -307,6 +314,7 @@ $(window).on("load", function () {
 });
 
 function removeFromCart(entryNo) {
+    $('.loading-indicator').show();
     $.ajax({
         type: 'DELETE',
         url: '/cart?entryNo=' + entryNo,
@@ -315,6 +323,7 @@ function removeFromCart(entryNo) {
         }
     }).always(function () {
         $('.cd-popup.cart').removeClass('is-visible');
+        $('.loading-indicator').hide();
         //todo: optimize double call
         SHOP.updateCartTotal();
         SHOP.showCart();
@@ -331,6 +340,7 @@ function addAndContinue() {
 
 function addToCart(openCart) {
     $('.cd-popup.add-to-cart').removeClass('is-visible');
+    $('.loading-indicator').show();
 
     var msg = $('.add-to-cart-js form').serializeArray();
     var obj = {additions: []};
@@ -354,6 +364,7 @@ function addToCart(openCart) {
         }
     }).always(function () {
         SHOP.updateCartTotal();
+        $('.loading-indicator').hide();
         if (openCart) {
             SHOP.showCart();
         }
