@@ -11,7 +11,14 @@
         </li>
         {{#each menus}}
         <li class="menu-row">
-            <a href="{{rootPath}}{{url}}">{{name}}</a>
+            <a href="{{rootPath}}{{url}}">{{name}}
+                {{#equal pageUrl url}}
+                <img id="menu-bg" src="/assets/image/active-menu.svg">
+                {{/equal}}
+                {{#equal cmsCategoryId url}}
+                <img id="menu-bg" src="/assets/image/active-menu.svg">
+                {{/equal}}
+            </a>
         </li>
         {{/each}}
         <li>

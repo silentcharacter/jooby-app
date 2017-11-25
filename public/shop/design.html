@@ -57,7 +57,14 @@
     <ul class="site-nav flex-space-between common-margin" id="accessibleNav">
         {{#each menus}}
         <li class="menu-row">
-            <a href="{{rootPath}}{{url}}">{{name}}</a>
+            <a href="{{rootPath}}{{url}}">{{name}}
+                {{#equal pageUrl url}}
+                    <img id="menu-bg" src="/assets/image/active-menu.svg">
+                {{/equal}}
+                {{#equal cmsCategoryId url}}
+                    <img id="menu-bg" src="/assets/image/active-menu.svg">
+                {{/equal}}
+            </a>
         </li>
         {{/each}}
         <li>
@@ -135,10 +142,12 @@
     </div>
 </footer>
 
-<div class="cd-popup cart" role="alert">
-</div>
+<div class="cd-popup cart" role="alert"></div>
 
 <div class="loading-indicator" style="display:none"></div>
+
+
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
 {{& home_scripts}}

@@ -1005,8 +1005,6 @@ a.backtotop:hover {
 }
 
 
-
-
 .loading-indicator {
     background-image: url('/assets/image/spinner.svg');
     transform: scale(2);
@@ -1020,4 +1018,23 @@ a.backtotop:hover {
     margin-top: -100px;
     margin-left: -100px;
     z-index: 9991;
+}
+
+img#menu-bg{
+    width: 150%;
+    height: 250%;
+    position: absolute;
+    top: -50%;
+    left: -25%;
+    z-index: -1;
+}
+
+.fixed-nav-bar img#menu-bg {
+    height: 110%;
+    top: 0;
+}
+
+.menu-row {
+    position: relative;
+    z-index: 2;
 }

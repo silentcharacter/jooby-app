@@ -117,6 +117,7 @@ public class ShopApp extends Jooby
 		get(SHOP_PATH + "/cms/:pageUrl", req -> Results.html("shop/design")
 				.put("templateName", "shop/empty")
 				.put("menus", menuService.getAll())
+				.put("pageUrl", "/cms/" + req.param("pageUrl").value())
 				.put("cmsPage", cmsPageService.getBy("url", "/"  + req.param("pageUrl").value()))
 				.put("rootPath", SHOP_PATH)
 				.put("cart", cartService.getFetchedCart(req)));
@@ -141,9 +142,11 @@ public class ShopApp extends Jooby
 			if (product == null) {
 				product = productService.getById(req.param("productCode").value());
 			}
+			Category category = categoryService.getById(product.categoryId);
 			return Results.html("shop/design")
 					.put("templateName", "shop/product")
 					.put("product", product)
+					.put("cmsCategoryId", SHOP_PATH + "/#" + category.cmsId)
 					.put("additional", productService.getAdditionalProducts())
 					.put("unit", unitService.getById(product.unitId))
 					.put("menus", menuService.getAll())
