@@ -5323,3 +5323,19 @@ nav .facebook {
     }
 
 }
+
+.menu-row {
+    position: relative;
+    z-index: 2;
+}
+
+.menu-row:hover, .sum-wrapper:hover, .cart-popup-trigger:hover {
+    transform: scale(1.1);
+}
+.menu-row:hover a{
+    font-weight: 400;
+}
+
+.sum-wrapper:hover .small-font {
+    font-weight: 400;
+}
