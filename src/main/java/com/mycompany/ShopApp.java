@@ -10,6 +10,7 @@ import com.mycompany.service.SmsService;
 import com.mycompany.service.shop.*;
 import com.mycompany.util.Utils;
 import com.typesafe.config.Config;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.Binary;
 import org.jooby.*;
@@ -35,6 +36,9 @@ public class ShopApp extends Jooby
 	private static List<String> possibleDateTimes = new ArrayList<String>(){{
 		addAll(Arrays.asList("10:00-13:00", "13:00-16:00", "16:00-19:00", "19:00-22:00"));
 	}};
+	private static Set<String> excludedUrls = new HashSet<String>(){{
+		addAll(Arrays.asList("/admin", "/api", "/media/image/banner", "/login", "/logout", "/google", "/auth", "/_log", "/maintenance"));
+	}};
 
 	private static Logger logger = LoggerFactory.getLogger(ShopApp.class);
 
@@ -58,6 +62,7 @@ public class ShopApp extends Jooby
 	private static EmailService emailService;
 	private static DeliveryTypeService deliveryTypeService;
 	private static Config config;
+	private static GlobalConfigService globalConfigService;
 	private static ObjectMapper mapper = new ObjectMapper();
 
 	{
@@ -80,6 +85,7 @@ public class ShopApp extends Jooby
 			reviewService = registry.require(ReviewService.class);
 			emailService = registry.require(EmailService.class);
 			deliveryTypeService = registry.require(DeliveryTypeService.class);
+			globalConfigService = registry.require(GlobalConfigService.class);
 		});
 
 		err((req, rsp, err) -> {
@@ -96,6 +102,14 @@ public class ShopApp extends Jooby
 					.put("menus", menuService.getAll())
 					.put("rootPath", SHOP_PATH)
 					.put("cart", cartService.getFetchedCart(req)));
+		});
+
+		get("**", (req, rsp, chain) -> {
+			if (BooleanUtils.isTrue(globalConfigService.getConfig().siteClosed) &&
+					excludedUrls.stream().noneMatch(url -> req.path().startsWith(url))) {
+				rsp.send(Results.html("shop/mockUp"));
+			}
+			chain.next(req, rsp);
 		});
 
 		get("/" + SHOP_PATH, req -> Results.html("shop/design")
@@ -325,6 +339,8 @@ public class ShopApp extends Jooby
 				.put("templateName", "shop/thankyou"));
 		});
 
+		get("/maintenance", req -> Results.html("shop/mockUp"));
+
 		//ARM
 		get("/order/detailed/:orderNumber", req -> {
 			Order voiceOrder = null;
@@ -469,7 +485,7 @@ public class ShopApp extends Jooby
 
 	private void populateDatesAndTimes(View view, Request req)
 	{
-		GlobalConfig config = require(GlobalConfigService.class).getConfig();
+		GlobalConfig config = globalConfigService.getConfig();
 
 		List<String> tomorrowDateTimes = new ArrayList<>();
 		Map<String, String> dates = new TreeMap<>();

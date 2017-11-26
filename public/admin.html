@@ -212,6 +212,7 @@
             nga.field('smsTemplate', 'text').label("Шаблон смс о подтверждении заказа"),
             nga.field('smsTemplateAdmin', 'text').label("Шаблон смс о заказе, созданном менеджером"),
             nga.field('testMode', 'boolean').label("Тестовый режим"),
+            nga.field('siteClosed', 'boolean').label("Сайт закрыт"),
         ]);
         globalConfigs.editionView().fields(globalConfigs.creationView().fields()).title('Настройки');
         admin.addEntity(globalConfigs);
