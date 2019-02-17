@@ -44,10 +44,11 @@ $(document).ready(function () {
         source: function (query, process) {
             return $.ajax({
                 type: 'POST',
-                url: 'https://dadata.ru/api/v1/suggest/address',
+                url: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Token bf69a05b6ce842dcd0cbc159648d19a8c49fdf33"
+                    "Accept": "application/json",
+                    "Authorization": "Token 5f9a9639b143b728904625104e17412857145b77"
                 },
                 data: JSON.stringify({"query": "Ярославль " + query}),
                 success: function (result) {

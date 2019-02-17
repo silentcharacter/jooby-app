@@ -7,6 +7,7 @@ import com.mycompany.domain.shop.District;
 import com.mycompany.domain.shop.DistrictForList;
 import com.mycompany.domain.shop.GeoCodeResults;
 import com.mycompany.domain.shop.Geometry;
+import com.typesafe.config.Config;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -26,6 +27,8 @@ public class GoogleMapsService
 
 	@Inject
 	private DistrictService districtService;
+	@Inject
+	private Config config;
 
 	public Geometry getCoordinates(String streetName, Integer streetNumber, String litera, Integer korpus) {
 		StringBuilder streetNumberSb = new StringBuilder(Optional.ofNullable(streetNumber).orElse(0).toString());
@@ -39,9 +42,10 @@ public class GoogleMapsService
 	}
 
 	public Geometry getCoordinates(String streetName, String streetNumber) {
-		StringBuilder url = new StringBuilder("http://maps.google.com/maps/api/geocode/json?address=Россия+Ярославль+");
+		StringBuilder url = new StringBuilder("https://maps.google.com/maps/api/geocode/json?address=Россия+Ярославль+");
 		url.append(streetName.trim().replaceAll("\\s", "+")).append("+");
 		url.append(streetNumber.trim().replaceAll("\\s", "+"));
+		url.append("&key=").append(config.getString("google.map.key"));
 		Geometry res;
 		try
 		{
