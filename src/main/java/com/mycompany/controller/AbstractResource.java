@@ -41,12 +41,11 @@ public class AbstractResource<T extends Entity> extends Jooby {
     }
 
     private void initializeRoutes() {
-        use("/api/" + entityName)
-                .put("/:id", this::update)
-                .get("/", this::getList)
-                .get("/:id", this::getById)
-                .post("/", this::insert)
-                .delete("/:id", this::deleteHandler);
+        put("/api/" + entityName + "/:id", this::update);
+        get("/api/" + entityName + "/", this::getList);
+        get("/api/" + entityName + "/:id", this::getById);
+        post("/api/" + entityName + "/", this::insert);
+        delete("/api/" + entityName + "/:id", this::deleteHandler);
     }
 
     protected T update(Request req) throws Exception {

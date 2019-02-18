@@ -28,7 +28,7 @@ public class MenuService extends AbstractService<Menu>
 	@Override
 	public void onSave(Menu object)
 	{
-		object.url = StringUtils.isNoneEmpty(object.categoryId)?
+		object.url = StringUtils.isNotEmpty(object.categoryId)?
 				("/#" + categoryService.getById(object.categoryId).cmsId) : ("/cms" + cmsPageService.getById(object.cmsPageId).url);
 	}
 }

@@ -1,5 +1,6 @@
 package com.mycompany;
 
+import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.jvm.FileDescriptorRatioGauge;
 import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class App extends Jooby {
@@ -58,13 +60,14 @@ public class App extends Jooby {
               .request()
               .threadDump()
               .ping()
+//              .healthCheck("db", new DatabaseHealthCheck())
               .metric("memory", new MemoryUsageGaugeSet())
               .metric("threads", new ThreadStatesGaugeSet())
               .metric("gc", new GarbageCollectorMetricSet())
               .metric("fs", new FileDescriptorRatioGauge())
               .reporter(registry -> {
-                  JmxReporter reporter = JmxReporter.forRegistry(registry).build();
-                  reporter.start();
+                  ConsoleReporter reporter = ConsoleReporter.forRegistry(registry).build();
+                  reporter.start(1, TimeUnit.MINUTES);
                   return reporter;
               })
         );

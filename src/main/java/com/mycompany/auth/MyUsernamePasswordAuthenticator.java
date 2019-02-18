@@ -14,6 +14,7 @@ import org.pac4j.core.context.WebContext;
 import org.pac4j.core.credentials.UsernamePasswordCredentials;
 import org.pac4j.core.credentials.authenticator.Authenticator;
 import org.pac4j.core.exception.CredentialsException;
+import org.pac4j.core.exception.HttpAction;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.util.CommonHelper;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ public class MyUsernamePasswordAuthenticator implements Authenticator<UsernamePa
     @Inject
     private RoleService roleService;
 
-    public void validate(UsernamePasswordCredentials credentials, WebContext context) {
+    public void validate(UsernamePasswordCredentials credentials, WebContext context) throws HttpAction, CredentialsException {
         if (credentials == null) {
             this.throwsException("No credential");
             return;
